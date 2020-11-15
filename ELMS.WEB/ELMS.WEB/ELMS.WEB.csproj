@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="UI\Components\" />
+    <Folder Include="Views\Shared\Components\" />
+    <Folder Include="wwwroot\resource\" />
+  </ItemGroup>
+
+</Project>
