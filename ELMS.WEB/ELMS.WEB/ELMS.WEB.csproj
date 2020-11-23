@@ -11,9 +11,9 @@
     <Folder Include="Managers\Equipment\Interfaces\" />
     <Folder Include="Managers\Equipment\Concrete\" />
     <Folder Include="Managers\Equipment\" />
+    <Folder Include="Models\Base\Request\" />
     <Folder Include="Models\Equipment\Response\" />
     <Folder Include="Models\Equipment\Request\" />
-    <Folder Include="Models\Base\" />
     <Folder Include="Repositories\Equipment\Interfaces\" />
     <Folder Include="Repositories\Equipment\Concrete\" />
     <Folder Include="Repositories\Equipment\" />
