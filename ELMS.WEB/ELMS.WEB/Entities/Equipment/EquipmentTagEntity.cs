@@ -8,6 +8,7 @@ namespace ELMS.WEB.Entities.Equipment
     {
         [Required]
         public Guid EquipmentUID { get; set; }
+
         [Required]
         public Guid TagUID { get; set; }
     }

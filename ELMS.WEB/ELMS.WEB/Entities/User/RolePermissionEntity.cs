@@ -8,6 +8,7 @@ namespace ELMS.WEB.Entities.User
     {
         [Required]
         public Guid RoleUID { get; set; }
+
         [Required]
         public Guid PermissionUID { get; set; }
     }
