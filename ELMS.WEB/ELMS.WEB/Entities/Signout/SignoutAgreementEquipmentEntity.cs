@@ -8,6 +8,7 @@ namespace ELMS.WEB.Entities.Signout
     {
         [Required]
         public Guid SignoutAgreementUID { get; set; }
+
         [Required]
         public Guid EquipmentUID { get; set; }
     }
