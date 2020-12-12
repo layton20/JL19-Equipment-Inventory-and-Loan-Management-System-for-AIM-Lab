@@ -8,8 +8,9 @@ namespace ELMS.WEB.Entities.Equipment
     {
         [Required]
         public int EquipmentID { get; set; }
+        [Required]
+        public int UserID { get; set; }
         public string Description { get; set; }
-
         public EquipmentEntity Equipment { get; set; }
     }
 }
