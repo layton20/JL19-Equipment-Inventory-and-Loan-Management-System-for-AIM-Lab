@@ -18,7 +18,6 @@
     <Folder Include="Repositories\Equipment\Concrete\" />
     <Folder Include="Repositories\Equipment\" />
     <Folder Include="UI\Components\" />
-    <Folder Include="Views\Shared\Components\" />
     <Folder Include="wwwroot\resource\" />
   </ItemGroup>
 
