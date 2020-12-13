@@ -6,23 +6,19 @@
 
   <ItemGroup>
     <Folder Include="Areas\Equipment\Data\" />
-    <Folder Include="Areas\Equipment\Models\" />
     <Folder Include="Areas\Equipment\Views\" />
-    <Folder Include="Managers\Equipment\Interfaces\" />
-    <Folder Include="Managers\Equipment\Concrete\" />
-    <Folder Include="Managers\Equipment\" />
     <Folder Include="Models\Base\Request\" />
-    <Folder Include="Models\Equipment\Response\" />
     <Folder Include="Models\Equipment\Request\" />
-    <Folder Include="Repositories\Equipment\Interfaces\" />
-    <Folder Include="Repositories\Equipment\Concrete\" />
-    <Folder Include="Repositories\Equipment\" />
     <Folder Include="UI\Components\" />
-    <Folder Include="Views\Shared\Components\" />
-    <Folder Include="wwwroot\resource\" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
   </ItemGroup>
 

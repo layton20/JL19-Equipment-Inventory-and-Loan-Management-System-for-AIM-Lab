@@ -1,5 +1,3 @@
-using System;
-
 namespace ELMS.WEB.Models
 {
     public class ErrorViewModel
