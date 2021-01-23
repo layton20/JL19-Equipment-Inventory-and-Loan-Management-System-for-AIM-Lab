@@ -26,5 +26,8 @@ namespace ELMS.WEB.Areas.Equipment.Models
         [Required]
 
         public InitialStatus Status { get; set; } = InitialStatus.Available;
+        [Required]
+        [Range(0, 500)]
+        public int Quantity { get; set; } = 1;
     }
 }

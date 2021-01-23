@@ -12,5 +12,6 @@ namespace ELMS.WEB.Repositories.Equipment.Interfaces
         public Task<IEnumerable<EquipmentEntity>> GetAsync();
         public Task<bool> UpdateAsync(EquipmentEntity equipment);
         public Task<bool> DeleteAsync(Guid uid);
+        public Task<bool> BulkCreateAsync(EquipmentEntity equipment, int Quantity);
     }
 }

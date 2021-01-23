@@ -35,6 +35,19 @@ namespace ELMS.WEB.Managers.Equipment.Concrete
             return _Response;
         }
 
+        public async Task<BaseResponse> BulkCreateAsync(CreateEquipmentRequest request)
+        {
+            BaseResponse _Response = new BaseResponse();
+
+            if (!await __EquipmentRepository.BulkCreateAsync(request.ToEntity(), request.Quantity))
+            {
+                _Response.Success = false;
+                _Response.Message = $"Error: ${GlobalConstants.ERROR_ACTION_PREFIX} delete ${MODEL_NAME}.";
+            }
+
+            return _Response;
+        }
+
         public async Task<BaseResponse> DeleteAsync(DeleteEquipmentViewModel model)
         {
             BaseResponse _Response = new BaseResponse();

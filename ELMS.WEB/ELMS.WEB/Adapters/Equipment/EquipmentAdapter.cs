@@ -20,7 +20,8 @@ namespace ELMS.WEB.Adapters.Equipment
                 SerialNumber = model.SerialNumber,
                 Status = (Status)model.Status,
                 PurchaseDate = model.PurchaseDate,
-                PurchasePrice = model.PurchasePrice
+                PurchasePrice = model.PurchasePrice,
+                Quantity = model.Quantity
             };
         }
 

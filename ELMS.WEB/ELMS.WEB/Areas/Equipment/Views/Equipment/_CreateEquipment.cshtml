@@ -10,6 +10,7 @@
         </div>
     </div>
     <form id="formCreateEquipment" asp-area="Equipment" asp-controller="Equipment" asp-action="Create" enctype="multipart/form-data">
+        <div asp-validation-summary="All" class="text-danger"></div>
         <div class="modal-body">
             <div class="form-group">
                 <label asp-for="Name"></label>
@@ -25,21 +26,9 @@
                 <select class="form-control selectpicker" data-style="btn btn-link" asp-for="Status" asp-items="Html.GetEnumSelectList<ELMS.WEB.Enums.Equipment.InitialStatus>()">
                 </select>
             </div>
-            <div class="form-group form-file-upload form-file-multiple">
-                <label>Upload File</label>
-                <input type="file" multiple="" class="inputFileHidden">
-                <div class="input-group">
-                    <input type="text" class="form-control inputFileVisible">
-                    <span class="input-group-btn">
-                        <button type="button" class="btn btn-fab btn-round btn-primary">
-                            <i class="material-icons">attach_file</i>
-                        </button>
-                    </span>
-                </div>
-            </div>
             <div class="form-group">
                 <label asp-for="Description"></label>
-                <textarea class="form-control" rows="2" asp-for="Description"></textarea>
+                <input class="form-control" rows="2" asp-for="Description"></input>
             </div>
             <div class="form-group">
                 <label asp-for="WarrantyExpirationDate"></label>
@@ -52,6 +41,10 @@
             <div class="form-group">
                 <label asp-for="PurchaseDate"></label>
                 <input class="form-control datetimepicker" asp-for="PurchaseDate" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Quantity"></label>
+                <input type="number" value="1" min="1" step="1" class="form-control" asp-for="Quantity" required />
             </div>
         </div>
         <div class="modal-footer">
