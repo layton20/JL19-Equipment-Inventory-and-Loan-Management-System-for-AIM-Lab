@@ -1,0 +1,147 @@
+﻿@model ELMS.WEB.Areas.Equipment.Models.CreateEquipmentViewModel
+
+@{
+    ViewData["Title"] = "Add a new piece of equipment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header card-header-primary card-header-text">
+                <div class="card-text">
+                    <h4 class="card-title">Fill out the form</h4>
+                </div>
+            </div>
+            <div class="card-body">
+                <form asp-area="Equipment" asp-controller="Equipment" asp-action="Create" enctype="multipart/form-data">
+                    <div class="row">
+                        <label class="col-sm-2 col-form-label" asp-for="Name"></label>
+                        <div class="col-sm-10">
+                            <div class="form-group bmd-form-group">
+                                <input class="form-control" asp-for="Name" />
+                                <span class="text-danger" asp-validation-for="Name"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="col-sm-2 col-form-label" asp-for="SerialNumber"></label>
+                        <div class="col-sm-10">
+                            <div class="form-group bmd-form-group">
+                                <input class="form-control" asp-for="SerialNumber" />
+                                <span class="text-danger" asp-validation-for="SerialNumber"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="col-sm-2 col-form-label" asp-for="Status"></label>
+                        <div class="col-sm-10">
+                            <div class="form-group bmd-form-group">
+                                <select class="form-control selectpicker" data-style="btn btn-link" asp-for="Status" asp-items="Html.GetEnumSelectList<ELMS.WEB.Enums.Equipment.InitialStatus>()">
+                                </select>
+                                <span class="text-danger" asp-validation-for="Status"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="col-sm-2 col-form-label" asp-for="Description"></label>
+                        <div class="col-sm-10">
+                            <div class="form-group bmd-form-group">
+                                <textarea class="form-control" rows="2" asp-for="Description" placeholder="Enter a description of the equipment"></textarea>
+                                <span class="text-danger" asp-validation-for="Description"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="col-sm-2 col-form-label" asp-for="WarrantyExpirationDate"></label>
+                        <div class="col-sm-10">
+                            <div class="form-group bmd-form-group">
+                                <input class="form-control datetimepicker" asp-for="WarrantyExpirationDate" value="@DateTime.Today" />
+                                <span class="text-danger" asp-validation-for="WarrantyExpirationDate"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="col-sm-2 col-form-label" asp-for="PurchaseDate"></label>
+                        <div class="col-sm-10">
+                            <div class="form-group bmd-form-group">
+                                <input class="form-control datetimepicker" asp-for="PurchaseDate" value="@DateTime.Today" />
+                                <span class="text-danger" asp-validation-for="PurchaseDate"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="col-sm-2 col-form-label" asp-for="PurchasePrice"></label>
+                        <div class="col-sm-10">
+                            <div class="form-group bmd-form-group">
+                                <input type="number" step=".01" class="form-control" asp-for="PurchasePrice" />
+                                <span class="text-danger" asp-validation-for="PurchasePrice"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="col-sm-2 col-form-label">Upload Photo</label>
+                        <div class="col-sm-10">
+                            <div class="form-group form-file-upload form-file-multiple">
+                                <input type="file" multiple="" class="inputFileHidden">
+                                <div class="input-group">
+                                    <input type="text" class="form-control inputFileVisible">
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-fab btn-round btn-primary">
+                                            <i class="material-icons">attach_file</i>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <button type="submit" class="btn btn-primary">Add Equipment</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $('#navItemEquipment').addClass('active');
+        $('.selectpicker').selectpicker();
+
+        // FileInput
+        $('.form-file-simple .inputFileVisible').click(function () {
+            $(this).siblings('.inputFileHidden').trigger('click');
+        });
+
+        $('.form-file-simple .inputFileHidden').change(function () {
+            var filename = $(this).val().replace(/C:\\fakepath\\/i, '');
+            $(this).siblings('.inputFileVisible').val(filename);
+        });
+
+        $('.form-file-multiple .inputFileVisible, .form-file-multiple .input-group-btn').click(function () {
+            $(this).parent().parent().find('.inputFileHidden').trigger('click');
+            $(this).parent().parent().addClass('is-focused');
+        });
+
+        $('.form-file-multiple .inputFileHidden').change(function () {
+            var names = '';
+            for (var i = 0; i < $(this).get(0).files.length; ++i) {
+                if (i < $(this).get(0).files.length - 1) {
+                    names += $(this).get(0).files.item(i).name + ',';
+                } else {
+                    names += $(this).get(0).files.item(i).name;
+                }
+            }
+            $(this).siblings('.input-group').find('.inputFileVisible').val(names);
+        });
+
+        $('.form-file-multiple .btn').on('focus', function () {
+            $(this).parent().siblings().trigger('focus');
+        });
+
+        $('.form-file-multiple .btn').on('focusout', function () {
+            $(this).parent().siblings().trigger('focusout');
+        });
+    </script>
+}

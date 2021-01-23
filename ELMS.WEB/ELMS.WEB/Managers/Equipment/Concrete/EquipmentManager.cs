@@ -3,10 +3,10 @@ using ELMS.WEB.Areas.Equipment.Models;
 using ELMS.WEB.Helpers;
 using ELMS.WEB.Managers.Equipment.Interfaces;
 using ELMS.WEB.Models.Base.Response;
+using ELMS.WEB.Models.Equipment.Request;
 using ELMS.WEB.Models.Equipment.Response;
 using ELMS.WEB.Repositories.Equipment.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -22,9 +22,9 @@ namespace ELMS.WEB.Managers.Equipment.Concrete
             __EquipmentRepository = equipmentRepository ?? throw new ArgumentNullException(nameof(equipmentRepository));
         }
 
-        public async Task<EquipmentResponse> CreateAsync(CreateEquipmentViewModel model)
+        public async Task<EquipmentResponse> CreateAsync(CreateEquipmentRequest request)
         {
-            EquipmentResponse _Response = (await __EquipmentRepository.CreateAsync(model.ToEntity())).ToResponse();
+            EquipmentResponse _Response = (await __EquipmentRepository.CreateAsync(request.ToEntity())).ToResponse();
 
             if (_Response == null)
             {
@@ -71,7 +71,7 @@ namespace ELMS.WEB.Managers.Equipment.Concrete
             return _Response;
         }
 
-        public async Task<BaseResponse> UpdateAsync(UpdateEquipmentViewModel model)
+        public async Task<BaseResponse> UpdateAsync(EquipmentViewModel model)
         {
             BaseResponse _Response = new BaseResponse();
 

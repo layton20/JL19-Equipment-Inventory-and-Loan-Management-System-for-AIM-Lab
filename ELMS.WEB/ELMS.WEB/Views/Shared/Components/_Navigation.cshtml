@@ -5,37 +5,59 @@
     </div>
     <div class="sidebar-wrapper">
         <ul class="nav">
-            <li class="nav-item active">
+            <li class="nav-item" id="navItemDashboard">
                 <a href="#" class="nav-link">
                     <i class="material-icons">dashboard</i>
                     <p> Dashboard</p>
                 </a>
             </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link">
+            <li class="nav-item" id="navItemEquipment">
+                <a class="nav-link" asp-area="Equipment" asp-controller="Equipment" asp-action="Index">
                     <i class="fas fa-cubes"></i>
                     <p> Equipment</p>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="#" class="nav-link" id="navItemLoans">
                     <i class="material-icons">compare_arrows</i>
                     <p> Loans</p>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="#" class="nav-link" id="navItemReports">
                     <i class="material-icons">analytics</i>
                     <p> Reports</p>
                 </a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link">
+            <li class="nav-item" id="navItemEmails">
+                <a class="nav-link" data-toggle="collapse" href="#navEmails">
                     <i class="material-icons">email</i>
-                    <p> Emails</p>
+                    <p> Emails <b class="caret"></b></p>
                 </a>
+                <div class="collapse" id="navEmails">
+                    <ul class="nav">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <span class="sidebar-mini"> ET </span>
+                                <span class="sidebar-normal"> Email Templates </span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <span class="sidebar-mini"> EL </span>
+                                <span class="sidebar-normal"> Email Logs </span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <span class="sidebar-mini"> SE </span>
+                                <span class="sidebar-normal"> Scheduled Emails </span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" id="navItemUsers">
                 <a class="nav-link" data-toggle="collapse" href="#navUsers">
                     <i class="material-icons">groups</i>
                     <p> Users <b class="caret"></b></p>
@@ -50,18 +72,17 @@
                         </li>
                         <li class="nav-item">
                             <a href="#" class="nav-link">
-                                <i class="material-icons">analytics</i>
-                                <p> Roles and Permissions</p>
+                                <span class="sidebar-mini"> RP </span>
+                                <span class="sidebar-normal"> Roles and Permissions </span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="#" class="nav-link">
-                                <i class="material-icons">analytics</i>
-                                <p> Blacklists</p>
+                                <span class="sidebar-mini"> RP </span>
+                                <span class="sidebar-normal"> Blacklists </span>
                             </a>
                         </li>
                     </ul>
-
                 </div>
             </li>
         </ul>
