@@ -1,0 +1,237 @@
+﻿@model ELMS.WEB.Areas.Equipment.Models.DetailsViewModel
+
+@{
+    ViewData["Title"] = "Equipment Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card my-2">
+            <div class="d-flex py-2 px-4 align-items-center">
+                <div class="card-avatar">
+                    <i class="fas fa-image fa-8x text-gray"></i>
+                </div>
+                <div class="card-body">
+                    <h3><strong>@Model.Equipment.Name</strong></h3>
+                    @if (Model.Equipment.Status == ELMS.WEB.Enums.Equipment.Status.Available)
+                    {
+                        <p><i class="fas fa-circle text-success"></i><span class="ml-2">@Model.Equipment.Status</span></p>
+                    }
+                    else
+                    {
+                        <p><i class="fas fa-circle text-danger"></i><span class="ml-2">@Model.Equipment.Status</span></p>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="card my-3">
+            <div class="container-fluid card-body">
+                <div class="row">
+                    <div class="col-sm-12 col-md-2">
+                        <ul class="nav nav-pills nav-pills-icons flex-column pl-0">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#tabDetails" data-toggle="tab">
+                                    <i class="material-icons">subject</i>
+                                    Details
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#tabNotes" data-toggle="tab">
+                                    <i class="material-icons">note</i>
+                                    Notes
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#tabHistory" data-toggle="tab">
+                                    <i class="material-icons">history</i>
+                                    Loan History
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#tabSettings" data-toggle="tab">
+                                    <i class="material-icons">settings</i>
+                                    Settings
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-12 col-md-10 border-left">
+                        <div class="tab-content tab-space pt-2">
+                            <div class="tab-pane active" id="tabDetails">
+                                <form asp-area="Equipment" asp-controller="Equipment" asp-action="Edit" enctype="multipart/form-data">
+                                    <input asp-for="Equipment.UID" type="hidden" />
+
+                                    <div class="form-group mb-4">
+                                        <label asp-for="Equipment.Name" class="bmd-label-floating"></label>
+                                        <input type="text" class="form-control" asp-for="Equipment.Name">
+                                        <small class="form-text text-danger" asp-validation-for="Equipment.Name"></small>
+                                    </div>
+
+                                    <div class="form-group mb-4">
+                                        <label asp-for="Equipment.SerialNumber" class="bmd-label-floating"></label>
+                                        <input type="text" class="form-control" asp-for="Equipment.SerialNumber">
+                                        <small class="form-text text-danger" asp-validation-for="Equipment.SerialNumber"></small>
+                                    </div>
+
+                                    <div class="form-group mb-4">
+                                        <label asp-for="Equipment.Status" style="font-size: .6875rem"></label>
+                                        <select class="form-control selectpicker" data-style="btn btn-link" asp-for="Equipment.Status" asp-items="Html.GetEnumSelectList<ELMS.WEB.Enums.Equipment.InitialStatus>()">
+                                        </select>
+                                        <small class="form-text text-danger" asp-validation-for="Equipment.Status"></small>
+                                    </div>
+
+                                    <div class="form-group mb-4">
+                                        <label asp-for="Equipment.Description" class="bmd-label-floating"></label>
+                                        <input class="form-control" asp-for="Equipment.Description">
+                                        <small class="form-text text-danger" asp-validation-for="Equipment.Description"></small>
+                                    </div>
+
+                                    <div class="form-group mb-4">
+                                        <label asp-for="Equipment.WarrantyExpirationDate" class="bmd-label-floating"></label>
+                                        <input class="form-control datetimepicker" asp-for="Equipment.WarrantyExpirationDate" />
+                                        <small class="form-text text-danger" asp-validation-for="Equipment.WarrantyExpirationDate"></small>
+                                    </div>
+
+                                    <div class="form-group mb-4">
+                                        <label asp-for="Equipment.PurchasePrice" class="bmd-label-floating"></label>
+                                        <input type="number" class="form-control" asp-for="Equipment.PurchasePrice">
+                                        <small class="form-text text-danger" asp-validation-for="Equipment.PurchasePrice"></small>
+                                    </div>
+
+                                    <div class="form-group mb-4">
+                                        <label asp-for="Equipment.PurchaseDate" class="bmd-label-floating"></label>
+                                        <input class="form-control datetimepicker" asp-for="Equipment.PurchaseDate" />
+                                        <small class="form-text text-danger" asp-validation-for="Equipment.PurchaseDate"></small>
+                                    </div>
+
+                                    <div class="form-group mb-4">
+                                        <label class="bmd-label-floating">Upload Photo</label>
+                                        <input type="file" multiple="" class="inputFileHidden">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control inputFileVisible">
+                                            <span class="input-group-btn">
+                                                <button type="button" class="btn btn-fab btn-round btn-primary">
+                                                    <i class="material-icons">attach_file</i>
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="mt-2">
+                                        <button type="submit" class="btn btn-primary">Update Details</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="tab-pane" id="tabNotes">
+                                <div class="mb-2">
+                                    <a class="btn btn-primary text-white" href="#">New Note</a>
+                                </div>
+
+                                <div class="list-group">
+                                    <a href="#" class="border list-group-item list-group-item-action flex-column align-items-start mb-2">
+                                        <div class="d-flex w-100 justify-content-between">
+                                            <h5 class="mb-1">Cracked screen</h5>
+                                            <small>@DateTime.Now</small>
+                                        </div>
+                                        <p class="mb-1">This laptop was recently damaged by one of our lendees and as a result, there's a small chip in the right-corner of the desktop screen.</p>
+                                        <small>Made by Johnny Le</small>
+                                    </a>
+                                    <a href="#" class="border list-group-item list-group-item-action flex-column align-items-start mb-2">
+                                        <div class="d-flex w-100 justify-content-between">
+                                            <h5 class="mb-1">List group item heading</h5>
+                                            <small class="text-muted">@DateTime.Now</small>
+                                        </div>
+                                        <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+                                        <small class="text-muted">Donec id elit non mi porta.</small>
+                                    </a>
+                                    <a href="#" class="border list-group-item list-group-item-action flex-column align-items-start mb-2">
+                                        <div class="d-flex w-100 justify-content-between">
+                                            <h5 class="mb-1">List group item heading</h5>
+                                            <small class="text-muted">@DateTime.Now</small>
+                                        </div>
+                                        <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+                                        <small class="text-muted">Donec id elit non mi porta.</small>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="tabHistory">
+                                <div class="table-responsive">
+                                    <table class="display table datatable responsive" cellspacing="0" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th>Loan ID</th>
+                                                <th>Loaned by</th>
+                                                <th>Loaned to</th>
+                                                <th>From</th>
+                                                <th>To</th>
+                                                <th>Extensions Applied</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>@Guid.NewGuid()</td>
+                                                <td>Joanna Lumsden</td>
+                                                <td>Johnny Le</td>
+                                                <td>@DateTime.Now</td>
+                                                <td>@DateTime.Now</td>
+                                                <td><a href="#">3 (Show me as a modal)</a></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="tabSettings">
+                                <a class="deleteEquipment btn btn-danger text-white" data-url="/Equipment/Equipment/DeleteModal" data-uid="@Model.Equipment.UID">Delete Equipment</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $('#navItemEquipment').addClass('active');
+        $('.selectpicker').selectpicker();
+
+        // FileInput
+        $('.form-file-simple .inputFileVisible').click(function () {
+            $(this).siblings('.inputFileHidden').trigger('click');
+        });
+
+        $('.form-file-simple .inputFileHidden').change(function () {
+            var filename = $(this).val().replace(/C:\\fakepath\\/i, '');
+            $(this).siblings('.inputFileVisible').val(filename);
+        });
+
+        $('.form-file-multiple .inputFileVisible, .form-file-multiple .input-group-btn').click(function () {
+            $(this).parent().parent().find('.inputFileHidden').trigger('click');
+            $(this).parent().parent().addClass('is-focused');
+        });
+
+        $('.form-file-multiple .inputFileHidden').change(function () {
+            var names = '';
+            for (var i = 0; i < $(this).get(0).files.length; ++i) {
+                if (i < $(this).get(0).files.length - 1) {
+                    names += $(this).get(0).files.item(i).name + ',';
+                } else {
+                    names += $(this).get(0).files.item(i).name;
+                }
+            }
+            $(this).siblings('.input-group').find('.inputFileVisible').val(names);
+        });
+
+        $('.form-file-multiple .btn').on('focus', function () {
+            $(this).parent().siblings().trigger('focus');
+        });
+
+        $('.form-file-multiple .btn').on('focusout', function () {
+            $(this).parent().siblings().trigger('focusout');
+        });
+    </script>
+    <script src="~/js/areas/equipment/details.js"></script>
+}

@@ -6,9 +6,6 @@
 
   <ItemGroup>
     <Folder Include="Areas\Equipment\Data\" />
-    <Folder Include="Areas\Equipment\Views\" />
-    <Folder Include="Models\Base\Request\" />
-    <Folder Include="Models\Equipment\Request\" />
     <Folder Include="UI\Components\" />
   </ItemGroup>
 

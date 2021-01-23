@@ -1,8 +1,15 @@
+using ELMS.WEB.Managers.Equipment.Concrete;
+using ELMS.WEB.Managers.Equipment.Interfaces;
+using ELMS.WEB.Models;
+using ELMS.WEB.Repositories.Equipment.Concrete;
+using ELMS.WEB.Repositories.Equipment.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 
 namespace ELMS.WEB
 {
@@ -19,6 +26,23 @@ namespace ELMS.WEB
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
+            {
+                services.AddDbContext<ApplicationContext>(options =>
+                    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            }
+            else
+            {
+                services.AddDbContext<ApplicationContext>(options =>
+                    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            }
+
+            // Manager
+            services.AddScoped<IEquipmentManager, EquipmentManager>();
+
+            // Repository
+            services.AddScoped<IEquipmentRepository, EquipmentRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

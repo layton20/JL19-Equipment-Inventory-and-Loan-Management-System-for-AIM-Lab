@@ -1,0 +1,101 @@
+﻿@model ELMS.WEB.Areas.Equipment.Models.CreateEquipmentViewModel
+
+<div class="modal-content">
+    <div class="modal-header d-flex align-content-center">
+        <div><h2 class="modal-title text-left font-weight-bold">Add a new equipment</h2></div>
+        <div>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <i class="fas fa-times-circle 2x"></i>
+            </button>
+        </div>
+    </div>
+    <form id="formCreateEquipment" asp-area="Equipment" asp-controller="Equipment" asp-action="Create" enctype="multipart/form-data">
+        <div class="modal-body">
+            <div class="form-group">
+                <label asp-for="Name"></label>
+                <input class="form-control" asp-for="Name" />
+                <span asp-validation-for="Name"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SerialNumber"></label>
+                <input class="form-control" asp-for="SerialNumber" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Status"></label>
+                <select class="form-control selectpicker" data-style="btn btn-link" asp-for="Status" asp-items="Html.GetEnumSelectList<ELMS.WEB.Enums.Equipment.InitialStatus>()">
+                </select>
+            </div>
+            <div class="form-group form-file-upload form-file-multiple">
+                <label>Upload File</label>
+                <input type="file" multiple="" class="inputFileHidden">
+                <div class="input-group">
+                    <input type="text" class="form-control inputFileVisible">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-fab btn-round btn-primary">
+                            <i class="material-icons">attach_file</i>
+                        </button>
+                    </span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description"></label>
+                <textarea class="form-control" rows="2" asp-for="Description"></textarea>
+            </div>
+            <div class="form-group">
+                <label asp-for="WarrantyExpirationDate"></label>
+                <input class="form-control datetimepicker" asp-for="WarrantyExpirationDate" />
+            </div>
+            <div class="form-group">
+                <label asp-for="PurchasePrice"></label>
+                <input type="number" step=".01" class="form-control" asp-for="PurchasePrice" />
+            </div>
+            <div class="form-group">
+                <label asp-for="PurchaseDate"></label>
+                <input class="form-control datetimepicker" asp-for="PurchaseDate" />
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Create Equipment</button>
+            <button type="submit" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    $('.selectpicker').selectpicker();
+
+    // FileInput
+    $('.form-file-simple .inputFileVisible').click(function () {
+        $(this).siblings('.inputFileHidden').trigger('click');
+    });
+
+    $('.form-file-simple .inputFileHidden').change(function () {
+        var filename = $(this).val().replace(/C:\\fakepath\\/i, '');
+        $(this).siblings('.inputFileVisible').val(filename);
+    });
+
+    $('.form-file-multiple .inputFileVisible, .form-file-multiple .input-group-btn').click(function () {
+        $(this).parent().parent().find('.inputFileHidden').trigger('click');
+        $(this).parent().parent().addClass('is-focused');
+    });
+
+    $('.form-file-multiple .inputFileHidden').change(function () {
+        var names = '';
+        for (var i = 0; i < $(this).get(0).files.length; ++i) {
+            if (i < $(this).get(0).files.length - 1) {
+                names += $(this).get(0).files.item(i).name + ',';
+            } else {
+                names += $(this).get(0).files.item(i).name;
+            }
+        }
+        $(this).siblings('.input-group').find('.inputFileVisible').val(names);
+    });
+
+    $('.form-file-multiple .btn').on('focus', function () {
+        $(this).parent().siblings().trigger('focus');
+    });
+
+    $('.form-file-multiple .btn').on('focusout', function () {
+        $(this).parent().siblings().trigger('focusout');
+    });
+</script>
