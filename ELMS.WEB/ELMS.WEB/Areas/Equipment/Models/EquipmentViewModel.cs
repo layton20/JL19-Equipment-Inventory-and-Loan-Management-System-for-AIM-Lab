@@ -7,6 +7,8 @@ namespace ELMS.WEB.Areas.Equipment.Models
     public class EquipmentViewModel
     {
         [Required]
+        public string OwnerUID { get; set; }
+        [Required]
         public Guid UID { get; set; }
         [Required]
         public string Name { get; set; }

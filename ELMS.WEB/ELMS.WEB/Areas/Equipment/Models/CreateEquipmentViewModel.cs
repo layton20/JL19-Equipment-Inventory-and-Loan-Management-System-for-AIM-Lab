@@ -5,7 +5,8 @@ using System.ComponentModel.DataAnnotations;
 namespace ELMS.WEB.Areas.Equipment.Models
 {
     public class CreateEquipmentViewModel
-    {   
+    {
+        public string OwnerUID { get; set; }
         [Required]
         public string Name { get; set; }
 

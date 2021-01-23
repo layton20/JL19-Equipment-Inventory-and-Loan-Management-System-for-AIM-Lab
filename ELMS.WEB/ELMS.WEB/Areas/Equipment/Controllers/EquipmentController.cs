@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace ELMS.WEB.Areas.Equipment.Controllers
@@ -52,12 +53,6 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> CreateViewAsync()
-        {
-            CreateEquipmentViewModel model = new CreateEquipmentViewModel();
-            return View("Create");
-        }
-
         public async Task<IActionResult> CreateModalAsync()
         {
             CreateEquipmentViewModel model = new CreateEquipmentViewModel();
@@ -74,6 +69,7 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
             }
 
             BaseResponse _Response = new BaseResponse();
+            model.OwnerUID = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             if (model.Quantity <= 1)
             {

@@ -19,6 +19,7 @@ namespace ELMS.WEB.Areas.Identity
                         context.Configuration.GetConnectionString("ELMSWEBContextConnection")));
 
                 services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                    .AddRoles<IdentityRole>()
                     .AddEntityFrameworkStores<ApplicationContext>();
             });
         }

@@ -6,6 +6,7 @@ namespace ELMS.WEB.Models.Equipment.Response
 {
     public class EquipmentResponse : BaseEntityResponse
     {
+        public Guid OwnerUID { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string SerialNumber { get; set; }

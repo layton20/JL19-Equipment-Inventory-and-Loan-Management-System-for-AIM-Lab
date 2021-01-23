@@ -7,6 +7,8 @@ namespace ELMS.WEB.Areas.Equipment.Models
     public class UpdateEquipmentViewModel
     {
         [Required]
+        public Guid OwnerUID { get; set; }
+        [Required]
         public Guid UID { get; set; }
         [Required]
         public string Name { get; set; }

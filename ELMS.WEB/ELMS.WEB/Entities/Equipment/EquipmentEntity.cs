@@ -8,6 +8,9 @@ namespace ELMS.WEB.Entities.Equipment
     public class EquipmentEntity : BaseEntity
     {
         [Required]
+        public Guid OwnerUID { get; set; }
+
+        [Required]
         [MaxLength(50)]
         public string Name { get; set; }
 
@@ -17,12 +20,13 @@ namespace ELMS.WEB.Entities.Equipment
         public string SerialNumber { get; set; }
 
         public double PurchasePrice { get; set; }
+
         public DateTime PurchaseDate { get; set; }
 
         [Required]
         public DateTime WarrantyExpirationDate { get; set; }
-        [Required]
 
+        [Required]
         public Status Status { get; set; } = Status.Available;
     }
 }
