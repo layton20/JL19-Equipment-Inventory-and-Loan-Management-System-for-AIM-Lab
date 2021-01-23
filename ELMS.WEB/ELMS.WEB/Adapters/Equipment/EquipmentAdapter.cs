@@ -3,6 +3,7 @@ using ELMS.WEB.Entities.Equipment;
 using ELMS.WEB.Enums.Equipment;
 using ELMS.WEB.Models.Equipment.Request;
 using ELMS.WEB.Models.Equipment.Response;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -12,7 +13,12 @@ namespace ELMS.WEB.Adapters.Equipment
     {
         internal static CreateEquipmentRequest ToRequest(this CreateEquipmentViewModel model)
         {
-            return model == null ? null : new CreateEquipmentRequest
+            if (model == null)
+            {
+                return null;
+            }
+
+            CreateEquipmentRequest _Request = new CreateEquipmentRequest
             {
                 Name = model.Name,
                 WarrantyExpirationDate = model.WarrantyExpirationDate,
@@ -21,8 +27,15 @@ namespace ELMS.WEB.Adapters.Equipment
                 Status = (Status)model.Status,
                 PurchaseDate = model.PurchaseDate,
                 PurchasePrice = model.PurchasePrice,
-                Quantity = model.Quantity
+                Quantity = model.Quantity,
             };
+
+            if (Guid.TryParse(model.OwnerUID, out Guid ownerUID))
+            {
+                _Request.OwnerUID = ownerUID;
+            }
+
+            return _Request;
         }
 
         internal static EquipmentEntity ToEntity(this CreateEquipmentRequest request)
@@ -36,12 +49,18 @@ namespace ELMS.WEB.Adapters.Equipment
                 Status = request.Status,
                 PurchasePrice = request.PurchasePrice,
                 PurchaseDate = request.PurchaseDate,
+                OwnerUID = request.OwnerUID
             };
         }
 
         internal static EquipmentEntity ToEntity(this EquipmentViewModel model)
         {
-            return model == null ? null : new EquipmentEntity
+            if (model == null)
+            {
+                return null;
+            }
+
+            EquipmentEntity _Entity = new EquipmentEntity
             {
                 UID = model.UID,
                 Name = model.Name,
@@ -50,8 +69,15 @@ namespace ELMS.WEB.Adapters.Equipment
                 WarrantyExpirationDate = model.WarrantyExpirationDate,
                 Status = model.Status,
                 PurchasePrice = model.PurchasePrice,
-                PurchaseDate = model.PurchaseDate,
+                PurchaseDate = model.PurchaseDate
             };
+
+            if (Guid.TryParse(model.OwnerUID, out Guid ownerUID))
+            {
+                _Entity.OwnerUID = ownerUID;
+            }
+
+            return _Entity;
         }
 
         internal static EquipmentResponse ToResponse(this EquipmentEntity entity)
@@ -67,7 +93,8 @@ namespace ELMS.WEB.Adapters.Equipment
                 Status = entity.Status,
                 WarrantyExpirationDate = entity.WarrantyExpirationDate,
                 CreatedTimestamp = entity.CreatedTimestamp,
-                AmendedTimestamp = entity.AmendedTimestamp
+                AmendedTimestamp = entity.AmendedTimestamp,
+                OwnerUID = entity.OwnerUID
             };
         }
 
@@ -87,7 +114,8 @@ namespace ELMS.WEB.Adapters.Equipment
                 Status = response.Status,
                 WarrantyExpirationDate = response.WarrantyExpirationDate,
                 PurchaseDate = response.PurchaseDate,
-                PurchasePrice = response.PurchasePrice
+                PurchasePrice = response.PurchasePrice,
+                OwnerUID = response.OwnerUID.ToString()
             };
         }
 
@@ -107,7 +135,8 @@ namespace ELMS.WEB.Adapters.Equipment
                 Status = response.Status,
                 PurchaseDate = response.PurchaseDate,
                 PurchasePrice = response.PurchasePrice,
-                SerialNumber = response.SerialNumber
+                SerialNumber = response.SerialNumber,
+                OwnerUID = response.OwnerUID
             };
         }
     }

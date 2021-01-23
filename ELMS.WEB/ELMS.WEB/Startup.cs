@@ -3,6 +3,7 @@ using ELMS.WEB.Managers.Equipment.Interfaces;
 using ELMS.WEB.Repositories.Equipment.Concrete;
 using ELMS.WEB.Repositories.Equipment.Interfaces;
 using ELMS.WEB.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -35,6 +36,12 @@ namespace ELMS.WEB
 
             services.AddTransient<IEmailSender, EmailSender>();
             services.Configure<AuthMessageSenderOptions>(Configuration);
+
+            services.AddAuthorization(options => {
+                options.FallbackPolicy = new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .Build();
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
