@@ -23,5 +23,8 @@ namespace ELMS.WEB.Models.Equipment.Request
         [Required]
 
         public Status Status { get; set; } = Status.Available;
+        [Required]
+        [Range(1, 500)]
+        public int Quantity { get; set; }
     }
 }

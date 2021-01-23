@@ -52,22 +52,33 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
             return PartialView("_CreateEquipment", model);
         }
 
+        [HttpPost]
         public async Task<IActionResult> CreateAsync(CreateEquipmentViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 ViewData["ErrorMessage"] = "Invalid form submission";
-                return View("Create", model);
+                return PartialView("_CreateEquipment", model);
             }
 
-            EquipmentResponse _Response = await __EquipmentManager.CreateAsync(model.ToRequest());
+            BaseResponse _Response = new BaseResponse();
+
+            if (model.Quantity <= 1)
+            {
+                _Response = await __EquipmentManager.CreateAsync(model.ToRequest());
+            }
+            else
+            {
+                _Response = await __EquipmentManager.BulkCreateAsync(model.ToRequest());
+            }
 
             if (!_Response.Success)
             {
-                ViewData["ErrorMessage"] = _Response.Message;
+                ModelState.AddModelError("Error", _Response.Message);
+                return await CreateModalAsync();
             }
 
-            return RedirectToAction("Index", new { successMessage = _Response.Message });
+            return Json(new { success = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} created {ENTITY_NAME}" });
         }
 
         public async Task<IActionResult> EditViewAsync(Guid equipmentUID)

@@ -4,6 +4,7 @@ using ELMS.WEB.Repositories.Equipment.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ELMS.WEB.Repositories.Equipment.Concrete
@@ -28,6 +29,37 @@ namespace ELMS.WEB.Repositories.Equipment.Concrete
             bool _Added = await __Context.SaveChangesAsync() > 0;
 
             return _Added ? equipment : null;
+        }
+
+        public async Task<bool> BulkCreateAsync(EquipmentEntity equipment, int Quantity)
+        {
+            if (equipment == null || equipment.UID == Guid.Empty)
+            {
+                return false;
+            }
+
+            List<EquipmentEntity> _Copies = new List<EquipmentEntity>();
+
+            for (int i = 0; i < Quantity; i++)
+            {
+                _Copies.Add(new EquipmentEntity
+                {
+                    Name = equipment.Name,
+                    Description = equipment.Description,
+                    WarrantyExpirationDate = equipment.WarrantyExpirationDate,
+                    Status = equipment.Status,
+                    PurchaseDate = equipment.PurchaseDate,
+                    PurchasePrice = equipment.PurchasePrice,
+                    SerialNumber = equipment.SerialNumber
+                });
+            }
+
+            int _Added = 0;
+
+            await __Context.Equipment.AddRangeAsync(_Copies);
+            _Added = await __Context.SaveChangesAsync();
+
+            return _Added > 0;
         }
 
         public async Task<bool> DeleteAsync(Guid uid)
