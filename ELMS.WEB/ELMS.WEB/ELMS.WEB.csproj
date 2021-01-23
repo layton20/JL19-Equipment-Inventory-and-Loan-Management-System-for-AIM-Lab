@@ -1,15 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk.Web">
-
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>97c499e8-42f8-4bb1-a7e6-3582ffdb2f02</UserSecretsId>
   </PropertyGroup>
-
   <ItemGroup>
     <Folder Include="Areas\Equipment\Data\" />
     <Folder Include="Migrations\ELMSWEB\" />
     <Folder Include="UI\Components\" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.11" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.11" />
@@ -20,6 +19,6 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
+    <PackageReference Include="SendGrid" Version="9.22.0" />
   </ItemGroup>
-
 </Project>

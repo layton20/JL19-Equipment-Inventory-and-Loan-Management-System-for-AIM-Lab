@@ -20,17 +20,20 @@
                         @RenderBody()
                     </main>
                 </div>
+                <partial name="Components/_Footer" />
             </div>
-        </div>
+    </div>
     }
     else
     {
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
+
+        <partial name="Components/_Footer" />
     }
 
-    <partial name="Components/_Footer" />
+
 
     <div aria-hidden="true" aria-labelledby="modal-crud-label" role="dialog" tabindex="-1" id="modalRoot" class="modal fade">
         <div id="modalDialog" class="modal-dialog">

@@ -4,21 +4,33 @@ using ELMS.WEB.Helpers;
 using ELMS.WEB.Managers.Equipment.Interfaces;
 using ELMS.WEB.Models.Base.Response;
 using ELMS.WEB.Models.Equipment.Response;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Threading.Tasks;
 
 namespace ELMS.WEB.Areas.Equipment.Controllers
 {
+    [Authorize]
     [Area("Equipment")]
     public class EquipmentController : Controller
     {
+        private readonly IConfiguration __Configuration;
         private readonly IEquipmentManager __EquipmentManager;
         private readonly String ENTITY_NAME = "Equipment";
 
-        public EquipmentController(IEquipmentManager equipmentManager)
+        public EquipmentController(IConfiguration configuration, IEquipmentManager equipmentManager)
         {
+            this.__Configuration = configuration;
             __EquipmentManager = equipmentManager ?? throw new ArgumentNullException(nameof(equipmentManager));
+        }
+
+        public async Task<IActionResult> SendGridSampleAsync()
+        {
+            //EmailSender _Sender = new EmailSender(__Configuration);
+            //return Json(await _Sender.SendEmailSampleAsync());
+            return null;
         }
 
         public async Task<IActionResult> IndexAsync(String errorMessage, String successMessage)
@@ -134,7 +146,7 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
         [HttpGet]
         public async Task<IActionResult> DeleteModalAsync(Guid equipmentUID)
         {
-             EquipmentResponse _Response = await __EquipmentManager.GetAsync(equipmentUID);
+            EquipmentResponse _Response = await __EquipmentManager.GetAsync(equipmentUID);
 
             if (!_Response.Success)
             {
