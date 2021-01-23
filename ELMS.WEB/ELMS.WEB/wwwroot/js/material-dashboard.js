@@ -23,9 +23,23 @@
 
         if (isWindows) {
             // if we are on windows OS we activate the perfectScrollbar function
-            var ps = new PerfectScrollbar('.sidebar');
-            var ps1 = new PerfectScrollbar('.sidebar-wrapper');
-            var ps2 = new PerfectScrollbar('.main-panel');
+
+            if ($('.sidebar').length) {
+                var ps = new PerfectScrollbar('.sidebar');
+            }
+
+            if ($('.sidebar').length) {
+                var ps1 = new PerfectScrollbar('.sidebar-wrapper');
+            }
+
+            if ($('.main-panel').length) {
+                var ps2 = new PerfectScrollbar('.main-panel');
+            }
+
+            if ($('.template-panel').length) {
+                var ps3 = new PerfectScrollbar('.template-panel');
+            }
+
             $('html').addClass('perfect-scrollbar-on');
 
         } else {

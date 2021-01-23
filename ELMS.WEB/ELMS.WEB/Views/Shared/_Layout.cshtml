@@ -9,26 +9,36 @@
     <partial name="Imports/Links/_MainImport"/>
 </head>
 <body>
-    <div class="wrapper">
-        <partial name="Components/_Navigation" />
-        <div class="main-panel">
-            <partial name="Components/_Header" />
-            <div class="content pt-0">
-                <main role="main" class="pb-3">
-                    @RenderBody()
-                </main>
+    @if (User.Identity.IsAuthenticated)
+    {
+        <div class="wrapper">
+            <partial name="Components/_Navigation" />
+            <div class="main-panel">
+                <partial name="Components/_Header" />
+                <div class="content pt-0">
+                    <main role="main" class="pb-3">
+                        @RenderBody()
+                    </main>
+                </div>
             </div>
         </div>
-        <partial name="Components/_Footer" />
+    }
+    else
+    {
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    }
 
-        <div aria-hidden="true" aria-labelledby="modal-crud-label" role="dialog" tabindex="-1" id="modalRoot" class="modal fade">
-            <div id="modalDialog" class="modal-dialog">
-            </div>
+    <partial name="Components/_Footer" />
+
+    <div aria-hidden="true" aria-labelledby="modal-crud-label" role="dialog" tabindex="-1" id="modalRoot" class="modal fade">
+        <div id="modalDialog" class="modal-dialog">
         </div>
     </div>
 
-    <partial name="Imports/Scripts/_MaterialDashboardScripts"/>
-    <partial name="Imports/Scripts/_MainScripts"/>
+    <partial name="Imports/Scripts/_MaterialDashboardScripts" />
+    <partial name="Imports/Scripts/_MainScripts" />
     <script src="~/js/site.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)
 </body>
