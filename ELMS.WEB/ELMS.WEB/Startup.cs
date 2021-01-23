@@ -1,3 +1,4 @@
+using ELMS.WEB.Data;
 using ELMS.WEB.Managers.Equipment.Concrete;
 using ELMS.WEB.Managers.Equipment.Interfaces;
 using ELMS.WEB.Models;
@@ -5,6 +6,7 @@ using ELMS.WEB.Repositories.Equipment.Concrete;
 using ELMS.WEB.Repositories.Equipment.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,17 +28,7 @@ namespace ELMS.WEB
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-
-            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
-            {
-                services.AddDbContext<ApplicationContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            }
-            else
-            {
-                services.AddDbContext<ApplicationContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            }
+            services.AddRazorPages();
 
             // Manager
             services.AddScoped<IEquipmentManager, EquipmentManager>();
@@ -63,10 +55,13 @@ namespace ELMS.WEB
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapRazorPages();
+
                 endpoints.MapControllerRoute(
                     name: "areas",
                     pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");

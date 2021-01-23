@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <Folder Include="Areas\Equipment\Data\" />
+    <Folder Include="Migrations\ELMSWEB\" />
     <Folder Include="UI\Components\" />
   </ItemGroup>
 
