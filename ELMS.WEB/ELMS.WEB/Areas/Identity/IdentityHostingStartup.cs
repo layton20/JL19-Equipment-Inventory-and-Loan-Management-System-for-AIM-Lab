@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 [assembly: HostingStartup(typeof(ELMS.WEB.Areas.Identity.IdentityHostingStartup))]
+
 namespace ELMS.WEB.Areas.Identity
 {
     public class IdentityHostingStartup : IHostingStartup

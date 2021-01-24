@@ -1,8 +1,9 @@
 ﻿@model ELMS.WEB.Areas.Equipment.Models.DetailsViewModel
+@using System.Security.Claims;
 
 @{
     ViewData["Title"] = "Equipment Dashboard";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+ Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="row">
@@ -125,35 +126,47 @@
                             </div>
                             <div class="tab-pane" id="tabNotes">
                                 <div class="mb-2">
-                                    <a class="btn btn-primary text-white" href="#">New Note</a>
+                                    <a class="createNote btn btn-primary text-white" data-url="/Equipment/Note/CreateModal" data-equipmentuid="@Model.Equipment.UID">New Note</a>
                                 </div>
 
-                                <div class="list-group">
-                                    <a href="#" class="border list-group-item list-group-item-action flex-column align-items-start mb-2">
-                                        <div class="d-flex w-100 justify-content-between">
-                                            <h5 class="mb-1">Cracked screen</h5>
-                                            <small>@DateTime.Now</small>
-                                        </div>
-                                        <p class="mb-1">This laptop was recently damaged by one of our lendees and as a result, there's a small chip in the right-corner of the desktop screen.</p>
-                                        <small>Made by Johnny Le</small>
-                                    </a>
-                                    <a href="#" class="border list-group-item list-group-item-action flex-column align-items-start mb-2">
-                                        <div class="d-flex w-100 justify-content-between">
-                                            <h5 class="mb-1">List group item heading</h5>
-                                            <small class="text-muted">@DateTime.Now</small>
-                                        </div>
-                                        <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-                                        <small class="text-muted">Donec id elit non mi porta.</small>
-                                    </a>
-                                    <a href="#" class="border list-group-item list-group-item-action flex-column align-items-start mb-2">
-                                        <div class="d-flex w-100 justify-content-between">
-                                            <h5 class="mb-1">List group item heading</h5>
-                                            <small class="text-muted">@DateTime.Now</small>
-                                        </div>
-                                        <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-                                        <small class="text-muted">Donec id elit non mi porta.</small>
-                                    </a>
-                                </div>
+                                @if (Model.Notes.Count <= 0)
+                                {
+                                    <div>
+                                        <p>No notes have been added to this equipment yet.</p>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="list-group">
+                                        @foreach (var note in Model.Notes.OrderByDescending(x => x.CreatedTimestamp).ToList())
+                                        {
+                                            <div class="border list-group-item flex-column align-items-start text-dark mb-2">
+                                                <div class="d-flex w-100 justify-content-between">
+                                                    <div class="col-sm-12 col-md-8 p-0">
+                                                        <h5 class="mb-1">@note.Name</h5>
+                                                        <p class="mb-1">@note.Description</p>
+                                                        <small>Made by @(note.OwnerUID == Guid.Empty.ToString() ? "Anonymous" : note.OwnerUID)</small>
+                                                    </div>
+                                                    <div class="col-sm-12 col-md-4 p-0 text-right">
+                                                        <p class="mb-1">Created on @note.CreatedTimestamp</p>
+                                                        @if (note.OwnerUID == User.FindFirstValue(ClaimTypes.NameIdentifier))
+                                                        {
+                                                            <div class="btn-group">
+                                                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                    Action
+                                                                </button>
+                                                                <div class="dropdown-menu">
+                                                                    <a class="editNote dropdown-item" href="javascript:;" data-url="/Equipment/Note/EditModal" data-uid="@note.UID">Edit</a>
+                                                                    <a class="deleteNote dropdown-item" href="javascript:;" data-url="/Equipment/Note/DeleteModal" data-uid="@note.UID">Delete</a>
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                }
                             </div>
                             <div class="tab-pane" id="tabHistory">
                                 <div class="table-responsive">
@@ -187,7 +200,6 @@
                         </div>
                     </div>
                 </div>
-                
             </div>
         </div>
     </div>

@@ -19,15 +19,17 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
     {
         private readonly IConfiguration __Configuration;
         private readonly IEquipmentManager __EquipmentManager;
+        private readonly INoteManager __NoteManager;
         private readonly String ENTITY_NAME = "Equipment";
 
-        public EquipmentController(IConfiguration configuration, IEquipmentManager equipmentManager)
+        public EquipmentController(IConfiguration configuration, IEquipmentManager equipmentManager, INoteManager noteManager)
         {
-            this.__Configuration = configuration;
+            __Configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             __EquipmentManager = equipmentManager ?? throw new ArgumentNullException(nameof(equipmentManager));
+            __NoteManager = noteManager ?? throw new ArgumentNullException(nameof(noteManager));
         }
 
-        public async Task<IActionResult> SendGridSampleAsync()
+        public Task<IActionResult> SendGridSampleAsync()
         {
             //EmailSender _Sender = new EmailSender(__Configuration);
             //return Json(await _Sender.SendEmailSampleAsync());
@@ -45,18 +47,18 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
                 ViewData["SuccessMessage"] = successMessage;
             }
 
-            IndexViewModel model = new IndexViewModel
+            IndexViewModel _Model = new IndexViewModel
             {
                 Equipment = (await __EquipmentManager.GetAsync()).Equipments.ToViewModel()
             };
 
-            return View(model);
+            return View(_Model);
         }
 
         public async Task<IActionResult> CreateModalAsync()
         {
-            CreateEquipmentViewModel model = new CreateEquipmentViewModel();
-            return PartialView("_CreateEquipment", model);
+            CreateEquipmentViewModel _Model = new CreateEquipmentViewModel();
+            return PartialView("_CreateEquipment", _Model);
         }
 
         [HttpPost]
@@ -129,11 +131,10 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
                 ViewData["ErrorMessage"] = "Invalid equipment UID";
             }
 
-            EquipmentResponse _Response = await __EquipmentManager.GetAsync(equipmentUID);
-
             DetailsViewModel _Model = new DetailsViewModel
             {
-                Equipment = _Response.ToViewModel()
+                Equipment = (await __EquipmentManager.GetAsync(equipmentUID)).ToViewModel(),
+                Notes = (await __NoteManager.GetAsync(equipmentUID)).ToViewModel()
             };
 
             return View("Details", _Model);
@@ -158,7 +159,7 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
             if (!ModelState.IsValid)
             {
                 ViewData["ErrorMessage"] = "Invalid form submission.";
-                return PartialView("_DeleteStock", model);
+                return PartialView("_DeleteEquipment", model);
             }
 
             BaseResponse _Response = await __EquipmentManager.DeleteAsync(model);
