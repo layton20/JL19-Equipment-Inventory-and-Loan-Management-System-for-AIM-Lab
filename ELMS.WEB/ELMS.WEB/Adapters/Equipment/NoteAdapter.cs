@@ -26,7 +26,8 @@ namespace ELMS.WEB.Adapters.Equipment
             return request == null ? null : new NoteEntity
             {
                 Name = request.Name,
-                Description = request.Description
+                Description = request.Description,
+                UID = request.UID
             };
         }
 
@@ -44,6 +45,7 @@ namespace ELMS.WEB.Adapters.Equipment
                 Description = entity.Description,
                 CreatedTimestamp = entity.CreatedTimestamp,
                 AmendedTimestamp = entity.AmendedTimestamp,
+                EquipmentUID = entity.EquipmentUID
             };
 
             if (Guid.TryParse(entity.OwnerUID, out Guid ownerUID))
@@ -70,6 +72,16 @@ namespace ELMS.WEB.Adapters.Equipment
             };
         }
 
+        internal static UpdateNoteRequest ToRequest(this NoteViewModel model)
+        {
+            return model == null ? null : new UpdateNoteRequest
+            {
+                Name = model.Name,
+                Description = model.Description,
+                UID = model.UID
+            };
+        }
+
         internal static NoteViewModel ToViewModel(this NoteResponse response)
         {
             return response == null ? null : new NoteViewModel
@@ -77,7 +89,9 @@ namespace ELMS.WEB.Adapters.Equipment
                 Name = response.Name,
                 Description = response.Description,
                 CreatedTimestamp = response.CreatedTimestamp,
-                OwnerUID = response.OwnerUID.ToString()
+                OwnerUID = response.OwnerUID.ToString(),
+                UID = response.UID,
+                EquipmentUID = response.EquipmentUID
             };
         }
 

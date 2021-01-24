@@ -1,8 +1,9 @@
 ﻿@model ELMS.WEB.Areas.Equipment.Models.DetailsViewModel
+@using System.Security.Claims;
 
 @{
     ViewData["Title"] = "Equipment Dashboard";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+ Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="row">
@@ -139,14 +140,30 @@
                                     <div class="list-group">
                                         @foreach (var note in Model.Notes.OrderByDescending(x => x.CreatedTimestamp).ToList())
                                         {
-                                            <a href="#" class="border list-group-item list-group-item-action flex-column align-items-start mb-2">
+                                            <div class="border list-group-item flex-column align-items-start text-dark mb-2">
                                                 <div class="d-flex w-100 justify-content-between">
-                                                    <h5 class="mb-1">@note.Name</h5>
-                                                    <small>@note.CreatedTimestamp</small>
+                                                    <div class="col-sm-12 col-md-8 p-0">
+                                                        <h5 class="mb-1">@note.Name</h5>
+                                                        <p class="mb-1">@note.Description</p>
+                                                        <small>Made by @(note.OwnerUID == Guid.Empty.ToString() ? "Anonymous" : note.OwnerUID)</small>
+                                                    </div>
+                                                    <div class="col-sm-12 col-md-4 p-0 text-right">
+                                                        <p class="mb-1">Created on @note.CreatedTimestamp</p>
+                                                        @if (note.OwnerUID == User.FindFirstValue(ClaimTypes.NameIdentifier))
+                                                        {
+                                                            <div class="btn-group">
+                                                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                    Action
+                                                                </button>
+                                                                <div class="dropdown-menu">
+                                                                    <a class="editNote dropdown-item" href="javascript:;" data-url="/Equipment/Note/EditModal" data-uid="@note.UID">Edit</a>
+                                                                    <a class="deleteNote dropdown-item" href="javascript:;" data-url="/Equipment/Note/DeleteModal" data-uid="@note.UID">Delete</a>
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                    </div>
                                                 </div>
-                                                <p class="mb-1">@note.Description</p>
-                                                <small>Made by @note.OwnerUID</small>
-                                            </a>
+                                            </div>
                                         }
                                     </div>
                                 }
@@ -183,7 +200,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>

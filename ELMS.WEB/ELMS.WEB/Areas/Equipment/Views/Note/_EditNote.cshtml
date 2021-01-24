@@ -1,17 +1,17 @@
-﻿@model ELMS.WEB.Areas.Equipment.Models.Note.CreateNoteViewModel
+﻿@model ELMS.WEB.Areas.Equipment.Models.Note.NoteViewModel
 
 <div class="modal-content">
     <div class="modal-header d-flex align-content-center">
-        <div><h2 class="modal-title text-left font-weight-bold">Add a new note</h2></div>
+        <div><h2 class="modal-title text-left font-weight-bold">Edit note</h2></div>
         <div>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <i class="fas fa-times-circle 2x"></i>
             </button>
         </div>
     </div>
-    <form id="formCreate" class="formCreate" asp-area="Equipment" asp-controller="Note" asp-action="Create" enctype="multipart/form-data">
+    <form id="formCreate" class="formNote" asp-area="Equipment" asp-controller="Note" asp-action="Edit" enctype="multipart/form-data" data-equipmentuid="@Model.EquipmentUID">
         <div asp-validation-summary="All" class="text-danger"></div>
-        <input type="hidden" asp-for="EquipmentUID" />
+        <input type="hidden" asp-for="UID" />
         <div class="modal-body">
             <div class="form-group">
                 <label asp-for="Name"></label>
@@ -23,7 +23,7 @@
             </div>
         </div>
         <div class="modal-footer">
-            <button type="submit" class="btn btn-primary">Create Note</button>
+            <button type="submit" class="btn btn-primary">Update details</button>
             <button type="submit" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
         </div>
     </form>

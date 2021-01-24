@@ -19,16 +19,20 @@
         });
     };
 
-    function postModalFormAjax(form) {
+    function postModalFormAjax(form, returnUrl = "") {
+        if (returnUrl == "") {
+            returnUrl = "/Equipment/Equipment?";
+        }
+
         $.ajax({
             method: form.attr('method'),
             url: form.attr('action'),
             data: form.serialize(),
             success: function (response) {
                 if (response.success) {
-                    window.location.href = encodeURI(`/Equipment/Equipment?SuccessMessage=${response.success}`);
+                    window.location.href = encodeURI(`${returnUrl}&SuccessMessage=${response.success}`);
                 } else if (response.error) {
-                    window.location.href = encodeURI(`/Equipment/Equipment?SuccessMessage=${response.error}`);
+                    window.location.href = encodeURI(`${returnUrl}&ErrorMessage=${response.error}`);
                 }
                 else {
                     $('#modalDialog').html(response);
@@ -45,13 +49,28 @@
         loadModalAjax($(this).data('url'), `EquipmentUID=${$(this).data('equipmentuid')}`);
     });
 
+    $('.editNote').click(function () {
+        loadModalAjax($(this).data('url'), `NoteUID=${$(this).data('uid')}`);
+    });
+
     $('#modalRoot').on("submit", ".formCreate", function (e) {
         e.preventDefault();
         var form = $(this);
         postModalFormAjax(form);
     });
 
+    $('#modalRoot').on("submit", ".formNote", function (e) {
+        e.preventDefault();
+        var form = $(this);
+        var equipmentUid = $(this).data('equipmentuid')
+        postModalFormAjax(form, `/Equipment/Equipment/DetailsView?EquipmentUID=${equipmentUid}`);
+    });
+
     $('.deleteEquipment').click(function () {
         loadModalAjax($(this).data('url'), `EquipmentUID=${$(this).data('uid')}`);
+    });
+
+    $('.deleteNote').click(function () {
+        loadModalAjax($(this).data('url'), `NoteUID=${$(this).data('uid')}`);
     });
 });

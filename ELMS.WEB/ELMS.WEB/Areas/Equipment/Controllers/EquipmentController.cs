@@ -159,7 +159,7 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
             if (!ModelState.IsValid)
             {
                 ViewData["ErrorMessage"] = "Invalid form submission.";
-                return PartialView("_DeleteStock", model);
+                return PartialView("_DeleteEquipment", model);
             }
 
             BaseResponse _Response = await __EquipmentManager.DeleteAsync(model);

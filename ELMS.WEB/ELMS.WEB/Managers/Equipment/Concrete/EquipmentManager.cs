@@ -67,8 +67,11 @@ namespace ELMS.WEB.Managers.Equipment.Concrete
 
             if (_Response == null)
             {
-                _Response.Success = false;
-                _Response.Message = $"Error: ${GlobalConstants.ERROR_ACTION_PREFIX} get ${MODEL_NAME}.";
+                return new EquipmentResponse
+                {
+                    Success = false,
+                    Message = $"Error: ${GlobalConstants.ERROR_ACTION_PREFIX} get ${MODEL_NAME}."
+                };
             }
 
             return _Response;
