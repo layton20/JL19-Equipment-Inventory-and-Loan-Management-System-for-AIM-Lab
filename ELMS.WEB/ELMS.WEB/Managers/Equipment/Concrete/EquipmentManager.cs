@@ -74,9 +74,9 @@ namespace ELMS.WEB.Managers.Equipment.Concrete
             return _Response;
         }
 
-        public async Task<EquipmentsResponse> GetAsync()
+        public async Task<EquipmentListResponse> GetAsync()
         {
-            EquipmentsResponse _Response = new EquipmentsResponse
+            EquipmentListResponse _Response = new EquipmentListResponse
             {
                 Equipments = (await __EquipmentRepository.GetAsync()).ToList().ToResponse()
             };

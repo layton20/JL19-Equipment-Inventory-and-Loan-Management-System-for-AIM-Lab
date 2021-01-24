@@ -2,7 +2,7 @@
 
 namespace ELMS.WEB.Models.Equipment.Response
 {
-    public class EquipmentsResponse
+    public class EquipmentListResponse
     {
         public IList<EquipmentResponse> Equipments { get; set; }
     }

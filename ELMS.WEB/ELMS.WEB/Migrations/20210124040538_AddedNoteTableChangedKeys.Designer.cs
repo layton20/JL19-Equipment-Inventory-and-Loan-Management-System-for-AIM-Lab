@@ -4,14 +4,16 @@ using ELMS.WEB.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ELMS.WEB.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20210124040538_AddedNoteTableChangedKeys")]
+    partial class AddedNoteTableChangedKeys
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -78,7 +80,7 @@ namespace ELMS.WEB.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("EquipmentUID")
+                    b.Property<Guid>("EquipmentID")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
@@ -92,7 +94,7 @@ namespace ELMS.WEB.Migrations
 
                     b.HasKey("UID");
 
-                    b.HasIndex("EquipmentUID");
+                    b.HasIndex("EquipmentID");
 
                     b.HasIndex("OwnerUID");
 
@@ -303,7 +305,7 @@ namespace ELMS.WEB.Migrations
                 {
                     b.HasOne("ELMS.WEB.Entities.Equipment.EquipmentEntity", "Equipment")
                         .WithMany()
-                        .HasForeignKey("EquipmentUID")
+                        .HasForeignKey("EquipmentID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

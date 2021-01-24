@@ -30,9 +30,11 @@ namespace ELMS.WEB
 
             // Manager
             services.AddScoped<IEquipmentManager, EquipmentManager>();
+            services.AddScoped<INoteManager, NoteManager>();
 
             // Repository
             services.AddScoped<IEquipmentRepository, EquipmentRepository>();
+            services.AddScoped<INoteRepository, NoteRepository>();
 
             services.AddTransient<IEmailSender, EmailSender>();
             services.Configure<AuthMessageSenderOptions>(Configuration);

@@ -37,6 +37,20 @@
         })
     }
 
+    $('.create').click(function () {
+        loadModalAjax($(this).data('url'), null);
+    });
+
+    $('.createNote').click(function () {
+        loadModalAjax($(this).data('url'), `EquipmentUID=${$(this).data('equipmentuid')}`);
+    });
+
+    $('#modalRoot').on("submit", ".formCreate", function (e) {
+        e.preventDefault();
+        var form = $(this);
+        postModalFormAjax(form);
+    });
+
     $('.deleteEquipment').click(function () {
         loadModalAjax($(this).data('url'), `EquipmentUID=${$(this).data('uid')}`);
     });

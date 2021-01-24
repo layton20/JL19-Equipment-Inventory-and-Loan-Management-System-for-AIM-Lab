@@ -13,5 +13,6 @@ namespace ELMS.WEB.Models
         }
 
         public DbSet<EquipmentEntity> Equipment { get; set; }
+        public DbSet<NoteEntity> Notes { get; set; }
     }
 }
