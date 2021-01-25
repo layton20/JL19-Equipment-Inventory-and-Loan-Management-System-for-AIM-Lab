@@ -15,3 +15,5 @@ You can find a list of current documents within this Google drive link [here](ht
 ![Home Dashboard](https://i.gyazo.com/a1bc9e17647555f9a9a770212f199982.png "Home dashboard")
 
 ![Equipment Page](https://i.gyazo.com/dae09e003b9fb18d78b17ebc0c3e3287.png "Equipment view")
+
+![Equipment Details](https://i.gyazo.com/3042d50ad20cdbdb9fcb329b0044d542.png "Equipment details")
