@@ -141,6 +141,23 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> DetailsModalAsync(Guid equipmentUID)
+        {
+            if (equipmentUID == null || equipmentUID == Guid.Empty)
+            {
+                ViewData["ErrorMessage"] = "Invalid equipment UID";
+            }
+
+            DetailsViewModel _Model = new DetailsViewModel
+            {
+                Equipment = (await __EquipmentManager.GetAsync(equipmentUID)).ToViewModel(),
+                Notes = (await __NoteManager.GetAsync(equipmentUID)).ToViewModel()
+            };
+
+            return PartialView("_DetailsModal", _Model);
+        }
+
+        [HttpGet]
         public async Task<IActionResult> DeleteModalAsync(Guid equipmentUID)
         {
             EquipmentResponse _Response = await __EquipmentManager.GetAsync(equipmentUID);

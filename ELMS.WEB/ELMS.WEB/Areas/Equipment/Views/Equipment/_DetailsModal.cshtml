@@ -1,0 +1,65 @@
+﻿@model ELMS.WEB.Areas.Equipment.Models.DetailsViewModel
+
+<div class="modal-content">
+    <div class="modal-header">
+        <h5 class="modal-title"><strong>Equipment Details</strong></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div id="accordion" role="tablist">
+            <div class="card card-collapse">
+                <div class="card-header" role="tab" id="headingDetails">
+                    <h5 class="mb-0">
+                        <a data-toggle="collapse" href="#collapseDetails" aria-expanded="true" aria-controls="collapseDetails">
+                            Equipment Details
+                            <i class="material-icons">keyboard_arrow_down</i>
+                        </a>
+                    </h5>
+                </div>
+
+                <div id="collapseDetails" class="collapse show" role="tabpanel" aria-labelledby="headingDetails" data-parent="#accordion">
+                    <div class="card-body">
+                        <ul class="list-group rounded-0">
+                            <li class="list-group-item border my-1"><strong>Name: </strong><span>@Model.Equipment.Name</span></li>
+                            <li class="list-group-item border my-1"><strong>Status: </strong><span>@Model.Equipment.Status.ToString()</span></li>
+                            <li class="list-group-item border my-1"><strong>Warranty Expiration Date: </strong><span>@Model.Equipment.WarrantyExpirationDate</span></li>
+                            <li class="list-group-item border my-1"><strong>Purchase Price: </strong><span>@Model.Equipment.PurchasePrice</span></li>
+                            <li class="list-group-item border my-1"><strong>Purchase Date: </strong><span>@Model.Equipment.PurchaseDate</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="card card-collapse">
+                <div class="card-header" role="tab" id="headingNotes">
+                    <h5 class="mb-0">
+                        <a class="collapsed" data-toggle="collapse" href="#collapseNotes" aria-expanded="false" aria-controls="collapseNotes">
+                            Notes
+                            <i class="material-icons">keyboard_arrow_down</i>
+                        </a>
+                    </h5>
+                </div>
+                <div id="collapseNotes" class="collapse" role="tabpanel" aria-labelledby="headingNotes" data-parent="#accordion">
+                    <div class="card-body">
+                        <div>
+                            @foreach (var note in Model.Notes)
+                            {
+                                <div class="border my-2 py-2 px-3">
+                                    <div class="d-flex justify-content-between">
+                                        <strong>@note.Name</strong>
+                                        <strong>@note.CreatedTimestamp.ToShortDateString()</strong>
+                                    </div>
+                                    <p class="mb-0">@note.Name</p>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="my-4">
+                    <a class="btn btn-primary w-100" asp-area="Equipment" asp-controller="Equipment" asp-action="DetailsView" asp-route-equipmentuid="@Model.Equipment.UID" target="_blank">View details page</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
