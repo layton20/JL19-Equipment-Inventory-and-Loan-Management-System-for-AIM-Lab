@@ -6,6 +6,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="Adapters\Identity\" />
+    <Folder Include="Areas\Email\Data\" />
+    <Folder Include="Areas\Email\Models\" />
     <Folder Include="Areas\Equipment\Data\" />
     <Folder Include="Areas\Loan\Data\" />
     <Folder Include="Migrations\ELMSWEB\" />

@@ -29,4 +29,9 @@ $('.datatable-export').DataTable({
     }
 });
 
-$('[data-toggle="tooltip"]').tooltip()
+$('[data-toggle="tooltip"]').tooltip();
+
+tinymce.init({
+    selector: '.tinymce',
+    menubar: false,
+});
