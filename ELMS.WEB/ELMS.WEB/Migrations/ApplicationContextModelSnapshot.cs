@@ -99,6 +99,82 @@ namespace ELMS.WEB.Migrations
                     b.ToTable("Notes");
                 });
 
+            modelBuilder.Entity("ELMS.WEB.Entities.Loan.LoanEntity", b =>
+                {
+                    b.Property<Guid>("UID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("AcceptedTermsAndConditions")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("AmendedTimestamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("CreatedTimestamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ExpiryTimestamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("FromTimestamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LoaneeEmail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LoaneeId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<Guid>("LoaneeUID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("LoanerUID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("UID");
+
+                    b.HasIndex("LoaneeId");
+
+                    b.ToTable("Loans");
+                });
+
+            modelBuilder.Entity("ELMS.WEB.Entities.Loan.LoanEquipmentEntity", b =>
+                {
+                    b.Property<Guid>("UID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("AmendedTimestamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("CreatedTimestamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("EquipmentUID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("LoanUID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("UID");
+
+                    b.HasIndex("EquipmentUID");
+
+                    b.HasIndex("LoanUID");
+
+                    b.ToTable("LoanEquipmentList");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -316,6 +392,34 @@ namespace ELMS.WEB.Migrations
                     b.Navigation("Equipment");
 
                     b.Navigation("Owner");
+                });
+
+            modelBuilder.Entity("ELMS.WEB.Entities.Loan.LoanEntity", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "Loanee")
+                        .WithMany()
+                        .HasForeignKey("LoaneeId");
+
+                    b.Navigation("Loanee");
+                });
+
+            modelBuilder.Entity("ELMS.WEB.Entities.Loan.LoanEquipmentEntity", b =>
+                {
+                    b.HasOne("ELMS.WEB.Entities.Equipment.EquipmentEntity", "Equipment")
+                        .WithMany()
+                        .HasForeignKey("EquipmentUID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ELMS.WEB.Entities.Loan.LoanEntity", "Loan")
+                        .WithMany()
+                        .HasForeignKey("LoanUID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Equipment");
+
+                    b.Navigation("Loan");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

@@ -1,7 +1,13 @@
 using ELMS.WEB.Managers.Equipment.Concrete;
 using ELMS.WEB.Managers.Equipment.Interfaces;
+using ELMS.WEB.Managers.Loan.Concrete;
+using ELMS.WEB.Managers.Loan.Interface;
 using ELMS.WEB.Repositories.Equipment.Concrete;
 using ELMS.WEB.Repositories.Equipment.Interfaces;
+using ELMS.WEB.Repositories.Identity.Concrete;
+using ELMS.WEB.Repositories.Identity.Interface;
+using ELMS.WEB.Repositories.Loan.Concrete;
+using ELMS.WEB.Repositories.Loan.Interface;
 using ELMS.WEB.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -31,15 +37,19 @@ namespace ELMS.WEB
             // Manager
             services.AddScoped<IEquipmentManager, EquipmentManager>();
             services.AddScoped<INoteManager, NoteManager>();
+            services.AddScoped<ILoanManager, LoanManager>();
 
             // Repository
+            services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IEquipmentRepository, EquipmentRepository>();
             services.AddScoped<INoteRepository, NoteRepository>();
+            services.AddScoped<ILoanRepository, LoanRepository>();
 
             services.AddTransient<IEmailSender, EmailSender>();
             services.Configure<AuthMessageSenderOptions>(Configuration);
 
-            services.AddAuthorization(options => {
+            services.AddAuthorization(options =>
+            {
                 options.FallbackPolicy = new AuthorizationPolicyBuilder()
                 .RequireAuthenticatedUser()
                 .Build();

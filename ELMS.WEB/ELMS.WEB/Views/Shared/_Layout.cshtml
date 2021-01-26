@@ -6,7 +6,7 @@
     <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
-    <partial name="Imports/Links/_MainImport"/>
+    <partial name="Imports/Links/_MainImport" />
 </head>
 <body>
     @if (User.Identity.IsAuthenticated)
@@ -32,8 +32,6 @@
 
         <partial name="Components/_Footer" />
     }
-
-
 
     <div aria-hidden="true" aria-labelledby="modal-crud-label" role="dialog" tabindex="-1" id="modalRoot" class="modal fade">
         <div id="modalDialog" class="modal-dialog">

@@ -10,10 +10,15 @@ namespace ELMS.WEB.Managers.Equipment.Interfaces
     public interface IEquipmentManager
     {
         public Task<EquipmentResponse> CreateAsync(CreateEquipmentRequest request);
+
         public Task<EquipmentResponse> GetAsync(Guid uid);
+
         public Task<EquipmentListResponse> GetAsync();
+
         public Task<BaseResponse> UpdateAsync(EquipmentViewModel model);
+
         public Task<BaseResponse> DeleteAsync(DeleteEquipmentViewModel model);
+
         public Task<BaseResponse> BulkCreateAsync(CreateEquipmentRequest request);
     }
 }

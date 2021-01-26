@@ -5,7 +5,9 @@
     <UserSecretsId>97c499e8-42f8-4bb1-a7e6-3582ffdb2f02</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
+    <Folder Include="Adapters\Identity\" />
     <Folder Include="Areas\Equipment\Data\" />
+    <Folder Include="Areas\Loan\Data\" />
     <Folder Include="Migrations\ELMSWEB\" />
     <Folder Include="UI\Components\" />
   </ItemGroup>

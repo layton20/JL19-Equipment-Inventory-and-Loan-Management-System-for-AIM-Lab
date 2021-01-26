@@ -1,4 +1,12 @@
 ﻿$('.datatable').DataTable({
+    responsive: {
+        details: {
+            display: $.fn.dataTable.Responsive.display.childRow
+        }
+    }
+});
+
+$('.datatable-export').DataTable({
     dom: 'Bfrtip',
     buttons: [
         {
