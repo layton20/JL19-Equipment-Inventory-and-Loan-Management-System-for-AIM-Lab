@@ -22,5 +22,6 @@ namespace ELMS.WEB.Managers.Loan.Interface
         public Task<BaseResponse> ChangeStatusAsync(Guid uid, Status status);
 
         public Task<BaseResponse> UpdateAsync(UpdateLoanRequest loan);
+        public Task<IntResponse> GetCountByStatus(Status status);
     }
 }

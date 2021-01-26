@@ -88,5 +88,15 @@ namespace ELMS.WEB.Managers.Loan.Concrete
         {
             return (await __LoanRepository.GetAsync()).ToResponse();
         }
+
+        public async Task<IntResponse> GetCountByStatus(Status status)
+        {
+            IntResponse _Response = new IntResponse
+            {
+                Value = await __LoanRepository.GetCountByStatus(status)
+            };
+
+            return _Response;
+        }
     }
 }

@@ -103,6 +103,11 @@ namespace ELMS.WEB.Repositories.Loan.Concrete
             return await __ApplicationContext.Loans.FirstOrDefaultAsync(x => x.UID == uid);
         }
 
+        public async Task<int> GetCountByStatus(Status status)
+        {
+            return await __ApplicationContext.Loans.Where(x => x.Status == status).CountAsync();
+        }
+
         public async Task<bool> UpdateAsync(LoanEntity loan, IList<Guid> updatedEquipmentList)
         {
             if (loan.UID == Guid.Empty)

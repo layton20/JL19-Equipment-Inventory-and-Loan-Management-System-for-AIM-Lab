@@ -116,5 +116,70 @@ namespace ELMS.WEB.Areas.Loan.Controllers
 
             return RedirectToAction("Index", "Loan", new { Area = "Loan" });
         }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> AcceptTermsAndConditionsViewAsync(Guid loanUID)
+        {
+            if (loanUID == null || loanUID == Guid.Empty)
+            {
+                return Json("Page not found");
+            }
+
+            LoanResponse _Response = await __LoanManager.GetByUIDAsync(loanUID);
+
+            if (_Response == null)
+            {
+                return Json("Page not found");
+            }
+
+            LoanViewModel _LoanViewModel = _Response.ToViewModel();
+
+            IList<Guid> _EquipmentUIDs = (await __LoanEquipmentManager.GetAsync(_Response.UID)).Select(x => x.EquipmentUID).ToList();
+            if (_EquipmentUIDs != null && _EquipmentUIDs.Count > 0)
+            {
+                _LoanViewModel.EquipmentList = (await __EquipmentManager.GetAsync(_EquipmentUIDs)).Equipments.ToViewModel();
+            }
+
+            if (_Response.LoaneeUID != Guid.Empty)
+            {
+                _LoanViewModel.Loanee = await __UserRepository.GetByUIDAsync(_Response.LoaneeUID);
+            }
+
+            if (_Response.LoanerUID != Guid.Empty)
+            {
+                _LoanViewModel.Loaner = await __UserRepository.GetByUIDAsync(_Response.LoanerUID);
+            }
+
+            AcceptTermsAndConditionsViewModel _Model = new AcceptTermsAndConditionsViewModel
+            {
+                UID = loanUID,
+                Accepted = false,
+                Loan = _LoanViewModel
+            };
+
+            return View("AcceptTermsAndConditions", _Model);
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<IActionResult> AcceptTermsAndConditionsAsync(AcceptTermsAndConditionsViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                ViewData["ErrorMessage"] = "Invalid form submission";
+                return View("AcceptTermsAndConditions", model);
+            }
+
+            BaseResponse _Response = await __LoanManager.AcceptTermsAndConditions(model.UID);
+
+            if (!_Response.Success)
+            {
+                ModelState.AddModelError("Error", _Response.Message);
+                return await AcceptTermsAndConditionsViewAsync(model.UID);
+            }
+
+            return View("AcceptedTermsAndConditions");
+        }
     }
 }

@@ -1,0 +1,67 @@
+﻿@model ELMS.WEB.Areas.Loan.Models.AcceptTermsAndConditionsViewModel
+
+@{
+    ViewData["Title"] = "You have been assigned to a loan";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row bg-dark">
+        <div class="m-auto text-white text-center">
+            <div class="m-5">
+                <h1 class="display-2"><strong>AIM LAB</strong></h1>
+                <h2 class="display-4 text-center">@ViewData["Title"]</h2>
+                <p>Please read the Terms and Conditions below and accept to start the loan.</p>
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center text-center">
+        <div class="card col-md-5 col-sm-12">
+            <div class="card-header pt-4 pb-0">
+                <h3 class="card-title">Allocated equipment</h3>
+                <hr />
+            </div>
+            <div class="card-body pt-0">
+                <ul class="list-group list-group-flush">
+                    @foreach (var equipment in Model.Loan.EquipmentList)
+                    {
+                        <li class="list-group-item">
+                            <div class="d-flex justify-content-center align-items-center">
+                                <div class="mx-2">
+                                    <i class="far fa-image fa-3x text-gray"></i>
+                                </div>
+                                <div class="mx-2">
+                                    @equipment.Name
+                                </div>
+                            </div>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center text-center col-md-8 m-auto">
+        <h3>Terms and Conditions</h3>
+        <p>In signing out the identified equipment, <strong>I accept personal responsibility for the equipment and agree to replace it</strong> with new (to the satisfaction of the AIM Lab director) if lost or damaged whilst on loan to me. Furthermore, I agree to return the identified equipment immediately upon request by the AIM Lab director (or her delegate).</p>
+
+        <form asp-area="Loan" asp-controller="Loan" asp-action="AcceptTermsAndConditions">
+            <input type="hidden" asp-for="UID"/>
+            <div class="form-check">
+                <label class="form-check-label">
+                    <input class="checkAcceptTAC form-check-input" type="checkbox" asp-for="Accepted">
+                    I have read the Terms and Conditions and agree to them
+                    <span class="form-check-sign">
+                        <span class="check"></span>
+                    </span>
+                </label>
+            </div>
+            <div class="m-3">
+                <button type="submit" class="submit btn btn-primary" disabled>Activate Loan</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/areas/loan/accepttermsandconditions.js"></script>
+}
