@@ -93,6 +93,11 @@ namespace ELMS.WEB.Repositories.Loan.Concrete
             return await __ApplicationContext.Loans.Where(x => x.Status == Status.OnLoan).ToListAsync();
         }
 
+        public async Task<IList<LoanEntity>> GetAsync()
+        {
+            return await __ApplicationContext.Loans.ToListAsync();
+        }
+
         public async Task<LoanEntity> GetByUIDAsync(Guid uid)
         {
             return await __ApplicationContext.Loans.FirstOrDefaultAsync(x => x.UID == uid);

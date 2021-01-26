@@ -38,12 +38,14 @@ namespace ELMS.WEB
             services.AddScoped<IEquipmentManager, EquipmentManager>();
             services.AddScoped<INoteManager, NoteManager>();
             services.AddScoped<ILoanManager, LoanManager>();
+            services.AddScoped<ILoanEquipmentManager, LoanEquipmentManager>();
 
             // Repository
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IEquipmentRepository, EquipmentRepository>();
             services.AddScoped<INoteRepository, NoteRepository>();
             services.AddScoped<ILoanRepository, LoanRepository>();
+            services.AddScoped<ILoanEquipmentRepository, LoanEquipmentRepository>();
 
             services.AddTransient<IEmailSender, EmailSender>();
             services.Configure<AuthMessageSenderOptions>(Configuration);

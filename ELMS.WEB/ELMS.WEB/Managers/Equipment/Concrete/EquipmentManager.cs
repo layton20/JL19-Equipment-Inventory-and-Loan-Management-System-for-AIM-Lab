@@ -7,6 +7,7 @@ using ELMS.WEB.Models.Equipment.Request;
 using ELMS.WEB.Models.Equipment.Response;
 using ELMS.WEB.Repositories.Equipment.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -82,6 +83,15 @@ namespace ELMS.WEB.Managers.Equipment.Concrete
             EquipmentListResponse _Response = new EquipmentListResponse
             {
                 Equipments = (await __EquipmentRepository.GetAsync()).ToList().ToResponse()
+            };
+
+            return _Response;
+        }
+        public async Task<EquipmentListResponse> GetAsync(IList<Guid> uids)
+        {
+            EquipmentListResponse _Response = new EquipmentListResponse
+            {
+                Equipments = (await __EquipmentRepository.GetAsync(uids)).ToResponse()
             };
 
             return _Response;

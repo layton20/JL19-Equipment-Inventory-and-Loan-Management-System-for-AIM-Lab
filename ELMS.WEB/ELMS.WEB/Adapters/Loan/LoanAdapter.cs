@@ -88,5 +88,21 @@ namespace ELMS.WEB.Adapters.Loan
 
             return _Request;
         }
+
+        internal static LoanViewModel ToViewModel(this LoanResponse response)
+        {
+            return response == null ? null : new LoanViewModel
+            {
+                UID = response.UID,
+                Name = response.Name,
+                LoaneeEmail = response.LoaneeEmail,
+                FromTimestamp = response.FromTimestamp,
+                ExpiryTimestamp = response.ExpiryTimestamp,
+                Status = response.Status,
+                AcceptedTermsAndConditions = response.AcceptedTermsAndConditions,
+                CreatedTimestamp = response.CreatedTimestamp,
+                AmendedTimestamp = response.AmendedTimestamp
+            };
+        }
     }
 }

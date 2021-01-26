@@ -23,11 +23,11 @@ namespace ELMS.WEB.Entities.Loan
         public string LoaneeEmail { get; set; }
 
         [Required]
-        [CurrentDateAttribute]
+        [CurrentDate]
         public DateTime FromTimestamp { get; set; } = DateTime.Now;
 
         [Required]
-        [CurrentDateAttribute]
+        [CurrentDate]
         public DateTime ExpiryTimestamp { get; set; }
 
         [Required]

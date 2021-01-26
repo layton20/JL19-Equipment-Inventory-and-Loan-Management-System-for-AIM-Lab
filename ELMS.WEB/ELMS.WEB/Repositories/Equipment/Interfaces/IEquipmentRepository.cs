@@ -10,6 +10,7 @@ namespace ELMS.WEB.Repositories.Equipment.Interfaces
         public Task<EquipmentEntity> CreateAsync(EquipmentEntity equipment);
 
         public Task<EquipmentEntity> GetAsync(Guid uid);
+        public Task<IList<EquipmentEntity>> GetAsync(IList<Guid> uids);
 
         public Task<IEnumerable<EquipmentEntity>> GetAsync();
 

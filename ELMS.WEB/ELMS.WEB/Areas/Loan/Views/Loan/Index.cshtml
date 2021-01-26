@@ -17,7 +17,7 @@
             </div>
             <div class="card-footer">
                 <div class="stats">
-                    <a href="#">Add a new equipment</a>
+                    <a href="#">View active loans</a>
                 </div>
             </div>
         </div>
@@ -34,7 +34,7 @@
             </div>
             <div class="card-footer">
                 <div class="stats">
-                    <a href="#">Add a new equipment</a>
+                    <a href="#">View pending loans</a>
                 </div>
             </div>
         </div>
@@ -51,7 +51,7 @@
             </div>
             <div class="card-footer">
                 <div class="stats">
-                    <a href="#">Add a new equipment</a>
+                    <a href="#">View overdue loans</a>
                 </div>
             </div>
         </div>
@@ -104,16 +104,49 @@
                     <table class="display table datatable responsive hover compact" cellspacing="0" width="100%">
                         <thead>
                             <tr>
-                                <th class="text-center"></th>
-                                <th class="th-description font-weight-normal">Name</th>
-                                <th class="th-description font-weight-normal">Status</th>
-                                <th class="th-description font-weight-normal">Warranty Expiration Date</th>
-                                <th class="th-description font-weight-normal">Purchase Price (&pound;)</th>
-                                <th class="th-description font-weight-normal">Purchase Date</th>
+                                <th class="th-description font-weight-normal">Loan name</th>
+                                <th class="th-description font-weight-normal">Loaner</th>
+                                <th class="th-description font-weight-normal">Loanee</th>
+                                <th class="th-description font-weight-normal">Equipment</th>
+                                <th class="th-description font-weight-normal">Start Date</th>
+                                <th class="th-description font-weight-normal">End Date</th>
+                                <th class="th-description font-weight-normal">Terms and Conditions Accepted</th>
                                 <th class="th-description font-weight-normal">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach (var loan in Model.Loans)
+                            {
+                                <tr>
+                                    <td>@loan.Name</td>
+                                    <td>@loan.Loaner.Email</td>
+                                    <td>
+                                        @if (loan.Loanee == null)
+                                        {
+                                            @loan.LoaneeEmail
+                                        }
+                                        else
+                                        {
+                                            @loan.Loanee.Email
+                                        }
+                                    </td>
+                                    <td>
+                                        <ul class="list-group list-group-flush">
+                                            @foreach (var equipment in Model.Loans.FirstOrDefault(x => x.UID == loan.UID).EquipmentList)
+                                            {
+                                                <li class="list-group-item"><a href="#">@equipment.Name</a></li>
+                                            }
+                                        </ul>
+                                    </td>
+                                    <td>@loan.FromTimestamp</td>
+                                    <td>@loan.ExpiryTimestamp</td>
+                                    <td>@loan.AcceptedTermsAndConditions</td>
+                                    <td class="td-actions">
+                                        <a class="btn btn-primary" href="#"><i class="fas fa-eye p-1"></i></a>
+                                        <a class="deleteEquipment btn btn-danger text-white" href="#" data-toggle="tooltip" data-placement="left" title="Manually end loan"><i class="fas fa-backward p-1"></i></a>
+                                    </td>
+                                </tr>
+                            }
                         </tbody>
                     </table>
                 </div>

@@ -83,5 +83,10 @@ namespace ELMS.WEB.Managers.Loan.Concrete
 
             return _Response;
         }
+
+        public async Task<IList<LoanResponse>> GetAsync()
+        {
+            return (await __LoanRepository.GetAsync()).ToResponse();
+        }
     }
 }

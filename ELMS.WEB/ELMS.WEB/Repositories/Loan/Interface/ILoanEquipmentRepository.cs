@@ -1,0 +1,12 @@
+﻿using ELMS.WEB.Entities.Loan;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+namespace ELMS.WEB.Repositories.Loan.Interface
+{
+    public interface ILoanEquipmentRepository
+    {
+        public Task<IList<LoanEquipmentEntity>> GetAsync(Guid loanUID);
+    }
+}

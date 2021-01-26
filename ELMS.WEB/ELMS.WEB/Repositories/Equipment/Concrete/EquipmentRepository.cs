@@ -4,6 +4,7 @@ using ELMS.WEB.Repositories.Equipment.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ELMS.WEB.Repositories.Equipment.Concrete
@@ -113,6 +114,11 @@ namespace ELMS.WEB.Repositories.Equipment.Concrete
             _Equipment.Status = equipment.Status;
 
             return await __Context.SaveChangesAsync() > 0;
+        }
+
+        public async Task<IList<EquipmentEntity>> GetAsync(IList<Guid> uids)
+        {
+            return await __Context.Equipment.Where(x => uids.Contains(x.UID)).ToListAsync();
         }
     }
 }

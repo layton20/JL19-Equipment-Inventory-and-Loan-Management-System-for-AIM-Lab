@@ -10,6 +10,7 @@ using ELMS.WEB.Repositories.Identity.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -23,15 +24,17 @@ namespace ELMS.WEB.Areas.Loan.Controllers
         private readonly ILoanManager __LoanManager;
         private readonly IEquipmentManager __EquipmentManager;
         private readonly IUserRepository __UserRepository;
+        private readonly ILoanEquipmentManager __LoanEquipmentManager;
 
-        public LoanController(ILoanManager loanManager, IEquipmentManager equipmentManager, IUserRepository userRepository)
+        public LoanController(ILoanManager loanManager, IEquipmentManager equipmentManager, IUserRepository userRepository, ILoanEquipmentManager loanEquipmentManager)
         {
             __LoanManager = loanManager ?? throw new ArgumentNullException(nameof(loanManager));
             __EquipmentManager = equipmentManager ?? throw new ArgumentNullException(nameof(equipmentManager));
             __UserRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
+            __LoanEquipmentManager = loanEquipmentManager ?? throw new ArgumentNullException(nameof(loanEquipmentManager));
         }
 
-        public IActionResult Index(string errorMessage = "", string successMessage = "")
+        public async Task<IActionResult> Index(string errorMessage = "", string successMessage = "")
         {
             if (!String.IsNullOrWhiteSpace(errorMessage))
             {
@@ -43,7 +46,32 @@ namespace ELMS.WEB.Areas.Loan.Controllers
                 ViewData["SuccessMessage"] = successMessage;
             }
 
-            return View();
+            IndexViewModel _Model = new IndexViewModel();
+
+            foreach (LoanResponse loan in await __LoanManager.GetAsync())
+            {
+                LoanViewModel _LoanViewModel = loan.ToViewModel();
+
+                IList<Guid> _EquipmentUIDs = (await __LoanEquipmentManager.GetAsync(loan.UID)).Select(x => x.EquipmentUID).ToList();
+                if (_EquipmentUIDs != null && _EquipmentUIDs.Count > 0)
+                {
+                    _LoanViewModel.EquipmentList = (await __EquipmentManager.GetAsync(_EquipmentUIDs)).Equipments.ToViewModel();
+                }
+
+                if (loan.LoaneeUID != Guid.Empty)
+                {
+                    _LoanViewModel.Loanee = await __UserRepository.GetByUIDAsync(loan.LoaneeUID);
+                }
+
+                if (loan.LoanerUID != Guid.Empty)
+                {
+                    _LoanViewModel.Loaner = await __UserRepository.GetByUIDAsync(loan.LoanerUID);
+                }
+
+                _Model.Loans.Add(_LoanViewModel);
+            }
+
+            return View("Index", _Model);
         }
 
         [HttpGet]

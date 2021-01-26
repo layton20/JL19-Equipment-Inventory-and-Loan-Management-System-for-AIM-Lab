@@ -28,3 +28,5 @@ $('.datatable-export').DataTable({
         }
     }
 });
+
+$('[data-toggle="tooltip"]').tooltip()
