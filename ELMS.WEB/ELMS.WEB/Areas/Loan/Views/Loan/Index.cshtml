@@ -1,0 +1,169 @@
+﻿@model ELMS.WEB.Areas.Loan.Models.IndexViewModel
+@using ELMS.WEB.Enums.Loan
+
+@{
+    ViewData["Title"] = "Loan Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card card-stats">
+            <div class="card-header card-header-icon card-header-success">
+                <div class="card-icon">
+                    <i class="fas fa-sign-in-alt"></i>
+                </div>
+                <div class="card-category">Active Loans</div>
+                <h2 class="card-title">@Model.Loans.Where(x => x.AcceptedTermsAndConditions && x.ExpiryTimestamp > DateTime.Now && x.FromTimestamp < DateTime.Now).Count()</h2>
+            </div>
+            <div class="card-footer">
+                <div class="stats">
+                    <a href="#">View active loans</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card card-stats">
+            <div class="card-header card-header-icon card-header-primary">
+                <div class="card-icon">
+                    <i class="fas fa-pause-circle"></i>
+                </div>
+                <div class="card-category">Pending Loans</div>
+                <h2 class="card-title">@Model.Loans.Where(x => !x.AcceptedTermsAndConditions).Count()</h2>
+            </div>
+            <div class="card-footer">
+                <div class="stats">
+                    <a href="#">View pending loans</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card card-stats">
+            <div class="card-header card-header-icon card-header-danger">
+                <div class="card-icon">
+                    <i class="fas fa-exclamation-circle"></i>
+                </div>
+                <div class="card-category">Overdue Loans</div>
+                <h2 class="card-title">@Model.Loans.Where(x => x.AcceptedTermsAndConditions && x.ExpiryTimestamp < DateTime.Now && x.Status == Status.OnLoan).Count()</h2>
+            </div>
+            <div class="card-footer">
+                <div class="stats">
+                    <a href="#">View overdue loans</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex pull-left">
+                    <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle" id="statusDropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">All Statuses</button>
+                        <div class="dropdown-menu" aria-labelledby="statusDropdownMenuButton">
+                            <a class="dropdown-item" href="javascript:;">All Statuses</a>
+                            <a class="dropdown-item" href="javascript:;">Available</a>
+                            <a class="dropdown-item" href="javascript:;">On Loan</a>
+                            <a class="dropdown-item" href="javascript:;">Unavailable</a>
+                        </div>
+                    </div>
+                    <div class="ml-1">
+                        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseFilters" aria-expanded="false" aria-controls="collapseFilters">
+                            <i class="material-icons mr-2">filter_alt</i>Show Filters
+                        </button>
+                    </div>
+                </div>
+                <div class="pull-right">
+                    <a class="create btn btn-success text-white" asp-area="Loan" asp-controller="Loan" asp-action="CreateView">New Loan</a>
+                    <div class="btn-group">
+                        <a class="btn btn-primary"><i class="text-white fas fa-th-large"></i></a>
+                        <a class="btn btn-primary active"><i class="text-white fas fa-bars"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 collapse" id="collapseFilters">
+                <div class="card my-3">
+                    <div class="card-header">
+                        HIDDEN FILTERS
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mt-0">
+            <div class="card-header card-header-primary card-header-icon">
+                <h4 class="card-title">All Equipment</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="display table datatable responsive hover compact" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th class="th-description font-weight-normal">Loan name</th>
+                                <th class="th-description font-weight-normal">Loaner</th>
+                                <th class="th-description font-weight-normal">Loanee</th>
+                                <th class="th-description font-weight-normal">Equipment</th>
+                                <th class="th-description font-weight-normal">Start Date</th>
+                                <th class="th-description font-weight-normal">End Date</th>
+                                <th class="th-description font-weight-normal">Status</th>
+                                <th class="th-description font-weight-normal">Terms and Conditions Accepted</th>
+                                <th class="th-description font-weight-normal">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var loan in Model.Loans)
+                            {
+                                <tr>
+                                    <td>@loan.Name</td>
+                                    <td>@loan.Loaner.Email</td>
+                                    <td>
+                                        @if (loan.Loanee == null)
+                                        {
+                                            @loan.LoaneeEmail
+                                        }
+                                        else
+                                        {
+                                            @loan.Loanee.Email
+                                        }
+                                    </td>
+                                    <td>
+                                        <ul class="list-group list-group-flush">
+                                            @foreach (var equipment in Model.Loans.FirstOrDefault(x => x.UID == loan.UID).EquipmentList)
+                                            {
+                                                <li class="list-group-item"><a class="loanDetailsModal text-primary" data-url="/Equipment/Equipment/DetailsModal" data-uid="@equipment.UID" style="cursor: pointer">@equipment.Name</a></li>
+                                            }
+                                        </ul>
+                                    </td>
+                                    <td>@loan.FromTimestamp</td>
+                                    <td>@loan.ExpiryTimestamp</td>
+                                    <td>@loan.Status.ToString()</td>
+                                    <td>@loan.AcceptedTermsAndConditions</td>
+                                    <td class="td-actions">
+                                        <a class="btn btn-primary text-white"><i class="fas fa-eye p-1"></i></a>
+                                        <a class="deleteEquipment btn btn-danger text-white" href="#" data-toggle="tooltip" data-placement="left" title="Manually end loan"><i class="fas fa-backward p-1"></i></a>
+                                        <a class="deleteEquipment btn btn-danger text-white p-1" asp-area="Loan" asp-controller="Loan" asp-action="AcceptTermsAndConditionsView" asp-route-loanuid="@loan.UID">TAC</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/areas/loan/index.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#navItemLoans').addClass('active');
+        });
+    </script>
+}

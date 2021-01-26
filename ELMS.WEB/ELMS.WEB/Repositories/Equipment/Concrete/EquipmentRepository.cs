@@ -115,5 +115,10 @@ namespace ELMS.WEB.Repositories.Equipment.Concrete
 
             return await __Context.SaveChangesAsync() > 0;
         }
+
+        public async Task<IList<EquipmentEntity>> GetAsync(IList<Guid> uids)
+        {
+            return await __Context.Equipment.Where(x => uids.Contains(x.UID)).ToListAsync();
+        }
     }
 }

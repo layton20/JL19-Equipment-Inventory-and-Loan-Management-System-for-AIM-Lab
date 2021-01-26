@@ -11,12 +11,15 @@ namespace ELMS.WEB.Entities.Equipment
         [Required]
         [ForeignKey("Owner")]
         public string OwnerUID { get; set; }
+
         [Required]
         [ForeignKey("Equipment")]
         public Guid EquipmentUID { get; set; }
+
         [Required]
         [MaxLength(50)]
         public string Name { get; set; }
+
         public string Description { get; set; }
         public IdentityUser Owner { get; set; }
         public EquipmentEntity Equipment { get; set; }

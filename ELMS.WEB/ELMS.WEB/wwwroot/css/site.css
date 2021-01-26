@@ -83,9 +83,8 @@ body {
 }
 
 .validation-summary-errors {
-
 }
 
-.validation-summary-errors > ul {
-    margin: 1rem 0 0 0;
-}
+    .validation-summary-errors > ul {
+        margin: 1rem 0 0 0;
+    }

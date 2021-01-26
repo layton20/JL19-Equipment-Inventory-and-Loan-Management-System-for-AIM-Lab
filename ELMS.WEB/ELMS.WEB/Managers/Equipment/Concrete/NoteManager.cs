@@ -7,7 +7,6 @@ using ELMS.WEB.Models.Equipment.Response;
 using ELMS.WEB.Repositories.Equipment.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ELMS.WEB.Managers.Equipment.Concrete

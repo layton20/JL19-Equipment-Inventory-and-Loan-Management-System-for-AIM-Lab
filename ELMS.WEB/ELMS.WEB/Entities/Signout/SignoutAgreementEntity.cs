@@ -1,5 +1,5 @@
 ﻿using ELMS.WEB.Entities.Base;
-using ELMS.WEB.Enums.Signout;
+using ELMS.WEB.Enums.Loan;
 using System;
 using System.ComponentModel.DataAnnotations;
 

@@ -8,6 +8,7 @@ namespace ELMS.WEB.Models.Equipment.Request
     {
         [Required]
         public Guid UID { get; set; }
+
         [Required]
         [MaxLength(50)]
         public string Name { get; set; }
@@ -22,8 +23,8 @@ namespace ELMS.WEB.Models.Equipment.Request
 
         [Required]
         public DateTime WarrantyExpirationDate { get; set; }
-        [Required]
 
+        [Required]
         public Status Status { get; set; } = Status.Available;
     }
 }

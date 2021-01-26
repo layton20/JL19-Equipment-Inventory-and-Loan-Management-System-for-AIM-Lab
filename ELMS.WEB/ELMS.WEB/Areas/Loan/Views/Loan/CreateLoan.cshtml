@@ -1,0 +1,170 @@
+﻿@model ELMS.WEB.Areas.Loan.Models.CreateLoanViewModel
+
+@{
+    ViewData["Title"] = "Create a new Loan";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row bg-dark">
+        <div class="m-auto text-white text-center">
+            <div class="m-5">
+                <h1 class="display-2"><strong>@ViewData["Title"]</strong></h1>
+                <h2 class="display-4 text-center">Select the equipment and user you would like to create a loan for.</h2>
+                <p>The user will be required to accept the Terms of Conditions before the loan becomes active.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form asp-area="Loan" asp-controller="Loan" asp-action="Create" enctype="multipart/form-data">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="card my-3">
+        <div class="card-header card-header-primary card-header-icon">
+            <h4 class="card-title">Provide general details</h4>
+        </div>
+        <div class="card-body">
+            <div class="form-group">
+                <label asp-for="Name">Loan Name</label>
+                <input class="form-control" asp-for="Name">
+                <small>The name should roughly describe what the loan is about</small>
+            </div>
+            <div class="form-group">
+                <label asp-for="FromTimestamp"></label>
+                <input class="form-control datetimepicker" asp-for="FromTimestamp" value="@DateTime.Now"/>
+            </div>
+            <div class="form-group">
+                <label asp-for="ExpiryTimestamp"></label>
+                <input class="form-control datetimepicker" asp-for="ExpiryTimestamp" value="@DateTime.Now.AddDays(7)"/>
+            </div>
+        </div>
+    </div>
+
+    <div class="card my-3">
+        <div class="card-header card-header-primary card-header-icon">
+            <h4 class="card-title">Select Available Equipment</h4>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="display table datatable-export responsive hover compact" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th class="text-center"></th>
+                            <th class="th-description font-weight-normal">Name</th>
+                            <th class="th-description font-weight-normal">Status</th>
+                            <th class="th-description font-weight-normal">Warranty Expiration Date</th>
+                            <th class="th-description font-weight-normal">Purchase Price (&pound;)</th>
+                            <th class="th-description font-weight-normal">Purchase Date</th>
+                            <th class="th-description font-weight-normal">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.EquipmentSelectList.Count; i++)
+                        {
+                            <tr>
+                                <td>
+                                    <input type="checkbox" class="checkbox-equipment" />
+                                    <input class="equipment-selection" type="hidden" asp-for="SelectedEquipment" value="@Model.EquipmentSelectList[i].UID" disabled />
+                                </td>
+                                <td>@Model.EquipmentSelectList[i].Name</td>
+                                <td>@Model.EquipmentSelectList[i].Status.ToString()</td>
+                                <td>@Model.EquipmentSelectList[i].WarrantyExpirationDate</td>
+                                <td>@Model.EquipmentSelectList[i].PurchasePrice</td>
+                                <td>@Model.EquipmentSelectList[i].PurchaseDate</td>
+                                <td>
+                                    <a class="btn btn-primary" asp-area="Equipment" asp-controller="Equipment" asp-action="DetailsView" asp-route-equipmentUID="@Model.EquipmentSelectList[i].UID"><i class="fas fa-eye p-1"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="card my-3">
+        <div class="card-header card-header-primary card-header-icon">
+            <h4 class="card-title">Select User</h4>
+        </div>
+        <div class="card-body">
+            <div id="accordion" role="tablist">
+                <div class="card card-collapse">
+                    <div class="card-header pt-0" role="tab" id="headingExistingUser">
+                        <h5 class="mb-0">
+                            <a id="collapseLinkExistingUser" data-toggle="collapse" href="#collapseExistingUser" aria-expanded="true" aria-controls="collapseExistingUser">
+                                Option 1: Select by existing user
+                                <i class="material-icons">keyboard_arrow_down</i>
+                            </a>
+                        </h5>
+                    </div>
+                    <div id="collapseExistingUser" class="collapse show" role="tabpanel" aria-labelledby="headingExistingUser" data-parent="#accordion">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="display table datatable responsive hover compact" cellspacing="0" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th class="th-description font-weight-normal">Select</th>
+                                            <th class="th-description font-weight-normal">Username</th>
+                                            <th class="th-description font-weight-normal">Normalised Email</th>
+                                            <th class="th-description font-weight-normal">Email Confirmed</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var user in Model.UserSelectList)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <input class="user-radio" type="radio" asp-for="LoaneeUID" value="@user.Id">
+                                                    <input class="user-detail" type="hidden" asp-for="LoaneeEmailAddress" value="@user.Email"/>
+                                                    <input class="user-detail" type="hidden" asp-for="LoaneeUID" value="@user.Id"/>
+                                                </td>
+                                                <td>@user.UserName</td>
+                                                <td>@user.NormalizedEmail</td>
+                                                <td>@user.EmailConfirmed</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card card-collapse">
+                    <div class="card-header" role="tab" id="headingManualUser">
+                        <h5 class="mb-0">
+                            <a id="collapseLinkManualUser" class="collapsed" data-toggle="collapse" href="#collapseManualUser" aria-expanded="false" aria-controls="collapseManualUser">
+                                Option 2: Select by manual details
+                                <i class="material-icons">keyboard_arrow_down</i>
+                            </a>
+                        </h5>
+                    </div>
+                    <div id="collapseManualUser" class="collapse" role="tabpanel" aria-labelledby="headingManualUser" data-parent="#accordion">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label asp-for="LoaneeEmailAddress"></label>
+                                <input type="email" class="manualUserEmail form-control" asp-for="LoaneeEmailAddress" placeholder="AstonAIM@aston.ac.uk">
+                                <small>The confirmation link will be sent to this email. Ensure it is correct</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center">
+        <h3>How it works</h3>
+        <p>Ensure you have enter all required details for this loan, submit the form below to create a <strong>potential</strong> loan.</p>
+        <p>This will create a loan and send a confirmation link to the provided user's address to accept the Terms and Conditions of this loan. Once accepted, the loan will be <strong>active</strong>. Currently it is inactive.</p>
+
+        <div>
+            <input type="submit" class="btn btn-success" value="I understand. Create the loan" />
+            <a class="btn text-white">Cancel.</a>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <script src="~/js/areas/loan/createloan.js"></script>
+}
