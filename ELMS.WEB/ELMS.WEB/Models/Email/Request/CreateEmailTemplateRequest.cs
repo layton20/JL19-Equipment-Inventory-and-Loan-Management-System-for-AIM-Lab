@@ -1,11 +1,10 @@
-﻿using ELMS.WEB.Entities.Base;
-using ELMS.WEB.Enums.Email;
+﻿using ELMS.WEB.Enums.Email;
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace ELMS.WEB.Entities.Email
+namespace ELMS.WEB.Models.Email.Request
 {
-    public class EmailTemplateEntity : BaseEntity
+    public class CreateEmailTemplateRequest
     {
         [Required]
         public string Name { get; set; }

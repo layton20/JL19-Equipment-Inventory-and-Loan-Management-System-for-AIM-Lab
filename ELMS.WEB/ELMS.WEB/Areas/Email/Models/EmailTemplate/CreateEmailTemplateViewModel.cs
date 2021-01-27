@@ -1,16 +1,15 @@
-﻿using ELMS.WEB.Entities.Base;
-using ELMS.WEB.Enums.Email;
-using System;
+﻿using ELMS.WEB.Enums.Email;
 using System.ComponentModel.DataAnnotations;
 
-namespace ELMS.WEB.Entities.Email
+namespace ELMS.WEB.Areas.Email.Models.EmailTemplate
 {
-    public class EmailTemplateEntity : BaseEntity
+    public class CreateEmailTemplateViewModel
     {
         [Required]
         public string Name { get; set; }
 
         [Required]
+        [Display(Name = "Email Format")]
         public EmailTemplateType TemplateType { get; set; }
 
         [Required]
@@ -18,7 +17,6 @@ namespace ELMS.WEB.Entities.Email
 
         [Required]
         public string Body { get; set; }
-        [Required]
-        public Guid OwnerUID { get; set; }
+        public string OwnerUID { get; set; }
     }
 }

@@ -1,9 +1,95 @@
-﻿
+﻿@model ELMS.WEB.Areas.Email.Models.EmailTemplate.IndexViewModel
+
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Email Templates";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<div class="row">
+    <div class="col-12">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex pull-left">
+                    <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle" id="statusDropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">All Statuses</button>
+                        <div class="dropdown-menu" aria-labelledby="statusDropdownMenuButton">
+                            <a class="dropdown-item" href="javascript:;">All Statuses</a>
+                            <a class="dropdown-item" href="javascript:;">Available</a>
+                            <a class="dropdown-item" href="javascript:;">On Loan</a>
+                            <a class="dropdown-item" href="javascript:;">Unavailable</a>
+                        </div>
+                    </div>
+                    <div class="ml-1">
+                        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseFilters" aria-expanded="false" aria-controls="collapseFilters">
+                            <i class="material-icons mr-2">filter_alt</i>Show Filters
+                        </button>
+                    </div>
+                </div>
+                <div class="pull-right">
+                    <a class="create btn btn-success text-white" data-url="/Email/EmailTemplate/CreateModal">New Email Template</a>
+                    <div class="btn-group">
+                        <a class="btn btn-primary"><i class="text-white fas fa-th-large"></i></a>
+                        <a class="btn btn-primary active"><i class="text-white fas fa-bars"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 collapse" id="collapseFilters">
+                <div class="card my-3">
+                    <div class="card-header">
+                        HIDDEN FILTERS
+                    </div>
+                </div>
+            </div>
+        </div>
 
-<textarea class="tinymce">HI THERE</textarea>
+        <div class="card mt-0">
+            <div class="card-header card-header-primary card-header-icon">
+                <h4 class="card-title">All Email Templates</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="display table datatable responsive hover compact" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th class="th-description font-weight-normal">Name</th>
+                                <th class="th-description font-weight-normal">Subject</th>
+                                <th class="th-description font-weight-normal">Body</th>
+                                <th class="th-description font-weight-normal">Format</th>
+                                <th class="th-description font-weight-normal">Created By</th>
+                                <th class="th-description font-weight-normal">Created On</th>
+                                <th class="th-description font-weight-normal">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var template in Model.EmailTemplates)
+                            {
+                                <tr>
+                                    <td class="td-name">@template.Name</td>
+                                    <td class="td-name">@template.Subject</td>
+                                    <td class="td-name">@template.Body</td>
+                                    <td class="td-name">@template.TemplateType.ToString()</td>
+                                    <td class="td-name">@template.OwnerUID</td>
+                                    <td class="td-name">@template.CreatedTimestamp</td>
+                                    <td class="td-actions">
+                                        <a class="editEmailTemplate btn btn-primary text-white" data-url="/Email/EmailTemplate/EditModal" data-uid="@template.UID"><i class="fas fa-pen p-1"></i></a>
+                                        <a class="deleteEmailTemplate btn btn-danger text-white" data-url="/Email/EmailTemplate/DeleteModal" data-uid="@template.UID"><i class="fas fa-trash p-1"></i></a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/areas/email/emailtemplates/index.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#navItemEmails').addClass('active');
+            $('#navItemEmailTemplates').addClass('active');
+        });
+    </script>
+}

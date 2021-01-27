@@ -1,12 +1,13 @@
-﻿using ELMS.WEB.Entities.Base;
-using ELMS.WEB.Enums.Email;
+﻿using ELMS.WEB.Enums.Email;
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace ELMS.WEB.Entities.Email
+namespace ELMS.WEB.Models.Email.Request
 {
-    public class EmailTemplateEntity : BaseEntity
+    public class UpdateEmailTemplateRequest
     {
+        [Required]
+        public Guid UID { get; set; }
         [Required]
         public string Name { get; set; }
 
@@ -18,7 +19,5 @@ namespace ELMS.WEB.Entities.Email
 
         [Required]
         public string Body { get; set; }
-        [Required]
-        public Guid OwnerUID { get; set; }
     }
 }
