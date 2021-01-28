@@ -15,6 +15,8 @@ You can find a list of current documents within this Google drive link [here](ht
 - [Adobe XD Frontend Mockups](https://xd.adobe.com/view/0def09b2-8346-4e37-b770-13f543e4b9f3-58bc/)
   - These mockups may evolve and change in the future
   - These mockups are not artboard-connected for animations, but are just rough artboards. After clicking on the link to the Adobe XD mockups, click on the grid icon (4-square icon) in the top-left corner of the page to view all artboards
+- [Documents](https://drive.google.com/drive/folders/1qfzen5QwIkEONeCTrvyNe7FD1jh9Aut_?usp=sharing)
+  - Contains a list of documents and deliverables to manage tasks, requirement elicitation, system/architecture/software specifications, analysis, etc.
 
 ## Example screenshots of the current system
 ![Home Dashboard](https://i.gyazo.com/a1bc9e17647555f9a9a770212f199982.png "Home dashboard")
