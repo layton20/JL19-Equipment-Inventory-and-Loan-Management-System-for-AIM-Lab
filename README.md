@@ -12,7 +12,7 @@ The Aston Interactive Media (AIM) Lab is home to a variety of interesting techno
 You can find a list of current documents within this Google drive link [here](https://drive.google.com/drive/folders/1qfzen5QwIkEONeCTrvyNe7FD1jh9Aut_?usp=sharing) to see where I currently am!
 
 ## Links and resources
-- ([Adobe XD Frontend Mockups](https://xd.adobe.com/view/0def09b2-8346-4e37-b770-13f543e4b9f3-58bc/)
+- [Adobe XD Frontend Mockups](https://xd.adobe.com/view/0def09b2-8346-4e37-b770-13f543e4b9f3-58bc/)
   - These mockups may evolve and change in the future
   - These mockups are not artboard-connected for animations, but are just rough artboards. After clicking on the grid, click on the grid icon (4-square icon) to view all artboards
 
