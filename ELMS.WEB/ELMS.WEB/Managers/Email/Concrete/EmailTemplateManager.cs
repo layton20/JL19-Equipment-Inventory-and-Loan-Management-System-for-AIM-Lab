@@ -6,8 +6,6 @@ using ELMS.WEB.Models.Email.Request;
 using ELMS.WEB.Models.Email.Response;
 using ELMS.WEB.Repositories.Email.Interface;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ELMS.WEB.Managers.Email.Concrete

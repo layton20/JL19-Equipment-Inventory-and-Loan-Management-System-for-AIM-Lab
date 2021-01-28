@@ -127,5 +127,12 @@ namespace ELMS.WEB.Areas.Email.Controllers
 
             return RedirectToAction("Index", "EmailTemplate", new { Area = "Email", successMessage = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} deleted {ENTITY_NAME}" });
         }
+
+        [HttpGet]
+        public async Task<IActionResult> DetailsModalAsync(Guid uid)
+        {
+            EmailTemplateResponse _Response = await __EmailTemplateManager.GetByUIDAsync(uid);
+            return PartialView("_DetailsModal", _Response.ToViewModel());
+        }
     }
 }

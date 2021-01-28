@@ -38,14 +38,14 @@ namespace ELMS.WEB.Repositories.Email.Concrete
                 return false;
             }
 
-            EmailTemplateEntity _EmailTempalte = await __Context.EmailTemplates.FirstOrDefaultAsync(x => x.UID == uid);
+            EmailTemplateEntity _EmailTemplate = await __Context.EmailTemplates.FindAsync(uid);
 
-            if (_EmailTempalte == null)
+            if (_EmailTemplate == null)
             {
                 return false;
             }
 
-            __Context.EmailTemplates.Remove(_EmailTempalte);
+            __Context.EmailTemplates.Remove(_EmailTemplate);
 
             return await __Context.SaveChangesAsync() > 0;
         }

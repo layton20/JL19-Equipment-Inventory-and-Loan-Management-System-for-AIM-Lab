@@ -44,6 +44,7 @@ namespace ELMS.WEB
             services.AddScoped<ILoanManager, LoanManager>();
             services.AddScoped<ILoanEquipmentManager, LoanEquipmentManager>();
             services.AddScoped<IEmailTemplateManager, EmailTemplateManager>();
+            services.AddScoped<IEmailScheduleManager, EmailScheduleManager>();
 
             // Repository
             services.AddScoped<IUserRepository, UserRepository>();
@@ -52,6 +53,7 @@ namespace ELMS.WEB
             services.AddScoped<ILoanRepository, LoanRepository>();
             services.AddScoped<ILoanEquipmentRepository, LoanEquipmentRepository>();
             services.AddScoped<IEmailTemplateRepository, EmailTemplateRepository>();
+            services.AddScoped<IEmailScheduleRepository, EmailScheduleRepository>();
 
             services.AddTransient<IEmailSender, EmailSender>();
             services.Configure<AuthMessageSenderOptions>(Configuration);
