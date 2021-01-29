@@ -51,7 +51,8 @@ namespace ELMS.WEB.Adapters.Loan
                 ExpiryTimestamp = entity.ExpiryTimestamp,
                 Status = entity.Status,
                 CreatedTimestamp = entity.CreatedTimestamp,
-                AmendedTimestamp = entity.AmendedTimestamp
+                AmendedTimestamp = entity.AmendedTimestamp,
+                LoaneeEmail = entity.LoaneeEmail
             };
         }
 

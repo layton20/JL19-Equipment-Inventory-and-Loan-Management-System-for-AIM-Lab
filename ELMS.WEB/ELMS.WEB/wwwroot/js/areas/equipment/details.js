@@ -56,13 +56,14 @@
     $('#modalRoot').on("submit", ".formCreate", function (e) {
         e.preventDefault();
         var form = $(this);
-        postModalFormAjax(form);
+        var equipmentUid = $(this).data('equipmentuid');
+        postModalFormAjax(form, `/Equipment/Equipment/DetailsView?EquipmentUID=${equipmentUid}`);
     });
 
     $('#modalRoot').on("submit", ".formNote", function (e) {
         e.preventDefault();
         var form = $(this);
-        var equipmentUid = $(this).data('equipmentuid')
+        var equipmentUid = $(this).data('equipmentuid');
         postModalFormAjax(form, `/Equipment/Equipment/DetailsView?EquipmentUID=${equipmentUid}`);
     });
 

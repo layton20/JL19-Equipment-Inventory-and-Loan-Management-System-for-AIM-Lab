@@ -1,7 +1,11 @@
+using ELMS.WEB.Managers.Email.Concrete;
+using ELMS.WEB.Managers.Email.Interface;
 using ELMS.WEB.Managers.Equipment.Concrete;
 using ELMS.WEB.Managers.Equipment.Interfaces;
 using ELMS.WEB.Managers.Loan.Concrete;
 using ELMS.WEB.Managers.Loan.Interface;
+using ELMS.WEB.Repositories.Email.Concrete;
+using ELMS.WEB.Repositories.Email.Interface;
 using ELMS.WEB.Repositories.Equipment.Concrete;
 using ELMS.WEB.Repositories.Equipment.Interfaces;
 using ELMS.WEB.Repositories.Identity.Concrete;
@@ -39,6 +43,8 @@ namespace ELMS.WEB
             services.AddScoped<INoteManager, NoteManager>();
             services.AddScoped<ILoanManager, LoanManager>();
             services.AddScoped<ILoanEquipmentManager, LoanEquipmentManager>();
+            services.AddScoped<IEmailTemplateManager, EmailTemplateManager>();
+            services.AddScoped<IEmailScheduleManager, EmailScheduleManager>();
 
             // Repository
             services.AddScoped<IUserRepository, UserRepository>();
@@ -46,9 +52,16 @@ namespace ELMS.WEB
             services.AddScoped<INoteRepository, NoteRepository>();
             services.AddScoped<ILoanRepository, LoanRepository>();
             services.AddScoped<ILoanEquipmentRepository, LoanEquipmentRepository>();
+            services.AddScoped<IEmailTemplateRepository, EmailTemplateRepository>();
+            services.AddScoped<IEmailScheduleRepository, EmailScheduleRepository>();
 
             services.AddTransient<IEmailSender, EmailSender>();
-            services.Configure<AuthMessageSenderOptions>(Configuration);
+            services.Configure<SendGridEmailSenderOptions>(options =>
+            {
+                options.SendGridKey = Configuration["SendGrid:ApiKey"];
+                options.SenderEmail = Configuration["SendGrid:SenderEmail"];
+                options.SenderName = Configuration["SendGrid:SenderName"];
+            });
 
             services.AddAuthorization(options =>
             {

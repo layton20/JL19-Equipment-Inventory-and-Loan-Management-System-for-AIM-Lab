@@ -44,7 +44,7 @@ namespace ELMS.WEB.Repositories.Equipment.Concrete
             {
                 _Copies.Add(new EquipmentEntity
                 {
-                    Name = equipment.Name,
+                    Name = $"{equipment.Name} {i + 1}",
                     Description = equipment.Description,
                     WarrantyExpirationDate = equipment.WarrantyExpirationDate,
                     Status = equipment.Status,

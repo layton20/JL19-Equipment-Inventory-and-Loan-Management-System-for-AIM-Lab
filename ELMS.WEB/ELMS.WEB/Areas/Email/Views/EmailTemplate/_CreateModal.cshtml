@@ -1,0 +1,45 @@
+﻿@model ELMS.WEB.Areas.Email.Models.EmailTemplate.CreateEmailTemplateViewModel
+
+<div class="modal-content">
+    <div class="modal-header d-flex align-content-center">
+        <div><h2 class="modal-title text-left font-weight-bold">Add a new email template</h2></div>
+        <div>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <i class="fas fa-times-circle 2x"></i>
+            </button>
+        </div>
+    </div>
+    <form class="formCreate" enctype="multipart/form-data" asp-area="Email" asp-controller="EmailTemplate" asp-action="Create">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label asp-for="Name"></label>
+                <input class="form-control" asp-for="Name" />
+            </div>
+            <div class="form-group">
+                <label asp-for="TemplateType"></label>
+                <select class="col-12 p-1 mb-2" data-style="btn btn-link" asp-for="TemplateType" asp-items="Html.GetEnumSelectList<ELMS.WEB.Enums.Email.EmailTemplateType>()">
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Subject"></label>
+                <input class="form-control" asp-for="Subject" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Body"></label>
+                <textarea class="tinymce w-100" asp-for="Body" cols="3"></textarea>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Create Email Template</button>
+            <button type="submit" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    tinymce.init({
+        selector: '.tinymce',
+        menubar: false,
+    });
+</script>

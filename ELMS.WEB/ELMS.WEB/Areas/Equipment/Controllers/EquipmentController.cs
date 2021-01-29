@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -49,7 +50,7 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
 
             IndexViewModel _Model = new IndexViewModel
             {
-                Equipment = (await __EquipmentManager.GetAsync()).Equipments.ToViewModel()
+                Equipment = (await __EquipmentManager.GetAsync()).Equipments.OrderByDescending(x => x.CreatedTimestamp).ToList().ToViewModel()
             };
 
             return View(_Model);
