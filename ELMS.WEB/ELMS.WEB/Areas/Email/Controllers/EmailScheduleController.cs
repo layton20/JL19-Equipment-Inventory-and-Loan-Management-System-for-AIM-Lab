@@ -4,9 +4,12 @@ using ELMS.WEB.Helpers;
 using ELMS.WEB.Managers.Email.Interface;
 using ELMS.WEB.Models.Base.Response;
 using ELMS.WEB.Models.Email.Response;
+using ELMS.WEB.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,14 +21,18 @@ namespace ELMS.WEB.Areas.Email.Controllers
     [Area("Email")]
     public class EmailScheduleController : Controller
     {
+        private readonly IConfiguration __Configuration;
         private readonly IEmailScheduleManager __EmailScheduleManager;
         private readonly IEmailTemplateManager __EmailTemplateManager;
+        private readonly IEmailSender __EmailSender;
         private readonly String ENTITY_NAME = "Email schedule";
 
-        public EmailScheduleController(IEmailScheduleManager emailScheduleManager, IEmailTemplateManager emailTemplateManager)
+        public EmailScheduleController(IConfiguration configuration, IEmailScheduleManager emailScheduleManager, IEmailTemplateManager emailTemplateManager, IEmailSender emailSender)
         {
+            __Configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             __EmailScheduleManager = emailScheduleManager ?? throw new ArgumentNullException(nameof(emailScheduleManager));
             __EmailTemplateManager = emailTemplateManager ?? throw new ArgumentNullException(nameof(emailTemplateManager));
+            __EmailSender = emailSender ?? throw new ArgumentNullException(nameof(emailTemplateManager));
         }
 
         [HttpGet]
@@ -125,6 +132,17 @@ namespace ELMS.WEB.Areas.Email.Controllers
             }
 
             return Json(new { success = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} created {ENTITY_NAME}" });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> SendAsync(Guid uid)
+        {
+            EmailScheduleResponse _Schedule = await __EmailScheduleManager.GetByUIDAsync(uid);
+            EmailTemplateResponse _Template = await __EmailTemplateManager.GetByUIDAsync(_Schedule.EmailTemplateUID);
+
+            await __EmailSender.SendEmailAsync(_Schedule.RecipientEmailAddress, _Template.Subject, _Template.Body);
+
+            return Json(true);
         }
     }
 }

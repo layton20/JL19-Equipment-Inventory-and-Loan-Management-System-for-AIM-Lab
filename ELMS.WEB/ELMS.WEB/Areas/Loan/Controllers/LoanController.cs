@@ -1,6 +1,7 @@
 ﻿using ELMS.WEB.Adapters.Equipment;
 using ELMS.WEB.Adapters.Loan;
 using ELMS.WEB.Areas.Loan.Models;
+using ELMS.WEB.Enums.Email;
 using ELMS.WEB.Enums.Equipment;
 using ELMS.WEB.Managers.Equipment.Interfaces;
 using ELMS.WEB.Managers.Loan.Interface;
@@ -8,6 +9,7 @@ using ELMS.WEB.Models.Base.Response;
 using ELMS.WEB.Models.Loan.Response;
 using ELMS.WEB.Repositories.Identity.Interface;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -25,13 +27,15 @@ namespace ELMS.WEB.Areas.Loan.Controllers
         private readonly IEquipmentManager __EquipmentManager;
         private readonly IUserRepository __UserRepository;
         private readonly ILoanEquipmentManager __LoanEquipmentManager;
+        private readonly IEmailSender __EmailSender;
 
-        public LoanController(ILoanManager loanManager, IEquipmentManager equipmentManager, IUserRepository userRepository, ILoanEquipmentManager loanEquipmentManager)
+        public LoanController(ILoanManager loanManager, IEquipmentManager equipmentManager, IUserRepository userRepository, ILoanEquipmentManager loanEquipmentManager, IEmailSender emailSender)
         {
             __LoanManager = loanManager ?? throw new ArgumentNullException(nameof(loanManager));
             __EquipmentManager = equipmentManager ?? throw new ArgumentNullException(nameof(equipmentManager));
             __UserRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
             __LoanEquipmentManager = loanEquipmentManager ?? throw new ArgumentNullException(nameof(loanEquipmentManager));
+            __EmailSender = emailSender ?? throw new ArgumentNullException(nameof(emailSender));
         }
 
         public async Task<IActionResult> Index(string errorMessage = "", string successMessage = "")
@@ -113,6 +117,9 @@ namespace ELMS.WEB.Areas.Loan.Controllers
                 ModelState.AddModelError("Error", _Response.Message);
                 return View("CreateLoan", model);
             }
+
+            string _Link = $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}/Loan/Loan/AcceptTermsAndConditionsView?loanUID={_Response.UID}";
+            await __EmailSender.SendEmailAsync(_Response.LoaneeEmail, "CONFIRM_LOAN", _Link);
 
             return RedirectToAction("Index", "Loan", new { Area = "Loan" });
         }
