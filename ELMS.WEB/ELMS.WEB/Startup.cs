@@ -55,7 +55,7 @@ namespace ELMS.WEB
             services.AddScoped<IEmailTemplateRepository, EmailTemplateRepository>();
             services.AddScoped<IEmailScheduleRepository, EmailScheduleRepository>();
 
-            services.AddTransient<IEmailSender, EmailSender>();
+            services.AddTransient<IApplicationEmailSender, ApplicationEmailSender>();
             services.Configure<SendGridEmailSenderOptions>(options =>
             {
                 options.SendGridKey = Configuration["SendGrid:ApiKey"];

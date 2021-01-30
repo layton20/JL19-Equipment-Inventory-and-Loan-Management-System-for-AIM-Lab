@@ -1,0 +1,142 @@
+﻿@model ELMS.WEB.Areas.Loan.Models.LoanViewModel
+
+@{
+    ViewData["Title"] = "Loan Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card my-3">
+            <div class="container-fluid card-body">
+                <div class="row">
+                    <div class="col-sm-12 col-md-2">
+                        <ul class="nav nav-pills nav-pills-icons flex-column pl-0">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#tabDetails" data-toggle="tab">
+                                    <i class="material-icons">subject</i>
+                                    Details
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#tabNotes" data-toggle="tab">
+                                    <i class="material-icons">note</i>
+                                    Extensions
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#tabSettings" data-toggle="tab">
+                                    <i class="material-icons">settings</i>
+                                    Settings
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-12 col-md-10 border-left">
+                        <div class="tab-content tab-space pt-2">
+                            <div class="tab-pane active" id="tabDetails">
+                                <div class="mb-4">
+                                    <h3 class="my-0">Editable fields</h3>
+                                </div>
+
+                                <form asp-area="Loan" asp-controller="Loan" asp-action="Edit" enctype="multipart/form-data">
+                                    <input asp-for="UID" type="hidden" />
+
+                                    <div class="form-group">
+                                        <label asp-for="Name" class="bmd-label-floating"></label>
+                                        <input type="text" class="form-control" asp-for="Name">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label asp-for="Status" class="bmd-label-floating"></label>
+                                        <select class="w-100 p-2 border-gray" asp-for="Status" asp-items="Html.GetEnumSelectList<ELMS.WEB.Enums.Loan.Status>()"></select>
+                                    </div>
+
+                                    <div class="form-check mt-3">
+                                        <label class="form-check-label ml-1">
+                                            <input class="form-check-input" type="checkbox" asp-for="AcceptedTermsAndConditions">
+                                            Terms and Conditions Accepted
+                                            <span class="form-check-sign">
+                                                <span class="check"></span>
+                                            </span>
+                                        </label>
+                                    </div>
+
+                                    <div class="mt-3">
+                                        <button type="submit" class="btn btn-primary">Update Details</button>
+                                    </div>
+                                </form>
+                                <hr />
+                                <div>
+                                    <h3 class="my-0 mb-1">Non-editable fields</h3>
+                                    <ul class="list-group">
+                                        <li class="list-group-item pl-0"><strong>Loan Name: </strong>@Model.Name</li>
+                                        <li class="list-group-item pl-0">
+                                            <strong>Equipment: </strong>
+                                            @foreach (var equipment in Model.EquipmentList)
+                                            {
+                                                <a class="equipmentDetails text-primary" data-url="/Equipment/Equipment/DetailsModal" data-uid="@equipment.UID" style="cursor: pointer">@equipment.Name</a>
+                                            }
+                                        </li>
+                                        <li class="list-group-item pl-0"><strong>Loan Start Date: </strong>@Model.FromTimestamp</li>
+                                        <li class="list-group-item pl-0"><strong>Loan End Date: </strong>@Model.ExpiryTimestamp</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="tabNotes">
+                                <div class="mb-2">
+                                    <a class="createLoanExtension btn btn-primary text-white" data-url="/Equipment/Note/CreateModal" data-equipmentuid="@Model.UID">New Extension</a>
+                                </div>
+
+                                @if (true)
+                                {
+                                    <div>
+                                        <p>No extensions have been added to this loan yet.</p>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="list-group">
+                                    </div>
+                                }
+                            </div>
+                            <div class="tab-pane" id="tabHistory">
+                                <div class="table-responsive">
+                                    <table class="display table datatable responsive" cellspacing="0" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th>Loan ID</th>
+                                                <th>Loaned by</th>
+                                                <th>Loaned to</th>
+                                                <th>From</th>
+                                                <th>To</th>
+                                                <th>Extensions Applied</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>@Guid.NewGuid()</td>
+                                                <td>Joanna Lumsden</td>
+                                                <td>Johnny Le</td>
+                                                <td>@DateTime.Now</td>
+                                                <td>@DateTime.Now</td>
+                                                <td><a href="#">3 (Show me as a modal)</a></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="tabSettings">
+                                <a class="deleteEquipment btn btn-danger text-white" data-url="/Equipment/Equipment/DeleteModal" data-uid="@Model.UID">Force end loan</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/areas/loan/details.js"></script>
+}

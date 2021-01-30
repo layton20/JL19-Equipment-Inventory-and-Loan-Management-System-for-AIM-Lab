@@ -1,6 +1,5 @@
 ﻿using ELMS.WEB.Areas.Email.Data;
 using ELMS.WEB.Enums.Email;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using SendGrid;
@@ -11,12 +10,12 @@ using System.Threading.Tasks;
 
 namespace ELMS.WEB.Services
 {
-    public class EmailSender : IEmailSender
+    public class ApplicationEmailSender : IApplicationEmailSender
     {
         private readonly IConfiguration __Configuration;
         private readonly SendGridEmailSenderOptions __OptionsAccessor;
 
-        public EmailSender(IConfiguration configuration, IOptions<SendGridEmailSenderOptions> optionsAccessor)
+        public ApplicationEmailSender(IConfiguration configuration, IOptions<SendGridEmailSenderOptions> optionsAccessor)
         {
             __Configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             __OptionsAccessor = optionsAccessor.Value;
@@ -84,6 +83,30 @@ namespace ELMS.WEB.Services
 
             Response response = await client.SendEmailAsync(msg);
             return response.IsSuccessStatusCode;
+        }
+
+        public async Task<Response> SendConfirmLoanEmail(string email, string subject, ConfirmEmailTemplate templateData)
+        {
+            SendGridClient _Client = new SendGridClient(__OptionsAccessor.SendGridKey);
+            SendGridMessage _Message = new SendGridMessage();
+            _Message.SetFrom(new EmailAddress(__OptionsAccessor.SenderEmail, __OptionsAccessor.SenderName));
+            _Message.AddTo(email);
+            _Message.SetTemplateId(__Configuration["SendGrid:TEMPLATES:CONFIRM_LOAN"]);
+            _Message.SetTemplateData(templateData);
+
+            return await _Client.SendEmailAsync(_Message);
+        }
+
+        public async Task<Response> SendConfirmedLoanEmail(string email, string subject, ConfirmedEmailTemplate templateData)
+        {
+            SendGridClient _Client = new SendGridClient(__OptionsAccessor.SendGridKey);
+            SendGridMessage _Message = new SendGridMessage();
+            _Message.SetFrom(new EmailAddress(__OptionsAccessor.SenderEmail, __OptionsAccessor.SenderName));
+            _Message.AddTo(email);
+            _Message.SetTemplateId(__Configuration["SendGrid:TEMPLATES:CONFIRMED_LOAN"]);
+            _Message.SetTemplateData(templateData);
+
+            return await _Client.SendEmailAsync(_Message);
         }
     }
 }

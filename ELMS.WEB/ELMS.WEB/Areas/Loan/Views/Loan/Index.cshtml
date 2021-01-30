@@ -145,7 +145,7 @@
                                     <td>@loan.Status.ToString()</td>
                                     <td>@loan.AcceptedTermsAndConditions</td>
                                     <td class="td-actions">
-                                        <a class="btn btn-primary text-white"><i class="fas fa-eye p-1"></i></a>
+                                        <a class="btn btn-primary text-white" asp-area="Loan" asp-controller="Loan" asp-action="DetailsView" asp-route-uid="@loan.UID"><i class="fas fa-eye p-1"></i></a>
                                         <a class="deleteEquipment btn btn-danger text-white" href="#" data-toggle="tooltip" data-placement="left" title="Manually end loan"><i class="fas fa-backward p-1"></i></a>
                                         <a class="deleteEquipment btn btn-danger text-white" asp-area="Loan" asp-controller="Loan" asp-action="AcceptTermsAndConditionsView" asp-route-loanuid="@loan.UID"><span class="p-1">TAC</span></a>
                                     </td>
