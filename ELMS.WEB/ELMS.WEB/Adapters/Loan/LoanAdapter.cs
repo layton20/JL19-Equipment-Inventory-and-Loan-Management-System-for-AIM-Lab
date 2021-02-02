@@ -97,7 +97,7 @@ namespace ELMS.WEB.Adapters.Loan
                 UID = response.UID,
                 Name = response.Name,
                 LoaneeEmail = response.LoaneeEmail,
-                FromTimestamp = response.FromTimestamp,
+                StartTimestamp = response.FromTimestamp,
                 ExpiryTimestamp = response.ExpiryTimestamp,
                 Status = response.Status,
                 AcceptedTermsAndConditions = response.AcceptedTermsAndConditions,

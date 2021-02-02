@@ -62,6 +62,7 @@
                             <div class="tab-pane active" id="tabDetails">
                                 <form asp-area="Equipment" asp-controller="Equipment" asp-action="Edit" enctype="multipart/form-data">
                                     <input asp-for="Equipment.UID" type="hidden" />
+                                    <input asp-for="Equipment.OwnerUID" type="hidden"/>
 
                                     <div class="form-group mb-4">
                                         <label asp-for="Equipment.Name" class="bmd-label-floating"></label>
@@ -145,7 +146,7 @@
                                                     <div class="col-sm-12 col-md-8 p-0">
                                                         <h5 class="mb-1">@note.Name</h5>
                                                         <p class="mb-1">@note.Description</p>
-                                                        <small>Made by @(note.OwnerUID == Guid.Empty.ToString() ? "Anonymous" : note.OwnerUID)</small>
+                                                        <small>Made by @(note.OwnerUID == Guid.Empty.ToString() ? "Anonymous" : note.Owner.Email)</small>
                                                     </div>
                                                     <div class="col-sm-12 col-md-4 p-0 text-right">
                                                         <p class="mb-1">Created on @note.CreatedTimestamp</p>
@@ -173,22 +174,24 @@
                                     <table class="display table datatable responsive" cellspacing="0" width="100%">
                                         <thead>
                                             <tr>
-                                                <th>Loan ID</th>
-                                                <th>Loaned by</th>
-                                                <th>Loaned to</th>
-                                                <th>From</th>
-                                                <th>To</th>
-                                                <th>Extensions Applied</th>
+                                                <th class="th-description">Loan ID</th>
+                                                <th class="th-description">Loaned by</th>
+                                                <th class="th-description">Loaned to</th>
+                                                <th class="th-description">From</th>
+                                                <th class="th-description">To</th>
+                                                <th class="th-description">Extensions Applied</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td>@Guid.NewGuid()</td>
-                                                <td>Joanna Lumsden</td>
-                                                <td>Johnny Le</td>
-                                                <td>@DateTime.Now</td>
-                                                <td>@DateTime.Now</td>
-                                                <td><a href="#">3 (Show me as a modal)</a></td>
+                                                <td class="td-name">@Guid.NewGuid()</td>
+                                                <td class="td-name">Joanna Lumsden</td>
+                                                <td class="td-name">Johnny Le</td>
+                                                <td class="td-name">@DateTime.Now</td>
+                                                <td class="td-name">@DateTime.Now</td>
+                                                <td class="td-actions">
+                                                    <a href="#">3 (Show me as a modal)</a>
+                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -246,4 +249,5 @@
         });
     </script>
     <script src="~/js/areas/equipment/details.js"></script>
+    <partial name="Components/_NotificationSnippet" />
 }

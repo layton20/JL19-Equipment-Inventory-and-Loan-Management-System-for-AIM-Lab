@@ -1,15 +1,17 @@
 ﻿using ELMS.WEB.Adapters.Equipment;
 using ELMS.WEB.Adapters.Loan;
+using ELMS.WEB.Areas.Email.Data;
 using ELMS.WEB.Areas.Loan.Models;
-using ELMS.WEB.Enums.Email;
 using ELMS.WEB.Enums.Equipment;
+using ELMS.WEB.Helpers;
 using ELMS.WEB.Managers.Equipment.Interfaces;
 using ELMS.WEB.Managers.Loan.Interface;
 using ELMS.WEB.Models.Base.Response;
+using ELMS.WEB.Models.Loan.Request;
 using ELMS.WEB.Models.Loan.Response;
 using ELMS.WEB.Repositories.Identity.Interface;
+using ELMS.WEB.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -27,9 +29,10 @@ namespace ELMS.WEB.Areas.Loan.Controllers
         private readonly IEquipmentManager __EquipmentManager;
         private readonly IUserRepository __UserRepository;
         private readonly ILoanEquipmentManager __LoanEquipmentManager;
-        private readonly IEmailSender __EmailSender;
+        private readonly IApplicationEmailSender __EmailSender;
+        private readonly string MODEL_NAME = "Loan";
 
-        public LoanController(ILoanManager loanManager, IEquipmentManager equipmentManager, IUserRepository userRepository, ILoanEquipmentManager loanEquipmentManager, IEmailSender emailSender)
+        public LoanController(ILoanManager loanManager, IEquipmentManager equipmentManager, IUserRepository userRepository, ILoanEquipmentManager loanEquipmentManager, IApplicationEmailSender emailSender)
         {
             __LoanManager = loanManager ?? throw new ArgumentNullException(nameof(loanManager));
             __EquipmentManager = equipmentManager ?? throw new ArgumentNullException(nameof(equipmentManager));
@@ -118,10 +121,12 @@ namespace ELMS.WEB.Areas.Loan.Controllers
                 return View("CreateLoan", model);
             }
 
-            string _Link = $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}/Loan/Loan/AcceptTermsAndConditionsView?loanUID={_Response.UID}";
-            await __EmailSender.SendEmailAsync(_Response.LoaneeEmail, "CONFIRM_LOAN", _Link);
+            await __EmailSender.SendLoanConfirmEmail(_Response.LoaneeEmail, "AIM LAB - Activate Loan", new ConfirmEmailTemplate
+            {
+                Confirm_Loan_URL = $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}/Loan/Loan/AcceptTermsAndConditionsView?loanUID={_Response.UID}"
+            });
 
-            return RedirectToAction("Index", "Loan", new { Area = "Loan" });
+            return RedirectToAction("Index", "Loan", new { Area = "Loan", successMessage = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} created {MODEL_NAME}." });
         }
 
         [HttpGet]
@@ -186,7 +191,121 @@ namespace ELMS.WEB.Areas.Loan.Controllers
                 return await AcceptTermsAndConditionsViewAsync(model.UID);
             }
 
+            LoanResponse _Loan = await __LoanManager.GetByUIDAsync(model.UID);
+            await __EmailSender.SendLoanConfirmedEmail(_Loan.LoaneeEmail, "AIM - Loan Confirmed", new ConfirmedEmailTemplate
+            {
+                Loan_Details_URL = "",
+                Start_Timestamp = _Loan.FromTimestamp.ToString()
+            });
+
             return View("AcceptedTermsAndConditions");
+        }
+
+        public async Task<IActionResult> DetailsViewAsync(Guid uid, string successMessage = "", string errorMessage = "")
+        {
+            if (!String.IsNullOrEmpty(successMessage))
+            {
+                ViewData["SuccessMessage"] = successMessage;
+            }
+
+            if (!String.IsNullOrEmpty(errorMessage))
+            {
+                ViewData["ErrorMessage"] = errorMessage;
+            }
+
+            LoanViewModel _Model = (await __LoanManager.GetByUIDAsync(uid)).ToViewModel();
+            IList<Guid> _EquipmentUIDs = (await __LoanEquipmentManager.GetAsync(_Model.UID)).Select(x => x.EquipmentUID).ToList();
+            if (_EquipmentUIDs != null && _EquipmentUIDs.Count > 0)
+            {
+                _Model.EquipmentList = (await __EquipmentManager.GetAsync(_EquipmentUIDs)).Equipments.ToViewModel();
+            }
+
+            return View("Details", _Model);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> LoanPreviewAsync(Guid uid)
+        {
+            if (uid == null || uid == Guid.Empty)
+            {
+                return Json("Page not found");
+            }
+
+            LoanResponse _Response = await __LoanManager.GetByUIDAsync(uid);
+
+            if (_Response == null)
+            {
+                return Json("Page not found");
+            }
+
+            LoanViewModel _Model = _Response.ToViewModel();
+
+            IList<Guid> _EquipmentUIDs = (await __LoanEquipmentManager.GetAsync(_Response.UID)).Select(x => x.EquipmentUID).ToList();
+            if (_EquipmentUIDs != null && _EquipmentUIDs.Count > 0)
+            {
+                _Model.EquipmentList = (await __EquipmentManager.GetAsync(_EquipmentUIDs)).Equipments.ToViewModel();
+            }
+
+            if (_Response.LoaneeUID != Guid.Empty)
+            {
+                _Model.Loanee = await __UserRepository.GetByUIDAsync(_Response.LoaneeUID);
+            }
+
+            if (_Response.LoanerUID != Guid.Empty)
+            {
+                _Model.Loaner = await __UserRepository.GetByUIDAsync(_Response.LoanerUID);
+            }
+
+            return View("LoanPreview", _Model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditAsync(UpdateLoanViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("DetailsView", new { Area = "Loan", uid = model.UID, errorMessage = $"{GlobalConstants.ERROR_ACTION_PREFIX} update {MODEL_NAME} details." });
+            }
+
+            LoanResponse _Loan = await __LoanManager.GetByUIDAsync(model.UID);
+
+            if (_Loan == null)
+            {
+                return RedirectToAction("DetailsView", new { Area = "Loan", uid = model.UID, errorMessage = $"{GlobalConstants.ERROR_ACTION_PREFIX} find {MODEL_NAME} details." });
+            }
+
+            UpdateLoanRequest _Request = new UpdateLoanRequest {
+                UID = model.UID,
+                Name = model.Name,
+                FromTimestamp = model.StartTimestamp,
+                ExpiryTimestamp = model.ExpiryTimestamp,
+                AcceptedTermsAndConditions = model.AcceptedTermsAndConditions
+            };
+
+            if (model.AcceptedTermsAndConditions)
+            {
+                if (_Loan.Status == Enums.Loan.Status.Pending)
+                {
+                    if (model.StartTimestamp <= DateTime.Now)
+                    {
+                        _Request.Status = Enums.Loan.Status.ActiveLoan;
+                    }
+                    else
+                    {
+                        _Request.Status = Enums.Loan.Status.InactiveLoan;
+                    }
+                }
+            }
+
+            BaseResponse _Response = await __LoanManager.UpdateAsync(_Request);
+
+            if (!_Response.Success)
+            {
+                return RedirectToAction("DetailsView", new { Area = "Loan", uid = model.UID, errorMessage = $"{GlobalConstants.ERROR_ACTION_PREFIX} update {MODEL_NAME} details." });
+            }
+
+            return RedirectToAction("DetailsView", new { Area = "Loan", uid = model.UID, successMessage = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} updated {MODEL_NAME} details." });
         }
     }
 }

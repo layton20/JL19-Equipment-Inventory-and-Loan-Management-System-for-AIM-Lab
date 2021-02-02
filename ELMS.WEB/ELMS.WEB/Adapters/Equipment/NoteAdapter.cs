@@ -45,7 +45,8 @@ namespace ELMS.WEB.Adapters.Equipment
                 Description = entity.Description,
                 CreatedTimestamp = entity.CreatedTimestamp,
                 AmendedTimestamp = entity.AmendedTimestamp,
-                EquipmentUID = entity.EquipmentUID
+                EquipmentUID = entity.EquipmentUID,
+                Owner = entity.Owner
             };
 
             if (Guid.TryParse(entity.OwnerUID, out Guid ownerUID))
@@ -91,7 +92,8 @@ namespace ELMS.WEB.Adapters.Equipment
                 CreatedTimestamp = response.CreatedTimestamp,
                 OwnerUID = response.OwnerUID.ToString(),
                 UID = response.UID,
-                EquipmentUID = response.EquipmentUID
+                EquipmentUID = response.EquipmentUID,
+                Owner = response.Owner
             };
         }
 

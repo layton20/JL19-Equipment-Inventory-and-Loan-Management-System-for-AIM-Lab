@@ -26,9 +26,9 @@
             data: form.serialize(),
             success: function (response) {
                 if (response.success) {
-                    window.location.href = encodeURI(`/Equipment/Equipment?successMessage=${response.success}`);
+                    window.location.href = encodeURI(`/Equipment/Equipment?SuccessMessage=${response.success}`);
                 } else if (response.error) {
-                    window.location.href = encodeURI(`/Equipment/Equipment?errorMessage=${response.error}`);
+                    window.location.href = encodeURI(`/Equipment/Equipment?SuccessMessage=${response.error}`);
                 }
                 else {
                     $('#modalDialog').html(response);
@@ -37,17 +37,7 @@
         })
     }
 
-    $('.create').click(function () {
-        loadModalAjax($(this).data('url'), null);
-    });
-
-    $('#modalRoot').on("submit", "#formCreateEquipment", function (e) {
-        e.preventDefault();
-        var form = $(this);
-        postModalFormAjax(form);
-    });
-
-    $('.deleteEquipment').click(function () {
-        loadModalAjax($(this).data('url'), `EquipmentUID=${$(this).data('uid')}`);
+    $('.equipmentDetails').click(function () {
+        loadModalAjax($(this).data('url'), `equipmentUID=${$(this).data('uid')}`);
     });
 });

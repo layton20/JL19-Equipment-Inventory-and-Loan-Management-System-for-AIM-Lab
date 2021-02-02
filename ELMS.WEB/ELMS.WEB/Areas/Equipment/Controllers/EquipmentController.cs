@@ -125,11 +125,21 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
             return await DetailsViewAsync(model.Equipment.UID);
         }
 
-        public async Task<IActionResult> DetailsViewAsync(Guid equipmentUID)
+        public async Task<IActionResult> DetailsViewAsync(Guid equipmentUID, string successMessage = "", string errorMessage = "")
         {
             if (equipmentUID == null || equipmentUID == Guid.Empty)
             {
                 ViewData["ErrorMessage"] = "Invalid equipment UID";
+            }
+
+            if (!String.IsNullOrWhiteSpace(successMessage))
+            {
+                ViewData["SuccessMessage"] = successMessage;
+            }
+
+            if (!String.IsNullOrWhiteSpace(errorMessage))
+            {
+                ViewData["ErrorMessage"] = errorMessage;
             }
 
             DetailsViewModel _Model = new DetailsViewModel
@@ -142,6 +152,7 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> DetailsModalAsync(Guid equipmentUID)
         {
             if (equipmentUID == null || equipmentUID == Guid.Empty)

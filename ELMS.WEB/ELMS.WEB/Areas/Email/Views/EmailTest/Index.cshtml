@@ -1,0 +1,24 @@
+﻿@{
+    ViewData["Title"] = "Email Testing";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <a class="btn btn-primary" asp-area="Email" asp-controller="EmailTest" asp-action="SendConfirmLoanEmail">Send Confirm Loan Template</a>
+    <a class="btn btn-primary" asp-area="Email" asp-controller="EmailTest" asp-action="SendConfirmedLoanEmail">Send Confirmed Loan Template</a>
+    <a class="btn btn-primary" asp-area="Email" asp-controller="EmailTest" asp-action="SendWarrantyExpiredEmail">Send Warranty Expired Email</a>
+    <a class="btn btn-primary" asp-area="Email" asp-controller="EmailTest" asp-action="SendWarrantyNearlyExpiredEmail">send Warranty Nearly Expired Email</a>
+    <a class="btn btn-primary" asp-area="Email" asp-controller="EmailTest" asp-action="SendLoanOverdueEmail">Send Overdue Email</a>
+</div>
+
+@section Scripts {
+    <script src="~/js/areas/email/emailtemplate/index.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#navItemEmails').addClass('active');
+            $('#navItemEmailTest').addClass('active');
+        });
+    </script>
+
+    <partial name="Components/_NotificationSnippet"></partial>
+}

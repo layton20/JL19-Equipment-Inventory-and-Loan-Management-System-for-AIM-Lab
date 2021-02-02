@@ -58,8 +58,18 @@ namespace ELMS.WEB.Repositories.Equipment.Concrete
             {
                 return Enumerable.Empty<NoteEntity>().ToList();
             }
+            
+            IList<NoteEntity> _Notes = await __Context.Notes.Where(x => x.EquipmentUID == equipmentUID).ToListAsync();
 
-            return await __Context.Notes.Where(x => x.EquipmentUID == equipmentUID).ToListAsync();
+            foreach (NoteEntity note in _Notes)
+            {
+                if (note.OwnerUID != Guid.Empty.ToString())
+                {
+                    note.Owner = await __Context.Users.FindAsync(note.OwnerUID);
+                }
+            }
+
+            return _Notes;
         }
 
         public async Task<NoteEntity> GetByUIDAsync(Guid uid)

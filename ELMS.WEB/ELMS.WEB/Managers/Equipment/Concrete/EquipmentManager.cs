@@ -104,7 +104,11 @@ namespace ELMS.WEB.Managers.Equipment.Concrete
             if (model.UID == Guid.Empty || !await __EquipmentRepository.UpdateAsync(model.ToEntity()))
             {
                 _Response.Success = false;
-                _Response.Message = $"Error: ${GlobalConstants.ERROR_ACTION_PREFIX} update ${MODEL_NAME}.";
+                _Response.Message = $"{GlobalConstants.ERROR_ACTION_PREFIX} update {MODEL_NAME} details.";
+            }
+            else
+            {
+                _Response.Message = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} updated {MODEL_NAME} details.";
             }
 
             return _Response;

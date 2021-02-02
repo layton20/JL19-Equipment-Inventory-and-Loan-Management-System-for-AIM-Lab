@@ -30,9 +30,9 @@
             data: form.serialize(),
             success: function (response) {
                 if (response.success) {
-                    window.location.href = encodeURI(`${returnUrl}&SuccessMessage=${response.success}`);
+                    window.location.href = encodeURI(`${returnUrl}&successMessage=${response.success}`);
                 } else if (response.error) {
-                    window.location.href = encodeURI(`${returnUrl}&ErrorMessage=${response.error}`);
+                    window.location.href = encodeURI(`${returnUrl}&errorMessage=${response.error}`);
                 }
                 else {
                     $('#modalDialog').html(response);

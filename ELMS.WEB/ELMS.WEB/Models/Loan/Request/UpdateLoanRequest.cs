@@ -1,7 +1,6 @@
 ﻿using ELMS.WEB.CustomDataAnnotations;
 using ELMS.WEB.Enums.Loan;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace ELMS.WEB.Models.Loan.Request
@@ -20,8 +19,6 @@ namespace ELMS.WEB.Models.Loan.Request
         [Required]
         [CurrentDateAttribute]
         public DateTime ExpiryTimestamp { get; set; }
-        [Required]
-        public IList<Guid> EquipmentList { get; set; }
         [Required]
         public bool AcceptedTermsAndConditions { get; set; }
         [Required]

@@ -1,0 +1,43 @@
+﻿@if (ViewData["SuccessMessage"] != null)
+{
+    <script>
+            $(document).ready(function () {
+                $.notify({
+                    // options
+                    title: '<h4><strong class="mb-3">Success</strong></h4>',
+                    message: '<p class="mb-3">@(ViewData["SuccessMessage"])</p>',
+                }, {
+                    // settings
+                    type: 'success',
+                    placement: {
+                        from: "top",
+                        align: "right"
+                    },
+                    delay: 2000,
+                    showProgressbar: true,
+                });
+            });
+    </script>
+}
+
+@if (ViewData["ErrorMessage"] != null)
+{
+    <script>
+            $(document).ready(function () {
+                $.notify({
+                    // options
+                    title: '<h4><strong class="mb-3">Error</strong></h4>',
+                    message: '<p class="mb-3">@(ViewData["ErrorMessage"])</p>',
+                }, {
+                    // settings
+                    type: 'danger',
+                    placement: {
+                        from: "top",
+                        align: "right"
+                    },
+                    delay: 2000,
+                    showProgressbar: true,
+                });
+            });
+    </script>
+}
