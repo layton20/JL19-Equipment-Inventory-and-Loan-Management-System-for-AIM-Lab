@@ -90,7 +90,7 @@ namespace ELMS.WEB.Repositories.Loan.Concrete
                 return await __ApplicationContext.Loans.ToListAsync();
             }
 
-            return await __ApplicationContext.Loans.Where(x => x.Status == Status.OnLoan).ToListAsync();
+            return await __ApplicationContext.Loans.Where(x => x.Status == Status.ActiveLoan).ToListAsync();
         }
 
         public async Task<IList<LoanEntity>> GetAsync()
@@ -108,7 +108,7 @@ namespace ELMS.WEB.Repositories.Loan.Concrete
             return await __ApplicationContext.Loans.Where(x => x.Status == status).CountAsync();
         }
 
-        public async Task<bool> UpdateAsync(LoanEntity loan, IList<Guid> updatedEquipmentList)
+        public async Task<bool> UpdateAsync(LoanEntity loan)
         {
             if (loan.UID == Guid.Empty)
             {
@@ -122,30 +122,12 @@ namespace ELMS.WEB.Repositories.Loan.Concrete
                 return false;
             }
 
+            _Loan.AcceptedTermsAndConditions = loan.AcceptedTermsAndConditions;
             _Loan.Name = loan.Name;
             _Loan.Status = loan.Status;
+            _Loan.FromTimestamp = loan.FromTimestamp;
+            _Loan.ExpiryTimestamp = loan.ExpiryTimestamp;
             _Loan.AmendedTimestamp = DateTime.Now;
-            _Loan.AcceptedTermsAndConditions = _Loan.AcceptedTermsAndConditions;
-            _Loan.FromTimestamp = _Loan.FromTimestamp;
-            _Loan.ExpiryTimestamp = _Loan.ExpiryTimestamp;
-
-            IList<Guid> _UpdatedValidEquipmentList = await __ApplicationContext.Equipment.Where(x => updatedEquipmentList.Contains(x.UID)).Select(x => x.UID).ToListAsync();
-            IList<Guid> _CurrentEquipmentList = await __ApplicationContext.LoanEquipmentList.Where(x => x.LoanUID == loan.UID).Select(x => x.EquipmentUID).ToListAsync();
-
-            // Entities to Delete = Equipment in the current list, but not in the new list
-            IList<Guid> _ToDelete = _CurrentEquipmentList.Where(uid => !_UpdatedValidEquipmentList.Contains(uid)).ToList();
-            IList<LoanEquipmentEntity> _ToDeleteEntities = await __ApplicationContext.LoanEquipmentList.Where(x => _ToDelete.Contains(x.EquipmentUID)).ToListAsync();
-
-            // Entities to Add = Equipment in the new list, but not in the current list
-            IList<Guid> _ToAdd = _UpdatedValidEquipmentList.Where(uid => !_CurrentEquipmentList.Contains(uid)).ToList();
-            IList<LoanEquipmentEntity> _ToAddEntities = _ToAdd.Select(equipmentUID => new LoanEquipmentEntity
-            {
-                LoanUID = loan.UID,
-                EquipmentUID = equipmentUID,
-            }).ToList();
-
-            __ApplicationContext.LoanEquipmentList.RemoveRange(_ToDeleteEntities);
-            await __ApplicationContext.LoanEquipmentList.AddRangeAsync(_ToAddEntities);
 
             return await __ApplicationContext.SaveChangesAsync() > 0;
         }

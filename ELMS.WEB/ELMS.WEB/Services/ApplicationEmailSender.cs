@@ -85,7 +85,7 @@ namespace ELMS.WEB.Services
             return response.IsSuccessStatusCode;
         }
 
-        public async Task<Response> SendConfirmLoanEmail(string email, string subject, ConfirmEmailTemplate templateData)
+        public async Task<Response> SendLoanConfirmEmail(string email, string subject, ConfirmEmailTemplate templateData)
         {
             SendGridClient _Client = new SendGridClient(__OptionsAccessor.SendGridKey);
             SendGridMessage _Message = new SendGridMessage();
@@ -97,13 +97,61 @@ namespace ELMS.WEB.Services
             return await _Client.SendEmailAsync(_Message);
         }
 
-        public async Task<Response> SendConfirmedLoanEmail(string email, string subject, ConfirmedEmailTemplate templateData)
+        public async Task<Response> SendLoanConfirmedEmail(string email, string subject, ConfirmedEmailTemplate templateData)
         {
             SendGridClient _Client = new SendGridClient(__OptionsAccessor.SendGridKey);
             SendGridMessage _Message = new SendGridMessage();
             _Message.SetFrom(new EmailAddress(__OptionsAccessor.SenderEmail, __OptionsAccessor.SenderName));
             _Message.AddTo(email);
             _Message.SetTemplateId(__Configuration["SendGrid:TEMPLATES:CONFIRMED_LOAN"]);
+            _Message.SetTemplateData(templateData);
+
+            return await _Client.SendEmailAsync(_Message);
+        }
+
+        public async Task<Response> SendLoanNearlyDueEmail(string email, string subject, LoanNearlyDueTemplate templateData)
+        {
+            SendGridClient _Client = new SendGridClient(__OptionsAccessor.SendGridKey);
+            SendGridMessage _Message = new SendGridMessage();
+            _Message.SetFrom(new EmailAddress(__OptionsAccessor.SenderEmail, __OptionsAccessor.SenderName));
+            _Message.AddTo(email);
+            _Message.SetTemplateId(__Configuration["SendGrid:TEMPLATES:NEARLY_OVERDUE_LOAN"]);
+            _Message.SetTemplateData(templateData);
+
+            return await _Client.SendEmailAsync(_Message);
+        }
+
+        public async Task<Response> SendLoanOverdueEmail(string email, string subject, LoanOverdueTemplate templateData)
+        {
+            SendGridClient _Client = new SendGridClient(__OptionsAccessor.SendGridKey);
+            SendGridMessage _Message = new SendGridMessage();
+            _Message.SetFrom(new EmailAddress(__OptionsAccessor.SenderEmail, __OptionsAccessor.SenderName));
+            _Message.AddTo(email);
+            _Message.SetTemplateId(__Configuration["SendGrid:TEMPLATES:OVERDUE_LOAN"]);
+            _Message.SetTemplateData(templateData);
+
+            return await _Client.SendEmailAsync(_Message);
+        }
+
+        public async Task<Response> SendWarrantyExpiredEmail(string email, string subject, WarrantyExpiredTemplate templateData)
+        {
+            SendGridClient _Client = new SendGridClient(__OptionsAccessor.SendGridKey);
+            SendGridMessage _Message = new SendGridMessage();
+            _Message.SetFrom(new EmailAddress(__OptionsAccessor.SenderEmail, __OptionsAccessor.SenderName));
+            _Message.AddTo(email);
+            _Message.SetTemplateId(__Configuration["SendGrid:TEMPLATES:EXPIRED_WARRANTY"]);
+            _Message.SetTemplateData(templateData);
+
+            return await _Client.SendEmailAsync(_Message);
+        }
+
+        public async Task<Response> SendWarrantyNearlyExpiredEmail(string email, string subject, WarrantyNearlyExpiredTemplate templateData)
+        {
+            SendGridClient _Client = new SendGridClient(__OptionsAccessor.SendGridKey);
+            SendGridMessage _Message = new SendGridMessage();
+            _Message.SetFrom(new EmailAddress(__OptionsAccessor.SenderEmail, __OptionsAccessor.SenderName));
+            _Message.AddTo(email);
+            _Message.SetTemplateId(__Configuration["SendGrid:TEMPLATES:NEARLY_EXPIRED_WARRANTY"]);
             _Message.SetTemplateData(templateData);
 
             return await _Client.SendEmailAsync(_Message);

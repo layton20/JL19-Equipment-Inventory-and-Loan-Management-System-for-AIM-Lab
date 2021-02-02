@@ -1,10 +1,12 @@
 ﻿using ELMS.WEB.Adapters.Loan;
+using ELMS.WEB.Entities.Loan;
 using ELMS.WEB.Enums.Loan;
 using ELMS.WEB.Helpers;
 using ELMS.WEB.Managers.Loan.Interface;
 using ELMS.WEB.Models.Base.Response;
 using ELMS.WEB.Models.Loan.Request;
 using ELMS.WEB.Models.Loan.Response;
+using ELMS.WEB.Repositories.Identity.Interface;
 using ELMS.WEB.Repositories.Loan.Interface;
 using System;
 using System.Collections.Generic;
@@ -15,11 +17,13 @@ namespace ELMS.WEB.Managers.Loan.Concrete
     public class LoanManager : ILoanManager
     {
         private readonly ILoanRepository __LoanRepository;
+        private readonly IUserRepository __UserRepository;
         private const string MODEL_NAME = "Loan";
 
-        public LoanManager(ILoanRepository loanRepository)
+        public LoanManager(ILoanRepository loanRepository, IUserRepository userRepository)
         {
             __LoanRepository = loanRepository ?? throw new ArgumentNullException(nameof(loanRepository));
+            __UserRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
         }
 
         public async Task<BaseResponse> AcceptTermsAndConditions(Guid uid)
@@ -75,10 +79,10 @@ namespace ELMS.WEB.Managers.Loan.Concrete
         {
             BaseResponse _Response = new BaseResponse();
 
-            if (request.UID == Guid.Empty || !await __LoanRepository.UpdateAsync(request.ToEntity(), request.EquipmentList))
+            if (request.UID == Guid.Empty || !await __LoanRepository.UpdateAsync(request.ToEntity()))
             {
                 _Response.Success = false;
-                _Response.Message = $"Error: ${GlobalConstants.ERROR_ACTION_PREFIX} update ${MODEL_NAME}.";
+                _Response.Message = $"Error: {GlobalConstants.ERROR_ACTION_PREFIX} update {MODEL_NAME}.";
             }
 
             return _Response;

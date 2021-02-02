@@ -80,7 +80,7 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
                 return await CreateModalAsync(model.EquipmentUID);
             }
 
-            return Json(new { success = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} created {ENTITY_NAME}" });
+            return Json(new { success = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} created {ENTITY_NAME}." });
         }
 
         [HttpPost]
@@ -102,7 +102,7 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
                 ViewData["SuccessMessage"] = _Response.Message;
             }
 
-            return Json(new { success = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} updated {ENTITY_NAME}" });
+            return Json(new { success = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} updated {ENTITY_NAME}." });
         }
 
         [HttpGet]
@@ -112,7 +112,7 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
 
             if (!_Response.Success)
             {
-                return Json(new { error = $"{GlobalConstants.ERROR_ACTION_PREFIX} find {ENTITY_NAME}" });
+                return Json(new { error = $"{GlobalConstants.ERROR_ACTION_PREFIX} find {ENTITY_NAME}." });
             }
 
             return PartialView("_DeleteNote", _Response.ToViewModel());
@@ -134,7 +134,7 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
                 return RedirectToAction("DetailsView", "Equipment", new { Area = "Equipment", model.EquipmentUID, errorMessage = _Response.Message });
             }
 
-            return RedirectToAction("DetailsView", "Equipment", new { Area = "Equipment", model.EquipmentUID, successMessage = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} deleted {ENTITY_NAME}" });
+            return RedirectToAction("DetailsView", "Equipment", new { Area = "Equipment", model.EquipmentUID, successMessage = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} deleted {ENTITY_NAME}." });
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace ELMS.WEB.Areas.Equipment.Models.Note
@@ -19,5 +20,6 @@ namespace ELMS.WEB.Areas.Equipment.Models.Note
         public string Description { get; set; }
 
         public DateTime CreatedTimestamp { get; set; }
+        public IdentityUser Owner { get; set; }
     }
 }

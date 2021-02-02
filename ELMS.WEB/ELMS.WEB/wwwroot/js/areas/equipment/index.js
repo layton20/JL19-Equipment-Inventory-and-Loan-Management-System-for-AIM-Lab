@@ -26,9 +26,9 @@
             data: form.serialize(),
             success: function (response) {
                 if (response.success) {
-                    window.location.href = encodeURI(`/Equipment/Equipment?SuccessMessage=${response.success}`);
+                    window.location.href = encodeURI(`/Equipment/Equipment?successMessage=${response.success}`);
                 } else if (response.error) {
-                    window.location.href = encodeURI(`/Equipment/Equipment?SuccessMessage=${response.error}`);
+                    window.location.href = encodeURI(`/Equipment/Equipment?errorMessage=${response.error}`);
                 }
                 else {
                     $('#modalDialog').html(response);

@@ -19,7 +19,7 @@ namespace ELMS.WEB.Repositories.Loan.Interface
 
         public Task<bool> ChangeStatusAsync(Guid uid, Status status);
 
-        public Task<bool> UpdateAsync(LoanEntity loan, IList<Guid> equipmentList);
+        public Task<bool> UpdateAsync(LoanEntity loan);
         public Task<int> GetCountByStatus(Status status);
     }
 }
