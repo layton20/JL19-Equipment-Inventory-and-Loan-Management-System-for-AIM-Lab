@@ -68,7 +68,6 @@ namespace ELMS.WEB
                 options.FallbackPolicy = new AuthorizationPolicyBuilder()
                 .RequireAuthenticatedUser()
                 .Build();
-
                 options.AddPolicy("CreateLoanPolicy", policy => policy.RequireClaim("Create Loan"));
                 options.AddPolicy("EditLoanPolicy", policy => policy.RequireClaim("Edit Loan"));
                 options.AddPolicy("DeleteLoanPolicy", policy => policy.RequireClaim("Delete Loan"));
