@@ -82,6 +82,7 @@ namespace ELMS.WEB.Areas.Loan.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "CreateLoanPolicy")]
         public async Task<IActionResult> CreateViewAsync()
         {
             CreateLoanViewModel _Model = new CreateLoanViewModel
@@ -94,6 +95,7 @@ namespace ELMS.WEB.Areas.Loan.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "CreateLoanPolicy")]
         public async Task<IActionResult> CreateAsync(CreateLoanViewModel model)
         {
             model.LoanerUID = User.FindFirstValue(ClaimTypes.NameIdentifier);

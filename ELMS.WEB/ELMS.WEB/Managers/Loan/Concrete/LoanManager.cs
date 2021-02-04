@@ -10,6 +10,7 @@ using ELMS.WEB.Repositories.Identity.Interface;
 using ELMS.WEB.Repositories.Loan.Interface;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ELMS.WEB.Managers.Loan.Concrete
@@ -90,6 +91,8 @@ namespace ELMS.WEB.Managers.Loan.Concrete
 
         public async Task<IList<LoanResponse>> GetAsync()
         {
+            IList<LoanEntity> _Entities = await __LoanRepository.GetAsync();
+
             return (await __LoanRepository.GetAsync()).ToResponse();
         }
 
@@ -101,6 +104,11 @@ namespace ELMS.WEB.Managers.Loan.Concrete
             };
 
             return _Response;
+        }
+
+        public async Task<IList<LoanResponse>> GetByUserAsync(string loaneeEmail)
+        {
+            return (await __LoanRepository.GetByUserAsync(loaneeEmail)).ToResponse();
         }
     }
 }

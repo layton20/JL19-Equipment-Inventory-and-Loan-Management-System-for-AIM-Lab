@@ -1,0 +1,54 @@
+﻿@model ELMS.WEB.Areas.Admin.Models.Permission.IndexViewModel
+
+@{
+    ViewData["Title"] = "Permission Management";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="w-100 justify-content-between">
+            <div class="pull-right">
+                <a class="createPermission btn btn-success text-white" data-url="/Admin/Permission/CreateModal">New Permission</a>
+            </div>
+        </div>
+
+        <div class="card mt-2">
+            <div class="card-header">
+                <h4 class="card-title">All Permissions</h4>
+                <p class="category">Each permission provides access for a user to perform a certain action or access to a resource.</p>
+            </div>
+            <div class="card-body">
+                <table class="display table datatable responsive hover compact">
+                    <thead>
+                        <tr>
+                            <th class="th-description">Permission Name</th>
+                            <th class="th-description">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var claim in Model.Claims)
+                        {
+                            <tr>
+                                <td class="td-name">@claim.Value</td>
+                                <td class="td-actions">
+                                    <a class="editPermission btn btn-danger text-white" data-url="/Admin/Permission/DeleteModal" data-uid="@claim.Value"><i class="fas fa-trash p-1"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#navItemUsers').addClass('active');
+            $('#navItemPermissions').addClass('active');
+        });
+    </script>
+    <partial name="Components/_NotificationSnippet" />
+}

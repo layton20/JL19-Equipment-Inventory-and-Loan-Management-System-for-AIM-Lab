@@ -1,6 +1,7 @@
 ﻿using ELMS.WEB.Areas.Email.Data;
 using ELMS.WEB.Helpers;
 using ELMS.WEB.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 namespace ELMS.WEB.Areas.Email.Controllers
 {
     [Area("Email")]
+    [Authorize]
     public class EmailTestController : Controller
     {
         private readonly IApplicationEmailSender __ApplicationEmailSender;

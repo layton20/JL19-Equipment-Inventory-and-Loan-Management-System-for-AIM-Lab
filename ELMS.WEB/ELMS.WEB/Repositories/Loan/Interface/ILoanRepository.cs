@@ -21,5 +21,6 @@ namespace ELMS.WEB.Repositories.Loan.Interface
 
         public Task<bool> UpdateAsync(LoanEntity loan);
         public Task<int> GetCountByStatus(Status status);
+        public Task<IList<LoanEntity>> GetByUserAsync(string email);
     }
 }

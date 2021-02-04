@@ -60,30 +60,28 @@
 
 <div class="row">
     <div class="col-12">
-        <div class="row">
-            <div class="col-12">
-                <div class="d-flex pull-left">
-                    <div class="dropdown">
-                        <button class="btn btn-primary dropdown-toggle" id="statusDropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">All Statuses</button>
-                        <div class="dropdown-menu" aria-labelledby="statusDropdownMenuButton">
-                            <a class="dropdown-item" href="javascript:;">All Statuses</a>
-                            <a class="dropdown-item" href="javascript:;">Available</a>
-                            <a class="dropdown-item" href="javascript:;">On Loan</a>
-                            <a class="dropdown-item" href="javascript:;">Unavailable</a>
-                        </div>
-                    </div>
-                    <div class="ml-1">
-                        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseFilters" aria-expanded="false" aria-controls="collapseFilters">
-                            <i class="material-icons mr-2">filter_alt</i>Show Filters
-                        </button>
+        <div class="row justify-content-between align-items-center col-12">
+            <div class="d-flex pull-left">
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" id="statusDropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">All Statuses</button>
+                    <div class="dropdown-menu" aria-labelledby="statusDropdownMenuButton">
+                        <a class="dropdown-item" href="javascript:;">All Statuses</a>
+                        <a class="dropdown-item" href="javascript:;">Available</a>
+                        <a class="dropdown-item" href="javascript:;">On Loan</a>
+                        <a class="dropdown-item" href="javascript:;">Unavailable</a>
                     </div>
                 </div>
-                <div class="pull-right">
-                    <a class="create btn btn-success text-white" data-url="/Equipment/Equipment/CreateModal">New Equipment</a>
-                    <div class="btn-group">
-                        <a class="btn btn-primary"><i class="text-white fas fa-th-large"></i></a>
-                        <a class="btn btn-primary active"><i class="text-white fas fa-bars"></i></a>
-                    </div>
+                <div class="ml-1">
+                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseFilters" aria-expanded="false" aria-controls="collapseFilters">
+                        <i class="material-icons mr-2">filter_alt</i>Show Filters
+                    </button>
+                </div>
+            </div>
+            <div class="pull-right">
+                <a class="create btn btn-success text-white" data-url="/Equipment/Equipment/CreateModal">New Equipment</a>
+                <div class="btn-group">
+                    <a class="btn btn-primary"><i class="text-white fas fa-th-large"></i></a>
+                    <a class="btn btn-primary active"><i class="text-white fas fa-bars"></i></a>
                 </div>
             </div>
             <div class="col-12 collapse" id="collapseFilters">

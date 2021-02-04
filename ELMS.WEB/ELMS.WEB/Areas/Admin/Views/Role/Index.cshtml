@@ -1,0 +1,58 @@
+﻿@model ELMS.WEB.Areas.Admin.Models.Role.IndexViewModel
+
+@{
+    ViewData["Title"] = "Role Management";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="w-100 justify-content-between">
+            <div class="pull-right">
+                <a class="createRole btn btn-success text-white" data-url="/Admin/Role/CreateModal">New Role</a>
+            </div>
+        </div>
+
+        <div class="card mt-2">
+            <div class="card-header">
+                <h4 class="card-title">All Roles</h4>
+                <p class="category">Each role can be manipulated to perform certain actions throughout the system.</p>
+            </div>
+            <div class="card-body">
+                <table class="display table datatable responsive hover compact">
+                    <thead>
+                        <tr>
+                            <th class="th-description">ID</th>
+                            <th class="th-description">Role Name</th>
+                            <th class="th-description">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var role in Model.Roles)
+                        {
+                            <tr>
+                                <td class="td-name">@role.Id</td>
+                                <td class="td-name">@role.Name</td>
+                                <td class="td-actions">
+                                    <a class="editRole btn btn-primary text-white" data-url="/Admin/Role/EditModal" data-uid="@role.Id"><i class="fas fa-pen p-1"></i></a>
+                                    <a class="editRole btn btn-danger text-white" data-url="/Admin/Role/DeleteModal" data-uid="@role.Id"><i class="fas fa-trash p-1"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/areas/admin/role/index.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#navItemUsers').addClass('active');
+            $('#navItemRoles').addClass('active');
+        });
+    </script>
+    <partial name="Components/_NotificationSnippet" />
+}

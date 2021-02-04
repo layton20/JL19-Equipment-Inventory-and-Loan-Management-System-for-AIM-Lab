@@ -15,9 +15,9 @@ namespace ELMS.WEB.Entities.Loan
         public string Name { get; set; } = "Untitled";
 
         [ForeignKey("Loaner")]
-        public Guid LoanerUID { get; set; }
+        public string LoanerUID { get; set; }
 
-        public Guid LoaneeUID { get; set; }
+        public string LoaneeUID { get; set; }
 
         [Required]
         public string LoaneeEmail { get; set; }
@@ -36,6 +36,6 @@ namespace ELMS.WEB.Entities.Loan
         [Required]
         public bool AcceptedTermsAndConditions { get; set; } = false;
 
-        public IdentityUser Loanee { get; set; }
+        public IdentityUser Loaner { get; set; }
     }
 }

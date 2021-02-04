@@ -17,10 +17,10 @@ namespace ELMS.WEB.Adapters.Loan
                 Name = request.Name,
                 FromTimestamp = request.FromTimestamp,
                 ExpiryTimestamp = request.ExpiryTimestamp,
-                LoaneeUID = request.LoaneeUID,
+                LoaneeUID = request.LoaneeUID.ToString(),
                 LoaneeEmail = request.LoaneeEmailAddress,
                 AcceptedTermsAndConditions = request.AcceptedTermsAndConditions,
-                LoanerUID = request.LoanerUID,
+                LoanerUID = request.LoanerUID.ToString(),
                 Status = request.Status
             };
         }
@@ -44,8 +44,8 @@ namespace ELMS.WEB.Adapters.Loan
             {
                 UID = entity.UID,
                 Name = entity.Name,
-                LoanerUID = entity.LoanerUID,
-                LoaneeUID = entity.LoaneeUID,
+                LoanerUID = Guid.Parse(entity.LoanerUID),
+                LoaneeUID = Guid.Parse(entity.LoaneeUID),
                 AcceptedTermsAndConditions = entity.AcceptedTermsAndConditions,
                 FromTimestamp = entity.FromTimestamp,
                 ExpiryTimestamp = entity.ExpiryTimestamp,
@@ -102,8 +102,13 @@ namespace ELMS.WEB.Adapters.Loan
                 Status = response.Status,
                 AcceptedTermsAndConditions = response.AcceptedTermsAndConditions,
                 CreatedTimestamp = response.CreatedTimestamp,
-                AmendedTimestamp = response.AmendedTimestamp
+                AmendedTimestamp = response.AmendedTimestamp,
             };
+        }
+
+        internal static IList<LoanViewModel> ToViewModel(this IList<LoanResponse> responses)
+        {
+            return responses != null && responses.Count > 0 ? responses.Select(ToViewModel).ToList() : Enumerable.Empty<LoanViewModel>().ToList();
         }
     }
 }

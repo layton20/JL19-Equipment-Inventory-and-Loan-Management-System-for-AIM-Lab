@@ -1,0 +1,25 @@
+﻿@model ELMS.WEB.Areas.Admin.Models.Permission.CreateViewModel
+
+<div class="modal-content">
+    <div class="modal-header d-flex align-content-center">
+        <div><h2 class="modal-title text-left font-weight-bold">Add new permission</h2></div>
+        <div>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <i class="fas fa-times-circle 2x"></i>
+            </button>
+        </div>
+    </div>
+    <form id="formCreate" class="formPermission" asp-area="Admin" asp-controller="Permission" asp-action="Create" enctype="multipart/form-data">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label asp-for="Name"></label>
+                <input class="form-control" asp-for="Name" />
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Create Permission</button>
+            <button type="submit" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        </div>
+    </form>
+</div>

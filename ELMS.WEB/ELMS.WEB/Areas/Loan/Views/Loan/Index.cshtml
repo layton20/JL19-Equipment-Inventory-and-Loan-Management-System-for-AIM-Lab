@@ -1,5 +1,7 @@
 ﻿@model ELMS.WEB.Areas.Loan.Models.IndexViewModel
 @using ELMS.WEB.Enums.Loan
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
 
 @{
     ViewData["Title"] = "Loan Dashboard";
@@ -80,7 +82,10 @@
                     </div>
                 </div>
                 <div class="pull-right">
-                    <a class="create btn btn-success text-white" asp-area="Loan" asp-controller="Loan" asp-action="CreateView">New Loan</a>
+                    @if ((await AuthorizationService.AuthorizeAsync(User, "CreateLoanPolicy")).Succeeded)
+                    {
+                        <a class="create btn btn-success text-white" asp-area="Loan" asp-controller="Loan" asp-action="CreateView">New Loan</a>
+                    }
                     <div class="btn-group">
                         <a class="btn btn-primary"><i class="text-white fas fa-th-large"></i></a>
                         <a class="btn btn-primary active"><i class="text-white fas fa-bars"></i></a>
@@ -98,7 +103,7 @@
 
         <div class="card mt-0">
             <div class="card-header card-header-primary card-header-icon">
-                <h4 class="card-title">All Equipment</h4>
+                <h4 class="card-title">All Loans</h4>
             </div>
             <div class="card-body">
                 <div class="table-responsive">

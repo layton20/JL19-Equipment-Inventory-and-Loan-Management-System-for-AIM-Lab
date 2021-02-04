@@ -43,15 +43,22 @@
                 <div id="collapseNotes" class="collapse" role="tabpanel" aria-labelledby="headingNotes" data-parent="#accordion">
                     <div class="card-body">
                         <div>
-                            @foreach (var note in Model.Notes)
+                            @if (Model.Notes.Count > 0)
                             {
-                                <div class="border my-2 py-2 px-3">
-                                    <div class="d-flex justify-content-between">
-                                        <strong>@note.Name</strong>
-                                        <strong>@note.CreatedTimestamp.ToShortDateString()</strong>
+                                @foreach (var note in Model.Notes)
+                                {
+                                    <div class="border my-2 py-2 px-3">
+                                        <div class="d-flex justify-content-between">
+                                            <strong>@note.Name</strong>
+                                            <strong>@note.CreatedTimestamp.ToShortDateString()</strong>
+                                        </div>
+                                        <p class="mb-0">@note.Name</p>
                                     </div>
-                                    <p class="mb-0">@note.Name</p>
-                                </div>
+                                }
+                            }
+                            else
+                            {
+                                <p>No notes assigned to this equipment.</p>
                             }
                         </div>
                     </div>
