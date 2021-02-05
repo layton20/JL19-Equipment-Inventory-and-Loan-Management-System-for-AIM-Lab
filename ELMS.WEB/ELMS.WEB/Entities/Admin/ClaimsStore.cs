@@ -24,6 +24,18 @@ namespace ELMS.WEB.Entities.Admin
             new Claim("Edit Note", "Edit Note"),
             new Claim("Delete Note", "Delete Note"),
             new Claim("View Note", "View Note"),
+
+            // EmailSchedules
+            new Claim("Create EmailSchedule", "Create EmailSchedule"),
+            new Claim("Edit EmailSchedule", "Edit EmailSchedule"),
+            new Claim("Delete EmailSchedule", "Delete EmailSchedule"),
+            new Claim("View EmailSchedule", "View EmailSchedule"),
+
+            // Users
+            new Claim("Create User", "Create User"),
+            new Claim("Edit User", "Edit User"),
+            new Claim("Delete User", "Delete User"),
+            new Claim("View User", "View User"),
         };
     }
 }

@@ -25,14 +25,14 @@ namespace ELMS.WEB.Areas.Loan.Models
         public string LoanerUID { get; set; }
 
         [Required]
-        [CurrentDate]
+        [FutureOrTodayDate]
         [Display(Name = "From Date")]
-        public DateTime FromTimestamp { get; set; } = DateTime.Now;
+        public DateTime FromTimestamp { get; set; } = DateTime.Today;
 
         [Required]
-        [CurrentDate]
+        [FutureDate]
         [Display(Name = "Expiry Date")]
-        public DateTime ExpiryTimestamp { get; set; }
+        public DateTime ExpiryTimestamp { get; set; } = DateTime.Today.AddDays(1);
 
         [Required(ErrorMessage = "Select at least one equipment to loan off")]
         public IList<Guid> SelectedEquipment { get; set; }

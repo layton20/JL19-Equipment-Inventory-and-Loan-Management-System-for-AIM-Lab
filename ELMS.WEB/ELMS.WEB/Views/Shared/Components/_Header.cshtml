@@ -1,4 +1,7 @@
-﻿<header>
+﻿@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+
+<header>
     <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
         <div class="container-fluid">
             <div class="navbar-wrapper">
@@ -23,10 +26,22 @@
                             <i class="material-icons">add</i>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item" href="#">New Equipment</a>
-                            <a class="dropdown-item" href="#">New Loan</a>
-                            <a class="dropdown-item" href="#">New User</a>
-                            <a class="dropdown-item" href="#">New Email</a>
+                            @if ((await AuthorizationService.AuthorizeAsync(User, "CreateEquipmentPolicy")).Succeeded)
+                            {
+                                <a class="dropdown-item" href="#">New Equipment</a>
+                            }
+                            @if ((await AuthorizationService.AuthorizeAsync(User, "CreateLoanPolicy")).Succeeded)
+                            {
+                                <a class="dropdown-item" href="#">New Loan</a>
+                            }
+                            @if ((await AuthorizationService.AuthorizeAsync(User, "CreateUserPolicy")).Succeeded)
+                            {
+                                <a class="dropdown-item" href="#">New User</a>
+                            }
+                            @if ((await AuthorizationService.AuthorizeAsync(User, "CreateEmailSchedulePolicy")).Succeeded)
+                            {
+                                <a class="dropdown-item" href="#">New Email Schedule</a>
+                            }
                         </div>
                     </li>
                     <li class="nav-item dropdown">

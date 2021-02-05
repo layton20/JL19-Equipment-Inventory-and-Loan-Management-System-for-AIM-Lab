@@ -13,10 +13,8 @@ using ELMS.WEB.Repositories.Identity.Interface;
 using ELMS.WEB.Repositories.Loan.Concrete;
 using ELMS.WEB.Repositories.Loan.Interface;
 using ELMS.WEB.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -79,6 +77,16 @@ namespace ELMS.WEB
                 options.AddPolicy("EditNotePolicy", policy => policy.RequireClaim("Edit Note", "true"));
                 options.AddPolicy("DeleteNotePolicy", policy => policy.RequireClaim("Delete Note", "true"));
                 options.AddPolicy("ViewNotePolicy", policy => policy.RequireClaim("View Note", "true"));
+
+                options.AddPolicy("CreateEmailSchedulePolicy", policy => policy.RequireClaim("Create EmailSchedule", "true"));
+                options.AddPolicy("EditEmailSchedulePolicy", policy => policy.RequireClaim("Edit EmailSchedule", "true"));
+                options.AddPolicy("DeleteEmailSchedulePolicy", policy => policy.RequireClaim("Delete EmailSchedule", "true"));
+                options.AddPolicy("ViewEmailSchedulePolicy", policy => policy.RequireClaim("View EmailSchedule", "true"));
+
+                options.AddPolicy("CreateUserPolicy", policy => policy.RequireClaim("Create User", "true"));
+                options.AddPolicy("EditUserPolicy", policy => policy.RequireClaim("Edit User", "true"));
+                options.AddPolicy("DeleteUserPolicy", policy => policy.RequireClaim("Delete User", "true"));
+                options.AddPolicy("ViewUserPolicy", policy => policy.RequireClaim("View User", "true"));
             });
         }
 

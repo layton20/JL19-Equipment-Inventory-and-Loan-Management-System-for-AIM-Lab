@@ -84,8 +84,19 @@ namespace ELMS.WEB.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> DetailsViewAsync(Guid uid)
+        public async Task<IActionResult> DetailsViewAsync(Guid uid, string successMessage, string errorMessage)
         {
+
+            if (!string.IsNullOrWhiteSpace(successMessage))
+            {
+                ViewData["SuccessMessage"] = successMessage;
+            }
+
+            if (!string.IsNullOrWhiteSpace(errorMessage))
+            {
+                ViewData["ErrorMessage"] = errorMessage;
+            }
+
             IdentityUser _User = await __UserManager.FindByIdAsync(uid.ToString());
 
             if (_User == null)
@@ -174,7 +185,7 @@ namespace ELMS.WEB.Areas.Admin.Controllers
                 return RedirectToAction("DetailsView", "User", new { Area = "Admin", uid = model.UserClaims.UserID, errorMessage = $"{GlobalConstants.ERROR_ACTION_PREFIX} update User Permissions." });
             }
 
-            return RedirectToAction("DetailsView", "User", new { Area = "Admin", uid = model.UserClaims.UserID, errorMessage = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} updated User Permissions." });
+            return RedirectToAction("DetailsView", "User", new { Area = "Admin", uid = model.UserClaims.UserID, successMessage = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} updated User Permissions." });
         }
     }
 }
