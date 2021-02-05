@@ -102,7 +102,8 @@
                             </div>
                             <div class="tab-pane" id="tabPermissions">
                                 <form asp-area="Admin" asp-controller="User" asp-action="EditUserPermissions">
-                                    <table class="display table datatable responsive hover compact w-100">
+                                    <input type="hidden" asp-for="UserClaims.UserID"/>
+                                    <table class="display table datatable-permissions responsive hover compact w-100">
                                         <thead>
                                             <tr>
                                                 <th class="th-description">Selection</th>
@@ -116,6 +117,8 @@
                                                 <tr>
                                                     <td class="td-name">
                                                         <input type="checkbox" asp-for="@Model.UserClaims.Claims[i].IsSelected" />
+                                                        <input type="hidden" asp-for="@Model.UserClaims.Claims[i].ClaimType" />
+                                                        <input type="hidden" asp-for="@Model.UserClaims.Claims[i].ClaimValue" />
                                                     </td>
                                                     <td class="td-name">@Model.UserClaims.Claims[i].ClaimType</td>
                                                     <td class="td-name">@Model.UserClaims.Claims[i].ClaimValue</td>
@@ -144,6 +147,15 @@
         $(document).ready(function () {
             $('#navItemUsers').addClass('active');
             $('#navItemUserManagement').addClass('active');
+
+            $('.datatable-permissions').DataTable({
+                paging: false,
+                responsive: {
+                    details: {
+                        display: $.fn.dataTable.Responsive.display.childRow
+                    }
+                }
+            });
         });
     </script>
     <partial name="Components/_NotificationSnippet" />

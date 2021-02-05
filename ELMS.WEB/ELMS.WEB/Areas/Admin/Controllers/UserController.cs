@@ -18,6 +18,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using ELMS.WEB.Entities.Admin;
+using ELMS.WEB.Areas.Admin.Models.User;
 
 namespace ELMS.WEB.Areas.Admin.Controllers
 {
@@ -136,7 +137,7 @@ namespace ELMS.WEB.Areas.Admin.Controllers
                     ClaimValue = claim.Value
                 };
 
-                if (_ExistingClains.Any(c => c.Type == claim.Type))
+                if (_ExistingClains.Any(c => c.Type == claim.Type && c.Value == "true"))
                 {
                     _UserClaim.IsSelected = true;
                 }
@@ -145,6 +146,35 @@ namespace ELMS.WEB.Areas.Admin.Controllers
             }
 
             return View("Details", _Model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditUserPermissionsAsync(DetailsViewModel model)
+        {
+            IdentityUser _User = await __UserManager.FindByIdAsync(model.UserClaims.UserID);
+
+            if (_User == null)
+            {
+                return RedirectToAction("DetailsView", "User", new { Area = "Admin", uid = model.UserClaims.UserID, errorMessage = $"{GlobalConstants.ERROR_ACTION_PREFIX} find User." });
+            }
+
+            IList<Claim> _Claims = await __UserManager.GetClaimsAsync(_User);
+            IdentityResult _Result = await __UserManager.RemoveClaimsAsync(_User, _Claims);
+
+            if (!_Result.Succeeded)
+            {
+                return RedirectToAction("DetailsView", "User", new { Area = "Admin", uid = model.UserClaims.UserID, errorMessage = $"{GlobalConstants.ERROR_ACTION_PREFIX} update User Permissions." });
+            }
+
+            _Result = await __UserManager.AddClaimsAsync(_User,
+                model.UserClaims.Claims.Select(c => new Claim(c.ClaimType, c.IsSelected ? "true" : "false")));
+
+            if (!_Result.Succeeded)
+            {
+                return RedirectToAction("DetailsView", "User", new { Area = "Admin", uid = model.UserClaims.UserID, errorMessage = $"{GlobalConstants.ERROR_ACTION_PREFIX} update User Permissions." });
+            }
+
+            return RedirectToAction("DetailsView", "User", new { Area = "Admin", uid = model.UserClaims.UserID, errorMessage = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} updated User Permissions." });
         }
     }
 }

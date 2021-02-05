@@ -65,23 +65,20 @@ namespace ELMS.WEB
 
             services.AddAuthorization(options =>
             {
-                options.FallbackPolicy = new AuthorizationPolicyBuilder()
-                .RequireAuthenticatedUser()
-                .Build();
-                options.AddPolicy("CreateLoanPolicy", policy => policy.RequireClaim("Create Loan"));
-                options.AddPolicy("EditLoanPolicy", policy => policy.RequireClaim("Edit Loan"));
-                options.AddPolicy("DeleteLoanPolicy", policy => policy.RequireClaim("Delete Loan"));
-                options.AddPolicy("ViewLoanPolicy", policy => policy.RequireClaim("View Loan"));
+                options.AddPolicy("CreateLoanPolicy", policy => policy.RequireClaim("Create Loan", "true"));
+                options.AddPolicy("EditLoanPolicy", policy => policy.RequireClaim("Edit Loan", "true"));
+                options.AddPolicy("DeleteLoanPolicy", policy => policy.RequireClaim("Delete Loan", "true"));
+                options.AddPolicy("ViewLoanPolicy", policy => policy.RequireClaim("View Loan", "true"));
 
-                options.AddPolicy("CreateEquipmentPolicy", policy => policy.RequireClaim("Create Equipment"));
-                options.AddPolicy("EditEquipmentPolicy", policy => policy.RequireClaim("Edit Equipment"));
-                options.AddPolicy("DeleteEquipmentPolicy", policy => policy.RequireClaim("Delete Equipment"));
-                options.AddPolicy("ViewEquipmentPolicy", policy => policy.RequireClaim("View Equipment"));
+                options.AddPolicy("CreateEquipmentPolicy", policy => policy.RequireClaim("Create Equipment", "true"));
+                options.AddPolicy("EditEquipmentPolicy", policy => policy.RequireClaim("Edit Equipment", "true"));
+                options.AddPolicy("DeleteEquipmentPolicy", policy => policy.RequireClaim("Delete Equipment", "true"));
+                options.AddPolicy("ViewEquipmentPolicy", policy => policy.RequireClaim("View Equipment", "true"));
 
-                options.AddPolicy("CreateNotePolicy", policy => policy.RequireClaim("Create Note"));
-                options.AddPolicy("EditNotePolicy", policy => policy.RequireClaim("Edit Note"));
-                options.AddPolicy("DeleteNotePolicy", policy => policy.RequireClaim("Delete Note"));
-                options.AddPolicy("ViewNotePolicy", policy => policy.RequireClaim("View Note"));
+                options.AddPolicy("CreateNotePolicy", policy => policy.RequireClaim("Create Note", "true"));
+                options.AddPolicy("EditNotePolicy", policy => policy.RequireClaim("Edit Note", "true"));
+                options.AddPolicy("DeleteNotePolicy", policy => policy.RequireClaim("Delete Note", "true"));
+                options.AddPolicy("ViewNotePolicy", policy => policy.RequireClaim("View Note", "true"));
             });
         }
 
