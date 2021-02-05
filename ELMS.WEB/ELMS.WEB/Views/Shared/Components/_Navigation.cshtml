@@ -70,16 +70,22 @@
                 </a>
                 <div class="collapse" id="navUsers">
                     <ul class="nav">
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <span class="sidebar-mini"> UM </span>
-                                <span class="sidebar-normal"> User Management </span>
+                        <li class="nav-item" id="navItemUserManagement">
+                            <a class="nav-link" asp-area="Admin" asp-controller="User" asp-action="Index">
+                                <span class="sidebar-mini"> US </span>
+                                <span class="sidebar-normal"> Users </span>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <span class="sidebar-mini"> RP </span>
-                                <span class="sidebar-normal"> Roles and Permissions </span>
+                        <li class="nav-item" id="navItemRoles">
+                            <a class="nav-link" asp-area="Admin" asp-controller="Role" asp-action="Index">
+                                <span class="sidebar-mini"> RO </span>
+                                <span class="sidebar-normal"> Roles </span>
+                            </a>
+                        </li>
+                        <li class="nav-item" id="navItemPermissions">
+                            <a class="nav-link" asp-area="Admin" asp-controller="Permission" asp-action="Index">
+                                <span class="sidebar-mini"> PE </span>
+                                <span class="sidebar-normal"> Permissions </span>
                             </a>
                         </li>
                         <li class="nav-item">

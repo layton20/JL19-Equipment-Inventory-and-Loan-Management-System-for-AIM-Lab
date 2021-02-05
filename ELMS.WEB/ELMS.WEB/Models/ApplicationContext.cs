@@ -9,7 +9,7 @@ namespace ELMS.WEB.Models
 {
     public class ApplicationContext : IdentityDbContext<IdentityUser>
     {
-        public ApplicationContext(DbContextOptions options) : base(options)
+        public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
         {
         }
 

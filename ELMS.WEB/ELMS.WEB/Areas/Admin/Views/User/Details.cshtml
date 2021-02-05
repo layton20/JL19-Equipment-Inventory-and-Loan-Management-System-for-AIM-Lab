@@ -1,0 +1,162 @@
+﻿@model ELMS.WEB.Areas.Admin.Models.User.DetailsViewModel
+
+@{
+    ViewData["Title"] = "User Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card my-3">
+            <div class="container-fluid card-body">
+                <div class="row">
+                    <div class="col-sm-12 col-md-2">
+                        <ul class="nav nav-pills nav-pills-icons flex-column pl-0">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#tabDetails" data-toggle="tab">
+                                    <i class="material-icons">subject</i>
+                                    Details
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#tabLoans" data-toggle="tab">
+                                    <i class="material-icons">note</i>
+                                    Loans
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#tabRoles" data-toggle="tab">
+                                    <i class="material-icons">note</i>
+                                    Roles
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#tabPermissions" data-toggle="tab">
+                                    <i class="material-icons">note</i>
+                                    Permissions
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#tabSettings" data-toggle="tab">
+                                    <i class="material-icons">settings</i>
+                                    Settings
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-12 col-md-10 border-left">
+                        <div class="tab-content tab-space pt-2">
+                            <div class="tab-pane active" id="tabDetails">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item"><p class="mb-0"><strong>ID: </strong>@Model.User.Id</p></li>
+                                    <li class="list-group-item"><p class="mb-0"><strong>Email: </strong>@Model.User.Email</p></li>
+                                    <li class="list-group-item"><p class="mb-0"><strong>Normalised Email: </strong>@Model.User.NormalizedEmail</p></li>
+                                    <li class="list-group-item"><p class="mb-0"><strong>Email Verified: </strong>@Model.User.EmailConfirmed</p></li>
+                                </ul>
+                            </div>
+                            <div class="tab-pane" id="tabLoans">
+                                <table class="display table datatable responsive hover compact" cellspacing="0" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th class="th-description font-weight-normal">Loan name</th>
+                                            <th class="th-description font-weight-normal">Loaner</th>
+                                            <th class="th-description font-weight-normal">Equipment</th>
+                                            <th class="th-description font-weight-normal">Start Date</th>
+                                            <th class="th-description font-weight-normal">End Date</th>
+                                            <th class="th-description font-weight-normal">
+                                                <span>Status</span>
+                                                <i class="fas fa-info-circle text-gray" data-toggle="tooltip" data-placement="left" data-html="true" title="<strong>Statuses: </strong>Pending, Inactive, Active, Complete, Manually Completed"></i>
+                                            </th>
+                                            <th class="th-description font-weight-normal">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var loan in Model.Loans.OrderByDescending(x => x.CreatedTimestamp))
+                                        {
+                                            <tr>
+                                                <td>@loan.Name</td>
+                                                <td>@loan.Loaner.Email</td>
+                                                <td>
+                                                    <ul class="list-group list-group-flush">
+                                                        @foreach (var equipment in Model.Loans.FirstOrDefault(x => x.UID == loan.UID).EquipmentList)
+                                                        {
+                                                            <li class="list-group-item px-0"><a class="loanDetailsModal text-primary" data-url="/Equipment/Equipment/DetailsModal" data-uid="@equipment.UID" style="cursor: pointer">@equipment.Name</a></li>
+                                                        }
+                                                    </ul>
+                                                </td>
+                                                <td>@loan.StartTimestamp</td>
+                                                <td>@loan.ExpiryTimestamp</td>
+                                                <td>@loan.Status.ToString()</td>
+                                                <td class="td-actions">
+                                                    <a class="btn btn-primary text-white" asp-area="Loan" asp-controller="Loan" asp-action="DetailsView" asp-route-uid="@loan.UID"><i class="fas fa-eye p-1"></i></a>
+                                                    <a class="deleteEquipment btn btn-danger text-white" href="#" data-toggle="tooltip" data-placement="left" title="Manually end loan"><i class="fas fa-backward p-1"></i></a>
+                                                    <a class="deleteEquipment btn btn-danger text-white" asp-area="Loan" asp-controller="Loan" asp-action="AcceptTermsAndConditionsView" asp-route-loanuid="@loan.UID"><span class="p-1">TAC</span></a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="tab-pane" id="tabRoles">
+                                DETAILS
+                            </div>
+                            <div class="tab-pane" id="tabPermissions">
+                                <form asp-area="Admin" asp-controller="User" asp-action="EditUserPermissions">
+                                    <input type="hidden" asp-for="UserClaims.UserID"/>
+                                    <table class="display table datatable-permissions responsive hover compact w-100">
+                                        <thead>
+                                            <tr>
+                                                <th class="th-description">Selection</th>
+                                                <th class="th-description">Category</th>
+                                                <th class="th-description">Permission Name</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @for (int i = 0; i < Model.UserClaims.Claims.Count; i++)
+                                            {
+                                                <tr>
+                                                    <td class="td-name">
+                                                        <input type="checkbox" asp-for="@Model.UserClaims.Claims[i].IsSelected" />
+                                                        <input type="hidden" asp-for="@Model.UserClaims.Claims[i].ClaimType" />
+                                                        <input type="hidden" asp-for="@Model.UserClaims.Claims[i].ClaimValue" />
+                                                    </td>
+                                                    <td class="td-name">@Model.UserClaims.Claims[i].ClaimType</td>
+                                                    <td class="td-name">@Model.UserClaims.Claims[i].ClaimValue</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+
+                                    <input class="btn btn-primary" type="submit" value="Update Permissions"/>
+                                </form>
+                            </div>
+                            <div class="tab-pane" id="tabSettings">
+                                DETAILS
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/areas/admin/user/details.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#navItemUsers').addClass('active');
+            $('#navItemUserManagement').addClass('active');
+
+            $('.datatable-permissions').DataTable({
+                paging: false,
+                responsive: {
+                    details: {
+                        display: $.fn.dataTable.Responsive.display.childRow
+                    }
+                }
+            });
+        });
+    </script>
+    <partial name="Components/_NotificationSnippet" />
+}

@@ -37,6 +37,7 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
             return null;
         }
 
+        [Authorize(Policy = "ViewEquipmentPolicy")]
         public async Task<IActionResult> IndexAsync(String errorMessage, String successMessage)
         {
             if (!String.IsNullOrWhiteSpace(errorMessage))
@@ -56,12 +57,14 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
             return View(_Model);
         }
 
+        [Authorize(Policy = "CreateEquipmentPolicy")]
         public async Task<IActionResult> CreateModalAsync()
         {
             CreateEquipmentViewModel _Model = new CreateEquipmentViewModel();
             return PartialView("_CreateEquipment", _Model);
         }
 
+        [Authorize(Policy = "CreateEquipmentPolicy")]
         [HttpPost]
         public async Task<IActionResult> CreateAsync(CreateEquipmentViewModel model)
         {
@@ -92,6 +95,8 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
             return Json(new { success = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} created {ENTITY_NAME}" });
         }
 
+        [Authorize(Policy = "EditEquipmentPolicy")]
+        [HttpGet]
         public async Task<IActionResult> EditViewAsync(Guid equipmentUID)
         {
             EquipmentResponse _Response = await __EquipmentManager.GetAsync(equipmentUID);
@@ -104,6 +109,8 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
             return View("Edit", _Response.ToUpdateViewModel());
         }
 
+        [Authorize(Policy = "EditEquipmentPolicy")]
+        [HttpPost]
         public async Task<IActionResult> EditAsync(DetailsViewModel model)
         {
             if (!ModelState.IsValid)
@@ -125,6 +132,8 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
             return await DetailsViewAsync(model.Equipment.UID);
         }
 
+        [Authorize(Policy = "ViewEquipmentPolicy")]
+        [HttpGet]
         public async Task<IActionResult> DetailsViewAsync(Guid equipmentUID, string successMessage = "", string errorMessage = "")
         {
             if (equipmentUID == null || equipmentUID == Guid.Empty)
@@ -169,6 +178,7 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
             return PartialView("_DetailsModal", _Model);
         }
 
+        [Authorize(Policy = "DeleteEquipmentPolicy")]
         [HttpGet]
         public async Task<IActionResult> DeleteModalAsync(Guid equipmentUID)
         {
@@ -182,6 +192,7 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
             return PartialView("_DeleteEquipment", _Response.ToViewModel());
         }
 
+        [Authorize(Policy = "DeleteEquipmentPolicy")]
         [HttpPost]
         public async Task<IActionResult> DeleteAsync(DeleteEquipmentViewModel model)
         {

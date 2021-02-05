@@ -26,11 +26,7 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
             __EquipmentManager = equipmentManager ?? throw new ArgumentNullException(nameof(noteManager));
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
-
+        [Authorize(Policy = "CreateNotePolicy")]
         [HttpGet]
         public async Task<IActionResult> CreateModalAsync(Guid equipmentUID)
         {
@@ -47,6 +43,7 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
             return PartialView("_CreateNote", _Model);
         }
 
+        [Authorize(Policy = "EditNotePolicy")]
         [HttpGet]
         public async Task<IActionResult> EditModalAsync(Guid NoteUID)
         {
@@ -60,6 +57,7 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
             return PartialView("_EditNote", _Response.ToViewModel());
         }
 
+        [Authorize(Policy = "CreateNotePolicy")]
         [HttpPost]
         public async Task<IActionResult> CreateAsync(CreateNoteViewModel model)
         {
@@ -83,6 +81,7 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
             return Json(new { success = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} created {ENTITY_NAME}." });
         }
 
+        [Authorize(Policy = "EditNotePolicy")]
         [HttpPost]
         public async Task<IActionResult> EditAsync(NoteViewModel model)
         {
@@ -105,6 +104,7 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
             return Json(new { success = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} updated {ENTITY_NAME}." });
         }
 
+        [Authorize(Policy = "DeleteNotePolicy")]
         [HttpGet]
         public async Task<IActionResult> DeleteModalAsync(Guid noteUID)
         {
@@ -118,6 +118,7 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
             return PartialView("_DeleteNote", _Response.ToViewModel());
         }
 
+        [Authorize(Policy = "DeleteNotePolicy")]
         [HttpPost]
         public async Task<IActionResult> DeleteAsync(DeleteNoteViewModel model)
         {
