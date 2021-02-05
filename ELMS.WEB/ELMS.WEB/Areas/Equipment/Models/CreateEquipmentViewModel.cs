@@ -1,4 +1,5 @@
-﻿using ELMS.WEB.Enums.Equipment;
+﻿using ELMS.WEB.CustomDataAnnotations;
+using ELMS.WEB.Enums.Equipment;
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -22,12 +23,14 @@ namespace ELMS.WEB.Areas.Equipment.Models
         public double PurchasePrice { get; set; }
 
         [Required]
+        [PastDate]
         [Display(Name = "Purchase Date")]
-        public DateTime PurchaseDate { get; set; }
+        public DateTime PurchaseDate { get; set; } = DateTime.Now;
 
         [Required]
+        [PastDate]
         [Display(Name = "Warranty Expiration Date")]
-        public DateTime WarrantyExpirationDate { get; set; }
+        public DateTime WarrantyExpirationDate { get; set; } = DateTime.Now;
 
         [Required]
         public InitialStatus Status { get; set; } = InitialStatus.Available;
