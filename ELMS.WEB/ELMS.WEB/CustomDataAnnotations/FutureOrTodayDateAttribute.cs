@@ -3,15 +3,15 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ELMS.WEB.CustomDataAnnotations
 {
-    public class PastDateAttribute : ValidationAttribute
+    public class FutureOrTodayDateAttribute : ValidationAttribute
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             DateTime Date = (DateTime)value;
 
-            if (Date > DateTime.Now)
+            if (Date < DateTime.Now.Date)
             {
-                return new ValidationResult($"The Date field must be less than or equal to {DateTime.Now.ToString("d")}.");
+                return new ValidationResult($"The {validationContext.DisplayName} field must be greater than or equal to {DateTime.Now.ToString("d")}.");
             }
 
             return ValidationResult.Success;

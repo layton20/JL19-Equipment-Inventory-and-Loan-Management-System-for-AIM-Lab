@@ -149,27 +149,36 @@ namespace ELMS.WEB.Areas.Loan.Controllers
             }
 
             LoanViewModel _LoanViewModel = _Response.ToViewModel();
-
             IList<Guid> _EquipmentUIDs = (await __LoanEquipmentManager.GetAsync(_Response.UID)).Select(x => x.EquipmentUID).ToList();
             if (_EquipmentUIDs != null && _EquipmentUIDs.Count > 0)
             {
                 _LoanViewModel.EquipmentList = (await __EquipmentManager.GetAsync(_EquipmentUIDs)).Equipments.ToViewModel();
             }
-
             if (_Response.LoaneeUID != Guid.Empty)
             {
                 _LoanViewModel.Loanee = await __UserRepository.GetByUIDAsync(_Response.LoaneeUID);
             }
-
             if (_Response.LoanerUID != Guid.Empty)
             {
                 _LoanViewModel.Loaner = await __UserRepository.GetByUIDAsync(_Response.LoanerUID);
             }
 
+            if (_Response.AcceptedTermsAndConditions)
+            {
+                AlreadyAcceptedTermsAndConditionsViewModel _AlreadyAcceptedModel = new AlreadyAcceptedTermsAndConditionsViewModel
+                {
+                    UID = loanUID,
+                    Accepted = _Response.AcceptedTermsAndConditions,
+                    Loan = _LoanViewModel
+                };
+
+                return View("AlreadyAcceptedTermsAndConditions", _AlreadyAcceptedModel);
+            }
+
             AcceptTermsAndConditionsViewModel _Model = new AcceptTermsAndConditionsViewModel
             {
                 UID = loanUID,
-                Accepted = false,
+                Accepted = _Response.AcceptedTermsAndConditions,
                 Loan = _LoanViewModel
             };
 

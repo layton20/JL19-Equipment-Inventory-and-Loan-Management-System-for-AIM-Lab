@@ -33,13 +33,13 @@
                 <div class="col">
                     <div class="form-group">
                         <label asp-for="FromTimestamp"></label>
-                        <input class="form-control datetimepicker" asp-for="FromTimestamp" value="@DateTime.Now" />
+                        <input type="date" class="form-control datetimepicker" asp-for="FromTimestamp"/>
                     </div>
                 </div>
                 <div class="col">
                     <div class="form-group">
                         <label asp-for="ExpiryTimestamp"></label>
-                        <input class="form-control datetimepicker" asp-for="ExpiryTimestamp" value="@DateTime.Now.AddDays(7)" />
+                        <input type="date" class="form-control datetimepicker" asp-for="ExpiryTimestamp" />
                     </div>
                 </div>
             </div>

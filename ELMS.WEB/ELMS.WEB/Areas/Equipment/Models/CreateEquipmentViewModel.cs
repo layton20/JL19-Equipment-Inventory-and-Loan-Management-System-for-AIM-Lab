@@ -23,12 +23,12 @@ namespace ELMS.WEB.Areas.Equipment.Models
         public double PurchasePrice { get; set; }
 
         [Required]
-        [PastDate]
+        [PastOrTodayDate]
         [Display(Name = "Purchase Date")]
         public DateTime PurchaseDate { get; set; } = DateTime.Now;
 
         [Required]
-        [PastDate]
+        [PastOrTodayDate]
         [Display(Name = "Warranty Expiration Date")]
         public DateTime WarrantyExpirationDate { get; set; } = DateTime.Now;
 
