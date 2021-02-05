@@ -41,6 +41,7 @@ namespace ELMS.WEB.Areas.Loan.Controllers
             __EmailSender = emailSender ?? throw new ArgumentNullException(nameof(emailSender));
         }
 
+        [Authorize(Policy = "ViewLoanPolicy")]
         public async Task<IActionResult> Index(string errorMessage = "", string successMessage = "")
         {
             if (!String.IsNullOrWhiteSpace(errorMessage))
@@ -203,6 +204,7 @@ namespace ELMS.WEB.Areas.Loan.Controllers
             return View("AcceptedTermsAndConditions");
         }
 
+        [Authorize(Policy = "ViewLoanPolicy")]
         public async Task<IActionResult> DetailsViewAsync(Guid uid, string successMessage = "", string errorMessage = "")
         {
             if (!String.IsNullOrEmpty(successMessage))
@@ -262,6 +264,7 @@ namespace ELMS.WEB.Areas.Loan.Controllers
             return View("LoanPreview", _Model);
         }
 
+        [Authorize(Policy = "EditLoanPolicy")]
         [HttpPost]
         public async Task<IActionResult> EditAsync(UpdateLoanViewModel model)
         {
