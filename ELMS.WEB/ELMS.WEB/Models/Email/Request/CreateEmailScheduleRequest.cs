@@ -6,7 +6,7 @@ namespace ELMS.WEB.Models.Email.Request
 {
     public class CreateEmailScheduleRequest
     {
-        public Guid EmailTemplateUID { get; set; }
+        public Guid EmailTemplateUID { get; set; } = Guid.Empty;
 
         [Required]
         [EmailAddress]

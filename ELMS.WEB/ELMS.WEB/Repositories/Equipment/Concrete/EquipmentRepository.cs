@@ -31,11 +31,11 @@ namespace ELMS.WEB.Repositories.Equipment.Concrete
             return _Added ? equipment : null;
         }
 
-        public async Task<bool> BulkCreateAsync(EquipmentEntity equipment, int Quantity)
+        public async Task<IList<EquipmentEntity>> BulkCreateAsync(EquipmentEntity equipment, int Quantity)
         {
             if (equipment == null || equipment.UID == Guid.Empty)
             {
-                return false;
+                return null;
             }
 
             List<EquipmentEntity> _Copies = new List<EquipmentEntity>();
@@ -54,12 +54,14 @@ namespace ELMS.WEB.Repositories.Equipment.Concrete
                 });
             }
 
-            int _Added = 0;
-
             await __Context.Equipment.AddRangeAsync(_Copies);
-            _Added = await __Context.SaveChangesAsync();
 
-            return _Added > 0;
+            if (await __Context.SaveChangesAsync() <= 0)
+            {
+                return null;
+            }
+
+            return _Copies;
         }
 
         public async Task<bool> DeleteAsync(Guid uid)

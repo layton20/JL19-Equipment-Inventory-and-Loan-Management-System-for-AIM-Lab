@@ -21,6 +21,6 @@ namespace ELMS.WEB.Managers.Equipment.Interfaces
 
         public Task<BaseResponse> DeleteAsync(DeleteEquipmentViewModel model);
 
-        public Task<BaseResponse> BulkCreateAsync(CreateEquipmentRequest request);
+        public Task<IList<EquipmentResponse>> BulkCreateAsync(CreateEquipmentRequest request);
     }
 }
