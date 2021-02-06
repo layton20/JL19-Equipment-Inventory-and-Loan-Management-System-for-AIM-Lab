@@ -92,7 +92,7 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
                 return await CreateModalAsync();
             }
 
-            return Json(new { success = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} created {ENTITY_NAME}" });
+            return Json(new { success = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} created {ENTITY_NAME}." });
         }
 
         [Authorize(Policy = "EditEquipmentPolicy")]

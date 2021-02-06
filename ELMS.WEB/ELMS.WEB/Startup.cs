@@ -1,3 +1,5 @@
+using ELMS.WEB.Background.Concrete;
+using ELMS.WEB.Background.Interfaces;
 using ELMS.WEB.Managers.Email.Concrete;
 using ELMS.WEB.Managers.Email.Interface;
 using ELMS.WEB.Managers.Equipment.Concrete;
@@ -43,6 +45,7 @@ namespace ELMS.WEB
             services.AddScoped<ILoanEquipmentManager, LoanEquipmentManager>();
             services.AddScoped<IEmailTemplateManager, EmailTemplateManager>();
             services.AddScoped<IEmailScheduleManager, EmailScheduleManager>();
+            services.AddScoped<IEmailScheduleParameterManager, EmailScheduleParameterManager>();
 
             // Repository
             services.AddScoped<IUserRepository, UserRepository>();
@@ -52,6 +55,7 @@ namespace ELMS.WEB
             services.AddScoped<ILoanEquipmentRepository, LoanEquipmentRepository>();
             services.AddScoped<IEmailTemplateRepository, EmailTemplateRepository>();
             services.AddScoped<IEmailScheduleRepository, EmailScheduleRepository>();
+            services.AddScoped<IEmailScheduleParameterRepository, EmailScheduleParameterRepository>();
 
             services.AddTransient<IApplicationEmailSender, ApplicationEmailSender>();
             services.Configure<SendGridEmailSenderOptions>(options =>
@@ -88,6 +92,8 @@ namespace ELMS.WEB
                 options.AddPolicy("DeleteUserPolicy", policy => policy.RequireClaim("Delete User", "true"));
                 options.AddPolicy("ViewUserPolicy", policy => policy.RequireClaim("View User", "true"));
             });
+
+            services.AddSingleton<IEmailWorker, EmailWorker>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

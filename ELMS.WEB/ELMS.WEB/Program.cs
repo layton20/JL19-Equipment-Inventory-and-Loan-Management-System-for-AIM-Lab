@@ -1,4 +1,6 @@
+using ELMS.WEB.Background;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 namespace ELMS.WEB
@@ -15,6 +17,9 @@ namespace ELMS.WEB
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                })
+                .ConfigureServices(services => {
+                    services.AddHostedService<BackgroundWorker>();
                 });
     }
 }

@@ -7,16 +7,18 @@ namespace ELMS.WEB.Entities.Email
 {
     public class EmailScheduleEntity : BaseEntity
     {
-        [Required]
         public Guid EmailTemplateUID { get; set; }
 
         [Required]
         [EmailAddress]
         public string RecipientEmailAddress { get; set; }
+
         [Required]
-        public EmailScheduleStatus Status { get; set; } = EmailScheduleStatus.Scheduled;
+        public EmailType EmailType { get; set; }
 
         [Required]
         public DateTime SendTimestamp { get; set; }
+        [Required]
+        public bool Sent { get; set; } = false;
     }
 }

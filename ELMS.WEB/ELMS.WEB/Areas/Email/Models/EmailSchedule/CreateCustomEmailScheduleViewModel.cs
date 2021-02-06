@@ -1,24 +1,25 @@
 ﻿using ELMS.WEB.Areas.Email.Models.EmailTemplate;
 using ELMS.WEB.CustomDataAnnotations;
-using ELMS.WEB.Enums.Email;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace ELMS.WEB.Areas.Email.Models.EmailSchedule
 {
-    public class CreateEmailScheduleViewModel
+    public class CreateCustomEmailScheduleViewModel
     {
         [Required]
-        public Guid EmailTemplateUID { get; set; } = Guid.Empty;
+        [NonDefaultGuid]
+        [Display(Name = "Email Template")]
+        public Guid EmailTemplateUID { get; set; }
         [Required]
+        [EmailAddress]
         [Display(Name = "Recipient Email")]
         public string RecipientEmailAddress { get; set; }
         [Required]
-        public EmailType EmailType { get; set; }
-        [Required]
         [FutureOrTodayDate]
-        public DateTime SendTimestamp { get; set; }
+        [Display(Name = "Scheduled For")]
+        public DateTime SendTimestamp { get; set; } = DateTime.Today.Date.AddHours(12);
         public IList<EmailTemplateViewModel> EmailTemplates { get; set; }
     }
 }

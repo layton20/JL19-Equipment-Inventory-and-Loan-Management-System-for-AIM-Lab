@@ -4,7 +4,6 @@ using ELMS.WEB.Repositories.Email.Interface;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ELMS.WEB.Repositories.Email.Concrete
@@ -58,28 +57,6 @@ namespace ELMS.WEB.Repositories.Email.Concrete
         public async Task<EmailScheduleEntity> GetByUIDAsync(Guid uid)
         {
             return await __ApplicationContext.EmailSchedules.FindAsync(uid);
-        }
-
-        public async Task<bool> UpdateAsync(EmailScheduleEntity entity)
-        {
-            if (entity == null || entity.UID == Guid.Empty)
-            {
-                return false;
-            }
-
-            EmailScheduleEntity _EmailSchedule = await __ApplicationContext.EmailSchedules.FindAsync(entity.UID);
-
-            if (_EmailSchedule == null)
-            {
-                return false;
-            }
-
-            _EmailSchedule.Status = entity.Status;
-            _EmailSchedule.RecipientEmailAddress = entity.RecipientEmailAddress;
-            _EmailSchedule.SendTimestamp = _EmailSchedule.SendTimestamp;
-            _EmailSchedule.AmendedTimestamp = DateTime.Now;
-
-            return await __ApplicationContext.SaveChangesAsync() > 0;
         }
     }
 }

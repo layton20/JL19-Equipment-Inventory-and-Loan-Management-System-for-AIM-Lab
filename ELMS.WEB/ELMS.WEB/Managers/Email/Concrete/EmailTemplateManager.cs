@@ -26,8 +26,9 @@ namespace ELMS.WEB.Managers.Email.Concrete
 
             if (_Response == null)
             {
+                _Response = new EmailTemplateResponse();
                 _Response.Success = false;
-                _Response.Message = $"Error: ${GlobalConstants.ERROR_ACTION_PREFIX} create ${MODEL_NAME}.";
+                _Response.Message = $"Error: {GlobalConstants.ERROR_ACTION_PREFIX} create {MODEL_NAME}.";
             }
 
             return _Response;
@@ -40,7 +41,7 @@ namespace ELMS.WEB.Managers.Email.Concrete
             if (!await __EmailTemplateRepository.DeleteAsync(uid))
             {
                 _Response.Success = false;
-                _Response.Message = $"Error: ${GlobalConstants.ERROR_ACTION_PREFIX} delete ${MODEL_NAME}.";
+                _Response.Message = $"Error: {GlobalConstants.ERROR_ACTION_PREFIX} delete {MODEL_NAME}.";
             }
 
             return _Response;

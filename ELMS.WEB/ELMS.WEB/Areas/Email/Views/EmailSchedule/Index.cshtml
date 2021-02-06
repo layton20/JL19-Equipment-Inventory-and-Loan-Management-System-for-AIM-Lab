@@ -52,8 +52,9 @@
                         <thead>
                             <tr>
                                 <th class="th-description font-weight-normal">Email Template</th>
-                                <th class="th-description font-weight-normal">Recipient</th>
-                                <th class="th-description font-weight-normal">Status</th>
+                                <th class="th-description font-weight-normal">Recipient Email</th>
+                                <th class="th-description font-weight-normal">Email Type</th>
+                                <th class="th-description font-weight-normal">Email Sent?</th>
                                 <th class="th-description font-weight-normal">Scheduled For</th>
                                 <th class="th-description font-weight-normal">Actions</th>
                             </tr>
@@ -63,28 +64,18 @@
                             {
                                 <tr>
                                     <td class="td-name">
-                                        <a class="emailTemplateDetails text-primary" data-url="/Email/EmailTemplate/DetailsModal" data-uid="@schedule.EmailTemplateUID" style="cursor: pointer">@schedule.EmailTemplate.Name</a>
+                                        @schedule.EmailTemplateUID
                                     </td>
-                                    <td class="td-name">@schedule.RecipientEmailAddress</td>
-                                    <td class="td-name">@schedule.Status.ToString()</td>
+                                    <td class="td-name">@schedule.RecipientEmail</td>
+                                    <td class="td-name">@schedule.EmailType.ToString()</td>
+                                    <td class="td-name">@schedule.EmailSent</td>
                                     <td class="td-name">@schedule.SendTimestamp</td>
                                     <td class="td-actions">
-                                        <a class="editSchedule btn btn-primary text-white" data-url="/Email/EmailSchedule/EditModal" data-uid="@schedule.UID"><i class="fas fa-eye p-1"></i></a>
                                         <a class="btn btn-primary" asp-area="Email" asp-controller="EmailSchedule" asp-action="Send" asp-route-uid="@schedule.UID" data-toggle="tooltip" data-placement="left" title="Force send email"><i class="fas fa-paper-plane p-1"></i></a>
                                         <a class="deleteSchedule btn btn-danger text-white" data-url="/Email/EmailSchedule/DeleteModal" data-uid="@schedule.UID"><i class="fas fa-trash p-1"></i></a>
                                     </td>
                                 </tr>
                             }
-                            <tr>
-                                <td class="td-name"><a href="#">Example Template Name</a></td>
-                                <td class="td-name">contact.lejohnny@gmail.com</td>
-                                <td class="td-name">Scheduled</td>
-                                <td class="td-name">@DateTime.Now.AddDays(7)</td>
-                                <td class="td-actions">
-                                    <a class="editSchedule btn btn-primary text-white" data-url="/Email/EmailSchedule/EditModal"><i class="fas fa-eye p-1"></i></a>
-                                    <a class="deleteSchedule btn btn-danger text-white" data-url="/Email/EmailSchedule/DeleteModal"><i class="fas fa-trash p-1"></i></a>
-                                </td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -101,4 +92,5 @@
             $('#navItemEmailSchedules').addClass('active');
         });
     </script>
+    <partial name="Components/_NotificationSnippet" />
 }

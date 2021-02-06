@@ -1,5 +1,4 @@
-﻿using ELMS.WEB.Areas.Email.Models.EmailTemplate;
-using ELMS.WEB.Enums.Email;
+﻿using ELMS.WEB.Enums.Email;
 using System;
 
 namespace ELMS.WEB.Areas.Email.Models.EmailSchedule
@@ -8,12 +7,11 @@ namespace ELMS.WEB.Areas.Email.Models.EmailSchedule
     {
         public Guid UID { get; set; }
         public Guid EmailTemplateUID { get; set; }
-        public Guid SenderUID { get; set; }
-        public string RecipientEmailAddress { get; set; }
-        public EmailScheduleStatus Status { get; set; } = EmailScheduleStatus.Scheduled;
+        public string RecipientEmail { get; set; }
+        public EmailType EmailType { get; set; }
         public DateTime SendTimestamp { get; set; }
+        public bool EmailSent { get; set; }
         public DateTime CreatedTimestamp { get; set; }
         public DateTime AmendedTimestamp { get; set; }
-        public EmailTemplateViewModel EmailTemplate { get; set; }
     }
 }
