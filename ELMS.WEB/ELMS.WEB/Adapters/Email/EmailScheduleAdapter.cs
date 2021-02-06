@@ -16,7 +16,8 @@ namespace ELMS.WEB.Adapters.Email
                 EmailTemplateUID = request.EmailTemplateUID,
                 RecipientEmailAddress = request.RecipientEmailAddress,
                 EmailType = request.EmailType,
-                SendTimestamp = request.SendTimestamp
+                SendTimestamp = request.SendTimestamp,
+                Sent = request.Sent
             };
         }
 

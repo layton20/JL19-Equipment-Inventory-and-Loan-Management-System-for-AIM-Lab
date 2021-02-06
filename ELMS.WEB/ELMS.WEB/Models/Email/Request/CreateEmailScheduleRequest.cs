@@ -14,6 +14,8 @@ namespace ELMS.WEB.Models.Email.Request
 
         [Required]
         public EmailType EmailType { get; set; }
+        [Required]
+        public bool Sent { get; set; } = false;
 
         [Required]
         public DateTime SendTimestamp { get; set; }

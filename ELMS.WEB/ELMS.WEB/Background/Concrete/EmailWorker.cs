@@ -1,4 +1,5 @@
 ﻿using ELMS.WEB.Background.Interfaces;
+using ELMS.WEB.Managers.Email.Interface;
 using ELMS.WEB.Services;
 using Microsoft.Extensions.Logging;
 using System;
@@ -12,13 +13,13 @@ namespace ELMS.WEB.Background.Concrete
     public class EmailWorker : IEmailWorker
     {
         private readonly ILogger<EmailWorker> __Logger;
-        private readonly IApplicationEmailSender __EmailSender;
+        private readonly IEmailScheduleManager __EmailScheduleManager;
         private int number = 0;
 
-        public EmailWorker(ILogger<EmailWorker> logger, IApplicationEmailSender emailSender)
+        public EmailWorker(ILogger<EmailWorker> logger, IEmailScheduleManager emailScheduleManager)
         {
             __Logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            __EmailSender = emailSender ?? throw new ArgumentNullException(nameof(emailSender));
+            __EmailScheduleManager = emailScheduleManager ?? throw new ArgumentNullException(nameof(emailScheduleManager));
         }
 
         public async Task DoWork(CancellationToken cancellationToken)
@@ -27,7 +28,8 @@ namespace ELMS.WEB.Background.Concrete
             {
                 Interlocked.Increment(ref number);
                 __Logger.LogInformation("EmailWorker: Working");
-                await Task.Delay(1000 * 5);
+                //await __EmailScheduleManager.SendScheduledEmails();
+                await Task.Delay(6000 * 60 * 2);
             }
         }
     }

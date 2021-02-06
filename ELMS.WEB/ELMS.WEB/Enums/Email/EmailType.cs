@@ -3,11 +3,11 @@
     public enum EmailType : int
     {
         Custom = 0,
-        Confirm_Loan = 1,
-        Confirmed_Loan = 2,
-        Nearly_Overdue_Loan = 3,
-        Overdue_Loan = 4,
-        Nearly_Expired_Warranty = 5,
-        Expired_Warranty = 6
+        Loan_Confirm = 1,
+        Loan_Confirmed = 2,
+        Loan_Nearly_Due = 3,
+        Loan_Overdue = 4,
+        Warranty_Nearly_Expired = 5,
+        Warranty_Expired = 6
     }
 }

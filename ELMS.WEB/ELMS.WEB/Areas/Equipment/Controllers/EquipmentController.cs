@@ -90,7 +90,7 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
 
                 if (_EquipmentResponse.Success)
                 {
-                    await __EmailScheduleManager.CreateEquipmentWarrantyAsync(_EquipmentResponse, $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}");
+                    await __EmailScheduleManager.CreateEquipmentWarrantyScheduleAsync(_EquipmentResponse, $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}");
                 }
             }
             else
@@ -102,7 +102,7 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
                     return Json(new { error = $"{GlobalConstants.ERROR_ACTION_PREFIX} create {ENTITY_NAME}." });
                 }
 
-                await __EmailScheduleManager.BulkCreateEquipmentWarrantyAsync(_EquipmentResponses, $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}");
+                await __EmailScheduleManager.BulkCreateEquipmentWarrantyScheduleAsync(_EquipmentResponses, $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}");
             }
 
             return Json(new { success = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} created {ENTITY_NAME}." });

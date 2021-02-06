@@ -28,7 +28,7 @@ namespace ELMS.WEB.Areas.Equipment.Models
         public DateTime PurchaseDate { get; set; } = DateTime.Now;
 
         [Required]
-        [PastOrTodayDate]
+        [FutureDate]
         [Display(Name = "Warranty Expiration Date")]
         public DateTime WarrantyExpirationDate { get; set; } = DateTime.Now;
 
