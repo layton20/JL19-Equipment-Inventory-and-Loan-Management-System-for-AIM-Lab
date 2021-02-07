@@ -57,6 +57,8 @@ namespace ELMS.WEB
             services.AddScoped<IEmailScheduleRepository, EmailScheduleRepository>();
             services.AddScoped<IEmailScheduleParameterRepository, EmailScheduleParameterRepository>();
 
+            services.AddScoped<IEmailWorker, EmailWorker>();
+
             services.AddTransient<IApplicationEmailSender, ApplicationEmailSender>();
             services.Configure<SendGridEmailSenderOptions>(options =>
             {
@@ -92,8 +94,6 @@ namespace ELMS.WEB
                 options.AddPolicy("DeleteUserPolicy", policy => policy.RequireClaim("Delete User", "true"));
                 options.AddPolicy("ViewUserPolicy", policy => policy.RequireClaim("View User", "true"));
             });
-
-            services.AddSingleton<IEmailWorker, EmailWorker>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,10 +1,7 @@
 ﻿using ELMS.WEB.Background.Interfaces;
 using ELMS.WEB.Managers.Email.Interface;
-using ELMS.WEB.Services;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -26,7 +23,6 @@ namespace ELMS.WEB.Background.Concrete
         {
             while (!cancellationToken.IsCancellationRequested)
             {
-                Interlocked.Increment(ref number);
                 __Logger.LogInformation("EmailWorker: Working");
                 //await __EmailScheduleManager.SendScheduledEmails();
                 await Task.Delay(6000 * 60 * 2);

@@ -18,7 +18,8 @@ namespace ELMS.WEB
                 {
                     webBuilder.UseStartup<Startup>();
                 })
-                .ConfigureServices(services => {
+                .ConfigureServices(services =>
+                {
                     services.AddHostedService<BackgroundWorker>();
                 });
     }
