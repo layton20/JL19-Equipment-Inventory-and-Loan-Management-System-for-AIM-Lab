@@ -1,5 +1,6 @@
 ﻿using ELMS.WEB.Adapters.Equipment;
 using ELMS.WEB.Areas.Equipment.Models;
+using ELMS.WEB.Entities.Equipment;
 using ELMS.WEB.Helpers;
 using ELMS.WEB.Managers.Equipment.Interfaces;
 using ELMS.WEB.Models.Base.Response;
@@ -36,17 +37,11 @@ namespace ELMS.WEB.Managers.Equipment.Concrete
             return _Response;
         }
 
-        public async Task<BaseResponse> BulkCreateAsync(CreateEquipmentRequest request)
+        public async Task<IList<EquipmentResponse>> BulkCreateAsync(CreateEquipmentRequest request)
         {
-            BaseResponse _Response = new BaseResponse();
+            IList<EquipmentEntity> _Entities = await __EquipmentRepository.BulkCreateAsync(request.ToEntity(), request.Quantity);
 
-            if (!await __EquipmentRepository.BulkCreateAsync(request.ToEntity(), request.Quantity))
-            {
-                _Response.Success = false;
-                _Response.Message = $"Error: ${GlobalConstants.ERROR_ACTION_PREFIX} delete ${MODEL_NAME}.";
-            }
-
-            return _Response;
+            return _Entities == null ? null : _Entities.ToResponse();
         }
 
         public async Task<BaseResponse> DeleteAsync(DeleteEquipmentViewModel model)

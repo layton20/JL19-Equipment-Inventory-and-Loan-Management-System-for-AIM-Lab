@@ -9,8 +9,9 @@ namespace ELMS.WEB.Repositories.Email.Interface
     {
         public Task<EmailScheduleEntity> CreateAsync(EmailScheduleEntity entity);
         public Task<IList<EmailScheduleEntity>> GetAsync();
+        public Task<IList<EmailScheduleEntity>> GetEmailsToSendAsync();
         public Task<EmailScheduleEntity> GetByUIDAsync(Guid uid);
-        public Task<bool> UpdateAsync(EmailScheduleEntity entity);
+        public Task<bool> UpdateSentAsync(Guid uid, bool sent);
         public Task<bool> DeleteAsync(Guid uid);
     }
 }

@@ -60,24 +60,27 @@ namespace ELMS.WEB.Repositories.Email.Concrete
             return await __ApplicationContext.EmailSchedules.FindAsync(uid);
         }
 
-        public async Task<bool> UpdateAsync(EmailScheduleEntity entity)
+        public async Task<IList<EmailScheduleEntity>> GetEmailsToSendAsync()
         {
-            if (entity == null || entity.UID == Guid.Empty)
+            return await __ApplicationContext.EmailSchedules.Where(s => !s.Sent && s.SendTimestamp < DateTime.Now)?.ToListAsync();
+        }
+
+        public async Task<bool> UpdateSentAsync(Guid uid, bool sent)
+        {
+            if (uid == null)
             {
                 return false;
             }
 
-            EmailScheduleEntity _EmailSchedule = await __ApplicationContext.EmailSchedules.FindAsync(entity.UID);
+            EmailScheduleEntity _Schedule = await __ApplicationContext.EmailSchedules.FindAsync(uid);
 
-            if (_EmailSchedule == null)
+            if (_Schedule == null)
             {
                 return false;
             }
 
-            _EmailSchedule.Status = entity.Status;
-            _EmailSchedule.RecipientEmailAddress = entity.RecipientEmailAddress;
-            _EmailSchedule.SendTimestamp = _EmailSchedule.SendTimestamp;
-            _EmailSchedule.AmendedTimestamp = DateTime.Now;
+            _Schedule.Sent = sent;
+            _Schedule.AmendedTimestamp = DateTime.Now;
 
             return await __ApplicationContext.SaveChangesAsync() > 0;
         }

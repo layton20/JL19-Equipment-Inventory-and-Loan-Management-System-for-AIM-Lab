@@ -3,13 +3,10 @@ using ELMS.WEB.Areas.Email.Models.EmailSchedule;
 using ELMS.WEB.Helpers;
 using ELMS.WEB.Managers.Email.Interface;
 using ELMS.WEB.Models.Base.Response;
+using ELMS.WEB.Models.Email.Request;
 using ELMS.WEB.Models.Email.Response;
-using ELMS.WEB.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,33 +18,34 @@ namespace ELMS.WEB.Areas.Email.Controllers
     [Area("Email")]
     public class EmailScheduleController : Controller
     {
-        private readonly IConfiguration __Configuration;
-        private readonly IEmailScheduleManager __EmailScheduleManager;
-        private readonly IEmailTemplateManager __EmailTemplateManager;
-        private readonly IEmailSender __EmailSender;
         private readonly String ENTITY_NAME = "Email schedule";
+        private readonly IEmailScheduleManager __EmailScheduleManager;
+        private readonly IEmailScheduleParameterManager __EmailScheduleParameterManager;
+        private readonly IEmailTemplateManager __EmailTemplateManager;
 
-        public EmailScheduleController(IConfiguration configuration, IEmailScheduleManager emailScheduleManager, IEmailTemplateManager emailTemplateManager, IEmailSender emailSender)
+        public EmailScheduleController(IEmailScheduleManager emailScheduleManager, IEmailScheduleParameterManager emailScheduleParameterManager, IEmailTemplateManager emailTemplateManager)
         {
-            __Configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             __EmailScheduleManager = emailScheduleManager ?? throw new ArgumentNullException(nameof(emailScheduleManager));
+            __EmailScheduleParameterManager = emailScheduleParameterManager ?? throw new ArgumentNullException(nameof(emailScheduleParameterManager));
             __EmailTemplateManager = emailTemplateManager ?? throw new ArgumentNullException(nameof(emailTemplateManager));
-            __EmailSender = emailSender ?? throw new ArgumentNullException(nameof(emailTemplateManager));
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string successMessage = "", string errorMessage = "")
         {
-            IList<EmailScheduleViewModel> _EmailSchedules = (await __EmailScheduleManager.GetAsync()).Responses.ToViewModel();
-
-            foreach (EmailScheduleViewModel schedule in _EmailSchedules)
+            if (!string.IsNullOrWhiteSpace(successMessage))
             {
-                schedule.EmailTemplate = (await __EmailTemplateManager.GetByUIDAsync(schedule.EmailTemplateUID)).ToViewModel();
+                ViewData["SuccessMessage"] = successMessage;
+            }
+
+            if (!string.IsNullOrWhiteSpace(errorMessage))
+            {
+                ViewData["ErrorMessage"] = errorMessage;
             }
 
             IndexViewModel _Model = new IndexViewModel
             {
-                EmailSchedules = _EmailSchedules
+                EmailSchedules = (await __EmailScheduleManager.GetAsync()).ToViewModel()
             };
 
             return View(_Model);
@@ -56,93 +54,96 @@ namespace ELMS.WEB.Areas.Email.Controllers
         [HttpGet]
         public async Task<IActionResult> CreateModalAsync()
         {
-            EmailTemplatesResponse _Responses = await __EmailTemplateManager.GetAsync();
-            IList<EmailTemplateResponse> _EmailTemplates = (await __EmailTemplateManager.GetAsync()).EmailTemplates;
-            CreateEmailScheduleViewModel _Model = new CreateEmailScheduleViewModel
+            IList<Models.EmailTemplate.EmailTemplateViewModel> _Templates = (await __EmailTemplateManager.GetAsync())?.EmailTemplates?.ToViewModel() ?? Enumerable.Empty<Models.EmailTemplate.EmailTemplateViewModel>().ToList();
+
+            if (_Templates.Count <= 0)
             {
-                EmailTemplates = _EmailTemplates.Select(x => new SelectListItem
-                {
-                    Text = x.Name,
-                    Value = x.UID.ToString()
-                }).ToList()
+                return Json(new { message = $"{GlobalConstants.ERROR_ACTION_PREFIX} create {ENTITY_NAME} because no Email templates exist." });
+            }
+
+            CreateCustomEmailScheduleViewModel _Model = new CreateCustomEmailScheduleViewModel
+            {
+                EmailTemplates = _Templates
             };
 
             return PartialView("_CreateModal", _Model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAsync(CreateEmailScheduleViewModel model)
+        public async Task<IActionResult> CreateAsync(CreateCustomEmailScheduleViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 ViewData["ErrorMessage"] = "Invalid form submission";
-                IList<EmailTemplateResponse> _EmailTemplates = (await __EmailTemplateManager.GetAsync()).EmailTemplates;
-                model.EmailTemplates = _EmailTemplates.Select(x => new SelectListItem
-                {
-                    Text = x.Name,
-                    Value = x.UID.ToString()
-                }).ToList();
-
+                model.EmailTemplates = (await __EmailTemplateManager.GetAsync())?.EmailTemplates?.ToViewModel();
                 return PartialView("_CreateModal", model);
             }
 
-            EmailScheduleResponse _Response = await __EmailScheduleManager.CreateAsync(model.ToRequest());
+            EmailScheduleResponse _Response = await __EmailScheduleManager.CreateAsync(new CreateEmailScheduleRequest { 
+                EmailTemplateUID = model.EmailTemplateUID,
+                EmailType = Enums.Email.EmailType.Custom,
+                RecipientEmailAddress = model.RecipientEmailAddress,
+                SendTimestamp = model.SendTimestamp
+            });
 
             if (!_Response.Success)
             {
-                ModelState.AddModelError("Error", _Response.Message);
-                ViewData["ErrorMessage"] = "Invalid form submission";
-                return PartialView("_CreateModal", model);
+                return Json(new { message = _Response.Message });
             }
 
-            return Json(new { success = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} created {ENTITY_NAME}" });
+            return Json(new { success = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} created {ENTITY_NAME}." });
         }
 
         [HttpGet]
         public async Task<IActionResult> DeleteModalAsync(Guid uid)
         {
+            if (uid == Guid.Empty)
+            {
+                return RedirectToAction("Index", "EmailSchedule", new { Area = "Email", errorMessage = "Unable to find Email Schedule." });
+            }
+
             EmailScheduleResponse _Response = await __EmailScheduleManager.GetByUIDAsync(uid);
 
             if (!_Response.Success)
             {
-                ModelState.AddModelError("Error", _Response.Message);
-                ViewData["ErrorMessage"] = "Invalid form submission";
+                return RedirectToAction("Index", "EmailSchedule", new { Area = "Email", errorMessage = "Unable to find Email Schedule." });
             }
 
-            EmailScheduleViewModel _Model = _Response.ToViewModel();
-            _Model.EmailTemplate = (await __EmailTemplateManager.GetByUIDAsync(_Response.EmailTemplateUID)).ToViewModel();
+            DeleteEmailScheduleViewModel _Model = new DeleteEmailScheduleViewModel
+            {
+                UID = _Response.UID,
+                RecipientEmail = _Response.RecipientEmailAddress,
+                EmailType = _Response.EmailType,
+                SendTimestamp = _Response.SendTimestamp,
+                Sent = _Response.Sent
+            };
 
             return PartialView("_DeleteModal", _Model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteAsync(EmailScheduleViewModel model)
+        public async Task<IActionResult> DeleteAsync(DeleteEmailScheduleViewModel model)
         {
             if (!ModelState.IsValid)
             {
-                ViewData["ErrorMessage"] = "Invalid form submission.";
                 return PartialView("_DeleteModal", model);
             }
 
             BaseResponse _Response = await __EmailScheduleManager.DeleteAsync(model.UID);
+            await __EmailScheduleParameterManager.DeleteAsync(model.UID);
 
             if (!_Response.Success)
             {
-                return Json(new { error = $"{GlobalConstants.ERROR_ACTION_PREFIX} created {ENTITY_NAME}" });
+                return Json(new { error = $"{GlobalConstants.ERROR_ACTION_PREFIX} delete {ENTITY_NAME}." });
             }
 
-            return Json(new { success = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} created {ENTITY_NAME}" });
+            return Json(new { success = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} deleted {ENTITY_NAME}." });
         }
 
         [HttpGet]
-        public async Task<IActionResult> SendAsync(Guid uid)
+        public async Task<IActionResult> ForceSendAsync(Guid uid)
         {
-            EmailScheduleResponse _Schedule = await __EmailScheduleManager.GetByUIDAsync(uid);
-            EmailTemplateResponse _Template = await __EmailTemplateManager.GetByUIDAsync(_Schedule.EmailTemplateUID);
-
-            await __EmailSender.SendEmailAsync(_Schedule.RecipientEmailAddress, _Template.Subject, _Template.Body);
-
-            return Json(true);
+            return null;
         }
     }
 }

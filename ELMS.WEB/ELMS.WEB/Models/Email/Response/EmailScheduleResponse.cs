@@ -7,9 +7,9 @@ namespace ELMS.WEB.Models.Email.Response
     public class EmailScheduleResponse : BaseEntityResponse
     {
         public Guid EmailTemplateUID { get; set; }
-        public Guid SenderUID { get; set; }
         public string RecipientEmailAddress { get; set; }
-        public EmailScheduleStatus Status { get; set; } = EmailScheduleStatus.Scheduled;
+        public EmailType EmailType { get; set; }
         public DateTime SendTimestamp { get; set; }
+        public bool Sent { get; set; }
     }
 }

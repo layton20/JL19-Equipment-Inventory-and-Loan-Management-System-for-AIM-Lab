@@ -60,7 +60,7 @@ namespace ELMS.WEB.Areas.Email.Controllers
                 return await CreateModalAsync();
             }
 
-            return Json(new { success = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} created {ENTITY_NAME}" });
+            return Json(new { success = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} created {ENTITY_NAME}." });
         }
 
         [HttpGet]

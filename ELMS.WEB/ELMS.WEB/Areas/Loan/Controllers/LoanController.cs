@@ -1,16 +1,15 @@
 ﻿using ELMS.WEB.Adapters.Equipment;
 using ELMS.WEB.Adapters.Loan;
-using ELMS.WEB.Areas.Email.Data;
 using ELMS.WEB.Areas.Loan.Models;
 using ELMS.WEB.Enums.Equipment;
 using ELMS.WEB.Helpers;
+using ELMS.WEB.Managers.Email.Interface;
 using ELMS.WEB.Managers.Equipment.Interfaces;
 using ELMS.WEB.Managers.Loan.Interface;
 using ELMS.WEB.Models.Base.Response;
 using ELMS.WEB.Models.Loan.Request;
 using ELMS.WEB.Models.Loan.Response;
 using ELMS.WEB.Repositories.Identity.Interface;
-using ELMS.WEB.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -29,16 +28,16 @@ namespace ELMS.WEB.Areas.Loan.Controllers
         private readonly IEquipmentManager __EquipmentManager;
         private readonly IUserRepository __UserRepository;
         private readonly ILoanEquipmentManager __LoanEquipmentManager;
-        private readonly IApplicationEmailSender __EmailSender;
+        private readonly IEmailScheduleManager __EmailScheduleManager;
         private readonly string MODEL_NAME = "Loan";
 
-        public LoanController(ILoanManager loanManager, IEquipmentManager equipmentManager, IUserRepository userRepository, ILoanEquipmentManager loanEquipmentManager, IApplicationEmailSender emailSender)
+        public LoanController(ILoanManager loanManager, IEquipmentManager equipmentManager, IUserRepository userRepository, ILoanEquipmentManager loanEquipmentManager, IEmailScheduleManager emailScheduleManager)
         {
             __LoanManager = loanManager ?? throw new ArgumentNullException(nameof(loanManager));
             __EquipmentManager = equipmentManager ?? throw new ArgumentNullException(nameof(equipmentManager));
             __UserRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
             __LoanEquipmentManager = loanEquipmentManager ?? throw new ArgumentNullException(nameof(loanEquipmentManager));
-            __EmailSender = emailSender ?? throw new ArgumentNullException(nameof(emailSender));
+            __EmailScheduleManager = emailScheduleManager ?? throw new ArgumentNullException(nameof(emailScheduleManager));
         }
 
         [Authorize(Policy = "ViewLoanPolicy")]
@@ -124,10 +123,7 @@ namespace ELMS.WEB.Areas.Loan.Controllers
                 return View("CreateLoan", model);
             }
 
-            await __EmailSender.SendLoanConfirmEmail(_Response.LoaneeEmail, "AIM LAB - Activate Loan", new ConfirmEmailTemplate
-            {
-                Confirm_Loan_URL = $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}/Loan/Loan/AcceptTermsAndConditionsView?loanUID={_Response.UID}"
-            });
+            await __EmailScheduleManager.CreateLoanConfirmScheduleAsync(_Response, $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}", true);
 
             return RedirectToAction("Index", "Loan", new { Area = "Loan", successMessage = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} created {MODEL_NAME}." });
         }
@@ -204,11 +200,7 @@ namespace ELMS.WEB.Areas.Loan.Controllers
             }
 
             LoanResponse _Loan = await __LoanManager.GetByUIDAsync(model.UID);
-            await __EmailSender.SendLoanConfirmedEmail(_Loan.LoaneeEmail, "AIM - Loan Confirmed", new ConfirmedEmailTemplate
-            {
-                Loan_Details_URL = "",
-                Start_Timestamp = _Loan.FromTimestamp.ToString()
-            });
+            await __EmailScheduleManager.CreateLoanConfirmedScheduleAsync(_Loan, $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}", true);
 
             return View("AcceptedTermsAndConditions");
         }
@@ -289,7 +281,8 @@ namespace ELMS.WEB.Areas.Loan.Controllers
                 return RedirectToAction("DetailsView", new { Area = "Loan", uid = model.UID, errorMessage = $"{GlobalConstants.ERROR_ACTION_PREFIX} find {MODEL_NAME} details." });
             }
 
-            UpdateLoanRequest _Request = new UpdateLoanRequest {
+            UpdateLoanRequest _Request = new UpdateLoanRequest
+            {
                 UID = model.UID,
                 Name = model.Name,
                 FromTimestamp = model.StartTimestamp,

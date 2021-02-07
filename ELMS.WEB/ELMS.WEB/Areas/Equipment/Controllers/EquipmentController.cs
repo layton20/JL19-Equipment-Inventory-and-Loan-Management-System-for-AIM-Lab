@@ -1,13 +1,16 @@
 ﻿using ELMS.WEB.Adapters.Equipment;
 using ELMS.WEB.Areas.Equipment.Models;
 using ELMS.WEB.Helpers;
+using ELMS.WEB.Managers.Email.Interface;
 using ELMS.WEB.Managers.Equipment.Interfaces;
 using ELMS.WEB.Models.Base.Response;
+using ELMS.WEB.Models.Email.Request;
 using ELMS.WEB.Models.Equipment.Response;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -21,13 +24,17 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
         private readonly IConfiguration __Configuration;
         private readonly IEquipmentManager __EquipmentManager;
         private readonly INoteManager __NoteManager;
+        private readonly IEmailScheduleManager __EmailScheduleManager;
+        private readonly IEmailScheduleParameterManager __EmailScheduleParameterManager;
         private readonly String ENTITY_NAME = "Equipment";
 
-        public EquipmentController(IConfiguration configuration, IEquipmentManager equipmentManager, INoteManager noteManager)
+        public EquipmentController(IConfiguration configuration, IEquipmentManager equipmentManager, INoteManager noteManager, IEmailScheduleManager emailScheduleManager, IEmailScheduleParameterManager emailScheduleParameterManager)
         {
             __Configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             __EquipmentManager = equipmentManager ?? throw new ArgumentNullException(nameof(equipmentManager));
             __NoteManager = noteManager ?? throw new ArgumentNullException(nameof(noteManager));
+            __EmailScheduleManager = emailScheduleManager ?? throw new ArgumentNullException(nameof(emailScheduleManager));
+            __EmailScheduleParameterManager = emailScheduleParameterManager ?? throw new ArgumentNullException(nameof(emailScheduleParameterManager));
         }
 
         public Task<IActionResult> SendGridSampleAsync()
@@ -79,20 +86,26 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
 
             if (model.Quantity <= 1)
             {
-                _Response = await __EquipmentManager.CreateAsync(model.ToRequest());
+                EquipmentResponse _EquipmentResponse = await __EquipmentManager.CreateAsync(model.ToRequest());
+
+                if (_EquipmentResponse.Success)
+                {
+                    await __EmailScheduleManager.CreateEquipmentWarrantyScheduleAsync(_EquipmentResponse, $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}");
+                }
             }
             else
             {
-                _Response = await __EquipmentManager.BulkCreateAsync(model.ToRequest());
+                IList<EquipmentResponse> _EquipmentResponses = await __EquipmentManager.BulkCreateAsync(model.ToRequest());
+
+                if (_EquipmentResponses == null || _EquipmentResponses?.Count <= 0)
+                {
+                    return Json(new { error = $"{GlobalConstants.ERROR_ACTION_PREFIX} create {ENTITY_NAME}." });
+                }
+
+                await __EmailScheduleManager.BulkCreateEquipmentWarrantyScheduleAsync(_EquipmentResponses, $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}");
             }
 
-            if (!_Response.Success)
-            {
-                ModelState.AddModelError("Error", _Response.Message);
-                return await CreateModalAsync();
-            }
-
-            return Json(new { success = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} created {ENTITY_NAME}" });
+            return Json(new { success = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} created {ENTITY_NAME}." });
         }
 
         [Authorize(Policy = "EditEquipmentPolicy")]

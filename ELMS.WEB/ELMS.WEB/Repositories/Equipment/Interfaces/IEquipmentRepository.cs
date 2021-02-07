@@ -18,6 +18,6 @@ namespace ELMS.WEB.Repositories.Equipment.Interfaces
 
         public Task<bool> DeleteAsync(Guid uid);
 
-        public Task<bool> BulkCreateAsync(EquipmentEntity equipment, int Quantity);
+        public Task<IList<EquipmentEntity>> BulkCreateAsync(EquipmentEntity equipment, int Quantity);
     }
 }
