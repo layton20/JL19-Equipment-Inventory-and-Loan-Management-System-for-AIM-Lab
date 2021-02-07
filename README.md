@@ -2,6 +2,9 @@
 
 ## Description
 This repository will hold my final year project. The web project will be developed with ASP.NET.
+The project contains the entire project all bundled up, and I have chosen to not split project up into APIs and a front-facing application, solely due to the context that having multiple APIs set up is costly during development (I do have localhost) but I like to have them published for testing in main/production. 
+
+The application will only be used by the client, literally. I doubt there'd be a need to split the project up into separate applications/APIs because no external parties would use them (any time soon 😉).
 
 ## Supervisor
 Dr Joanna Lumsden ([j.lumsden@aston.ac.uk](mailto:j.lumsden@aston.ac.uk))
