@@ -1,5 +1,4 @@
-﻿using ELMS.WEB.Background.Interfaces;
-using ELMS.WEB.Managers.Email.Interface;
+﻿using ELMS.WEB.Managers.Email.Interface;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -13,22 +12,29 @@ namespace ELMS.WEB.Background
     {
         private readonly ILogger<BackgroundWorker> __Logger;
         private readonly IServiceProvider __Services;
+        private int num = 0;
 
         public BackgroundWorker(ILogger<BackgroundWorker> logger, IServiceProvider services)
         {
             __Logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            this.__Services = services;
+            __Services = services ?? throw new ArgumentNullException(nameof(services));
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
             __Logger.LogInformation("EmailJob Worker Starting");
 
-            using (var scope = __Services.CreateScope())
+            while (!cancellationToken.IsCancellationRequested)
             {
-                var _ScopedProcessingService = scope.ServiceProvider.GetRequiredService<IEmailScheduleManager>();
+                __Logger.LogInformation("Running scheduled email service");
+                using (var scope = __Services.CreateScope())
+                {
+                    IEmailScheduleManager _ScopedProcessingService = scope.ServiceProvider.GetRequiredService<IEmailScheduleManager>();
+                    await _ScopedProcessingService.SendScheduledEmails();
+                }
+                __Logger.LogInformation("Stopping scheduled email service");
 
-                await _ScopedProcessingService.SendScheduledEmails();
+                await Task.Delay(60000 * 60 * 2);
             }
         }
 

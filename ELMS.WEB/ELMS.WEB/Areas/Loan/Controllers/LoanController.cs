@@ -7,9 +7,11 @@ using ELMS.WEB.Managers.Email.Interface;
 using ELMS.WEB.Managers.Equipment.Interfaces;
 using ELMS.WEB.Managers.Loan.Interface;
 using ELMS.WEB.Models.Base.Response;
+using ELMS.WEB.Models.Email.Response;
 using ELMS.WEB.Models.Loan.Request;
 using ELMS.WEB.Models.Loan.Response;
 using ELMS.WEB.Repositories.Identity.Interface;
+using ELMS.WEB.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -29,15 +31,16 @@ namespace ELMS.WEB.Areas.Loan.Controllers
         private readonly IUserRepository __UserRepository;
         private readonly ILoanEquipmentManager __LoanEquipmentManager;
         private readonly IEmailScheduleManager __EmailScheduleManager;
-        private readonly string MODEL_NAME = "Loan";
+        private readonly IApplicationEmailSender __EmailSender;
+        private readonly string ENTITY_NAME = "Loan";
 
-        public LoanController(ILoanManager loanManager, IEquipmentManager equipmentManager, IUserRepository userRepository, ILoanEquipmentManager loanEquipmentManager, IEmailScheduleManager emailScheduleManager)
-        {
+        public LoanController(ILoanManager loanManager, IEquipmentManager equipmentManager, IUserRepository userRepository, ILoanEquipmentManager loanEquipmentManager, IEmailScheduleManager emailScheduleManager, IApplicationEmailSender emailSender)        {
             __LoanManager = loanManager ?? throw new ArgumentNullException(nameof(loanManager));
             __EquipmentManager = equipmentManager ?? throw new ArgumentNullException(nameof(equipmentManager));
             __UserRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
             __LoanEquipmentManager = loanEquipmentManager ?? throw new ArgumentNullException(nameof(loanEquipmentManager));
             __EmailScheduleManager = emailScheduleManager ?? throw new ArgumentNullException(nameof(emailScheduleManager));
+            __EmailSender = emailSender ?? throw new ArgumentNullException(nameof(emailSender));
         }
 
         [Authorize(Policy = "ViewLoanPolicy")]
@@ -125,7 +128,7 @@ namespace ELMS.WEB.Areas.Loan.Controllers
 
             await __EmailScheduleManager.CreateLoanConfirmScheduleAsync(_Response, $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}", true);
 
-            return RedirectToAction("Index", "Loan", new { Area = "Loan", successMessage = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} created {MODEL_NAME}." });
+            return RedirectToAction("Index", "Loan", new { Area = "Loan", successMessage = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} created {ENTITY_NAME}." });
         }
 
         [HttpGet]
@@ -271,14 +274,14 @@ namespace ELMS.WEB.Areas.Loan.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return RedirectToAction("DetailsView", new { Area = "Loan", uid = model.UID, errorMessage = $"{GlobalConstants.ERROR_ACTION_PREFIX} update {MODEL_NAME} details." });
+                return RedirectToAction("DetailsView", new { Area = "Loan", uid = model.UID, errorMessage = $"{GlobalConstants.ERROR_ACTION_PREFIX} update {ENTITY_NAME} details." });
             }
 
             LoanResponse _Loan = await __LoanManager.GetByUIDAsync(model.UID);
 
             if (_Loan == null)
             {
-                return RedirectToAction("DetailsView", new { Area = "Loan", uid = model.UID, errorMessage = $"{GlobalConstants.ERROR_ACTION_PREFIX} find {MODEL_NAME} details." });
+                return RedirectToAction("DetailsView", new { Area = "Loan", uid = model.UID, errorMessage = $"{GlobalConstants.ERROR_ACTION_PREFIX} find {ENTITY_NAME} details." });
             }
 
             UpdateLoanRequest _Request = new UpdateLoanRequest
@@ -309,10 +312,61 @@ namespace ELMS.WEB.Areas.Loan.Controllers
 
             if (!_Response.Success)
             {
-                return RedirectToAction("DetailsView", new { Area = "Loan", uid = model.UID, errorMessage = $"{GlobalConstants.ERROR_ACTION_PREFIX} update {MODEL_NAME} details." });
+                return RedirectToAction("DetailsView", new { Area = "Loan", uid = model.UID, errorMessage = $"{GlobalConstants.ERROR_ACTION_PREFIX} update {ENTITY_NAME} details." });
             }
 
-            return RedirectToAction("DetailsView", new { Area = "Loan", uid = model.UID, successMessage = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} updated {MODEL_NAME} details." });
+            return RedirectToAction("DetailsView", new { Area = "Loan", uid = model.UID, successMessage = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} updated {ENTITY_NAME} details." });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ForceCompleteModalAsync(Guid uid)
+        {
+            if (uid == Guid.Empty)
+            {
+                return Json(new { error = $"{GlobalConstants.ERROR_ACTION_PREFIX} find {ENTITY_NAME}." });
+            }
+
+            LoanResponse _Loan = await __LoanManager.GetByUIDAsync(uid);
+
+            if (_Loan == null)
+            {
+                return Json(new { error = $"{GlobalConstants.ERROR_ACTION_PREFIX} find {ENTITY_NAME}." });
+            }
+
+            ForceCompleteLoanViewModel _Model = new ForceCompleteLoanViewModel
+            {
+                UID = uid,
+                Name = _Loan.Name,
+                LoaneeEmail = _Loan.LoaneeEmail,
+                StartTimestamp = _Loan.FromTimestamp,
+                ExpiryTimestamp = _Loan.ExpiryTimestamp
+            };
+
+            return PartialView("_ForceCompleteModal", _Model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ForceCompleteAsync(ForceCompleteLoanViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return PartialView(model);
+            }
+
+            LoanResponse _Loan = await __LoanManager.GetByUIDAsync(model.UID);
+            if (_Loan == null)
+            {
+                return Json(new { error = $"{GlobalConstants.ERROR_ACTION_PREFIX} find {ENTITY_NAME}." });
+            }
+            await __LoanManager.ChangeStatusAsync(_Loan.UID, Enums.Loan.Status.ManualComplete);
+
+            EmailScheduleResponse _Schedule = (await __EmailScheduleManager.GetAsync()).FirstOrDefault(s => s.Sent == false && s.RecipientEmailAddress == _Loan.LoaneeEmail && s.SendTimestamp == _Loan.ExpiryTimestamp);
+            if (_Schedule != null)
+            {
+                await __EmailScheduleManager.UpdateSentAsync(_Schedule.UID, true);
+            }
+
+            return RedirectToAction("Index", "Loan", new { Area = "Loan", successMessage = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} forced completed {ENTITY_NAME}" });
         }
     }
 }
