@@ -10,7 +10,6 @@ using ELMS.WEB.Repositories.Identity.Interface;
 using ELMS.WEB.Repositories.Loan.Interface;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ELMS.WEB.Managers.Loan.Concrete
@@ -18,13 +17,11 @@ namespace ELMS.WEB.Managers.Loan.Concrete
     public class LoanManager : ILoanManager
     {
         private readonly ILoanRepository __LoanRepository;
-        private readonly IUserRepository __UserRepository;
         private const string MODEL_NAME = "Loan";
 
-        public LoanManager(ILoanRepository loanRepository, IUserRepository userRepository)
+        public LoanManager(ILoanRepository loanRepository)
         {
             __LoanRepository = loanRepository ?? throw new ArgumentNullException(nameof(loanRepository));
-            __UserRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
         }
 
         public async Task<BaseResponse> AcceptTermsAndConditions(Guid uid)

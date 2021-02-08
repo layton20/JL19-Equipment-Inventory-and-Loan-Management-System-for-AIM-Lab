@@ -6,7 +6,7 @@
 
         $.get(url, function (data) {
             if (data.message) {
-                window.location.href = encodeURI(`/Equipment/Equipment?ErrorMessage=${data.message}`);
+                window.location.href = encodeURI(`/Loan/Loan?ErrorMessage=${data.message}`);
             } else {
                 $('#modalDialog').html(data);
                 $('#modalRoot').modal('show');
@@ -26,9 +26,9 @@
             data: form.serialize(),
             success: function (response) {
                 if (response.success) {
-                    window.location.href = encodeURI(`/Equipment/Equipment?SuccessMessage=${response.success}`);
+                    window.location.href = encodeURI(`/Loan/Loan?SuccessMessage=${response.success}`);
                 } else if (response.error) {
-                    window.location.href = encodeURI(`/Equipment/Equipment?SuccessMessage=${response.error}`);
+                    window.location.href = encodeURI(`/Loan/Loan?SuccessMessage=${response.error}`);
                 }
                 else {
                     $('#modalDialog').html(response);
@@ -39,5 +39,15 @@
 
     $('.loanDetailsModal').click(function () {
         loadModalAjax($(this).data('url'), `equipmentUID=${$(this).data('uid')}`);
+    });
+
+    $('.forceComplete').click(function () {
+        loadModalAjax($(this).data('url'), `uid=${$(this).data('uid')}`);
+    });
+
+    $('#modalRoot').on("submit", "#formForceCompleteLoan", function (e) {
+        e.preventDefault();
+        var form = $(this);
+        postModalFormAjax(form);
     });
 });

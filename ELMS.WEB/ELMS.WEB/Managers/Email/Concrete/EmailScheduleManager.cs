@@ -11,11 +11,9 @@ using ELMS.WEB.Models.Equipment.Response;
 using ELMS.WEB.Models.Loan.Response;
 using ELMS.WEB.Repositories.Email.Interface;
 using ELMS.WEB.Services;
-using SendGrid;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace ELMS.WEB.Managers.Email.Concrete
@@ -26,7 +24,7 @@ namespace ELMS.WEB.Managers.Email.Concrete
         private readonly IEmailScheduleParameterRepository __EmailScheduleParameterRepository;
         private readonly IApplicationEmailSender __EmailSender;
         private readonly IEmailTemplateRepository __EmailTemplateRepository;
-        private const string MODEL_NAME = "Email Schedule";
+        private const string ENTITY_ANEM = "Email Schedule";
 
         public EmailScheduleManager(IEmailScheduleRepository emailScheduleRepository, IEmailScheduleParameterRepository emailScheduleParameterRepository, IApplicationEmailSender emailSender, IEmailTemplateRepository emailTemplateRepository)
         {
@@ -43,7 +41,7 @@ namespace ELMS.WEB.Managers.Email.Concrete
             if (_Response == null)
             {
                 _Response.Success = false;
-                _Response.Message = $"{GlobalConstants.ERROR_ACTION_PREFIX} create {MODEL_NAME}.";
+                _Response.Message = $"{GlobalConstants.ERROR_ACTION_PREFIX} create {ENTITY_ANEM}.";
             }
 
             return _Response;
@@ -66,7 +64,7 @@ namespace ELMS.WEB.Managers.Email.Concrete
             if (!await __EmailScheduleRepository.DeleteAsync(uid))
             {
                 _Response.Success = false;
-                _Response.Message = $"{GlobalConstants.ERROR_ACTION_PREFIX} delete {MODEL_NAME}.";
+                _Response.Message = $"{GlobalConstants.ERROR_ACTION_PREFIX} delete {ENTITY_ANEM}.";
             }
 
             return _Response;
@@ -317,7 +315,8 @@ namespace ELMS.WEB.Managers.Email.Concrete
                     });
                     break;
                 case EmailType.Loan_Overdue:
-                    await __EmailSender.SendLoanOverdueEmail(schedule.RecipientEmailAddress, "AIM - Loan Overdue", new LoanOverdueTemplate { 
+                    await __EmailSender.SendLoanOverdueEmail(schedule.RecipientEmailAddress, "AIM - Loan Overdue", new LoanOverdueTemplate
+                    {
                         Loan_Expiry_Date = _Parameters.FirstOrDefault(p => p.Name.ToUpper() == "Loan_Expiry_Date")?.Value ?? "[Value not found]",
                         Overdue_Loan_URL = _Parameters.FirstOrDefault(p => p.Name.ToUpper() == "Overdue_Loan_URL")?.Value ?? "[Value not found]",
                     });
@@ -329,7 +328,7 @@ namespace ELMS.WEB.Managers.Email.Concrete
                     });
                     break;
                 case EmailType.Warranty_Expired:
-                    await __EmailSender.SendWarrantyExpiredEmail(schedule.RecipientEmailAddress, "AIM - Warranty Expired", new WarrantyExpiredTemplate 
+                    await __EmailSender.SendWarrantyExpiredEmail(schedule.RecipientEmailAddress, "AIM - Warranty Expired", new WarrantyExpiredTemplate
                     {
                         Warranty_Expiry_URL = _Parameters.FirstOrDefault(p => p.Name.ToUpper() == "Warranty_Expiry_URL")?.Value ?? "[Value not found]",
                     });
@@ -345,6 +344,19 @@ namespace ELMS.WEB.Managers.Email.Concrete
             }
 
             await __EmailScheduleRepository.UpdateSentAsync(schedule.UID, true);
+        }
+
+        public async Task<BaseResponse> UpdateSentAsync(Guid uid, bool sent)
+        {
+            BaseResponse _Response = new BaseResponse();
+
+            if (!await __EmailScheduleRepository.UpdateSentAsync(uid, sent))
+            {
+                _Response.Success = false;
+                _Response.Message = $"{GlobalConstants.ERROR_ACTION_PREFIX} update Sent field of {ENTITY_ANEM}";
+            }
+
+            return _Response;
         }
     }
 }

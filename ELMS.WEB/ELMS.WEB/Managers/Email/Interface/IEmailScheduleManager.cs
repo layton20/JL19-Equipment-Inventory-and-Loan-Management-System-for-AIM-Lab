@@ -15,6 +15,7 @@ namespace ELMS.WEB.Managers.Email.Interface
         public Task<IList<EmailScheduleResponse>> GetAsync();
         public Task<EmailScheduleResponse> GetByUIDAsync(Guid uid);
         public Task<BaseResponse> DeleteAsync(Guid uid);
+        public Task<BaseResponse> UpdateSentAsync(Guid uid, bool sent);
         public Task<BaseResponse> CreateEquipmentWarrantyScheduleAsync(EquipmentResponse equipment, string baseURL);
         public Task<BaseResponse> BulkCreateEquipmentWarrantyScheduleAsync(IList<EquipmentResponse> equipmentList, string baseURL);
         public Task<BaseResponse> CreateLoanConfirmScheduleAsync(LoanResponse loan, string baseURL, bool forceSend = false);
