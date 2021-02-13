@@ -1,0 +1,70 @@
+﻿@model ELMS.WEB.Areas.Admin.Models.Blacklist.IndexViewModel
+
+@{
+    ViewData["Title"] = "Blacklist Management";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="w-100 justify-content-between">
+            <div class="pull-right">
+                <a class="createBlacklist btn btn-success text-white" data-url="/Admin/Blacklist/CreateModal">New Blacklist</a>
+            </div>
+        </div>
+
+        <div class="card mt-2">
+            <div class="card-header">
+                <h4 class="card-title">All Blacklists</h4>
+            </div>
+            <div class="card-body">
+                <table class="display table datatable responsive hover compact">
+                    <thead>
+                        <tr>
+                            <th class="th-description">ID</th>
+                            <th class="th-description">Email</th>
+                            <th class="th-description">Reason</th>
+                            <th class="th-description">Type</th>
+                            <th class="th-description">Active</th>
+                            <th class="th-description">Created On</th>
+                            <th class="th-description">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var blacklist in Model.Blacklists)
+                        {
+                            <tr>
+                                <td class="td-name">@blacklist.UID</td>
+                                <td class="td-name">@blacklist.Email</td>
+                                <td class="td-name">@blacklist.Reason</td>
+                                <td class="td-name">@blacklist.Type.ToString()</td>
+                                <td class="td-name">@blacklist.Active</td>
+                                <td class="td-name">@blacklist.CreatedTimestamp</td>
+                                <td class="td-actions">
+                                    <a class="modifyBlacklist btn btn-primary text-white" data-url="/Admin/Blacklist/EditModal" data-uid="@blacklist.UID"><i class="fas fa-pen p-1"></i></a>
+                                    <a class="modifyBlacklist btn btn-danger text-white" data-url="/Admin/Blacklist/DeleteModal" data-uid="@blacklist.UID"><i class="fas fa-trash p-1"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <environment include="Development">
+        <script src="~/js/areas/admin/blacklist/index.js"></script>
+    </environment>
+    <environment exclude="Development"> 
+        <script src="~/js/areas/admin/blacklist/index.min.js"></script>
+    </environment>
+    <script>
+        $(document).ready(function () {
+            $('#navItemUsers').addClass('active');
+            $('#navItemBlacklists').addClass('active');
+        });
+    </script>
+    <partial name="Components/_NotificationSnippet" />
+}

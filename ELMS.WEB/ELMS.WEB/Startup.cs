@@ -1,11 +1,15 @@
 using ELMS.WEB.Background.Concrete;
 using ELMS.WEB.Background.Interfaces;
+using ELMS.WEB.Managers.Admin.Concrete;
+using ELMS.WEB.Managers.Admin.Interfaces;
 using ELMS.WEB.Managers.Email.Concrete;
 using ELMS.WEB.Managers.Email.Interface;
 using ELMS.WEB.Managers.Equipment.Concrete;
 using ELMS.WEB.Managers.Equipment.Interfaces;
 using ELMS.WEB.Managers.Loan.Concrete;
 using ELMS.WEB.Managers.Loan.Interface;
+using ELMS.WEB.Repositories.Admin.Concrete;
+using ELMS.WEB.Repositories.Admin.Interfaces;
 using ELMS.WEB.Repositories.Email.Concrete;
 using ELMS.WEB.Repositories.Email.Interface;
 using ELMS.WEB.Repositories.Equipment.Concrete;
@@ -46,6 +50,7 @@ namespace ELMS.WEB
             services.AddScoped<IEmailTemplateManager, EmailTemplateManager>();
             services.AddScoped<IEmailScheduleManager, EmailScheduleManager>();
             services.AddScoped<IEmailScheduleParameterManager, EmailScheduleParameterManager>();
+            services.AddScoped<IBlacklistManager, BlacklistManager>();
 
             // Repository
             services.AddScoped<IUserRepository, UserRepository>();
@@ -56,6 +61,7 @@ namespace ELMS.WEB
             services.AddScoped<IEmailTemplateRepository, EmailTemplateRepository>();
             services.AddScoped<IEmailScheduleRepository, EmailScheduleRepository>();
             services.AddScoped<IEmailScheduleParameterRepository, EmailScheduleParameterRepository>();
+            services.AddScoped<IBlacklistRepository, BlacklistRepository>();
 
             services.AddScoped<IEmailWorker, EmailWorker>();
 

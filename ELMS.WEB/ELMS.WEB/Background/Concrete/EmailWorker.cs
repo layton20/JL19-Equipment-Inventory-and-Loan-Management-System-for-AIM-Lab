@@ -11,7 +11,6 @@ namespace ELMS.WEB.Background.Concrete
     {
         private readonly ILogger<EmailWorker> __Logger;
         private readonly IEmailScheduleManager __EmailScheduleManager;
-        private int number = 0;
 
         public EmailWorker(ILogger<EmailWorker> logger, IEmailScheduleManager emailScheduleManager)
         {
