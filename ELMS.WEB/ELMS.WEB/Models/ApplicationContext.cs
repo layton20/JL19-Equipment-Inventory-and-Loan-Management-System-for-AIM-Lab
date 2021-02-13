@@ -1,4 +1,5 @@
-﻿using ELMS.WEB.Entities.Email;
+﻿using ELMS.WEB.Entities.Admin;
+using ELMS.WEB.Entities.Email;
 using ELMS.WEB.Entities.Equipment;
 using ELMS.WEB.Entities.Loan;
 using Microsoft.AspNetCore.Identity;
@@ -20,5 +21,6 @@ namespace ELMS.WEB.Models
         public DbSet<EmailTemplateEntity> EmailTemplates { get; set; }
         public DbSet<EmailScheduleEntity> EmailSchedules { get; set; }
         public DbSet<EmailScheduleParameterEntity> EmailScheduleParameters { get; set; }
+        public DbSet<BlacklistEntity> Blacklists { get; set; }
     }
 }

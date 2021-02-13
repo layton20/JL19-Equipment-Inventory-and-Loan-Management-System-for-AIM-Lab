@@ -12,7 +12,6 @@ namespace ELMS.WEB.Background
     {
         private readonly ILogger<BackgroundWorker> __Logger;
         private readonly IServiceProvider __Services;
-        private int num = 0;
 
         public BackgroundWorker(ILogger<BackgroundWorker> logger, IServiceProvider services)
         {

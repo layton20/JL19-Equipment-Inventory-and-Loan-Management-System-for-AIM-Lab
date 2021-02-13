@@ -82,5 +82,11 @@
     "inputFiles": [
       "wwwroot/js/areas/note/index.js"
     ]
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/admin/blacklist/index.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/admin/blacklist/index.js"
+    ]
   }
 ]

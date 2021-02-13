@@ -6,10 +6,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Remove="bundleconfig.json" />
+    <Content Remove="wwwroot\js\areas\admin\blacklist\index.min.js" />
     <Content Remove="wwwroot\js\areas\admin\permission\index.min.js" />
     <Content Remove="wwwroot\js\areas\admin\role\index.min.js" />
   </ItemGroup>
   <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\js\areas\admin\blacklist\index.min.js" />
     <_ContentIncludedByDefault Remove="wwwroot\js\areas\admin\permission\index.min.js" />
     <_ContentIncludedByDefault Remove="wwwroot\js\areas\admin\role\index.min.js" />
   </ItemGroup>
@@ -24,6 +26,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="bundleconfig.json" />
+    <None Include="wwwroot\js\areas\admin\blacklist\index.min.js" />
     <None Include="wwwroot\js\areas\admin\permission\index.min.js" />
     <None Include="wwwroot\js\areas\admin\role\index.min.js" />
   </ItemGroup>
