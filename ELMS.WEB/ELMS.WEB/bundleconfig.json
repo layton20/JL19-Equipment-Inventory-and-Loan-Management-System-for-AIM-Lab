@@ -1,0 +1,86 @@
+[
+  {
+    "outputFileName": "wwwroot/js/areas/admin/permission/index.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/admin/permission/index.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/admin/role/index.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/admin/role/index.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/admin/user/details.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/admin/user/details.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/admin/user/index.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/admin/user/index.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/email/emailschedule/index.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/email/emailschedule/index.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/email/emailtemplate/index.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/email/emailtemplate/index.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/equipment/details.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/equipment/details.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/equipment/index.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/equipment/index.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/loan/accepttermsandconditions.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/loan/accepttermsandconditions.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/loan/createloan.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/loan/createloan.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/loan/details.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/loan/details.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/loan/index.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/loan/index.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/loan/loanpreview.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/loan/loanpreview.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/note/index.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/note/index.js"
+    ]
+  }
+]
