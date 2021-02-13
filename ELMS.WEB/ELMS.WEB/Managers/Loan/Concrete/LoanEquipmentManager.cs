@@ -1,5 +1,4 @@
 ﻿using ELMS.WEB.Adapters.Loan;
-using ELMS.WEB.Entities.Loan;
 using ELMS.WEB.Managers.Loan.Interface;
 using ELMS.WEB.Models.Loan.Response;
 using ELMS.WEB.Repositories.Loan.Interface;

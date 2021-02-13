@@ -5,12 +5,27 @@
     <UserSecretsId>97c499e8-42f8-4bb1-a7e6-3582ffdb2f02</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
+    <Content Remove="bundleconfig.json" />
+    <Content Remove="wwwroot\js\areas\admin\permission\index.min.js" />
+    <Content Remove="wwwroot\js\areas\admin\role\index.min.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\js\areas\admin\permission\index.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\areas\admin\role\index.min.js" />
+  </ItemGroup>
+  <ItemGroup>
     <Folder Include="Adapters\Identity\" />
     <Folder Include="Areas\Email\Data\Templates\" />
     <Folder Include="Areas\Equipment\Data\" />
     <Folder Include="Areas\Loan\Data\" />
     <Folder Include="Migrations\ELMSWEB\" />
     <Folder Include="UI\Components\" />
+    <Folder Include="wwwroot\js\areas\note\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bundleconfig.json" />
+    <None Include="wwwroot\js\areas\admin\permission\index.min.js" />
+    <None Include="wwwroot\js\areas\admin\role\index.min.js" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.11" />

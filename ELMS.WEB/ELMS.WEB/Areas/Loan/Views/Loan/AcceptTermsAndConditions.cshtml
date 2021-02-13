@@ -45,7 +45,7 @@
         <p>In signing out the identified equipment, <strong>I accept personal responsibility for the equipment and agree to replace it</strong> with new (to the satisfaction of the AIM Lab director) if lost or damaged whilst on loan to me. Furthermore, I agree to return the identified equipment immediately upon request by the AIM Lab director (or her delegate).</p>
 
         <form asp-area="Loan" asp-controller="Loan" asp-action="AcceptTermsAndConditions">
-            <input type="hidden" asp-for="UID"/>
+            <input type="hidden" asp-for="UID" />
             <div class="form-check">
                 <label class="form-check-label">
                     <input class="checkAcceptTAC form-check-input" type="checkbox" asp-for="Accepted">
@@ -63,5 +63,10 @@
 </div>
 
 @section Scripts {
-    <script src="~/js/areas/loan/accepttermsandconditions.js"></script>
+    <environment include="Development">
+        <script src="~/js/areas/loan/accepttermsandconditions.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/areas/loan/accepttermsandconditions.js"></script>
+    </environment>
 }

@@ -10,6 +10,7 @@ namespace ELMS.WEB.Areas.Email.Models.EmailSchedule
         [Required]
         [NonDefaultGuid]
         public Guid UID { get; set; }
+
         public string RecipientEmail { get; set; }
         public EmailType EmailType { get; set; }
         public DateTime SendTimestamp { get; set; }

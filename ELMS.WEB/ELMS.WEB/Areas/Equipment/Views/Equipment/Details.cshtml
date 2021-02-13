@@ -62,7 +62,7 @@
                             <div class="tab-pane active" id="tabDetails">
                                 <form asp-area="Equipment" asp-controller="Equipment" asp-action="Edit" enctype="multipart/form-data">
                                     <input asp-for="Equipment.UID" type="hidden" />
-                                    <input asp-for="Equipment.OwnerUID" type="hidden"/>
+                                    <input asp-for="Equipment.OwnerUID" type="hidden" />
 
                                     <div class="form-group mb-4">
                                         <label asp-for="Equipment.Name" class="bmd-label-floating"></label>
@@ -248,6 +248,11 @@
             $(this).parent().siblings().trigger('focusout');
         });
     </script>
-    <script src="~/js/areas/equipment/details.js"></script>
+    <environment include="Development">
+        <script src="~/js/areas/equipment/details.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/areas/equipment/details.min.js"></script>
+    </environment>
     <partial name="Components/_NotificationSnippet" />
 }

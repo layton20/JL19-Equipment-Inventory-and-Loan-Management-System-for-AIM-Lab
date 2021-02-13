@@ -143,7 +143,12 @@
 </div>
 
 @section Scripts {
-    <script src="~/js/areas/equipment/index.js"></script>
+    <environment include="Development">
+        <script src="~/js/areas/equipment/index.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/areas/equipment/index.min.js"></script>
+    </environment>
     <script>
         $(document).ready(function () {
             $('#navItemEquipment').addClass('active');

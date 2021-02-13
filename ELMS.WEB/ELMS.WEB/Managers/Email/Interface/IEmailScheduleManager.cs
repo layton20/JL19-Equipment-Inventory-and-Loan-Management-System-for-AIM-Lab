@@ -12,15 +12,25 @@ namespace ELMS.WEB.Managers.Email.Interface
     public interface IEmailScheduleManager
     {
         public Task<EmailScheduleResponse> CreateAsync(CreateEmailScheduleRequest request);
+
         public Task<IList<EmailScheduleResponse>> GetAsync();
+
         public Task<EmailScheduleResponse> GetByUIDAsync(Guid uid);
+
         public Task<BaseResponse> DeleteAsync(Guid uid);
+
         public Task<BaseResponse> UpdateSentAsync(Guid uid, bool sent);
+
         public Task<BaseResponse> CreateEquipmentWarrantyScheduleAsync(EquipmentResponse equipment, string baseURL);
+
         public Task<BaseResponse> BulkCreateEquipmentWarrantyScheduleAsync(IList<EquipmentResponse> equipmentList, string baseURL);
+
         public Task<BaseResponse> CreateLoanConfirmScheduleAsync(LoanResponse loan, string baseURL, bool forceSend = false);
+
         public Task<BaseResponse> CreateLoanConfirmedScheduleAsync(LoanResponse loan, string baseURL, bool forceSend = false);
+
         public Task<BaseResponse> CreateLoanExpiryScheduleAsync(LoanResponse loan, string baseURL, bool forceSend = false);
+
         public Task SendScheduledEmails();
     }
 }

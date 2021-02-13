@@ -33,7 +33,7 @@
                 <div class="col">
                     <div class="form-group">
                         <label asp-for="FromTimestamp"></label>
-                        <input type="date" class="form-control datetimepicker" asp-for="FromTimestamp"/>
+                        <input type="date" class="form-control datetimepicker" asp-for="FromTimestamp" />
                     </div>
                 </div>
                 <div class="col">
@@ -121,8 +121,8 @@
                                             <tr>
                                                 <td>
                                                     <input class="user-radio" type="radio" asp-for="LoaneeUID" value="@user.Id">
-                                                    <input class="user-detail" type="hidden" asp-for="LoaneeEmailAddress" value="@user.Email"/>
-                                                    <input class="user-detail" type="hidden" asp-for="LoaneeUID" value="@user.Id"/>
+                                                    <input class="user-detail" type="hidden" asp-for="LoaneeEmailAddress" value="@user.Email" />
+                                                    <input class="user-detail" type="hidden" asp-for="LoaneeUID" value="@user.Id" />
                                                 </td>
                                                 <td>@user.UserName</td>
                                                 <td>@user.NormalizedEmail</td>
@@ -172,5 +172,10 @@
 </form>
 
 @section Scripts {
-    <script src="~/js/areas/loan/createloan.js"></script>
+    <environment include="Development">
+        <script src="~/js/areas/loan/createloan.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/areas/loan/createloan.min.js"></script>
+    </environment>
 }

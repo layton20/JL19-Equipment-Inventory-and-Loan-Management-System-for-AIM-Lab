@@ -15,6 +15,7 @@ namespace ELMS.WEB.Managers.Equipment.Interfaces
         public Task<EquipmentResponse> GetAsync(Guid uid);
 
         public Task<EquipmentListResponse> GetAsync();
+
         public Task<EquipmentListResponse> GetAsync(IList<Guid> uids);
 
         public Task<BaseResponse> UpdateAsync(EquipmentViewModel model);

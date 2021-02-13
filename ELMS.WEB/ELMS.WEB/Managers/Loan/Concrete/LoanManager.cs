@@ -6,7 +6,6 @@ using ELMS.WEB.Managers.Loan.Interface;
 using ELMS.WEB.Models.Base.Response;
 using ELMS.WEB.Models.Loan.Request;
 using ELMS.WEB.Models.Loan.Response;
-using ELMS.WEB.Repositories.Identity.Interface;
 using ELMS.WEB.Repositories.Loan.Interface;
 using System;
 using System.Collections.Generic;

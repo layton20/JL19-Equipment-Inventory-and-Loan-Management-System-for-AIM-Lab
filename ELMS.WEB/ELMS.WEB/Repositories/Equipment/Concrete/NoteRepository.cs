@@ -58,7 +58,7 @@ namespace ELMS.WEB.Repositories.Equipment.Concrete
             {
                 return Enumerable.Empty<NoteEntity>().ToList();
             }
-            
+
             IList<NoteEntity> _Notes = await __Context.Notes.Where(x => x.EquipmentUID == equipmentUID).ToListAsync();
 
             foreach (NoteEntity note in _Notes)

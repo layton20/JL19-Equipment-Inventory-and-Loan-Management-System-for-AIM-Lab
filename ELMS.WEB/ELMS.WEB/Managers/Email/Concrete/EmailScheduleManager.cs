@@ -300,6 +300,7 @@ namespace ELMS.WEB.Managers.Email.Concrete
                         Confirm_Loan_URL = _Parameters.FirstOrDefault(p => p.Name.ToUpper() == "Confirm_Loan_URL")?.Value ?? GlobalConstants.ASTON_URL
                     });
                     break;
+
                 case EmailType.Loan_Confirmed:
                     await __EmailSender.SendLoanConfirmedEmail(schedule.RecipientEmailAddress, "AIM - Loan Confirmed", new ConfirmedEmailTemplate
                     {
@@ -307,6 +308,7 @@ namespace ELMS.WEB.Managers.Email.Concrete
                         Start_Timestamp = _Parameters.FirstOrDefault(p => p.Name.ToUpper() == "Start_Timestamp")?.Value ?? "[Value not found]"
                     });
                     break;
+
                 case EmailType.Loan_Nearly_Due:
                     await __EmailSender.SendLoanNearlyDueEmail(schedule.RecipientEmailAddress, "AIM - Loan Nearly Due", new LoanNearlyDueTemplate
                     {
@@ -314,6 +316,7 @@ namespace ELMS.WEB.Managers.Email.Concrete
                         Loan_Details_URL = _Parameters.FirstOrDefault(p => p.Name.ToUpper() == "Loan_Details_URL")?.Value ?? "[Value not found]"
                     });
                     break;
+
                 case EmailType.Loan_Overdue:
                     await __EmailSender.SendLoanOverdueEmail(schedule.RecipientEmailAddress, "AIM - Loan Overdue", new LoanOverdueTemplate
                     {
@@ -321,18 +324,21 @@ namespace ELMS.WEB.Managers.Email.Concrete
                         Overdue_Loan_URL = _Parameters.FirstOrDefault(p => p.Name.ToUpper() == "Overdue_Loan_URL")?.Value ?? "[Value not found]",
                     });
                     break;
+
                 case EmailType.Warranty_Nearly_Expired:
                     await __EmailSender.SendWarrantyNearlyExpiredEmail(schedule.RecipientEmailAddress, "AIM - Warranty Nearly Expired", new WarrantyNearlyExpiredTemplate
                     {
                         Warranty_Expiry_URL = _Parameters.FirstOrDefault(p => p.Name.ToUpper() == "Warranty_Expiry_URL")?.Value ?? "[Value not found]"
                     });
                     break;
+
                 case EmailType.Warranty_Expired:
                     await __EmailSender.SendWarrantyExpiredEmail(schedule.RecipientEmailAddress, "AIM - Warranty Expired", new WarrantyExpiredTemplate
                     {
                         Warranty_Expiry_URL = _Parameters.FirstOrDefault(p => p.Name.ToUpper() == "Warranty_Expiry_URL")?.Value ?? "[Value not found]",
                     });
                     break;
+
                 case EmailType.Custom:
                 default:
                     EmailTemplateResponse _Template = (await __EmailTemplateRepository.GetByUIDAsync(schedule.EmailTemplateUID))?.ToResponse();

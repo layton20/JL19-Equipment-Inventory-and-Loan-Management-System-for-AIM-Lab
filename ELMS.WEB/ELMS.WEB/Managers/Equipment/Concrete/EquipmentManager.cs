@@ -82,6 +82,7 @@ namespace ELMS.WEB.Managers.Equipment.Concrete
 
             return _Response;
         }
+
         public async Task<EquipmentListResponse> GetAsync(IList<Guid> uids)
         {
             EquipmentListResponse _Response = new EquipmentListResponse

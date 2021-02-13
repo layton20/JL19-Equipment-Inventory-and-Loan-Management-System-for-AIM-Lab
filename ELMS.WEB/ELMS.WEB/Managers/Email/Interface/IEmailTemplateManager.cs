@@ -9,9 +9,13 @@ namespace ELMS.WEB.Managers.Email.Interface
     public interface IEmailTemplateManager
     {
         public Task<EmailTemplateResponse> CreateAsync(CreateEmailTemplateRequest request);
+
         public Task<EmailTemplatesResponse> GetAsync();
+
         public Task<EmailTemplateResponse> GetByUIDAsync(Guid uid);
+
         public Task<BaseResponse> UpdateAsync(UpdateEmailTemplateRequest request);
+
         public Task<BaseResponse> DeleteAsync(Guid uid);
     }
 }

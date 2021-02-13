@@ -10,7 +10,9 @@ namespace ELMS.WEB.Managers.Email.Interface
     public interface IEmailScheduleParameterManager
     {
         public Task<EmailScheduleParameterResponse> CreateAsync(CreateEmailScheduleParameterRequest request);
+
         public Task<IList<EmailScheduleParameterResponse>> GetAsync(Guid scheduleUID);
+
         public Task<BaseResponse> DeleteAsync(Guid scheduleUID);
     }
 }
