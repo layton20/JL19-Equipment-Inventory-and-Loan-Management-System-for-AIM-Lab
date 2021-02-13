@@ -9,13 +9,24 @@
             </button>
         </div>
     </div>
-    <form id="formCreate" class="formBlacklist" asp-area="Admin" asp-controller="Blacklist" asp-action="Create" enctype="multipart/form-data">
+    <form id="formBlacklist" class="formBlacklist" asp-area="Admin" asp-controller="Blacklist" asp-action="Edit" enctype="multipart/form-data">
         <div asp-validation-summary="All" class="text-danger"></div>
         <input type="hidden" asp-for="UID" />
         <div class="modal-body">
             <div class="form-group">
                 <label asp-for="Email"></label>
                 <input class="form-control" asp-for="Email" />
+            </div>
+            <div class="form-group pb-0">
+                <div class="form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" asp-for="Active">
+                        Active
+                        <span class="form-check-sign">
+                            <span class="check"></span>
+                        </span>
+                    </label>
+                </div>
             </div>
             <div class="form-group">
                 <label asp-for="Type"></label>

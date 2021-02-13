@@ -139,7 +139,7 @@ namespace ELMS.WEB.Areas.Loan.Controllers
                 LoaneeEmailAddress = model.LoaneeEmailAddress,
                 SelectedEquipmentList = EquipmentAdapter.ToViewModel((await __EquipmentManager.GetAsync(model.SelectedEquipment)).Equipments),
                 LoanerEmailAddress = __UserManager.GetUserAsync(HttpContext.User).Result.Email,
-                Blacklists = BlacklistAdapter.ToViewModel((await __BlacklistManager.GetAsync(model.LoaneeEmailAddress)))
+                Blacklists = BlacklistAdapter.ToViewModel((await __BlacklistManager.GetAsync(model.LoaneeEmailAddress)).Where(x => x.Type == Enums.Admin.BlacklistType.Loan).ToList())
             };
 
             return View("ConfirmationLoan", _Model);

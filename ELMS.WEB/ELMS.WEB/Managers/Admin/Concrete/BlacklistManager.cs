@@ -77,7 +77,8 @@ namespace ELMS.WEB.Managers.Admin.Concrete
             {
                 _Response.Message = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} updated {MODEL_NAME}.";
             }
-            throw new NotImplementedException();
+
+            return _Response;
         }
 
         public async Task<IList<BlacklistResponse>> GetAsync()
