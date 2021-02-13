@@ -9,11 +9,13 @@
     <Content Remove="wwwroot\js\areas\admin\blacklist\index.min.js" />
     <Content Remove="wwwroot\js\areas\admin\permission\index.min.js" />
     <Content Remove="wwwroot\js\areas\admin\role\index.min.js" />
+    <Content Remove="wwwroot\js\areas\loan\confirmationloan.min.js" />
   </ItemGroup>
   <ItemGroup>
     <_ContentIncludedByDefault Remove="wwwroot\js\areas\admin\blacklist\index.min.js" />
     <_ContentIncludedByDefault Remove="wwwroot\js\areas\admin\permission\index.min.js" />
     <_ContentIncludedByDefault Remove="wwwroot\js\areas\admin\role\index.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\areas\loan\confirmationloan.min.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Adapters\Identity\" />
@@ -29,6 +31,7 @@
     <None Include="wwwroot\js\areas\admin\blacklist\index.min.js" />
     <None Include="wwwroot\js\areas\admin\permission\index.min.js" />
     <None Include="wwwroot\js\areas\admin\role\index.min.js" />
+    <None Include="wwwroot\js\areas\loan\confirmationloan.min.js" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.11" />

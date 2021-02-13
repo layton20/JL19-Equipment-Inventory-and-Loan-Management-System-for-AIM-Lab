@@ -88,5 +88,11 @@
     "inputFiles": [
       "wwwroot/js/areas/admin/blacklist/index.js"
     ]
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/loan/confirmationloan.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/loan/confirmationloan.js"
+    ]
   }
 ]

@@ -22,6 +22,11 @@ namespace ELMS.WEB.Repositories.Identity.Concrete
             return await __Context.Users.ToListAsync();
         }
 
+        public async Task<IdentityUser> GetAsync(string email)
+        {
+;           return await __Context.Users.FirstOrDefaultAsync(x => x.Email.ToUpper() == email.ToUpper());
+        }
+
         public async Task<IdentityUser> GetByUIDAsync(Guid uid)
         {
             return await __Context.Users.FindAsync(uid.ToString());

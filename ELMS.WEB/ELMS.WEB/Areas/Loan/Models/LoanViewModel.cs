@@ -16,6 +16,7 @@ namespace ELMS.WEB.Areas.Loan.Models
 
         public IdentityUser Loaner { get; set; }
         public IdentityUser Loanee { get; set; }
+        public string LoanerEmail { get; set; }
         public string LoaneeEmail { get; set; }
 
         [Display(Name = "Start Date")]

@@ -1,4 +1,5 @@
-﻿using ELMS.WEB.Areas.Equipment.Models;
+﻿using ELMS.WEB.Areas.Admin.Models.Blacklist;
+using ELMS.WEB.Areas.Equipment.Models;
 using ELMS.WEB.CustomDataAnnotations;
 using Microsoft.AspNetCore.Identity;
 using System;
@@ -36,5 +37,7 @@ namespace ELMS.WEB.Areas.Loan.Models
 
         [Required(ErrorMessage = "Select at least one equipment to loan off")]
         public IList<Guid> SelectedEquipment { get; set; }
+
+        public IList<BlacklistViewModel> Blacklists { get; set; }
     }
 }

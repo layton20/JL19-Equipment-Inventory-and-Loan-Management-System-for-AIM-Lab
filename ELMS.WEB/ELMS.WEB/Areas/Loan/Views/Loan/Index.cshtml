@@ -126,7 +126,7 @@
                             {
                                 <tr>
                                     <td>@loan.Name</td>
-                                    <td>@loan.Loaner.Email</td>
+                                    <td>@(loan?.Loaner?.Email ?? "Not Found")</td>
                                     <td>
                                         @if (loan.Loanee == null)
                                         {

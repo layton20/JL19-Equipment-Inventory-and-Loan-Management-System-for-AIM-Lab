@@ -15,12 +15,11 @@ namespace ELMS.WEB.Adapters.Loan
             return request == null ? null : new LoanEntity
             {
                 Name = request.Name,
+                LoaneeEmail = request.LoaneeEmailAddress,
+                LoanerEmail = request.LoanerEmailAddress,
                 FromTimestamp = request.FromTimestamp,
                 ExpiryTimestamp = request.ExpiryTimestamp,
-                LoaneeUID = request.LoaneeUID.ToString(),
-                LoaneeEmail = request.LoaneeEmailAddress,
                 AcceptedTermsAndConditions = request.AcceptedTermsAndConditions,
-                LoanerUID = request.LoanerUID.ToString(),
                 Status = request.Status
             };
         }
@@ -44,15 +43,14 @@ namespace ELMS.WEB.Adapters.Loan
             {
                 UID = entity.UID,
                 Name = entity.Name,
-                LoanerUID = Guid.Parse(entity.LoanerUID),
-                LoaneeUID = Guid.Parse(entity.LoaneeUID),
+                LoanerEmail = entity.LoanerEmail,
+                LoaneeEmail = entity.LoaneeEmail,
                 AcceptedTermsAndConditions = entity.AcceptedTermsAndConditions,
                 FromTimestamp = entity.FromTimestamp,
                 ExpiryTimestamp = entity.ExpiryTimestamp,
                 Status = entity.Status,
                 CreatedTimestamp = entity.CreatedTimestamp,
                 AmendedTimestamp = entity.AmendedTimestamp,
-                LoaneeEmail = entity.LoaneeEmail
             };
         }
 
@@ -77,16 +75,6 @@ namespace ELMS.WEB.Adapters.Loan
                 EquipmentList = model.SelectedEquipment
             };
 
-            if (Guid.TryParse(model.LoaneeUID, out Guid loaneeUID))
-            {
-                _Request.LoaneeUID = loaneeUID;
-            }
-
-            if (Guid.TryParse(model.LoanerUID, out Guid loanerUID))
-            {
-                _Request.LoanerUID = loanerUID;
-            }
-
             return _Request;
         }
 
@@ -103,12 +91,26 @@ namespace ELMS.WEB.Adapters.Loan
                 AcceptedTermsAndConditions = response.AcceptedTermsAndConditions,
                 CreatedTimestamp = response.CreatedTimestamp,
                 AmendedTimestamp = response.AmendedTimestamp,
+                LoanerEmail = response.LoanerEmail
             };
         }
 
         internal static IList<LoanViewModel> ToViewModel(this IList<LoanResponse> responses)
         {
             return responses != null && responses.Count > 0 ? responses.Select(ToViewModel).ToList() : Enumerable.Empty<LoanViewModel>().ToList();
+        }
+
+        internal static CreateLoanRequest ToRequest(this ConfirmationLoanViewModel model)
+        {
+            return model == null ? null : new CreateLoanRequest
+            {
+                Name = model.Name,
+                EquipmentList = model.SelectedEquipment,
+                ExpiryTimestamp = model.ExpiryTimestamp,
+                LoaneeEmailAddress = model.LoaneeEmailAddress,
+                FromTimestamp = model.FromTimestamp,
+                LoanerEmailAddress = model.LoanerEmailAddress
+            };
         }
     }
 }

@@ -3,7 +3,6 @@ using ELMS.WEB.Enums.Loan;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ELMS.WEB.Models.Loan.Request
 {
@@ -14,12 +13,11 @@ namespace ELMS.WEB.Models.Loan.Request
         public string Name { get; set; } = "Untitled";
 
         [Required]
-        [ForeignKey("Loanee")]
-        public Guid LoanerUID { get; set; }
-
-        public Guid LoaneeUID { get; set; } = Guid.Empty;
+        [EmailAddress]
+        public string LoanerEmailAddress { get; set; }
 
         [Required]
+        [EmailAddress]
         public string LoaneeEmailAddress { get; set; }
 
         [Required]
