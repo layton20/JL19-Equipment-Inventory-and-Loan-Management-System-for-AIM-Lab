@@ -1,0 +1,144 @@
+﻿@model ELMS.WEB.Areas.Loan.Models.ConfirmationLoanViewModel
+
+@{
+    ViewData["Title"] = "Confirm Loan";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row bg-dark">
+        <div class="m-auto text-white text-center">
+            <div class="m-5">
+                <h1 class="display-2"><strong>@ViewData["Title"]</strong></h1>
+                <h2 class="display-4 text-center">Please confirm the loan details below to create the loan.</h2>
+                <p>Once confirmed, the recipient will be sent the confirmation link.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form asp-area="Loan" asp-controller="Loan" asp-action="Create">
+    <div class="container-fluid">
+        <div class="row">
+            @if (Model.Blacklists.Count > 0)
+            {
+                <div class="card mb-0">
+                    <div class="card-header card-header-primary card-header-icon">
+                        <h4 class="card-title">Blacklists from Loans</h4>
+                        <p class="card-subtitle">This user has previously or currently is blacklisted. You can may still continue to create the loan if you wish to do so.</p>
+                    </div>
+                    <div class="card-body">
+                        <table class="display table datatable-export responsive hover compact" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <td>Blacklisted User</td>
+                                    <td>Reason</td>
+                                    <td>Active</td>
+                                    <td>Created on</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var blacklist in Model.Blacklists)
+                                {
+                                    <tr>
+                                        <td>@blacklist.Email</td>
+                                        <td>@blacklist.Reason</td>
+                                        <td>
+                                            @if (blacklist.Active)
+                                            {
+                                                <span class="badge badge-danger">Active Blacklist</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge badge-warning">Historic Blacklist</span>
+                                            }
+                                        </td>
+                                        <td>@blacklist.CreatedTimestamp</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            }
+
+            <div class="card">
+                <div class="card-body">
+                    <table class="display table datatable-confirm-loan responsive hover compact" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>Loan Name</th>
+                                <th>Loaner</th>
+                                <th>Loanee</th>
+                                <th>Equipment</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    @Model.Name
+                                    <input type="hidden" asp-for="Name" />
+                                </td>
+                                <td>
+                                    @Model.LoanerEmailAddress
+                                    <input type="hidden" asp-for="LoanerEmailAddress" />
+                                </td>
+                                <td>
+                                    @Model.LoaneeEmailAddress
+                                    <input type="hidden" asp-for="LoaneeEmailAddress" />
+                                </td>
+                                <td>
+                                    <ul class="list-group list-group-flush">
+                                        @foreach (var equipment in Model.SelectedEquipmentList)
+                                        {
+                                            <li class="list-group-item">
+                                                <a class="equipmentDetailsModal text-primary" data-url="/Equipment/Equipment/DetailsModal" data-uid="@equipment.UID" style="cursor: pointer">@equipment.Name</a>
+
+                                            </li>
+                                        }
+                                    </ul>
+                                    @for (int i = 0; i < Model.SelectedEquipmentList.Count; i++)
+                                    {
+                                        <input type="hidden" asp-for="SelectedEquipment" value="@Model.SelectedEquipmentList[i].UID" />
+                                    }
+                                </td>
+                                <td>
+                                    @Model.FromTimestamp
+                                    <input type="hidden" asp-for="FromTimestamp" />
+                                </td>
+                                <td>
+                                    @Model.ExpiryTimestamp
+                                    <input type="hidden" asp-for="ExpiryTimestamp" />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center">
+        <h3>How it works</h3>
+        <p>Ensure all details for this loan are correct, submit the form below to create a <strong>potential</strong> loan.</p>
+        <p>This will create a loan and send a confirmation link to the provided user's address to accept the Terms and Conditions of this loan. Once accepted, the loan will be <strong>active</strong>. Currently it is inactive.</p>
+        <input class="btn btn-success" type="submit" value="Create Loan" />
+        <a class="btn" asp-area="Loan" asp-controller="Loan" asp-action="Index">Cancel</a>
+    </div>
+</form>
+
+@section Scripts {
+    <environment include="Development">
+        <script src="~/js/areas/loan/confirmationloan.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/areas/loan/confirmationloan.min.js"></script>
+    </environment>
+    <script>
+        $(document).ready(function () {
+            $('#navItemLoans').addClass('active');
+        });
+    </script>
+}

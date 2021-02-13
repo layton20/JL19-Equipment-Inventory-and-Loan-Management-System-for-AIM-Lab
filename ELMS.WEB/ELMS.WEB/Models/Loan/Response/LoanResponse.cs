@@ -9,9 +9,7 @@ namespace ELMS.WEB.Models.Loan.Response
     {
         public Guid UID { get; set; }
         public string Name { get; set; } = "Untitled";
-        public Guid LoanerUID { get; set; }
-
-        public Guid LoaneeUID { get; set; } = Guid.Empty;
+        public string LoanerEmail { get; set; }
         public string LoaneeEmail { get; set; }
         public DateTime FromTimestamp { get; set; } = DateTime.Now;
         public DateTime ExpiryTimestamp { get; set; }

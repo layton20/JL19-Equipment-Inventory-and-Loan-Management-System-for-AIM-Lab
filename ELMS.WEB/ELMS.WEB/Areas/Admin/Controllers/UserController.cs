@@ -104,7 +104,7 @@ namespace ELMS.WEB.Areas.Admin.Controllers
                 return RedirectToAction("Index", "User", new { Area = "Admin", errorMessage = $"User does not exist" });
             }
 
-            NsModelUser.DetailsViewModel _Model = new NsModelUser.DetailsViewModel
+            DetailsViewModel _Model = new DetailsViewModel
             {
                 User = _User,
                 Roles = await __UserManager.GetRolesAsync(_User),
@@ -118,16 +118,6 @@ namespace ELMS.WEB.Areas.Admin.Controllers
                 if (_EquipmentUIDs != null && _EquipmentUIDs.Count > 0)
                 {
                     _LoanViewModel.EquipmentList = (await __EquipmentManager.GetAsync(_EquipmentUIDs)).Equipments.ToViewModel();
-                }
-
-                if (loan.LoaneeUID != Guid.Empty)
-                {
-                    _LoanViewModel.Loanee = await __UserRepository.GetByUIDAsync(loan.LoaneeUID);
-                }
-
-                if (loan.LoanerUID != Guid.Empty)
-                {
-                    _LoanViewModel.Loaner = await __UserRepository.GetByUIDAsync(loan.LoanerUID);
                 }
 
                 _Model.Loans.Add(_LoanViewModel);

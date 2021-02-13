@@ -86,7 +86,8 @@ namespace ELMS.WEB.Areas.Admin.Controllers
                 Email = _Response.Email,
                 Reason = _Response.Reason,
                 Type = _Response.Type,
-                UID = _Response.UID
+                UID = _Response.UID,
+                Active = _Response.Active
             };
 
             return PartialView("_EditModal", _Model);

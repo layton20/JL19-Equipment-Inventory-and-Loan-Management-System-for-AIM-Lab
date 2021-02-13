@@ -80,6 +80,8 @@ namespace ELMS.WEB.Repositories.Admin.Concrete
             }
 
             _Entity.Reason = entity.Reason;
+            _Entity.Type = entity.Type;
+            _Entity.Active = entity.Active;
             _Entity.AmendedTimestamp = entity.AmendedTimestamp;
 
             return await __Context.SaveChangesAsync() > 0;

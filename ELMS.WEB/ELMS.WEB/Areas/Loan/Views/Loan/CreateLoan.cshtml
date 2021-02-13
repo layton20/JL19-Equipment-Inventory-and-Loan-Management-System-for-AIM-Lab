@@ -17,7 +17,7 @@
     </div>
 </div>
 
-<form asp-area="Loan" asp-controller="Loan" asp-action="Create" enctype="multipart/form-data">
+<form asp-area="Loan" asp-controller="Loan" asp-action="ConfirmView" enctype="multipart/form-data">
     <div asp-validation-summary="All" class="text-danger"></div>
     <div class="card my-3">
         <div class="card-header card-header-primary card-header-icon">
@@ -113,6 +113,7 @@
                                             <th class="th-description font-weight-normal">Username</th>
                                             <th class="th-description font-weight-normal">Normalised Email</th>
                                             <th class="th-description font-weight-normal">Email Confirmed</th>
+                                            <th class="th-description font-weight-normal">Additional Information</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -127,6 +128,16 @@
                                                 <td>@user.UserName</td>
                                                 <td>@user.NormalizedEmail</td>
                                                 <td>@user.EmailConfirmed</td>
+                                                <td>
+                                                    @if (Model.Blacklists.Any(x => x.Active && x.Email.ToUpper() == user.NormalizedEmail))
+                                                    {
+                                                        <span class="badge badge-danger">Blacklisted</span>
+                                                    }
+                                                    else if (Model.Blacklists.Any(x => x.Email.ToUpper() == user.NormalizedEmail))
+                                                    {
+                                                        <span class="badge badge-warning">Previously blacklisted</span>
+                                                    }
+                                                </td>
                                             </tr>
                                         }
                                     </tbody>
@@ -160,13 +171,9 @@
     </div>
 
     <div class="text-center">
-        <h3>How it works</h3>
-        <p>Ensure you have enter all required details for this loan, submit the form below to create a <strong>potential</strong> loan.</p>
-        <p>This will create a loan and send a confirmation link to the provided user's address to accept the Terms and Conditions of this loan. Once accepted, the loan will be <strong>active</strong>. Currently it is inactive.</p>
-
         <div>
-            <input type="submit" class="btn btn-success" value="I understand. Create the loan" />
-            <a class="btn text-white">Cancel.</a>
+            <input type="submit" class="btn btn-success" value="Continue to Loan Preview" />
+            <a class="btn text-white">Cancel</a>
         </div>
     </div>
 </form>
@@ -178,4 +185,9 @@
     <environment exclude="Development">
         <script src="~/js/areas/loan/createloan.min.js"></script>
     </environment>
+    <script>
+        $(document).ready(function () {
+            $('#navItemLoans').addClass('active');
+        });
+    </script>
 }

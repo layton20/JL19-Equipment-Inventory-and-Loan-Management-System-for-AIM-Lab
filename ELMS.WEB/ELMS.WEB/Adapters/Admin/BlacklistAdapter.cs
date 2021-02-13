@@ -45,7 +45,8 @@ namespace ELMS.WEB.Adapters.Admin
             {
                 Reason = request.Reason,
                 UID = request.UID,
-                Active = request.Active
+                Active = request.Active,
+                Type = request.Type
             };
         }
 
@@ -85,7 +86,8 @@ namespace ELMS.WEB.Adapters.Admin
             {
                 Active = model.Active,
                 Reason = model.Reason,
-                UID = model.UID
+                UID = model.UID,
+                Type = model.Type
             };
         }
 

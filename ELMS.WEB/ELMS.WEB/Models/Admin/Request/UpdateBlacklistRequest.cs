@@ -1,4 +1,5 @@
-﻿using ELMS.WEB.Models.Base.Request;
+﻿using ELMS.WEB.Enums.Admin;
+using ELMS.WEB.Models.Base.Request;
 using System.ComponentModel.DataAnnotations;
 
 namespace ELMS.WEB.Models.Admin.Request
@@ -9,5 +10,7 @@ namespace ELMS.WEB.Models.Admin.Request
         public string Reason { get; set; } = "Reason not provided.";
         [Required]
         public bool Active { get; set; }
+        [Required]
+        public BlacklistType Type { get; set; }
     }
 }
