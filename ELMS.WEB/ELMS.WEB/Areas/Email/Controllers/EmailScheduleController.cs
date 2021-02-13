@@ -79,7 +79,8 @@ namespace ELMS.WEB.Areas.Email.Controllers
                 return PartialView("_CreateModal", model);
             }
 
-            EmailScheduleResponse _Response = await __EmailScheduleManager.CreateAsync(new CreateEmailScheduleRequest { 
+            EmailScheduleResponse _Response = await __EmailScheduleManager.CreateAsync(new CreateEmailScheduleRequest
+            {
                 EmailTemplateUID = model.EmailTemplateUID,
                 EmailType = Enums.Email.EmailType.Custom,
                 RecipientEmailAddress = model.RecipientEmailAddress,

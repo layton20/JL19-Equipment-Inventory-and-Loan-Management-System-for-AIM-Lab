@@ -34,7 +34,8 @@ namespace ELMS.WEB.Areas.Loan.Controllers
         private readonly IApplicationEmailSender __EmailSender;
         private readonly string ENTITY_NAME = "Loan";
 
-        public LoanController(ILoanManager loanManager, IEquipmentManager equipmentManager, IUserRepository userRepository, ILoanEquipmentManager loanEquipmentManager, IEmailScheduleManager emailScheduleManager, IApplicationEmailSender emailSender)        {
+        public LoanController(ILoanManager loanManager, IEquipmentManager equipmentManager, IUserRepository userRepository, ILoanEquipmentManager loanEquipmentManager, IEmailScheduleManager emailScheduleManager, IApplicationEmailSender emailSender)
+        {
             __LoanManager = loanManager ?? throw new ArgumentNullException(nameof(loanManager));
             __EquipmentManager = equipmentManager ?? throw new ArgumentNullException(nameof(equipmentManager));
             __UserRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));

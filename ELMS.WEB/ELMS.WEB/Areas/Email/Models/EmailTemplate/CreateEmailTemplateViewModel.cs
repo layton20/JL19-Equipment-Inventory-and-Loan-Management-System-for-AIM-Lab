@@ -17,6 +17,7 @@ namespace ELMS.WEB.Areas.Email.Models.EmailTemplate
 
         [Required]
         public string Body { get; set; }
+
         public string OwnerUID { get; set; }
     }
 }

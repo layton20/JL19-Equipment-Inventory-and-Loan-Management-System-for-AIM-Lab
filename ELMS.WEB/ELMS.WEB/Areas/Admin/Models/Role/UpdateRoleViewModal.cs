@@ -7,6 +7,7 @@ namespace ELMS.WEB.Areas.Admin.Models.Role
     {
         [Required]
         public String UID { get; set; }
+
         [Required]
         public String Name { get; set; }
     }

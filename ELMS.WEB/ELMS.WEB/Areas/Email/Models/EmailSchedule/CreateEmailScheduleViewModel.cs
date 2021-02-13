@@ -11,14 +11,18 @@ namespace ELMS.WEB.Areas.Email.Models.EmailSchedule
     {
         [Required]
         public Guid EmailTemplateUID { get; set; } = Guid.Empty;
+
         [Required]
         [Display(Name = "Recipient Email")]
         public string RecipientEmailAddress { get; set; }
+
         [Required]
         public EmailType EmailType { get; set; }
+
         [Required]
         [FutureOrTodayDate]
         public DateTime SendTimestamp { get; set; }
+
         public IList<EmailTemplateViewModel> EmailTemplates { get; set; }
     }
 }

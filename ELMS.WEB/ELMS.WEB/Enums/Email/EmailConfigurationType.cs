@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace ELMS.WEB.Enums.Email
+﻿namespace ELMS.WEB.Enums.Email
 {
     public enum EmailConfigurationType
     {

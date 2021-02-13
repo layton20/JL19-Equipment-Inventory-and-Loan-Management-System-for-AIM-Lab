@@ -7,8 +7,10 @@ namespace ELMS.WEB.Models.Email.Request
     {
         [Required]
         public Guid EmailScheduleUID { get; set; }
+
         [Required]
         public string Name { get; set; }
+
         [Required]
         public string Value { get; set; }
     }

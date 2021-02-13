@@ -17,6 +17,7 @@ namespace ELMS.WEB.Models.Email.Request
 
         [Required]
         public string Body { get; set; }
+
         [Required]
         public Guid OwnerUID { get; set; }
     }

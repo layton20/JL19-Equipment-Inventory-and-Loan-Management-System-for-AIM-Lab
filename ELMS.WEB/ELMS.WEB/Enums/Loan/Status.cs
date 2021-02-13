@@ -9,7 +9,7 @@ namespace ELMS.WEB.Enums.Loan
 
         [Display(Name = "Inactive Loan")]
         InactiveLoan = 1,
-        
+
         [Display(Name = "Active Loan")]
         ActiveLoan = 2,
 

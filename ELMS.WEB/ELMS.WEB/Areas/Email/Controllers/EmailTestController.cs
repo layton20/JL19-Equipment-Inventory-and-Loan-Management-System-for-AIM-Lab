@@ -44,7 +44,7 @@ namespace ELMS.WEB.Areas.Email.Controllers
                 Confirm_Loan_URL = "https://www.google.com/"
             });
 
-            return RedirectToAction("Index", "EmailTest", new { Area = "Email", successMessage =  $"{GlobalConstants.SUCCESS_ACTION_PREFIX} sent email." });
+            return RedirectToAction("Index", "EmailTest", new { Area = "Email", successMessage = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} sent email." });
         }
 
         [HttpGet]

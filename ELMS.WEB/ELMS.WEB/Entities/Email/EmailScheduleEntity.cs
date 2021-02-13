@@ -18,6 +18,7 @@ namespace ELMS.WEB.Entities.Email
 
         [Required]
         public DateTime SendTimestamp { get; set; }
+
         [Required]
         public bool Sent { get; set; } = false;
     }

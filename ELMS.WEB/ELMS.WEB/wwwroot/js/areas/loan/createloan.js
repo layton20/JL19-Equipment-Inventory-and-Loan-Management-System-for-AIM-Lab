@@ -1,5 +1,4 @@
 ﻿$(document).ready(function () {
-
     $(".checkbox-equipment").click(function () {
         var selectedEquipmentElem = $(this).siblings('.equipment-selection');
 

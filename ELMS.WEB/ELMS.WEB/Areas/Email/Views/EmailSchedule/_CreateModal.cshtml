@@ -37,7 +37,7 @@
                                 @foreach (var template in Model.EmailTemplates)
                                 {
                                     <td class="td-name">
-                                        <input type="radio" asp-for="EmailTemplateUID" value="@template.UID"/>
+                                        <input type="radio" asp-for="EmailTemplateUID" value="@template.UID" />
                                     </td>
                                     <td class="td-name">@template.Name</td>
                                     <td class="td-name">@template.Subject</td>

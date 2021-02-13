@@ -67,7 +67,7 @@
     $('.deleteEmailTemplate').click(function () {
         loadModalAjax($(this).data('url'), `uid=${$(this).data('uid')}`);
     });
-    
+
     $('#modalRoot').on("submit", "#formDeleteEmailTemplate", function (e) {
         e.preventDefault();
         var form = $(this);

@@ -1,8 +1,8 @@
 ﻿using ELMS.WEB.Adapters.Equipment;
 using ELMS.WEB.Adapters.Loan;
 using ELMS.WEB.Areas.Admin.Data;
-using NsModelPermission = ELMS.WEB.Areas.Admin.Models.Permission;
-using NsModelUser = ELMS.WEB.Areas.Admin.Models.User;
+using ELMS.WEB.Areas.Admin.Models.User;
+using ELMS.WEB.Entities.Admin;
 using ELMS.WEB.Helpers;
 using ELMS.WEB.Managers.Equipment.Interfaces;
 using ELMS.WEB.Managers.Loan.Interface;
@@ -17,8 +17,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using ELMS.WEB.Entities.Admin;
-using ELMS.WEB.Areas.Admin.Models.User;
+using NsModelPermission = ELMS.WEB.Areas.Admin.Models.Permission;
+
+using NsModelUser = ELMS.WEB.Areas.Admin.Models.User;
 
 namespace ELMS.WEB.Areas.Admin.Controllers
 {
@@ -86,7 +87,6 @@ namespace ELMS.WEB.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> DetailsViewAsync(Guid uid, string successMessage, string errorMessage)
         {
-
             if (!string.IsNullOrWhiteSpace(successMessage))
             {
                 ViewData["SuccessMessage"] = successMessage;

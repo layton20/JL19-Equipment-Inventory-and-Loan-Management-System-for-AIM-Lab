@@ -6,6 +6,7 @@ namespace ELMS.WEB.Enums.Email
     {
         Scheduled = 0,
         Sent = 1,
+
         [Display(Name = "Manually Sent")]
         ManuallySent = 2,
     }

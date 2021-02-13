@@ -13,6 +13,7 @@ namespace ELMS.WEB.Repositories.Loan.Interface
         public Task<LoanEntity> GetByUIDAsync(Guid uid);
 
         public Task<IList<LoanEntity>> GetAsync(Guid equipmentUID, bool all = false);
+
         public Task<IList<LoanEntity>> GetAsync();
 
         public Task<bool> AcceptTermsAndConditions(Guid uid);
@@ -20,7 +21,9 @@ namespace ELMS.WEB.Repositories.Loan.Interface
         public Task<bool> ChangeStatusAsync(Guid uid, Status status);
 
         public Task<bool> UpdateAsync(LoanEntity loan);
+
         public Task<int> GetCountByStatus(Status status);
+
         public Task<IList<LoanEntity>> GetByUserAsync(string email);
     }
 }

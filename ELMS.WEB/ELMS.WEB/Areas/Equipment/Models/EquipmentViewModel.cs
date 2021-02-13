@@ -33,6 +33,7 @@ namespace ELMS.WEB.Areas.Equipment.Models
 
         [Required]
         public Status Status { get; set; } = Status.Available;
+
         public DateTime CreatedTimestamp { get; set; }
         public DateTime AmendedTimestamp { get; set; }
     }

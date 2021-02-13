@@ -6,6 +6,7 @@ namespace ELMS.WEB.Enums.Email
     {
         [Display(Name = "Plain Text")]
         PlainText = 0,
+
         [Display(Name = "HTML Formatted")]
         Formatted = 1
     }
