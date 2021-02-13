@@ -89,9 +89,19 @@ namespace ELMS.WEB.Areas.Loan.Controllers
         [Authorize(Policy = "CreateLoanPolicy")]
         public async Task<IActionResult> CreateViewAsync()
         {
+            IList<LoanResponse> _Loans = (await __LoanManager.GetAsync()).Where(loan => loan.Status != Enums.Loan.Status.Complete && loan.Status != Enums.Loan.Status.ManualComplete).ToList();
+
+            List<Guid> _ExcludeEquipment = new List<Guid>();
+            foreach (LoanResponse loan in _Loans)
+            {
+                IList<LoanEquipmentResponse> _Response = await __LoanEquipmentManager.GetAsync(loan.UID);
+                _ExcludeEquipment.AddRange(_Response.Select(x => x.EquipmentUID));
+            }
+            _ExcludeEquipment = _ExcludeEquipment.Distinct().ToList();
+
             CreateLoanViewModel _Model = new CreateLoanViewModel
             {
-                EquipmentSelectList = (await __EquipmentManager.GetAsync()).Equipments.Where(x => x.Status == Status.Available).ToList().ToViewModel(),
+                EquipmentSelectList = (await __EquipmentManager.GetAsync()).Equipments.Where(x => x.Status == Status.Available && !_ExcludeEquipment.Contains(x.UID)).ToList().ToViewModel(),
                 UserSelectList = await __UserRepository.GetAsync()
             };
 
