@@ -22,6 +22,7 @@
     <Folder Include="Areas\Email\Data\Templates\" />
     <Folder Include="Areas\Equipment\Data\" />
     <Folder Include="Areas\Loan\Data\" />
+    <Folder Include="Areas\Report\Data\" />
     <Folder Include="Migrations\ELMSWEB\" />
     <Folder Include="UI\Components\" />
     <Folder Include="wwwroot\js\areas\note\" />
@@ -43,7 +44,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.5" />
     <PackageReference Include="SendGrid" Version="9.22.0" />
   </ItemGroup>
 </Project>
