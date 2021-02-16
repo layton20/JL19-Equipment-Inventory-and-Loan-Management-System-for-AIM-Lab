@@ -1,0 +1,80 @@
+﻿@model ELMS.WEB.Areas.Report.Models.IndexViewModel
+
+@{
+    ViewData["Title"] = "Reports and Analytics";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row bg-dark">
+        <div class="m-auto text-white text-center">
+            <div class="m-5">
+                <h1 class="display-2"><strong>@ViewData["Title"]</strong></h1>
+                <h2 class="display-4 text-center">Select a report to view</h2>
+                <p>Reports can be filtered and exported to PDF, CSV or Excel format.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3 col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Lab equipment</h4>
+                    <p class="category">Subtitle</p>
+                </div>
+                <div class="card-body">
+                    View reports on current inventory within the lab, with value and replacement value, and whether they are out on loan.
+                </div>
+                <div class="card-footer">
+                    <a class="btn btn-primary text-white w-100" asp-area="Report" asp-controller="Report" asp-action="EquipmentValueReport">View</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Loan History</h4>
+                    <p class="category">Subtitle</p>
+                </div>
+                <div class="card-body">
+                    View historic loans between certain
+                    time periods, the equipment loaned off and who the loan was made for.
+                </div>
+                <div class="card-footer">
+                    <a class="btn btn-primary text-white w-100">View</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Written off equipment</h4>
+                    <p class="category">Subtitle</p>
+                </div>
+                <div class="card-body">
+                    View reports on equipment that was written off.
+                </div>
+                <div class="card-footer">
+                    <a class="btn btn-primary text-white w-100">View</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Loan History</h4>
+                    <p class="category">Subtitle</p>
+                </div>
+                <div class="card-body">
+                    View historic loans between certain time periods, the equipment loaned off and who the loan was made for.
+                </div>
+                <div class="card-footer">
+                    <a class="btn btn-primary text-white w-100">View</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
