@@ -19,6 +19,15 @@ The Aston Interactive Media (AIM) Lab is home to a variety of interesting techno
 - [Documents](https://drive.google.com/drive/folders/1qfzen5QwIkEONeCTrvyNe7FD1jh9Aut_?usp=sharing)
   - Contains a list of documents and deliverables to manage tasks, requirement elicitation, system/architecture/software specifications, analysis, etc.
 
+# Web application
+Unfortunately, if you have not been given access to login credentials, you will be unable to use the system. Please refer to the design mockups to get a rough overview of the system instead.
+
+Link to application (for authorised users): https://elmsweb20210219164402.azurewebsites.net/#
+
+# Deployment
+- Database: dev environment deployed on Azure Database service
+- Website: dev environment deployed on Azure Web app service B1 Tier
+
 ## Example screenshots of the current system
 ![Home Dashboard](https://i.gyazo.com/a1bc9e17647555f9a9a770212f199982.png "Home dashboard")
 
