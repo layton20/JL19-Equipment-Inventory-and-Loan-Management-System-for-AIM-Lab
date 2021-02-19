@@ -25,7 +25,7 @@ jobs:
       run: dotnet build --configuration Release ELMS.WEB/ELMS.WEB.sln
 
     - name: dotnet publish
-      run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/ELMS.WEB
+      run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/ELMS.WEB/ELMS.WEB.sln
 
     - name: Deploy to Azure Web App
       uses: azure/webapps-deploy@v2
@@ -33,4 +33,4 @@ jobs:
         app-name: 'ELMSWEB20210219164402'
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_df44fee558c14243a762abf817aaba43 }}
-        package: ${{env.DOTNET_ROOT}}/ELMS.WEB 
+        package: ${{env.DOTNET_ROOT}}/ELMS.WEB/ELMS.WEB.sln
