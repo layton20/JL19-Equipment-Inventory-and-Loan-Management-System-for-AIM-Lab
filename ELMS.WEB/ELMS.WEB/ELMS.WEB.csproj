@@ -22,7 +22,6 @@
     <Folder Include="Areas\Email\Data\Templates\" />
     <Folder Include="Areas\Equipment\Data\" />
     <Folder Include="Areas\Loan\Data\" />
-    <Folder Include="Areas\Report\Data\" />
     <Folder Include="Migrations\ELMSWEB\" />
     <Folder Include="UI\Components\" />
     <Folder Include="wwwroot\js\areas\note\" />

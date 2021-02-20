@@ -1,0 +1,142 @@
+﻿@model ELMS.WEB.Areas.Report.Models.LoanHistoryViewModel
+
+@{
+    ViewData["Title"] = "Historic Loans Report";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row bg-dark">
+        <div class="m-auto text-white text-center">
+            <div class="m-5">
+                <h1 class="display-2"><strong>@ViewData["Title"]</strong></h1>
+                <p>View past loans and filter based on loan fields, then export to PDF, CSV or an Excel spreadsheet.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="card mb-0">
+            <div class="card-header">
+                <h3 class="card-title">Filters</h3>
+                <p class="category">Fields will filter based on whether the attribute (e.g. Loanee email) <u>contains</u> the given input.</p>
+            </div>
+            <div class="card-body">
+                <form asp-area="Report" asp-controller="Report" asp-action="LoanHistoryReportFilter">
+                    <div class="form-row">
+                        <div class="form-group col-sm-12 col-md-3">
+                            <label asp-for="Filter.Name"></label>
+                            <input type="text" class="form-control" asp-for="Filter.Name" />
+                        </div>
+                        <div class="form-group col-sm-12 col-md-3">
+                            <label asp-for="Filter.LoanerEmail"></label>
+                            <input type="text" class="form-control" asp-for="Filter.LoanerEmail" />
+                        </div>
+                        <div class="form-group col-sm-12 col-md-3">
+                            <label asp-for="Filter.LoaneeEmail"></label>
+                            <input type="text" class="form-control" asp-for="Filter.LoaneeEmail" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-sm-6 col-md-3">
+                            <label asp-for="Filter.FromTimestamp"></label>
+                            <input type="date" class="form-control" asp-for="Filter.FromTimestamp" />
+                        </div>
+                        <div class="form-group col-sm-6 col-md-3">
+                            <label asp-for="Filter.ExpiryTimestamp">Scheduled To</label>
+                            <input type="date" class="form-control" asp-for="Filter.ExpiryTimestamp" />
+                        </div>
+
+                        <div class="form-group col-sm-6 col-md-3">
+                            <label asp-for="Filter.CreatedFromTimestamp"></label>
+                            <input type="date" class="form-control" asp-for="Filter.CreatedFromTimestamp" />
+                        </div>
+                        <div class="form-group col-sm-6 col-md-3">
+                            <label asp-for="Filter.CreatedToTimestamp"></label>
+                            <input type="date" class="form-control" asp-for="Filter.CreatedToTimestamp" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-sm-12 col-md-3">
+                            <label class="w-100" asp-for="Filter.Statuses"></label>
+                            <select class="selectpicker" data-width="100%" data-style="select-with-transition" multiple asp-for="Filter.Statuses" asp-items="Html.GetEnumSelectList<ELMS.WEB.Enums.Loan.Status>()">
+                            </select>
+                        </div>
+                        <div class="form-group col-sm-12 col-md-9">
+                            <label asp-for="Filter.AcceptedTermsAndConditions"></label>
+                            <br />
+                            @foreach (var item in Html.GetEnumSelectList<ELMS.WEB.Areas.Report.Data.BooleanFilter>().ToList())
+                            {
+                                <div class="form-check form-check-inline form-check-radio">
+                                    <label class="form-check-label">
+                                        <input class="form-check-input" type="radio" asp-for="Filter.AcceptedTermsAndConditions" value="@item.Text">
+                                        <label>@item.Text</label>
+                                        <span class="circle">
+                                            <span class="check"></span>
+                                        </span>
+                                    </label>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Filter Report</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <table class="display table datatable-export responsive hover compact" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th class="th-description">Name</th>
+                            <th class="th-description">Loaner Email</th>
+                            <th class="th-description">Loanee Email</th>
+                            <th class="th-description">From</th>
+                            <th class="th-description">To</th>
+                            <th class="th-description">Status</th>
+                            <th class="th-description">Accepted Terms and Conditions?</th>
+                            <th class="th-description">Equipment</th>
+                            <th class="th-description">Created On</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var loan in Model.Loans)
+                        {
+                            <tr>
+                                <td class="td-name">@loan.Name</td>
+                                <td class="td-name">@loan.LoanerEmail</td>
+                                <td class="td-name">@loan.LoaneeEmail</td>
+                                <td class="td-name">@loan.FromTimestamp</td>
+                                <td class="td-name">@loan.ExpiryTimestamp</td>
+                                <td class="td-name">@loan.Status.ToString()</td>
+                                <td class="td-name">@loan.AcceptedTermsAndConditions</td>
+                                <td class="td-name">
+                                    <ul>
+                                        @foreach (var equipment in loan.EquipmentList)
+                                        {
+                                            <li>@equipment.ToString()</li>
+                                        }
+                                    </ul>
+                                </td>
+                                <td class="td-name">@loan.CreatedTimestamp.ToShortDateString()</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+
+    </script>
+} 
