@@ -14,13 +14,15 @@ $('.datatable-export').DataTable({
             text: 'Export as CSV'
         },
         {
-            extend: 'pdf',
-            text: 'Export as PDF'
+            extend: 'pdfHtml5',
+            text: 'Export as PDF',
+            orientation: 'landscape',
+            pageSize: 'LEGAL',
         },
         {
             extend: 'excel',
             text: 'Export as Excel'
-        }
+        },
     ],
     responsive: {
         details: {
