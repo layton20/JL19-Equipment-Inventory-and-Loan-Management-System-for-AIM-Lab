@@ -1,12 +1,14 @@
-﻿using ELMS.WEB.Adapters.Admin;
+﻿using AutoMapper;
 using ELMS.WEB.Areas.Admin.Models.Blacklist;
 using ELMS.WEB.Helpers;
 using ELMS.WEB.Managers.Admin.Interfaces;
+using ELMS.WEB.Models.Admin.Request;
 using ELMS.WEB.Models.Admin.Response;
 using ELMS.WEB.Models.Base.Response;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ELMS.WEB.Areas.Admin.Controllers
@@ -15,11 +17,13 @@ namespace ELMS.WEB.Areas.Admin.Controllers
     [Area("Admin")]
     public class BlacklistController : Controller
     {
+        private readonly IMapper __Mapper;
         private readonly IBlacklistManager __BlacklistManager;
         private const string ENTITY_NAME = "Blacklist";
 
-        public BlacklistController(IBlacklistManager blacklistManager)
+        public BlacklistController(IMapper mapper, IBlacklistManager blacklistManager)
         {
+            __Mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             __BlacklistManager = blacklistManager ?? throw new ArgumentException(nameof(blacklistManager));
         }
 
@@ -36,7 +40,7 @@ namespace ELMS.WEB.Areas.Admin.Controllers
 
             IndexViewModel _Model = new IndexViewModel
             {
-                Blacklists = (await __BlacklistManager.GetAsync()).ToViewModel()
+                Blacklists = __Mapper.Map<IList<BlacklistViewModel>>(await __BlacklistManager.GetAsync())
             };
 
             return View(_Model);
@@ -56,7 +60,7 @@ namespace ELMS.WEB.Areas.Admin.Controllers
                 return PartialView("_CreateModal", model);
             }
 
-            BlacklistResponse _Response = await __BlacklistManager.CreateAsync(model.ToRequest());
+            BlacklistResponse _Response = await __BlacklistManager.CreateAsync(__Mapper.Map<CreateBlacklistRequest>(model));
 
             if (!_Response.Success)
             {
@@ -81,7 +85,7 @@ namespace ELMS.WEB.Areas.Admin.Controllers
                 return Json(new { error = $"{GlobalConstants.ERROR_ACTION_PREFIX} find {ENTITY_NAME}" });
             }
 
-            UpdateBlacklistViewModel _Model = new UpdateBlacklistViewModel
+            UpdateViewModel _Model = new UpdateViewModel
             {
                 Email = _Response.Email,
                 Reason = _Response.Reason,
@@ -94,7 +98,7 @@ namespace ELMS.WEB.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditAsync(UpdateBlacklistViewModel model)
+        public async Task<IActionResult> EditAsync(UpdateViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -108,7 +112,7 @@ namespace ELMS.WEB.Areas.Admin.Controllers
                 return Json(new { error = $"{GlobalConstants.ERROR_ACTION_PREFIX} find {ENTITY_NAME}." });
             }
 
-            BaseResponse _Response = await __BlacklistManager.UpdateAsync(model.ToRequest());
+            BaseResponse _Response = await __BlacklistManager.UpdateAsync(__Mapper.Map<UpdateBlacklistRequest>(model));
 
             if (_Response == null)
             {
@@ -133,11 +137,11 @@ namespace ELMS.WEB.Areas.Admin.Controllers
                 return Json(new { message = $"{GlobalConstants.ERROR_ACTION_PREFIX} delete {ENTITY_NAME}" });
             }
 
-            return PartialView("_DeleteModal", _Blacklist.ToDeleteViewModel());
+            return PartialView("_DeleteModal", __Mapper.Map<DeleteViewModel>(_Blacklist));
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteAsync(DeleteBlacklistViewModel model)
+        public async Task<IActionResult> DeleteAsync(DeleteViewModel model)
         {
             if (!ModelState.IsValid)
             {

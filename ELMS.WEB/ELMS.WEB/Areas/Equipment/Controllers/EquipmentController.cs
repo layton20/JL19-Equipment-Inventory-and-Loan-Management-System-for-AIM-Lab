@@ -1,9 +1,11 @@
-﻿using ELMS.WEB.Adapters.Equipment;
+﻿using AutoMapper;
 using ELMS.WEB.Areas.Equipment.Models;
+using ELMS.WEB.Areas.Equipment.Models.Note;
 using ELMS.WEB.Helpers;
 using ELMS.WEB.Managers.Email.Interface;
 using ELMS.WEB.Managers.Equipment.Interfaces;
 using ELMS.WEB.Models.Base.Response;
+using ELMS.WEB.Models.Equipment.Request;
 using ELMS.WEB.Models.Equipment.Response;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,27 +22,20 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
     [Area("Equipment")]
     public class EquipmentController : Controller
     {
-        private readonly IConfiguration __Configuration;
+        private readonly IMapper __Mapper;
         private readonly IEquipmentManager __EquipmentManager;
         private readonly INoteManager __NoteManager;
         private readonly IEmailScheduleManager __EmailScheduleManager;
         private readonly IEmailScheduleParameterManager __EmailScheduleParameterManager;
         private readonly String ENTITY_NAME = "Equipment";
 
-        public EquipmentController(IConfiguration configuration, IEquipmentManager equipmentManager, INoteManager noteManager, IEmailScheduleManager emailScheduleManager, IEmailScheduleParameterManager emailScheduleParameterManager)
+        public EquipmentController(IMapper mapper, IEquipmentManager equipmentManager, INoteManager noteManager, IEmailScheduleManager emailScheduleManager, IEmailScheduleParameterManager emailScheduleParameterManager)
         {
-            __Configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            __Mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             __EquipmentManager = equipmentManager ?? throw new ArgumentNullException(nameof(equipmentManager));
             __NoteManager = noteManager ?? throw new ArgumentNullException(nameof(noteManager));
             __EmailScheduleManager = emailScheduleManager ?? throw new ArgumentNullException(nameof(emailScheduleManager));
             __EmailScheduleParameterManager = emailScheduleParameterManager ?? throw new ArgumentNullException(nameof(emailScheduleParameterManager));
-        }
-
-        public Task<IActionResult> SendGridSampleAsync()
-        {
-            //EmailSender _Sender = new EmailSender(__Configuration);
-            //return Json(await _Sender.SendEmailSampleAsync());
-            return null;
         }
 
         [Authorize(Policy = "ViewEquipmentPolicy")]
@@ -57,7 +52,7 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
 
             IndexViewModel _Model = new IndexViewModel
             {
-                Equipment = (await __EquipmentManager.GetAsync()).Equipments.OrderByDescending(x => x.CreatedTimestamp).ToList().ToViewModel()
+                Equipment = __Mapper.Map<IList<EquipmentViewModel>>((await __EquipmentManager.GetAsync()).Equipments)
             };
 
             return View(_Model);
@@ -85,7 +80,7 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
 
             if (model.Quantity <= 1)
             {
-                EquipmentResponse _EquipmentResponse = await __EquipmentManager.CreateAsync(model.ToRequest());
+                EquipmentResponse _EquipmentResponse = await __EquipmentManager.CreateAsync(__Mapper.Map<CreateEquipmentRequest>(model));
 
                 if (_EquipmentResponse.Success)
                 {
@@ -94,7 +89,7 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
             }
             else
             {
-                IList<EquipmentResponse> _EquipmentResponses = await __EquipmentManager.BulkCreateAsync(model.ToRequest());
+                IList<EquipmentResponse> _EquipmentResponses = await __EquipmentManager.BulkCreateAsync(__Mapper.Map<CreateEquipmentRequest>(model));
 
                 if (_EquipmentResponses == null || _EquipmentResponses?.Count <= 0)
                 {
@@ -118,7 +113,7 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
                 return RedirectToAction("Index", new { errorMessage = _Response.Message });
             }
 
-            return View("Edit", _Response.ToUpdateViewModel());
+            return View("Edit", __Mapper.Map<UpdateEquipmentViewModel>(_Response));
         }
 
         [Authorize(Policy = "EditEquipmentPolicy")]
@@ -165,8 +160,8 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
 
             DetailsViewModel _Model = new DetailsViewModel
             {
-                Equipment = (await __EquipmentManager.GetAsync(equipmentUID)).ToViewModel(),
-                Notes = (await __NoteManager.GetAsync(equipmentUID)).ToViewModel()
+                Equipment = __Mapper.Map<EquipmentViewModel>(await __EquipmentManager.GetAsync(equipmentUID)),
+                Notes = __Mapper.Map<IList<NoteViewModel>>(await __NoteManager.GetAsync(equipmentUID))
             };
 
             return View("Details", _Model);
@@ -183,8 +178,8 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
 
             DetailsViewModel _Model = new DetailsViewModel
             {
-                Equipment = (await __EquipmentManager.GetAsync(equipmentUID)).ToViewModel(),
-                Notes = (await __NoteManager.GetAsync(equipmentUID)).ToViewModel()
+                Equipment = __Mapper.Map<EquipmentViewModel>(await __EquipmentManager.GetAsync(equipmentUID)),
+                Notes = __Mapper.Map<IList<NoteViewModel>>(await __NoteManager.GetAsync(equipmentUID))
             };
 
             return PartialView("_DetailsModal", _Model);
@@ -201,7 +196,7 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
                 return RedirectToAction("DetailsView", "Equipment", new { Area = "Equipment", errorMessage = _Response.Message });
             }
 
-            return PartialView("_DeleteEquipment", _Response.ToViewModel());
+            return PartialView("_DeleteEquipment", __Mapper.Map<EquipmentViewModel>(_Response));
         }
 
         [Authorize(Policy = "DeleteEquipmentPolicy")]

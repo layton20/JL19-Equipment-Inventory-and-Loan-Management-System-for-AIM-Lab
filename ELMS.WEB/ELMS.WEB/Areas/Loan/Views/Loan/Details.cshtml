@@ -50,8 +50,8 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label asp-for="StartTimestamp" class="bmd-label-floating"></label>
-                                        <input type="date" class="form-control" asp-for="StartTimestamp">
+                                        <label asp-for="FromTimestamp" class="bmd-label-floating"></label>
+                                        <input type="date" class="form-control" asp-for="FromTimestamp">
                                     </div>
 
                                     <div class="form-group">
@@ -161,5 +161,10 @@
     <environment exclude="Development">
         <script src="~/js/areas/loan/details.min.js"></script>
     </environment>
+    <script>
+        $(document).ready(function () {
+            $('#navItemLoans').addClass('active');
+        });
+    </script>
     <partial name="Components/_NotificationSnippet" />
 }

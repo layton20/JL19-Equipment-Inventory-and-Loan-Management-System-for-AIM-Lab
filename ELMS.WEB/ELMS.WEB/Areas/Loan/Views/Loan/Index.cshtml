@@ -16,7 +16,7 @@
                     <i class="fas fa-sign-in-alt"></i>
                 </div>
                 <div class="card-category">Active Loans</div>
-                <h2 class="card-title">@Model.Loans.Where(x => x.AcceptedTermsAndConditions && x.ExpiryTimestamp > DateTime.Now && x.StartTimestamp < DateTime.Now).Count()</h2>
+                <h2 class="card-title">@Model.Loans.Where(x => x.AcceptedTermsAndConditions && x.ExpiryTimestamp > DateTime.Now && x.FromTimestamp < DateTime.Now).Count()</h2>
             </div>
             <div class="card-footer">
                 <div class="stats">
@@ -145,7 +145,7 @@
                                             }
                                         </ul>
                                     </td>
-                                    <td>@loan.StartTimestamp</td>
+                                    <td>@loan.FromTimestamp</td>
                                     <td>@loan.ExpiryTimestamp</td>
                                     <td>@loan.Status.ToString()</td>
                                     <td>@loan.AcceptedTermsAndConditions</td>

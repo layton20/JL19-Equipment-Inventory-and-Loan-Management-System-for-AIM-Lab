@@ -1,4 +1,5 @@
-﻿using ELMS.WEB.Adapters.Email;
+﻿using AutoMapper;
+using ELMS.WEB.Entities.Email;
 using ELMS.WEB.Helpers;
 using ELMS.WEB.Managers.Email.Interface;
 using ELMS.WEB.Models.Base.Response;
@@ -6,23 +7,26 @@ using ELMS.WEB.Models.Email.Request;
 using ELMS.WEB.Models.Email.Response;
 using ELMS.WEB.Repositories.Email.Interface;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ELMS.WEB.Managers.Email.Concrete
 {
     public class EmailTemplateManager : IEmailTemplateManager
     {
+        private readonly IMapper __Mapper;
         private readonly IEmailTemplateRepository __EmailTemplateRepository;
         private const string MODEL_NAME = "Email template";
 
-        public EmailTemplateManager(IEmailTemplateRepository emailTemplateRepository)
+        public EmailTemplateManager(IMapper mapper, IEmailTemplateRepository emailTemplateRepository)
         {
+            __Mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             __EmailTemplateRepository = emailTemplateRepository ?? throw new ArgumentNullException(nameof(emailTemplateRepository));
         }
 
         public async Task<EmailTemplateResponse> CreateAsync(CreateEmailTemplateRequest request)
         {
-            EmailTemplateResponse _Response = (await __EmailTemplateRepository.CreateAsync(request.ToEntity())).ToResponse();
+            EmailTemplateResponse _Response = __Mapper.Map<EmailTemplateResponse>(await __EmailTemplateRepository.CreateAsync(__Mapper.Map<EmailTemplateEntity>(request)));
 
             if (_Response == null)
             {
@@ -51,7 +55,7 @@ namespace ELMS.WEB.Managers.Email.Concrete
         {
             EmailTemplatesResponse _Response = new EmailTemplatesResponse
             {
-                EmailTemplates = (await __EmailTemplateRepository.GetAsync()).ToResponse()
+                EmailTemplates = __Mapper.Map<IList<EmailTemplateResponse>>(await __EmailTemplateRepository.GetAsync())
             };
 
             if (_Response.EmailTemplates == null)
@@ -65,7 +69,7 @@ namespace ELMS.WEB.Managers.Email.Concrete
 
         public async Task<EmailTemplateResponse> GetByUIDAsync(Guid uid)
         {
-            EmailTemplateResponse _Response = (await __EmailTemplateRepository.GetByUIDAsync(uid)).ToResponse();
+            EmailTemplateResponse _Response = __Mapper.Map<EmailTemplateResponse>(await __EmailTemplateRepository.GetByUIDAsync(uid));
 
             if (_Response == null)
             {
@@ -83,7 +87,7 @@ namespace ELMS.WEB.Managers.Email.Concrete
         {
             BaseResponse _Response = new BaseResponse();
 
-            if (request.UID == Guid.Empty || !await __EmailTemplateRepository.UpdateAsync(request.ToEntity()))
+            if (request.UID == Guid.Empty || !await __EmailTemplateRepository.UpdateAsync(__Mapper.Map<EmailTemplateEntity>(request)))
             {
                 _Response.Success = false;
                 _Response.Message = $"Error: ${GlobalConstants.ERROR_ACTION_PREFIX} update ${MODEL_NAME}.";

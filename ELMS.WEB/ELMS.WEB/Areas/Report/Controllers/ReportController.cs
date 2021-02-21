@@ -1,14 +1,11 @@
-﻿using ELMS.WEB.Adapters.Loan;
-using ELMS.WEB.Areas.Report.Data;
+﻿using ELMS.WEB.Areas.Report.Data;
 using ELMS.WEB.Areas.Report.Models;
-using ELMS.WEB.Helpers;
 using ELMS.WEB.Managers.Equipment.Interfaces;
 using ELMS.WEB.Managers.Loan.Interface;
 using ELMS.WEB.Models.Equipment.Response;
 using ELMS.WEB.Models.Loan.Response;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,7 +38,8 @@ namespace ELMS.WEB.Areas.Report.Controllers
             EquipmentValueReportViewModel _Model = new EquipmentValueReportViewModel();
 
             EquipmentListResponse _EquipmentList = await __EquipmentManager.GetAsync();
-            _Model.ReportItems = _EquipmentList?.Equipments?.Select(x => new EquipmentValueReportItemViewModel { 
+            _Model.ReportItems = _EquipmentList?.Equipments?.Select(x => new EquipmentValueReportItemViewModel
+            {
                 Name = x.Name,
                 SerialNumber = x.SerialNumber,
                 PurchasePrice = x.PurchasePrice,
@@ -60,7 +58,8 @@ namespace ELMS.WEB.Areas.Report.Controllers
             LoanHistoryViewModel _Model = new LoanHistoryViewModel();
 
             IList<LoanResponse> _Response = await __LoanManager.GetAsync();
-            _Model.Loans = _Response?.Select(x => new LoanHistoryItemViewModel {
+            _Model.Loans = _Response?.Select(x => new LoanHistoryItemViewModel
+            {
                 UID = x.UID,
                 CreatedTimestamp = x.CreatedTimestamp,
                 AmendedTimestamp = x.AmendedTimestamp,
@@ -154,7 +153,8 @@ namespace ELMS.WEB.Areas.Report.Controllers
                 Status = x.Status
             }).ToList();
 
-            return View("LoanHistoryReport", new LoanHistoryViewModel { 
+            return View("LoanHistoryReport", new LoanHistoryViewModel
+            {
                 Loans = _Loans,
                 Filter = filter
             });

@@ -85,7 +85,7 @@ namespace ELMS.WEB.Repositories.Equipment.Concrete
 
         public async Task<IEnumerable<EquipmentEntity>> GetAsync()
         {
-            return await __Context.Equipment.ToListAsync();
+            return await __Context.Equipment.OrderByDescending(x => x.CreatedTimestamp).ToListAsync();
         }
 
         public async Task<EquipmentEntity> GetAsync(Guid uid)

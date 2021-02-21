@@ -1,4 +1,5 @@
-﻿using ELMS.WEB.Adapters.Email;
+﻿using AutoMapper;
+using ELMS.WEB.Entities.Email;
 using ELMS.WEB.Helpers;
 using ELMS.WEB.Managers.Email.Interface;
 using ELMS.WEB.Models.Base.Response;
@@ -13,17 +14,19 @@ namespace ELMS.WEB.Managers.Email.Concrete
 {
     public class EmailScheduleParameterManager : IEmailScheduleParameterManager
     {
+        private readonly IMapper __Mapper;
         private readonly IEmailScheduleParameterRepository __EmailScheduleParameterRepository;
         private const string MODEL_NAME = "Email schedule parameter";
 
-        public EmailScheduleParameterManager(IEmailScheduleParameterRepository emailScheduleParameterRepository)
+        public EmailScheduleParameterManager(IMapper mapper, IEmailScheduleParameterRepository emailScheduleParameterRepository)
         {
+            __Mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             __EmailScheduleParameterRepository = emailScheduleParameterRepository ?? throw new ArgumentNullException(nameof(emailScheduleParameterRepository));
         }
 
         public async Task<EmailScheduleParameterResponse> CreateAsync(CreateEmailScheduleParameterRequest request)
         {
-            EmailScheduleParameterResponse _Response = (await __EmailScheduleParameterRepository.CreateAsync(request.ToEntity())).ToResponse();
+            EmailScheduleParameterResponse _Response = __Mapper.Map<EmailScheduleParameterResponse>(await __EmailScheduleParameterRepository.CreateAsync(__Mapper.Map<EmailScheduleParameterEntity>(request)));
 
             if (_Response == null)
             {
@@ -55,7 +58,7 @@ namespace ELMS.WEB.Managers.Email.Concrete
                 return null;
             }
 
-            return (await __EmailScheduleParameterRepository.GetAsync(scheduleUID)).ToResponse();
+            return __Mapper.Map<IList<EmailScheduleParameterResponse>>(await __EmailScheduleParameterRepository.GetAsync(scheduleUID));
         }
     }
 }

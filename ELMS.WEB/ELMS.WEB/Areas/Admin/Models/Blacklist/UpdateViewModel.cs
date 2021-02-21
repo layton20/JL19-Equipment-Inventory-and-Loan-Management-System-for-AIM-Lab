@@ -5,14 +5,19 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ELMS.WEB.Areas.Admin.Models.Blacklist
 {
-    public class DeleteBlacklistViewModel
+    public class UpdateViewModel
     {
         [Required]
         [NonDefaultGuid]
         public Guid UID { get; set; }
+        [Required]
+        [EmailAddress]
         public string Email { get; set; }
-        public string Reason { get; set; }
+        [Required]
         public BlacklistType Type { get; set; }
+        [Required]
+        public string Reason { get; set; }
+        [Required]
         public bool Active { get; set; }
     }
 }

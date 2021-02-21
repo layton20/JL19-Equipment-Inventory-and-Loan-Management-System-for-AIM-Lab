@@ -1,4 +1,4 @@
-﻿using ELMS.WEB.Adapters.Equipment;
+﻿using AutoMapper;
 using ELMS.WEB.Areas.Equipment.Models;
 using ELMS.WEB.Entities.Equipment;
 using ELMS.WEB.Helpers;
@@ -16,17 +16,19 @@ namespace ELMS.WEB.Managers.Equipment.Concrete
 {
     public class EquipmentManager : IEquipmentManager
     {
+        private readonly IMapper __Mapper;
         private readonly IEquipmentRepository __EquipmentRepository;
         private const string MODEL_NAME = "Equipment";
 
-        public EquipmentManager(IEquipmentRepository equipmentRepository)
+        public EquipmentManager(IMapper mapper, IEquipmentRepository equipmentRepository)
         {
+            __Mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             __EquipmentRepository = equipmentRepository ?? throw new ArgumentNullException(nameof(equipmentRepository));
         }
 
         public async Task<EquipmentResponse> CreateAsync(CreateEquipmentRequest request)
         {
-            EquipmentResponse _Response = (await __EquipmentRepository.CreateAsync(request.ToEntity())).ToResponse();
+            EquipmentResponse _Response = __Mapper.Map<EquipmentResponse>(await __EquipmentRepository.CreateAsync(__Mapper.Map<EquipmentEntity>(request)));
 
             if (_Response == null)
             {
@@ -40,9 +42,9 @@ namespace ELMS.WEB.Managers.Equipment.Concrete
 
         public async Task<IList<EquipmentResponse>> BulkCreateAsync(CreateEquipmentRequest request)
         {
-            IList<EquipmentEntity> _Entities = await __EquipmentRepository.BulkCreateAsync(request.ToEntity(), request.Quantity);
+            IList<EquipmentEntity> _Entities = await __EquipmentRepository.BulkCreateAsync(__Mapper.Map<EquipmentEntity>(request), request.Quantity);
 
-            return _Entities == null ? null : _Entities.ToResponse();
+            return _Entities == null ? null : __Mapper.Map<IList<EquipmentResponse>>(_Entities);
         }
 
         public async Task<BaseResponse> DeleteAsync(DeleteEquipmentViewModel model)
@@ -60,14 +62,14 @@ namespace ELMS.WEB.Managers.Equipment.Concrete
 
         public async Task<EquipmentResponse> GetAsync(Guid uid)
         {
-            EquipmentResponse _Response = (await __EquipmentRepository.GetAsync(uid)).ToResponse();
+            EquipmentResponse _Response = __Mapper.Map<EquipmentResponse>(await __EquipmentRepository.GetAsync(uid));
 
             if (_Response == null)
             {
                 return new EquipmentResponse
                 {
                     Success = false,
-                    Message = $"Error: ${GlobalConstants.ERROR_ACTION_PREFIX} get ${MODEL_NAME}."
+                    Message = $"{GlobalConstants.ERROR_ACTION_PREFIX} get {MODEL_NAME}."
                 };
             }
 
@@ -78,7 +80,7 @@ namespace ELMS.WEB.Managers.Equipment.Concrete
         {
             EquipmentListResponse _Response = new EquipmentListResponse
             {
-                Equipments = (await __EquipmentRepository.GetAsync()).ToList().ToResponse()
+                Equipments = __Mapper.Map<IList<EquipmentResponse>>((await __EquipmentRepository.GetAsync()))
             };
 
             return _Response;
@@ -88,7 +90,7 @@ namespace ELMS.WEB.Managers.Equipment.Concrete
         {
             EquipmentListResponse _Response = new EquipmentListResponse
             {
-                Equipments = (await __EquipmentRepository.GetAsync(uids)).ToResponse()
+                Equipments = __Mapper.Map<IList<EquipmentResponse>>(await __EquipmentRepository.GetAsync(uids))
             };
 
             return _Response;
@@ -98,7 +100,7 @@ namespace ELMS.WEB.Managers.Equipment.Concrete
         {
             BaseResponse _Response = new BaseResponse();
 
-            if (model.UID == Guid.Empty || !await __EquipmentRepository.UpdateAsync(model.ToEntity()))
+            if (model.UID == Guid.Empty || !await __EquipmentRepository.UpdateAsync(__Mapper.Map<EquipmentEntity>(model)))
             {
                 _Response.Success = false;
                 _Response.Message = $"{GlobalConstants.ERROR_ACTION_PREFIX} update {MODEL_NAME} details.";

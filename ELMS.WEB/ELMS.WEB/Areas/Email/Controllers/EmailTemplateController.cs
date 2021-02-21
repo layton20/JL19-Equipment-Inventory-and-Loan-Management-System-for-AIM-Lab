@@ -1,12 +1,14 @@
-﻿using ELMS.WEB.Adapters.Email;
+﻿using AutoMapper;
 using ELMS.WEB.Areas.Email.Models.EmailTemplate;
 using ELMS.WEB.Helpers;
 using ELMS.WEB.Managers.Email.Interface;
 using ELMS.WEB.Models.Base.Response;
+using ELMS.WEB.Models.Email.Request;
 using ELMS.WEB.Models.Email.Response;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -16,11 +18,13 @@ namespace ELMS.WEB.Areas.Email.Controllers
     [Area("Email")]
     public class EmailTemplateController : Controller
     {
+        private readonly IMapper __Mapper;
         private readonly IEmailTemplateManager __EmailTemplateManager;
         private readonly String ENTITY_NAME = "Email template";
 
-        public EmailTemplateController(IEmailTemplateManager emailTemplateManager)
+        public EmailTemplateController(IMapper mapper, IEmailTemplateManager emailTemplateManager)
         {
+            __Mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             __EmailTemplateManager = emailTemplateManager ?? throw new ArgumentNullException(nameof(emailTemplateManager));
         }
 
@@ -29,7 +33,7 @@ namespace ELMS.WEB.Areas.Email.Controllers
         {
             IndexViewModel _Model = new IndexViewModel
             {
-                EmailTemplates = (await __EmailTemplateManager.GetAsync()).EmailTemplates.ToViewModel()
+                EmailTemplates = __Mapper.Map<IList<EmailTemplateViewModel>>((await __EmailTemplateManager.GetAsync()).EmailTemplates)
             };
 
             return View("Index", _Model);
@@ -52,7 +56,7 @@ namespace ELMS.WEB.Areas.Email.Controllers
             }
 
             model.OwnerUID = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            EmailTemplateResponse _Response = await __EmailTemplateManager.CreateAsync(model.ToRequest());
+            EmailTemplateResponse _Response = await __EmailTemplateManager.CreateAsync(__Mapper.Map<CreateEmailTemplateRequest>(model));
 
             if (!_Response.Success)
             {
@@ -73,7 +77,7 @@ namespace ELMS.WEB.Areas.Email.Controllers
                 return Json(new { error = $"{GlobalConstants.ERROR_ACTION_PREFIX} find {ENTITY_NAME}" });
             }
 
-            return PartialView("_EditModal", _Response.ToViewModel());
+            return PartialView("_EditModal", __Mapper.Map<EmailTemplateViewModel>(_Response));
         }
 
         [HttpPost]
@@ -84,7 +88,7 @@ namespace ELMS.WEB.Areas.Email.Controllers
                 ViewData["ErrorMessage"] = "Invalid form submission";
             }
 
-            BaseResponse _Response = await __EmailTemplateManager.UpdateAsync(model.ToRequest());
+            BaseResponse _Response = await __EmailTemplateManager.UpdateAsync(__Mapper.Map<UpdateEmailTemplateRequest>(model));
 
             if (!_Response.Success)
             {
@@ -106,7 +110,7 @@ namespace ELMS.WEB.Areas.Email.Controllers
                 return await IndexAsync();
             }
 
-            return PartialView("_DeleteModal", _Response.ToViewModel());
+            return PartialView("_DeleteModal", __Mapper.Map<EmailTemplateViewModel>(_Response));
         }
 
         [HttpPost]
@@ -132,7 +136,7 @@ namespace ELMS.WEB.Areas.Email.Controllers
         public async Task<IActionResult> DetailsModalAsync(Guid uid)
         {
             EmailTemplateResponse _Response = await __EmailTemplateManager.GetByUIDAsync(uid);
-            return PartialView("_DetailsModal", _Response.ToViewModel());
+            return PartialView("_DetailsModal", __Mapper.Map<EmailTemplateViewModel>(_Response));
         }
     }
 }
