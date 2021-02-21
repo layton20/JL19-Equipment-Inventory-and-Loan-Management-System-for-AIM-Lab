@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using ELMS.WEB.Enums.General;
 
 namespace ELMS.WEB.Areas.Loan.Controllers
 {
@@ -65,25 +66,90 @@ namespace ELMS.WEB.Areas.Loan.Controllers
                 ViewData["SuccessMessage"] = successMessage;
             }
 
-            IndexViewModel _Model = new IndexViewModel();
-
-            foreach (LoanResponse loan in await __LoanManager.GetAsync())
+            IndexViewModel _Model = new IndexViewModel
             {
-                LoanViewModel _LoanViewModel = __Mapper.Map<LoanViewModel>(loan);
-                _LoanViewModel.Loaner = await __UserRepository.GetAsync(loan.LoanerEmail);
-                _LoanViewModel.Loanee = await __UserRepository.GetAsync(loan.LoaneeEmail);
-
-                IList<Guid> _EquipmentUIDs = (await __LoanEquipmentManager.GetAsync(loan.UID)).Select(x => x.EquipmentUID).ToList();
-
-                if (_EquipmentUIDs != null && _EquipmentUIDs.Count > 0)
-                {
-                    _LoanViewModel.EquipmentList = __Mapper.Map<IList<Equipment.Models.EquipmentViewModel>>((await __EquipmentManager.GetAsync(_EquipmentUIDs)).Equipments);
-                }
-
-                _Model.Loans.Add(_LoanViewModel);
-            }
+                Filter = new LoanFilterViewModel(),
+                Loans = __Mapper.Map<IList<LoanViewModel>>(await __LoanManager.GetAsync())
+            };
 
             return View("Index", _Model);
+        }
+
+        [Authorize(Policy = "ViewLoanPolicy")]
+        [HttpPost]
+        public async Task<IActionResult> FilterIndexAsync(LoanFilterViewModel filter)
+        {
+            IList<LoanViewModel> _FilteredLoans = await FilterAsync(await __LoanManager.GetAsync(), filter);
+
+            IndexViewModel _Model = new IndexViewModel
+            {
+                Filter = filter,
+                Loans = _FilteredLoans
+            };
+
+            return View("Index", _Model);
+        }
+
+        private async Task<IList<LoanViewModel>> FilterAsync(IList<LoanResponse> loans, LoanFilterViewModel filter)
+        {
+            if (loans.Count <= 0)
+            {
+                return new List<LoanViewModel>();
+            }
+
+            if (!string.IsNullOrWhiteSpace(filter.LoaneeEmail))
+            {
+                loans = loans.Where(x => x.LoaneeEmail.ToUpper().Contains(filter.LoaneeEmail.ToUpper())).ToList();
+            }
+
+            if (!string.IsNullOrWhiteSpace(filter.LoanerEmail))
+            {
+                loans = loans.Where(x => x.LoanerEmail.ToUpper().Contains(filter.LoanerEmail.ToUpper())).ToList();
+            }
+
+            if (filter.FromTimestamp != null)
+            {
+                loans = loans.Where(x => x.FromTimestamp >= filter.FromTimestamp).ToList();
+            }
+
+            if (filter.ExpiryTimestamp != null)
+            {
+                loans = loans.Where(x => x.FromTimestamp <= filter.ExpiryTimestamp).ToList();
+            }
+
+            if (filter.CreatedFromTimestamp != null)
+            {
+                loans = loans.Where(x => x.CreatedTimestamp >= filter.CreatedFromTimestamp).ToList();
+            }
+
+            if (filter.CreatedToTimestamp != null)
+            {
+                loans = loans.Where(x => x.CreatedTimestamp <= filter.CreatedToTimestamp).ToList();
+            }
+
+            if (filter.AcceptedTermsAndConditions != BooleanFilter.All)
+            {
+                loans = (filter.AcceptedTermsAndConditions == BooleanFilter.True) ?
+                    loans.Where(x => x.AcceptedTermsAndConditions).ToList() :
+                    loans.Where(x => !x.AcceptedTermsAndConditions).ToList();
+            }
+
+            if (filter.FromTimestamp != null)
+            {
+                loans = loans.Where(x => x.FromTimestamp >= filter.FromTimestamp).ToList();
+            }
+
+            if (filter.ExpiryTimestamp != null)
+            {
+                loans = loans.Where(x => x.ExpiryTimestamp <= filter.ExpiryTimestamp).ToList();
+            }
+
+            if (filter.Statuses != null && filter.Statuses?.Count > 0)
+            {
+                loans = loans.Where(x => filter.Statuses.Contains(x.Status)).ToList();
+            }
+
+            return __Mapper.Map<IList<LoanViewModel>>(loans);
         }
 
         [HttpGet]

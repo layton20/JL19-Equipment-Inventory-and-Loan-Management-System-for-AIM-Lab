@@ -67,7 +67,7 @@
                         <div class="form-group col-sm-12 col-md-9">
                             <label asp-for="Filter.AcceptedTermsAndConditions"></label>
                             <br />
-                            @foreach (var item in Html.GetEnumSelectList<ELMS.WEB.Areas.Report.Data.BooleanFilter>().ToList())
+                            @foreach (var item in Html.GetEnumSelectList<ELMS.WEB.Enums.General.BooleanFilter>().ToList())
                             {
                                 <div class="form-check form-check-inline form-check-radio">
                                     <label class="form-check-label">

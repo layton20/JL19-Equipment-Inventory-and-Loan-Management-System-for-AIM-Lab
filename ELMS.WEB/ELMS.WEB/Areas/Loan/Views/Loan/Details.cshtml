@@ -118,30 +118,28 @@
                                 }
                             </div>
                             <div class="tab-pane" id="tabHistory">
-                                <div class="table-responsive">
-                                    <table class="display table datatable responsive" cellspacing="0" width="100%">
-                                        <thead>
-                                            <tr>
-                                                <th>Loan ID</th>
-                                                <th>Loaned by</th>
-                                                <th>Loaned to</th>
-                                                <th>From</th>
-                                                <th>To</th>
-                                                <th>Extensions Applied</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>@Guid.NewGuid()</td>
-                                                <td>Joanna Lumsden</td>
-                                                <td>Johnny Le</td>
-                                                <td>@DateTime.Now</td>
-                                                <td>@DateTime.Now</td>
-                                                <td><a href="#">3 (Show me as a modal)</a></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+                                <table class="display table datatable responsive" cellspacing="0" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th class="th-description">Loan ID</th>
+                                            <th class="th-description">Loaned by</th>
+                                            <th class="th-description">Loaned to</th>
+                                            <th class="th-description">From</th>
+                                            <th class="th-description">To</th>
+                                            <th class="th-description">Extensions Applied</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="td-name">@Guid.NewGuid()</td>
+                                            <td class="td-name">Joanna Lumsden</td>
+                                            <td class="td-name">Johnny Le</td>
+                                            <td class="td-name">@DateTime.Now</td>
+                                            <td class="td-name">@DateTime.Now</td>
+                                            <td class="td-name"><a href="#">3 (Show me as a modal)</a></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                             <div class="tab-pane" id="tabSettings">
                                 <a class="deleteEquipment btn btn-danger text-white" data-url="/Equipment/Equipment/DeleteModal" data-uid="@Model.UID">Force end loan</a>

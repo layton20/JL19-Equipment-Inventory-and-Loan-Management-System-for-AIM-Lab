@@ -13,9 +13,6 @@ namespace ELMS.WEB.Areas.Loan.Models
 
         [Display(Name = "Loan Name")]
         public string Name { get; set; }
-
-        public IdentityUser Loaner { get; set; }
-        public IdentityUser Loanee { get; set; }
         public string LoanerEmail { get; set; }
         public string LoaneeEmail { get; set; }
 
