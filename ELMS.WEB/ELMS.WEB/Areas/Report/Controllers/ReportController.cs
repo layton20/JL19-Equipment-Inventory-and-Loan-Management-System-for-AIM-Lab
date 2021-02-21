@@ -63,7 +63,6 @@ namespace ELMS.WEB.Areas.Report.Controllers
 
             IList<LoanResponse> _Response = await __LoanManager.GetAsync();
 
-
             _Model.Loans = _Response?.Select(x => new LoanHistoryItemViewModel
             {
                 UID = x.UID,

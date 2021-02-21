@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using ELMS.WEB.Entities.Equipment;
 using ELMS.WEB.Entities.Loan;
 using ELMS.WEB.Enums.Loan;
 using ELMS.WEB.Helpers;

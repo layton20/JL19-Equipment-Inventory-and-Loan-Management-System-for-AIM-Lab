@@ -1,5 +1,7 @@
-﻿using ELMS.WEB.Areas.Loan.Models;
+﻿using AutoMapper;
+using ELMS.WEB.Areas.Loan.Models;
 using ELMS.WEB.Enums.Equipment;
+using ELMS.WEB.Enums.General;
 using ELMS.WEB.Helpers;
 using ELMS.WEB.Managers.Admin.Interfaces;
 using ELMS.WEB.Managers.Email.Interface;
@@ -18,8 +20,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
-using ELMS.WEB.Enums.General;
 
 namespace ELMS.WEB.Areas.Loan.Controllers
 {
@@ -60,7 +60,7 @@ namespace ELMS.WEB.Areas.Loan.Controllers
             if (!String.IsNullOrWhiteSpace(errorMessage))
             {
                 ViewData["ErrorMessage"] = errorMessage;
-            } 
+            }
             else if (!String.IsNullOrWhiteSpace(successMessage))
             {
                 ViewData["SuccessMessage"] = successMessage;
@@ -365,7 +365,6 @@ namespace ELMS.WEB.Areas.Loan.Controllers
             IList<Guid> _EquipmentUIDs = (await __LoanEquipmentManager.GetAsync(_Response.UID)).Select(x => x.EquipmentUID).ToList();
             if (_EquipmentUIDs != null && _EquipmentUIDs.Count > 0)
             {
-
                 _Model.EquipmentList = __Mapper.Map<IList<Equipment.Models.EquipmentViewModel>>((await __EquipmentManager.GetAsync(_EquipmentUIDs)).Equipments);
             }
 

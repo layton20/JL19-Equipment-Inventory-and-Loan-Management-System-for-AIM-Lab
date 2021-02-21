@@ -1,5 +1,4 @@
-﻿using ELMS.WEB.Areas.Equipment.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace ELMS.WEB.Areas.Loan.Models
 {
