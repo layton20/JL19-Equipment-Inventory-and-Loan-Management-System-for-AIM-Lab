@@ -120,7 +120,7 @@ namespace ELMS.WEB.Repositories.Equipment.Concrete
 
         public async Task<IList<EquipmentEntity>> GetAsync(IList<Guid> uids)
         {
-            return await __Context.Equipment.Where(x => uids.Contains(x.UID)).ToListAsync();
+            return await __Context.Equipment.Where(x => uids.Contains(x.UID)).OrderByDescending(x => x.CreatedTimestamp).ToListAsync();
         }
     }
 }

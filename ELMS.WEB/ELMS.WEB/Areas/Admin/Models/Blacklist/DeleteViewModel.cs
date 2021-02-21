@@ -10,6 +10,7 @@ namespace ELMS.WEB.Areas.Admin.Models.Blacklist
         [Required]
         [NonDefaultGuid]
         public Guid UID { get; set; }
+
         public string Email { get; set; }
         public string Reason { get; set; }
         public BlacklistType Type { get; set; }

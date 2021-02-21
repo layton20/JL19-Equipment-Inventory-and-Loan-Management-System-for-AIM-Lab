@@ -5,5 +5,6 @@ namespace ELMS.WEB.Areas.Loan.Models
     public class IndexViewModel
     {
         public IList<LoanViewModel> Loans { get; set; } = new List<LoanViewModel>();
+        public LoanFilterViewModel Filter { get; set; } = new LoanFilterViewModel();
     }
 }

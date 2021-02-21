@@ -11,7 +11,7 @@
 <div class="row">
     <div class="col-md-4">
         <div class="card card-stats">
-            <div class="card-header card-header-icon card-header-success">
+            <div class="card-header card-header-icon card-header-primary">
                 <div class="card-icon">
                     <i class="fas fa-sign-in-alt"></i>
                 </div>
@@ -63,102 +63,137 @@
 
 <div class="row">
     <div class="col-12">
-        <div class="row">
-            <div class="col-12">
-                <div class="d-flex pull-left">
-                    <div class="dropdown">
-                        <button class="btn btn-primary dropdown-toggle" id="statusDropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">All Statuses</button>
-                        <div class="dropdown-menu" aria-labelledby="statusDropdownMenuButton">
-                            <a class="dropdown-item" href="javascript:;">All Statuses</a>
-                            <a class="dropdown-item" href="javascript:;">Available</a>
-                            <a class="dropdown-item" href="javascript:;">On Loan</a>
-                            <a class="dropdown-item" href="javascript:;">Unavailable</a>
-                        </div>
-                    </div>
-                    <div class="ml-1">
-                        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseFilters" aria-expanded="false" aria-controls="collapseFilters">
-                            <i class="material-icons mr-2">filter_alt</i>Show Filters
-                        </button>
-                    </div>
-                </div>
-                <div class="pull-right">
-                    @if ((await AuthorizationService.AuthorizeAsync(User, "CreateLoanPolicy")).Succeeded)
-                    {
-                        <a class="create btn btn-success text-white" asp-area="Loan" asp-controller="Loan" asp-action="CreateView">New Loan</a>
-                    }
-                    <div class="btn-group">
-                        <a class="btn btn-primary"><i class="text-white fas fa-th-large"></i></a>
-                        <a class="btn btn-primary active"><i class="text-white fas fa-bars"></i></a>
-                    </div>
+        <div class="row justify-content-between align-items-center col-12 m-0 p-0">
+            <div>
+                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseFilters" aria-expanded="false" aria-controls="collapseFilters">
+                    <i class="material-icons mr-2">filter_alt</i>Show Filters
+                </button>
+            </div>
+            <div>
+                @if ((await AuthorizationService.AuthorizeAsync(User, "CreateLoanPolicy")).Succeeded)
+                {
+                    <a class="create btn btn-success text-white" asp-area="Loan" asp-controller="Loan" asp-action="CreateView">New Loan</a>
+                }
+                <div class="btn-group">
+                    <a class="btn btn-primary"><i class="text-white fas fa-th-large"></i></a>
+                    <a class="btn btn-primary active"><i class="text-white fas fa-bars"></i></a>
                 </div>
             </div>
-            <div class="col-12 collapse" id="collapseFilters">
-                <div class="card my-3">
-                    <div class="card-header">
-                        HIDDEN FILTERS
-                    </div>
+        </div>
+        <div class="collapse" id="collapseFilters">
+            <div class="card mb-3 mt-0">
+                <div class="card-header">
+                    <h4 class="card-title">Filters</h4>
+                </div>
+                <div class="card-body">
+                    <form asp-area="Loan" asp-controller="Loan" asp-action="FilterIndex">
+                        <div class="form-row">
+                            <div class="form-group col-sm-12 col-md-3">
+                                <label asp-for="Filter.LoanerEmail"></label>
+                                <input type="text" class="form-control" asp-for="Filter.LoanerEmail" />
+                            </div>
+
+                            <div class="form-group col-sm-12 col-md-3">
+                                <label asp-for="Filter.LoaneeEmail"></label>
+                                <input type="text" class="form-control" asp-for="Filter.LoaneeEmail" />
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-sm-6 col-md-3">
+                                <label asp-for="Filter.FromTimestamp"></label>
+                                <input type="date" class="form-control" asp-for="Filter.FromTimestamp" />
+                            </div>
+                            <div class="form-group col-sm-6 col-md-3">
+                                <label asp-for="Filter.ExpiryTimestamp"></label>
+                                <input type="date" class="form-control" asp-for="Filter.ExpiryTimestamp" />
+                            </div>
+
+                            <div class="form-group col-sm-6 col-md-3">
+                                <label asp-for="Filter.CreatedFromTimestamp"></label>
+                                <input type="date" class="form-control" asp-for="Filter.CreatedFromTimestamp" />
+                            </div>
+                            <div class="form-group col-sm-6 col-md-3">
+                                <label asp-for="Filter.CreatedToTimestamp"></label>
+                                <input type="date" class="form-control" asp-for="Filter.CreatedToTimestamp" />
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-sm-12 col-md-3">
+                                <label class="w-100" asp-for="Filter.Statuses"></label>
+                                <select class="selectpicker" data-width="100%" data-style="select-with-transition" multiple asp-for="Filter.Statuses" asp-items="Html.GetEnumSelectList<ELMS.WEB.Enums.Loan.Status>()">
+                                </select>
+                            </div>
+                            <div class="form-group col-sm-12 col-md-9">
+                                <label asp-for="Filter.AcceptedTermsAndConditions"></label>
+                                <br />
+                                @foreach (var item in Html.GetEnumSelectList<ELMS.WEB.Enums.General.BooleanFilter>().ToList())
+                                {
+                                    <div class="form-check form-check-inline form-check-radio">
+                                        <label class="form-check-label">
+                                            <input class="form-check-input" type="radio" asp-for="Filter.AcceptedTermsAndConditions" value="@item.Text">
+                                            <label>@item.Text</label>
+                                            <span class="circle">
+                                                <span class="check"></span>
+                                            </span>
+                                        </label>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Filter Loan</button>
+                        <a class="btn btn-white" asp-area="Loan" asp-controller="Loan" asp-action="Index">Reset Filters</a>
+                    </form>
                 </div>
             </div>
         </div>
 
         <div class="card mt-0">
             <div class="card-header card-header-primary card-header-icon">
-                <h4 class="card-title">All Loans</h4>
+                <h4 class="card-title">Loan Table</h4>
             </div>
             <div class="card-body">
-                <div class="table-responsive">
-                    <table class="display table datatable responsive hover compact" cellspacing="0" width="100%">
-                        <thead>
+                <table class="display table datatable responsive hover compact" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th class="th-description font-weight-normal">Reference ID</th>
+                            <th class="th-description font-weight-normal">Loaner</th>
+                            <th class="th-description font-weight-normal">Loanee</th>
+                            <th class="th-description font-weight-normal">Equipment</th>
+                            <th class="th-description font-weight-normal">Start Date</th>
+                            <th class="th-description font-weight-normal">End Date</th>
+                            <th class="th-description font-weight-normal">Status</th>
+                            <th class="th-description font-weight-normal">Accepted TAC <i class="fas fa-info-circle text-gray" data-toggle="tooltip" data-placement="left" title="If the user has accepted the Terms and Conditions of the loan."></i></th>
+                            <th class="th-description font-weight-normal">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var loan in Model.Loans.OrderByDescending(x => x.CreatedTimestamp))
+                        {
                             <tr>
-                                <th class="th-description font-weight-normal">Loan name</th>
-                                <th class="th-description font-weight-normal">Loaner</th>
-                                <th class="th-description font-weight-normal">Loanee</th>
-                                <th class="th-description font-weight-normal">Equipment</th>
-                                <th class="th-description font-weight-normal">Start Date</th>
-                                <th class="th-description font-weight-normal">End Date</th>
-                                <th class="th-description font-weight-normal">Status</th>
-                                <th class="th-description font-weight-normal">Terms and Conditions Accepted</th>
-                                <th class="th-description font-weight-normal">Actions</th>
+                                <td>@loan.UID</td>
+                                <td>@(loan.LoanerEmail ?? "Not found")</td>
+                                <td>@(loan.LoaneeEmail ?? "Not found")</td>
+                                <td>
+                                    <ul class="list-group list-group-flush">
+                                        @foreach (var equipment in Model.Loans.FirstOrDefault(x => x.UID == loan.UID).EquipmentList)
+                                        {
+                                            <li class="list-group-item"><a class="loanDetailsModal text-primary" data-url="/Equipment/Equipment/DetailsModal" data-uid="@equipment.UID" style="cursor: pointer">@equipment.Name</a></li>
+                                        }
+                                    </ul>
+                                </td>
+                                <td>@loan.FromTimestamp</td>
+                                <td>@loan.ExpiryTimestamp</td>
+                                <td>@loan.Status.ToString()</td>
+                                <td>@loan.AcceptedTermsAndConditions</td>
+                                <td class="td-actions">
+                                    <a class="btn btn-primary text-white" asp-area="Loan" asp-controller="Loan" asp-action="DetailsView" asp-route-uid="@loan.UID"><i class="fas fa-eye p-1"></i></a>
+                                    <a class="forceComplete btn btn-danger text-white" data-url="/Loan/Loan/ForceCompleteModal" data-uid="@loan.UID" data-toggle="tooltip" data-placement="left" title="Manually end loan"><i class="fas fa-backward p-1"></i></a>
+                                    <a class="deleteEquipment btn btn-danger text-white" asp-area="Loan" asp-controller="Loan" asp-action="AcceptTermsAndConditionsView" asp-route-loanuid="@loan.UID"><span class="p-1">TAC</span></a>
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var loan in Model.Loans.OrderByDescending(x => x.CreatedTimestamp))
-                            {
-                                <tr>
-                                    <td>@loan.Name</td>
-                                    <td>@(loan?.Loaner?.Email ?? "Not Found")</td>
-                                    <td>
-                                        @if (loan.Loanee == null)
-                                        {
-                                            @loan.LoaneeEmail
-                                        }
-                                        else
-                                        {
-                                            @loan.Loanee.Email
-                                        }
-                                    </td>
-                                    <td>
-                                        <ul class="list-group list-group-flush">
-                                            @foreach (var equipment in Model.Loans.FirstOrDefault(x => x.UID == loan.UID).EquipmentList)
-                                            {
-                                                <li class="list-group-item"><a class="loanDetailsModal text-primary" data-url="/Equipment/Equipment/DetailsModal" data-uid="@equipment.UID" style="cursor: pointer">@equipment.Name</a></li>
-                                            }
-                                        </ul>
-                                    </td>
-                                    <td>@loan.FromTimestamp</td>
-                                    <td>@loan.ExpiryTimestamp</td>
-                                    <td>@loan.Status.ToString()</td>
-                                    <td>@loan.AcceptedTermsAndConditions</td>
-                                    <td class="td-actions">
-                                        <a class="btn btn-primary text-white" asp-area="Loan" asp-controller="Loan" asp-action="DetailsView" asp-route-uid="@loan.UID"><i class="fas fa-eye p-1"></i></a>
-                                        <a class="forceComplete btn btn-danger text-white" data-url="/Loan/Loan/ForceCompleteModal" data-uid="@loan.UID" data-toggle="tooltip" data-placement="left" title="Manually end loan"><i class="fas fa-backward p-1"></i></a>
-                                        <a class="deleteEquipment btn btn-danger text-white" asp-area="Loan" asp-controller="Loan" asp-action="AcceptTermsAndConditionsView" asp-route-loanuid="@loan.UID"><span class="p-1">TAC</span></a>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
+                        }
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

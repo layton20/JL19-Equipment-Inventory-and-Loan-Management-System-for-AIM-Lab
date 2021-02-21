@@ -19,17 +19,8 @@
         {
             <tr>
                 <td>@loan.Name</td>
-                <td>@loan.Loaner.Email</td>
-                <td>
-                    @if (loan.Loanee == null)
-                    {
-                        @loan.LoaneeEmail
-                    }
-                    else
-                    {
-                        @loan.Loanee.Email
-                    }
-                </td>
+                <td>@(loan.LoanerEmail ?? "Not found")</td>
+                <td>@(loan.LoaneeEmail ?? "Not found")</td>
                 <td>
                     <ul class="list-group list-group-flush">
                         @foreach (var equipment in Model.FirstOrDefault(x => x.UID == loan.UID).EquipmentList)

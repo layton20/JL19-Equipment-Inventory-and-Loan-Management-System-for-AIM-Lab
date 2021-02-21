@@ -4,11 +4,14 @@ using ELMS.WEB.Enums.Loan;
 using ELMS.WEB.Helpers;
 using ELMS.WEB.Managers.Loan.Interface;
 using ELMS.WEB.Models.Base.Response;
+using ELMS.WEB.Models.Equipment.Response;
 using ELMS.WEB.Models.Loan.Request;
 using ELMS.WEB.Models.Loan.Response;
+using ELMS.WEB.Repositories.Equipment.Interfaces;
 using ELMS.WEB.Repositories.Loan.Interface;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ELMS.WEB.Managers.Loan.Concrete
@@ -17,12 +20,16 @@ namespace ELMS.WEB.Managers.Loan.Concrete
     {
         private readonly IMapper __Mapper;
         private readonly ILoanRepository __LoanRepository;
+        private readonly IEquipmentRepository __EquipmentRepository;
+        private readonly ILoanEquipmentRepository __LoanEquipmentRepository;
         private const string MODEL_NAME = "Loan";
 
-        public LoanManager(IMapper mapper, ILoanRepository loanRepository)
+        public LoanManager(IMapper mapper, ILoanRepository loanRepository, IEquipmentRepository equipmentRepository, ILoanEquipmentRepository loanEquipmentRepository)
         {
             __Mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             __LoanRepository = loanRepository ?? throw new ArgumentNullException(nameof(loanRepository));
+            __EquipmentRepository = equipmentRepository ?? throw new ArgumentNullException(nameof(equipmentRepository));
+            __LoanEquipmentRepository = loanEquipmentRepository ?? throw new ArgumentNullException(nameof(loanEquipmentRepository));
         }
 
         public async Task<BaseResponse> AcceptTermsAndConditions(Guid uid)
@@ -89,7 +96,15 @@ namespace ELMS.WEB.Managers.Loan.Concrete
 
         public async Task<IList<LoanResponse>> GetAsync()
         {
-            return __Mapper.Map<IList<LoanResponse>>((await __LoanRepository.GetAsync()));
+            IList<LoanResponse> _LoanResponses = __Mapper.Map<IList<LoanResponse>>(await __LoanRepository.GetAsync());
+
+            foreach (LoanResponse response in _LoanResponses)
+            {
+                IList<Guid> _EquipmentUIDs = (await __LoanEquipmentRepository.GetAsync(response.UID)).Select(x => x.EquipmentUID).ToList();
+                response.EquipmentList = __Mapper.Map<IList<EquipmentResponse>>(await __EquipmentRepository.GetAsync(_EquipmentUIDs));
+            }
+
+            return _LoanResponses;
         }
 
         public async Task<IntResponse> GetCountByStatus(Status status)

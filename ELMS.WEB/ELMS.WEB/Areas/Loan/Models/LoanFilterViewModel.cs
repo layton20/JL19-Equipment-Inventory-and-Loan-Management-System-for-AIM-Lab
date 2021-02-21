@@ -4,12 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace ELMS.WEB.Areas.Report.Models
+namespace ELMS.WEB.Areas.Loan.Models
 {
-    public class LoanHistoryReportFilterViewModel
+    public class LoanFilterViewModel
     {
-        public string Name { get; set; }
-
         [Display(Name = "Loaner Email")]
         public string LoanerEmail { get; set; }
 

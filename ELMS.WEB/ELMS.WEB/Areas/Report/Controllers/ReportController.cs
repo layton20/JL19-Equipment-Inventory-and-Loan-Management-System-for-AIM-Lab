@@ -1,5 +1,7 @@
-﻿using ELMS.WEB.Areas.Report.Data;
+﻿using AutoMapper;
+using ELMS.WEB.Areas.Equipment.Models;
 using ELMS.WEB.Areas.Report.Models;
+using ELMS.WEB.Enums.General;
 using ELMS.WEB.Managers.Equipment.Interfaces;
 using ELMS.WEB.Managers.Loan.Interface;
 using ELMS.WEB.Models.Equipment.Response;
@@ -17,11 +19,13 @@ namespace ELMS.WEB.Areas.Report.Controllers
     [Area("Report")]
     public class ReportController : Controller
     {
+        private readonly IMapper __Mapper;
         private readonly IEquipmentManager __EquipmentManager;
         private readonly ILoanManager __LoanManager;
 
-        public ReportController(IEquipmentManager equipmentManager, ILoanManager loanManager)
+        public ReportController(IMapper mapper, IEquipmentManager equipmentManager, ILoanManager loanManager)
         {
+            __Mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             __EquipmentManager = equipmentManager ?? throw new ArgumentNullException(nameof(equipmentManager));
             __LoanManager = loanManager ?? throw new ArgumentNullException(nameof(loanManager));
         }
@@ -58,12 +62,13 @@ namespace ELMS.WEB.Areas.Report.Controllers
             LoanHistoryViewModel _Model = new LoanHistoryViewModel();
 
             IList<LoanResponse> _Response = await __LoanManager.GetAsync();
+
             _Model.Loans = _Response?.Select(x => new LoanHistoryItemViewModel
             {
                 UID = x.UID,
                 CreatedTimestamp = x.CreatedTimestamp,
                 AmendedTimestamp = x.AmendedTimestamp,
-                EquipmentList = x.EquipmentList ?? new List<Guid>(),
+                EquipmentList = __Mapper.Map<IList<EquipmentViewModel>>(x.EquipmentList),
                 ExpiryTimestamp = x.ExpiryTimestamp,
                 LoaneeEmail = x.LoaneeEmail,
                 LoanerEmail = x.LoanerEmail,
@@ -143,7 +148,7 @@ namespace ELMS.WEB.Areas.Report.Controllers
                 UID = x.UID,
                 CreatedTimestamp = x.CreatedTimestamp,
                 AmendedTimestamp = x.AmendedTimestamp,
-                EquipmentList = x.EquipmentList ?? new List<Guid>(),
+                EquipmentList = __Mapper.Map<IList<EquipmentViewModel>>(x.EquipmentList),
                 ExpiryTimestamp = x.ExpiryTimestamp,
                 LoaneeEmail = x.LoaneeEmail,
                 LoanerEmail = x.LoanerEmail,

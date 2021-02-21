@@ -1,5 +1,6 @@
 ﻿using ELMS.WEB.Enums.Loan;
 using ELMS.WEB.Models.Base.Response;
+using ELMS.WEB.Models.Equipment.Response;
 using System;
 using System.Collections.Generic;
 
@@ -15,7 +16,7 @@ namespace ELMS.WEB.Models.Loan.Response
         public DateTime ExpiryTimestamp { get; set; }
         public Status Status { get; set; } = Status.Pending;
         public bool AcceptedTermsAndConditions { get; set; } = false;
-        public IList<Guid> EquipmentList { get; set; }
+        public IList<EquipmentResponse> EquipmentList { get; set; }
         public DateTime CreatedTimestamp { get; set; }
         public DateTime AmendedTimestamp { get; set; }
     }
