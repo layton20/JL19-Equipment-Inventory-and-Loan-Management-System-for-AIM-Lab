@@ -4,6 +4,7 @@ namespace ELMS.WEB.Areas.Equipment.Models
 {
     public class IndexViewModel
     {
-        public IList<EquipmentViewModel> Equipment { get; set; }
+        public IList<EquipmentViewModel> Equipment { get; set; } = new List<EquipmentViewModel>();
+        public FilterEquipmentViewModel Filter { get; set; } = new FilterEquipmentViewModel();
     }
 }

@@ -44,7 +44,7 @@
 
     <div class="col-md-4">
         <div class="card card-stats">
-            <div class="card-header card-header-icon card-header-danger">
+            <div class="card-header card-header-icon card-header-primary">
                 <div class="card-icon">
                     <i class="fas fa-warehouse"></i>
                 </div>
@@ -62,24 +62,13 @@
 
 <div class="row">
     <div class="col-12">
-        <div class="row justify-content-between align-items-center col-12">
-            <div class="d-flex pull-left">
-                <div class="dropdown">
-                    <button class="btn btn-primary dropdown-toggle" id="statusDropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">All Statuses</button>
-                    <div class="dropdown-menu" aria-labelledby="statusDropdownMenuButton">
-                        <a class="dropdown-item" href="javascript:;">All Statuses</a>
-                        <a class="dropdown-item" href="javascript:;">Available</a>
-                        <a class="dropdown-item" href="javascript:;">On Loan</a>
-                        <a class="dropdown-item" href="javascript:;">Unavailable</a>
-                    </div>
-                </div>
-                <div class="ml-1">
-                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseFilters" aria-expanded="false" aria-controls="collapseFilters">
-                        <i class="material-icons mr-2">filter_alt</i>Show Filters
-                    </button>
-                </div>
+        <div class="row justify-content-between align-items-center col-12 m-0 p-0">
+            <div>
+                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseFilters" aria-expanded="false" aria-controls="collapseFilters">
+                    <i class="material-icons mr-2">filter_alt</i>Show Filters
+                </button>
             </div>
-            <div class="pull-right">
+            <div>
                 @if ((await AuthorizationService.AuthorizeAsync(User, "CreateEquipmentPolicy")).Succeeded)
                 {
                     <a class="create btn btn-success text-white" data-url="/Equipment/Equipment/CreateModal">New Equipment</a>
@@ -90,9 +79,65 @@
                 </div>
             </div>
             <div class="col-12 p-0 collapse" id="collapseFilters">
-                <div class="card my-3">
+                <div class="card mt-0 mb-3">
                     <div class="card-header">
-                        HIDDEN FILTERS
+                        <h4 class="card-title">Filters</h4>
+                    </div>
+                    <div class="card-body">
+                        <form asp-area="Equipment" asp-controller="Equipment" asp-action="FilterIndex">
+                            <div class="form-row">
+                                <div class="form-group col-sm-12 col-md-3">
+                                    <label asp-for="Filter.Name"></label>
+                                    <input type="text" class="form-control" asp-for="Filter.Name" />
+                                </div>
+                                <div class="form-group col-sm-12 col-md-3">
+                                    <label asp-for="Filter.Description"></label>
+                                    <input type="text" class="form-control" asp-for="Filter.Description" />
+                                </div>
+                                <div class="form-group col-sm-12 col-md-3">
+                                    <label asp-for="Filter.SerialNumber"></label>
+                                    <input type="text" class="form-control" asp-for="Filter.SerialNumber" />
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-sm-6 col-md-3">
+                                    <label asp-for="Filter.PurchaseDateFrom"></label>
+                                    <input type="date" class="form-control" asp-for="Filter.PurchaseDateFrom" />
+                                </div>
+                                <div class="form-group col-sm-6 col-md-3">
+                                    <label asp-for="Filter.PurchaseDateTo"></label>
+                                    <input type="date" class="form-control" asp-for="Filter.PurchaseDateTo" />
+                                </div>
+
+                                <div class="form-group col-sm-6 col-md-3">
+                                    <label asp-for="Filter.WarrantyExpirationDateFrom"></label>
+                                    <input type="date" class="form-control" asp-for="Filter.WarrantyExpirationDateFrom" />
+                                </div>
+                                <div class="form-group col-sm-6 col-md-3">
+                                    <label asp-for="Filter.WarrantyExpirationDateTo"></label>
+                                    <input type="date" class="form-control" asp-for="Filter.WarrantyExpirationDateTo" />
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-sm-12 col-md-3">
+                                    <label asp-for="Filter.PurchasePriceFrom"></label>
+                                    <input type="text" class="form-control" asp-for="Filter.PurchasePriceFrom" />
+                                </div>
+                                <div class="form-group col-sm-12 col-md-3">
+                                    <label asp-for="Filter.PurchasePriceTo"></label>
+                                    <input type="text" class="form-control" asp-for="Filter.PurchasePriceTo" />
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-sm-12 col-md-3">
+                                    <label class="w-100" asp-for="Filter.Statuses"></label>
+                                    <select class="selectpicker" data-style="select-with-transition" multiple asp-for="Filter.Statuses" asp-items="Html.GetEnumSelectList<ELMS.WEB.Enums.Equipment.Status>()">
+                                    </select>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Filter Equipment</button>
+                            <a class="btn btn-white" asp-area="Equipment" asp-controller="Equipment" asp-action="Index">Reset Filters</a>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -100,7 +145,7 @@
 
         <div class="card mt-0">
             <div class="card-header card-header-primary card-header-icon">
-                <h4 class="card-title">All Equipment</h4>
+                <h4 class="card-title">Equipment Table</h4>
             </div>
             <div class="card-body">
                 <div class="table-responsive">

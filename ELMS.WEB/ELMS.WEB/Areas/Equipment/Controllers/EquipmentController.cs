@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -24,16 +25,14 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
         private readonly IEquipmentManager __EquipmentManager;
         private readonly INoteManager __NoteManager;
         private readonly IEmailScheduleManager __EmailScheduleManager;
-        private readonly IEmailScheduleParameterManager __EmailScheduleParameterManager;
         private readonly String ENTITY_NAME = "Equipment";
 
-        public EquipmentController(IMapper mapper, IEquipmentManager equipmentManager, INoteManager noteManager, IEmailScheduleManager emailScheduleManager, IEmailScheduleParameterManager emailScheduleParameterManager)
+        public EquipmentController(IMapper mapper, IEquipmentManager equipmentManager, INoteManager noteManager, IEmailScheduleManager emailScheduleManager)
         {
             __Mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             __EquipmentManager = equipmentManager ?? throw new ArgumentNullException(nameof(equipmentManager));
             __NoteManager = noteManager ?? throw new ArgumentNullException(nameof(noteManager));
             __EmailScheduleManager = emailScheduleManager ?? throw new ArgumentNullException(nameof(emailScheduleManager));
-            __EmailScheduleParameterManager = emailScheduleParameterManager ?? throw new ArgumentNullException(nameof(emailScheduleParameterManager));
         }
 
         [Authorize(Policy = "ViewEquipmentPolicy")]
@@ -50,10 +49,77 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
 
             IndexViewModel _Model = new IndexViewModel
             {
-                Equipment = __Mapper.Map<IList<EquipmentViewModel>>((await __EquipmentManager.GetAsync()).Equipments)
+                Equipment = __Mapper.Map<IList<EquipmentViewModel>>((await __EquipmentManager.GetAsync()).Equipments),
             };
 
             return View(_Model);
+        }
+
+        [Authorize(Policy = "ViewEquipmentPolicy")]
+        public async Task<IActionResult> FilterIndexAsync(FilterEquipmentViewModel filter)
+        {
+            if (filter == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            EquipmentListResponse _Equipment = await __EquipmentManager.GetAsync();
+
+            if (!string.IsNullOrWhiteSpace(filter.Name))
+            {
+                _Equipment.Equipments = _Equipment.Equipments.Where(x => x.Name.ToUpper().Contains(filter.Name.ToUpper())).ToList();
+            }
+
+            if (!string.IsNullOrWhiteSpace(filter.Description))
+            {
+                _Equipment.Equipments = _Equipment.Equipments.Where(x => x.Name.ToUpper().Contains(filter.Description.ToUpper())).ToList();
+            }
+
+            if (!string.IsNullOrWhiteSpace(filter.SerialNumber))
+            {
+                _Equipment.Equipments = _Equipment.Equipments.Where(x => x.Name.ToUpper().Contains(filter.SerialNumber.ToUpper())).ToList();
+            }
+
+            if (filter.PurchasePriceFrom >= 0)
+            {
+                _Equipment.Equipments = _Equipment.Equipments.Where(x => x.PurchasePrice >= filter.PurchasePriceFrom).ToList();
+            }
+
+            if (filter.PurchasePriceFrom <= double.MaxValue)
+            {
+                _Equipment.Equipments = _Equipment.Equipments.Where(x => x.PurchasePrice <= filter.PurchasePriceTo).ToList();
+            }
+
+            if (filter.PurchaseDateFrom != null)
+            {
+                _Equipment.Equipments = _Equipment.Equipments.Where(x => x.PurchaseDate >= filter.PurchaseDateFrom).ToList();
+            }
+
+            if (filter.PurchaseDateTo != null)
+            {
+                _Equipment.Equipments = _Equipment.Equipments.Where(x => x.PurchaseDate <= filter.PurchaseDateTo).ToList();
+            }
+
+            if (filter.WarrantyExpirationDateFrom != null)
+            {
+                _Equipment.Equipments = _Equipment.Equipments.Where(x => x.WarrantyExpirationDate >= filter.WarrantyExpirationDateFrom).ToList();
+            }
+
+            if (filter.WarrantyExpirationDateTo != null)
+            {
+                _Equipment.Equipments = _Equipment.Equipments.Where(x => x.WarrantyExpirationDate <= filter.WarrantyExpirationDateTo).ToList();
+            }
+
+            if (filter.Statuses != null && filter.Statuses?.Count > 0)
+            {
+                _Equipment.Equipments = _Equipment.Equipments.Where(x => filter.Statuses.Contains(x.Status)).ToList();
+            }
+
+            return View("Index", new IndexViewModel 
+            {
+                Filter = filter,
+                Equipment = __Mapper.Map<IList<EquipmentViewModel>>(_Equipment.Equipments)
+            });
         }
 
         [Authorize(Policy = "CreateEquipmentPolicy")]
