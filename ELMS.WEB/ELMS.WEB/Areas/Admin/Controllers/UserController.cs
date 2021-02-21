@@ -1,5 +1,4 @@
-﻿using ELMS.WEB.Adapters.Equipment;
-using ELMS.WEB.Adapters.Loan;
+﻿using AutoMapper;
 using ELMS.WEB.Areas.Admin.Data;
 using ELMS.WEB.Areas.Admin.Models.User;
 using ELMS.WEB.Entities.Admin;
@@ -27,6 +26,7 @@ namespace ELMS.WEB.Areas.Admin.Controllers
     [Area("Admin")]
     public class UserController : Controller
     {
+        private readonly IMapper __Mapper;
         private readonly UserManager<IdentityUser> __UserManager;
         private readonly ILoanManager __LoanManager;
         private readonly IUserRepository __UserRepository;
@@ -34,8 +34,9 @@ namespace ELMS.WEB.Areas.Admin.Controllers
         private readonly IEquipmentManager __EquipmentManager;
         private readonly string MODEL_NAME = "User";
 
-        public UserController(UserManager<IdentityUser> userManager, ILoanManager loanManager, IUserRepository userRepository, ILoanEquipmentManager loanEquipmentManager, IEquipmentManager equipmentManager)
+        public UserController(IMapper mapper, UserManager<IdentityUser> userManager, ILoanManager loanManager, IUserRepository userRepository, ILoanEquipmentManager loanEquipmentManager, IEquipmentManager equipmentManager)
         {
+            __Mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             __UserManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             __LoanManager = loanManager ?? throw new ArgumentNullException(nameof(loanManager));
             __UserRepository = userRepository;
@@ -74,10 +75,10 @@ namespace ELMS.WEB.Areas.Admin.Controllers
                 return Json(new { success = $"{GlobalConstants.ERROR_ACTION_PREFIX} find {MODEL_NAME}" });
             }
 
-            NsModelUser.DetailsViewModel _Model = new NsModelUser.DetailsViewModel
+            DetailsViewModel _Model = new DetailsViewModel
             {
                 User = _User,
-                Loans = (await __LoanManager.GetByUserAsync(_User.Email)).ToViewModel(),
+                Loans = __Mapper.Map<IList<Loan.Models.LoanViewModel>>(await __LoanManager.GetByUserAsync(_User.Email)),
                 Roles = await __UserManager.GetRolesAsync(_User)
             };
 
@@ -112,12 +113,12 @@ namespace ELMS.WEB.Areas.Admin.Controllers
 
             foreach (LoanResponse loan in await __LoanManager.GetByUserAsync(_User.Email))
             {
-                Loan.Models.LoanViewModel _LoanViewModel = loan.ToViewModel();
+                Loan.Models.LoanViewModel _LoanViewModel = __Mapper.Map<Loan.Models.LoanViewModel>(loan);
 
                 IList<Guid> _EquipmentUIDs = (await __LoanEquipmentManager.GetAsync(loan.UID)).Select(x => x.EquipmentUID).ToList();
                 if (_EquipmentUIDs != null && _EquipmentUIDs.Count > 0)
                 {
-                    _LoanViewModel.EquipmentList = (await __EquipmentManager.GetAsync(_EquipmentUIDs)).Equipments.ToViewModel();
+                    _LoanViewModel.EquipmentList = __Mapper.Map<IList<Equipment.Models.EquipmentViewModel>>((await __EquipmentManager.GetAsync(_EquipmentUIDs)).Equipments);
                 }
 
                 _Model.Loans.Add(_LoanViewModel);

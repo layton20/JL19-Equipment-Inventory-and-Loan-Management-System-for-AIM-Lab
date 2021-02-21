@@ -1,8 +1,9 @@
-﻿using ELMS.WEB.Adapters.Equipment;
+﻿using AutoMapper;
 using ELMS.WEB.Areas.Equipment.Models.Note;
 using ELMS.WEB.Helpers;
 using ELMS.WEB.Managers.Equipment.Interfaces;
 using ELMS.WEB.Models.Base.Response;
+using ELMS.WEB.Models.Equipment.Request;
 using ELMS.WEB.Models.Equipment.Response;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,12 +17,14 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
     [Area("Equipment")]
     public class NoteController : Controller
     {
+        private readonly IMapper __Mapper;
         private readonly INoteManager __NoteManager;
         private readonly IEquipmentManager __EquipmentManager;
         private readonly String ENTITY_NAME = "Note";
 
-        public NoteController(INoteManager noteManager, IEquipmentManager equipmentManager)
+        public NoteController(IMapper mapper, INoteManager noteManager, IEquipmentManager equipmentManager)
         {
+            __Mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             __NoteManager = noteManager ?? throw new ArgumentNullException(nameof(noteManager));
             __EquipmentManager = equipmentManager ?? throw new ArgumentNullException(nameof(noteManager));
         }
@@ -54,7 +57,7 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
                 return Json(new { error = $"{GlobalConstants.ERROR_ACTION_PREFIX} find {ENTITY_NAME}" });
             }
 
-            return PartialView("_EditNote", _Response.ToViewModel());
+            return PartialView("_EditNote", __Mapper.Map<NoteViewModel>(_Response));
         }
 
         [Authorize(Policy = "CreateNotePolicy")]
@@ -70,7 +73,7 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
             BaseResponse _Response = new BaseResponse();
             model.OwnerUID = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            _Response = await __NoteManager.CreateAsync(model.ToRequest());
+            _Response = await __NoteManager.CreateAsync(__Mapper.Map<CreateNoteRequest>(model));
 
             if (!_Response.Success)
             {
@@ -90,7 +93,7 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
                 ViewData["ErrorMessage"] = "Invalid form submission";
             }
 
-            BaseResponse _Response = await __NoteManager.UpdateAsync(model.ToRequest());
+            BaseResponse _Response = await __NoteManager.UpdateAsync(__Mapper.Map<UpdateNoteRequest>(model));
 
             if (!_Response.Success)
             {
@@ -115,7 +118,7 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
                 return Json(new { error = $"{GlobalConstants.ERROR_ACTION_PREFIX} find {ENTITY_NAME}." });
             }
 
-            return PartialView("_DeleteNote", _Response.ToViewModel());
+            return PartialView("_DeleteNote", __Mapper.Map<NoteViewModel>(_Response));
         }
 
         [Authorize(Policy = "DeleteNotePolicy")]

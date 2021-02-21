@@ -1,4 +1,5 @@
-﻿using ELMS.WEB.Adapters.Admin;
+﻿using AutoMapper;
+using ELMS.WEB.Entities.Admin;
 using ELMS.WEB.Helpers;
 using ELMS.WEB.Managers.Admin.Interfaces;
 using ELMS.WEB.Models.Admin.Request;
@@ -14,17 +15,19 @@ namespace ELMS.WEB.Managers.Admin.Concrete
 {
     public class BlacklistManager : IBlacklistManager
     {
+        private readonly IMapper __Mapper;
         private readonly IBlacklistRepository __BlacklistRepository;
         private const string MODEL_NAME = "Blacklist";
 
-        public BlacklistManager(IBlacklistRepository blacklistRepository)
+        public BlacklistManager(IMapper mapper, IBlacklistRepository blacklistRepository)
         {
+            __Mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             __BlacklistRepository = blacklistRepository ?? throw new ArgumentNullException(nameof(blacklistRepository));
         }
 
         public async Task<BlacklistResponse> CreateAsync(CreateBlacklistRequest request)
         {
-            BlacklistResponse _Response = (await __BlacklistRepository.CreateAsync(request.ToEntity())).ToResponse();
+            BlacklistResponse _Response = __Mapper.Map<BlacklistResponse>(await __BlacklistRepository.CreateAsync(__Mapper.Map<BlacklistEntity>(request)));
 
             if (_Response == null)
             {
@@ -61,14 +64,14 @@ namespace ELMS.WEB.Managers.Admin.Concrete
 
         public async Task<IList<BlacklistResponse>> GetAsync(string email)
         {
-            return (await __BlacklistRepository.GetAsync(email)).ToResponse();
+            return __Mapper.Map<IList<BlacklistResponse>>(await __BlacklistRepository.GetAsync(email));
         }
 
         public async Task<BaseResponse> UpdateAsync(UpdateBlacklistRequest request)
         {
             BaseResponse _Response = new BaseResponse();
 
-            if (!await __BlacklistRepository.UpdateAsync(request.ToEntity()))
+            if (!await __BlacklistRepository.UpdateAsync(__Mapper.Map<BlacklistEntity>(request)))
             {
                 _Response.Success = false;
                 _Response.Message = $"{GlobalConstants.ERROR_ACTION_PREFIX} update {MODEL_NAME}.";
@@ -83,12 +86,12 @@ namespace ELMS.WEB.Managers.Admin.Concrete
 
         public async Task<IList<BlacklistResponse>> GetAsync()
         {
-            return (await __BlacklistRepository.GetAsync()).ToResponse();
+            return __Mapper.Map<IList<BlacklistResponse>>(await __BlacklistRepository.GetAsync());
         }
 
         public async Task<BlacklistResponse> GetByUIDAsync(Guid uid)
         {
-            return (await __BlacklistRepository.GetByUIDAsync(uid)).ToResponse();
+            return __Mapper.Map<BlacklistResponse>(await __BlacklistRepository.GetByUIDAsync(uid));
         }
     }
 }

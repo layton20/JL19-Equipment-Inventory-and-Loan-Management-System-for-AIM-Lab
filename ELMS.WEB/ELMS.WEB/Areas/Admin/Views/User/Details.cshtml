@@ -47,12 +47,24 @@
                     <div class="col-sm-12 col-md-10 border-left">
                         <div class="tab-content tab-space pt-2">
                             <div class="tab-pane active" id="tabDetails">
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item"><p class="mb-0"><strong>ID: </strong>@Model.User.Id</p></li>
-                                    <li class="list-group-item"><p class="mb-0"><strong>Email: </strong>@Model.User.Email</p></li>
-                                    <li class="list-group-item"><p class="mb-0"><strong>Normalised Email: </strong>@Model.User.NormalizedEmail</p></li>
-                                    <li class="list-group-item"><p class="mb-0"><strong>Email Verified: </strong>@Model.User.EmailConfirmed</p></li>
-                                </ul>
+                                <table class="display table datatable-details responsive hover compact">
+                                    <thead>
+                                        <tr>
+                                            <th class="th-description">Reference</th>
+                                            <th class="th-description">Email</th>
+                                            <th class="th-description">Normalised Email</th>
+                                            <th class="th-description">Verified Email?</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="td-name">@Model.User.Id</td>
+                                            <td class="td-name">@Model.User.Email</td>
+                                            <td class="td-name">@Model.User.NormalizedEmail</td>
+                                            <td class="td-name">@Model.User.EmailConfirmed</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                             <div class="tab-pane" id="tabLoans">
                                 <table class="display table datatable responsive hover compact" cellspacing="0" width="100%">
@@ -75,7 +87,7 @@
                                         {
                                             <tr>
                                                 <td>@loan.Name</td>
-                                                <td>@loan.Loaner.Email</td>
+                                                <td>@loan.LoanerEmail</td>
                                                 <td>
                                                     <ul class="list-group list-group-flush">
                                                         @foreach (var equipment in Model.Loans.FirstOrDefault(x => x.UID == loan.UID).EquipmentList)
@@ -84,13 +96,13 @@
                                                         }
                                                     </ul>
                                                 </td>
-                                                <td>@loan.StartTimestamp</td>
+                                                <td>@loan.FromTimestamp</td>
                                                 <td>@loan.ExpiryTimestamp</td>
                                                 <td>@loan.Status.ToString()</td>
                                                 <td class="td-actions">
-                                                    <a class="btn btn-primary text-white" asp-area="Loan" asp-controller="Loan" asp-action="DetailsView" asp-route-uid="@loan.UID"><i class="fas fa-eye p-1"></i></a>
-                                                    <a class="deleteEquipment btn btn-danger text-white" href="#" data-toggle="tooltip" data-placement="left" title="Manually end loan"><i class="fas fa-backward p-1"></i></a>
-                                                    <a class="deleteEquipment btn btn-danger text-white" asp-area="Loan" asp-controller="Loan" asp-action="AcceptTermsAndConditionsView" asp-route-loanuid="@loan.UID"><span class="p-1">TAC</span></a>
+                                                    <a class="btn btn-primary text-white m-1" asp-area="Loan" asp-controller="Loan" asp-action="DetailsView" asp-route-uid="@loan.UID"><i class="fas fa-eye p-1"></i></a>
+                                                    <a class="deleteEquipment btn btn-danger text-white m-1" href="#" data-toggle="tooltip" data-placement="left" title="Manually end loan"><i class="fas fa-backward p-1"></i></a>
+                                                    <a class="deleteEquipment btn btn-danger text-white m-1" asp-area="Loan" asp-controller="Loan" asp-action="AcceptTermsAndConditionsView" asp-route-loanuid="@loan.UID"><span class="p-1">TAC</span></a>
                                                 </td>
                                             </tr>
                                         }
@@ -156,6 +168,12 @@
                     }
                 }
             });
+        });
+
+        $('.datatable-details').DataTable({
+            searching: false,
+            paging: false,
+            info: false
         });
     </script>
     <partial name="Components/_NotificationSnippet" />

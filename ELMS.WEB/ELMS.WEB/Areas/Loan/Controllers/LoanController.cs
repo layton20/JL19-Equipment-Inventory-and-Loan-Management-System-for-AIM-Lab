@@ -18,9 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ELMS.WEB.Adapters.Loan;
-using ELMS.WEB.Adapters.Equipment;
-using ELMS.WEB.Adapters.Admin;
+using AutoMapper;
 
 namespace ELMS.WEB.Areas.Loan.Controllers
 {
@@ -28,6 +26,7 @@ namespace ELMS.WEB.Areas.Loan.Controllers
     [Area("Loan")]
     public class LoanController : Controller
     {
+        private readonly IMapper __Mapper;
         private readonly ILoanManager __LoanManager;
         private readonly IEquipmentManager __EquipmentManager;
         private readonly IUserRepository __UserRepository;
@@ -38,11 +37,12 @@ namespace ELMS.WEB.Areas.Loan.Controllers
         private readonly UserManager<IdentityUser> __UserManager;
         private readonly string ENTITY_NAME = "Loan";
 
-        public LoanController(ILoanManager loanManager, IEquipmentManager equipmentManager, IUserRepository userRepository,
+        public LoanController(IMapper mapper, ILoanManager loanManager, IEquipmentManager equipmentManager, IUserRepository userRepository,
             ILoanEquipmentManager loanEquipmentManager, IEmailScheduleManager emailScheduleManager,
             IApplicationEmailSender emailSender, IBlacklistManager blacklistManager,
             UserManager<IdentityUser> userManager)
         {
+            __Mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             __LoanManager = loanManager ?? throw new ArgumentNullException(nameof(loanManager));
             __EquipmentManager = equipmentManager ?? throw new ArgumentNullException(nameof(equipmentManager));
             __UserRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
@@ -69,7 +69,7 @@ namespace ELMS.WEB.Areas.Loan.Controllers
 
             foreach (LoanResponse loan in await __LoanManager.GetAsync())
             {
-                LoanViewModel _LoanViewModel = LoanAdapter.ToViewModel(loan);
+                LoanViewModel _LoanViewModel = __Mapper.Map<LoanViewModel>(loan);
                 _LoanViewModel.Loaner = await __UserRepository.GetAsync(loan.LoanerEmail);
                 _LoanViewModel.Loanee = await __UserRepository.GetAsync(loan.LoaneeEmail);
 
@@ -77,7 +77,7 @@ namespace ELMS.WEB.Areas.Loan.Controllers
 
                 if (_EquipmentUIDs != null && _EquipmentUIDs.Count > 0)
                 {
-                    _LoanViewModel.EquipmentList = EquipmentAdapter.ToViewModel((await __EquipmentManager.GetAsync(_EquipmentUIDs)).Equipments);
+                    _LoanViewModel.EquipmentList = __Mapper.Map<IList<Equipment.Models.EquipmentViewModel>>((await __EquipmentManager.GetAsync(_EquipmentUIDs)).Equipments);
                 }
 
                 _Model.Loans.Add(_LoanViewModel);
@@ -102,9 +102,9 @@ namespace ELMS.WEB.Areas.Loan.Controllers
 
             CreateLoanViewModel _Model = new CreateLoanViewModel
             {
-                EquipmentSelectList = EquipmentAdapter.ToViewModel((await __EquipmentManager.GetAsync()).Equipments.Where(x => x.Status == Status.Available && !_ExcludeEquipment.Contains(x.UID)).ToList()),
+                EquipmentSelectList = __Mapper.Map<IList<Equipment.Models.EquipmentViewModel>>((await __EquipmentManager.GetAsync()).Equipments.Where(x => x.Status == Status.Available && !_ExcludeEquipment.Contains(x.UID))),
                 UserSelectList = await __UserRepository.GetAsync(),
-                Blacklists = BlacklistAdapter.ToViewModel((await __BlacklistManager.GetAsync()))
+                Blacklists = __Mapper.Map<IList<Admin.Models.Blacklist.BlacklistViewModel>>(await __BlacklistManager.GetAsync())
             };
 
             return View("CreateLoan", _Model);
@@ -125,9 +125,10 @@ namespace ELMS.WEB.Areas.Loan.Controllers
                 }
                 _ExcludeEquipment = _ExcludeEquipment.Distinct().ToList();
 
-                model.EquipmentSelectList = EquipmentAdapter.ToViewModel((await __EquipmentManager.GetAsync()).Equipments.Where(x => x.Status == Status.Available && !_ExcludeEquipment.Contains(x.UID)).ToList());
+                model.EquipmentSelectList = __Mapper.Map<IList<Equipment.Models.EquipmentViewModel>>((await __EquipmentManager.GetAsync()).Equipments.Where(x => x.Status == Status.Available && !_ExcludeEquipment.Contains(x.UID)));
                 model.UserSelectList = await __UserRepository.GetAsync();
-                model.Blacklists = BlacklistAdapter.ToViewModel((await __BlacklistManager.GetAsync()));
+                model.Blacklists = __Mapper.Map<IList<Admin.Models.Blacklist.BlacklistViewModel>>(await __BlacklistManager.GetAsync());
+
                 return View("CreateLoan", model);
             }
 
@@ -137,9 +138,9 @@ namespace ELMS.WEB.Areas.Loan.Controllers
                 ExpiryTimestamp = model.ExpiryTimestamp,
                 FromTimestamp = model.FromTimestamp,
                 LoaneeEmailAddress = model.LoaneeEmailAddress,
-                SelectedEquipmentList = EquipmentAdapter.ToViewModel((await __EquipmentManager.GetAsync(model.SelectedEquipment)).Equipments),
+                SelectedEquipmentList = __Mapper.Map<IList<Equipment.Models.EquipmentViewModel>>((await __EquipmentManager.GetAsync(model.SelectedEquipment)).Equipments),
                 LoanerEmailAddress = __UserManager.GetUserAsync(HttpContext.User).Result.Email,
-                Blacklists = BlacklistAdapter.ToViewModel((await __BlacklistManager.GetAsync(model.LoaneeEmailAddress)).Where(x => x.Type == Enums.Admin.BlacklistType.Loan).ToList())
+                Blacklists = __Mapper.Map<IList<Admin.Models.Blacklist.BlacklistViewModel>>((await __BlacklistManager.GetAsync(model.LoaneeEmailAddress)).Where(x => x.Type == Enums.Admin.BlacklistType.Loan))
             };
 
             return View("ConfirmationLoan", _Model);
@@ -162,9 +163,9 @@ namespace ELMS.WEB.Areas.Loan.Controllers
 
                 CreateLoanViewModel _CreateLoanViewModel = new CreateLoanViewModel
                 {
-                    EquipmentSelectList = EquipmentAdapter.ToViewModel((await __EquipmentManager.GetAsync()).Equipments.Where(x => x.Status == Status.Available && !_ExcludeEquipment.Contains(x.UID)).ToList()),
+                    EquipmentSelectList = __Mapper.Map<IList<Equipment.Models.EquipmentViewModel>>((await __EquipmentManager.GetAsync()).Equipments.Where(x => x.Status == Status.Available && !_ExcludeEquipment.Contains(x.UID))),
                     UserSelectList = await __UserRepository.GetAsync(),
-                    Blacklists = BlacklistAdapter.ToViewModel(await __BlacklistManager.GetAsync())
+                    Blacklists = __Mapper.Map<IList<Admin.Models.Blacklist.BlacklistViewModel>>(await __BlacklistManager.GetAsync())
                 };
 
                 ModelState.AddModelError("Error", "Unable to create Loan");
@@ -172,7 +173,7 @@ namespace ELMS.WEB.Areas.Loan.Controllers
             }
 
             model.LoanerEmailAddress = __UserManager.GetUserAsync(HttpContext.User).Result.Email;
-            LoanResponse _Response = await __LoanManager.CreateAsync(LoanAdapter.ToRequest(model));
+            LoanResponse _Response = await __LoanManager.CreateAsync(__Mapper.Map<CreateLoanRequest>(model));
 
             if (!_Response.Success)
             {
@@ -201,11 +202,11 @@ namespace ELMS.WEB.Areas.Loan.Controllers
                 return Json("Page not found");
             }
 
-            LoanViewModel _LoanViewModel = LoanAdapter.ToViewModel(_Response);
+            LoanViewModel _LoanViewModel = __Mapper.Map<LoanViewModel>(_Response);
             IList<Guid> _EquipmentUIDs = (await __LoanEquipmentManager.GetAsync(_Response.UID)).Select(x => x.EquipmentUID).ToList();
             if (_EquipmentUIDs != null && _EquipmentUIDs.Count > 0)
             {
-                _LoanViewModel.EquipmentList = EquipmentAdapter.ToViewModel((await __EquipmentManager.GetAsync(_EquipmentUIDs)).Equipments);
+                _LoanViewModel.EquipmentList = __Mapper.Map<IList<Equipment.Models.EquipmentViewModel>>((await __EquipmentManager.GetAsync(_EquipmentUIDs)).Equipments);
             }
 
             if (_Response.AcceptedTermsAndConditions)
@@ -267,11 +268,11 @@ namespace ELMS.WEB.Areas.Loan.Controllers
                 ViewData["ErrorMessage"] = errorMessage;
             }
 
-            LoanViewModel _Model = LoanAdapter.ToViewModel((await __LoanManager.GetByUIDAsync(uid)));
+            LoanViewModel _Model = __Mapper.Map<LoanViewModel>(await __LoanManager.GetByUIDAsync(uid));
             IList<Guid> _EquipmentUIDs = (await __LoanEquipmentManager.GetAsync(_Model.UID)).Select(x => x.EquipmentUID).ToList();
             if (_EquipmentUIDs != null && _EquipmentUIDs.Count > 0)
             {
-                _Model.EquipmentList = EquipmentAdapter.ToViewModel((await __EquipmentManager.GetAsync(_EquipmentUIDs)).Equipments);
+                _Model.EquipmentList = __Mapper.Map<IList<Equipment.Models.EquipmentViewModel>>((await __EquipmentManager.GetAsync(_EquipmentUIDs)).Equipments);
             }
 
             return View("Details", _Model);
@@ -293,13 +294,13 @@ namespace ELMS.WEB.Areas.Loan.Controllers
                 return Json("Page not found");
             }
 
-            LoanViewModel _Model = LoanAdapter.ToViewModel(_Response);
+            LoanViewModel _Model = __Mapper.Map<LoanViewModel>(_Response);
 
             IList<Guid> _EquipmentUIDs = (await __LoanEquipmentManager.GetAsync(_Response.UID)).Select(x => x.EquipmentUID).ToList();
             if (_EquipmentUIDs != null && _EquipmentUIDs.Count > 0)
             {
 
-                _Model.EquipmentList = EquipmentAdapter.ToViewModel((await __EquipmentManager.GetAsync(_EquipmentUIDs)).Equipments);
+                _Model.EquipmentList = __Mapper.Map<IList<Equipment.Models.EquipmentViewModel>>((await __EquipmentManager.GetAsync(_EquipmentUIDs)).Equipments);
             }
 
             return View("LoanPreview", _Model);

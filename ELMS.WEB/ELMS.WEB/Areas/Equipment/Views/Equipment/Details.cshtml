@@ -1,5 +1,7 @@
 ﻿@model ELMS.WEB.Areas.Equipment.Models.DetailsViewModel
 @using System.Security.Claims;
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
 
 @{
     ViewData["Title"] = "Equipment Dashboard";
@@ -126,47 +128,60 @@
                                 </form>
                             </div>
                             <div class="tab-pane" id="tabNotes">
-                                <div class="mb-2">
-                                    <a class="createNote btn btn-primary text-white" data-url="/Equipment/Note/CreateModal" data-equipmentuid="@Model.Equipment.UID">New Note</a>
-                                </div>
-
-                                @if (Model.Notes.Count <= 0)
+                                @if ((await AuthorizationService.AuthorizeAsync(User, "CreateNotePolicy")).Succeeded)
                                 {
-                                    <div>
-                                        <p>No notes have been added to this equipment yet.</p>
+                                    <div class="mb-2">
+                                        <a class="createNote btn btn-primary text-white" data-url="/Equipment/Note/CreateModal" data-equipmentuid="@Model.Equipment.UID">New Note</a>
                                     </div>
                                 }
-                                else
+
+                                @if ((await AuthorizationService.AuthorizeAsync(User, "ViewNotePolicy")).Succeeded)
                                 {
-                                    <div class="list-group">
-                                        @foreach (var note in Model.Notes.OrderByDescending(x => x.CreatedTimestamp).ToList())
-                                        {
-                                            <div class="border list-group-item flex-column align-items-start text-dark mb-2">
-                                                <div class="d-flex w-100 justify-content-between">
-                                                    <div class="col-sm-12 col-md-8 p-0">
-                                                        <h5 class="mb-1">@note.Name</h5>
-                                                        <p class="mb-1">@note.Description</p>
-                                                        <small>Made by @(note.OwnerUID == Guid.Empty.ToString() ? "Anonymous" : note.Owner.Email)</small>
-                                                    </div>
-                                                    <div class="col-sm-12 col-md-4 p-0 text-right">
-                                                        <p class="mb-1">Created on @note.CreatedTimestamp</p>
-                                                        @if (note.OwnerUID == User.FindFirstValue(ClaimTypes.NameIdentifier))
-                                                        {
-                                                            <div class="btn-group">
-                                                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                                    Action
-                                                                </button>
-                                                                <div class="dropdown-menu">
-                                                                    <a class="editNote dropdown-item" href="javascript:;" data-url="/Equipment/Note/EditModal" data-uid="@note.UID">Edit</a>
-                                                                    <a class="deleteNote dropdown-item" href="javascript:;" data-url="/Equipment/Note/DeleteModal" data-uid="@note.UID">Delete</a>
+                                    @if (Model.Notes.Count <= 0)
+                                    {
+                                        <div>
+                                            <p>No notes have been added to this equipment yet.</p>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="list-group">
+                                            @foreach (var note in Model.Notes.OrderByDescending(x => x.CreatedTimestamp).ToList())
+                                            {
+                                                <div class="border list-group-item flex-column align-items-start text-dark mb-2">
+                                                    <div class="d-flex w-100 justify-content-between">
+                                                        <div class="col-sm-12 col-md-8 p-0">
+                                                            <h5 class="mb-1">@note.Name</h5>
+                                                            <p class="mb-1">@note.Description</p>
+                                                            <small>Made by @(note.OwnerUID == Guid.Empty.ToString() ? "Anonymous" : note.Owner.Email)</small>
+                                                        </div>
+                                                        <div class="col-sm-12 col-md-4 p-0 text-right">
+                                                            <p class="mb-1">Created on @note.CreatedTimestamp</p>
+                                                            @if (note.OwnerUID == User.FindFirstValue(ClaimTypes.NameIdentifier))
+                                                            {
+                                                                <div class="btn-group">
+                                                                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                        Action
+                                                                    </button>
+                                                                    <div class="dropdown-menu">
+                                                                        @if ((await AuthorizationService.AuthorizeAsync(User, "EditEquipmentPolicy")).Succeeded)
+                                                                        {
+                                                                            <a class="editNote dropdown-item" href="javascript:;" data-url="/Equipment/Note/EditModal" data-uid="@note.UID">Edit</a>
+                                                                        }
+
+                                                                        @if ((await AuthorizationService.AuthorizeAsync(User, "DeleteEquipmentPolicy")).Succeeded)
+                                                                        {
+                                                                            <a class="deleteNote dropdown-item" href="javascript:;" data-url="/Equipment/Note/DeleteModal" data-uid="@note.UID">Delete</a>
+                                                                        }
+                                                                    </div>
                                                                 </div>
-                                                            </div>
-                                                        }
+                                                            }
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        }
-                                    </div>
+                                            }
+                                        </div>
+                                    }
                                 }
                             </div>
                             <div class="tab-pane" id="tabHistory">

@@ -1,4 +1,4 @@
-﻿using ELMS.WEB.Adapters.Email;
+﻿using AutoMapper;
 using ELMS.WEB.Areas.Email.Models.EmailSchedule;
 using ELMS.WEB.Helpers;
 using ELMS.WEB.Managers.Email.Interface;
@@ -19,12 +19,14 @@ namespace ELMS.WEB.Areas.Email.Controllers
     public class EmailScheduleController : Controller
     {
         private readonly String ENTITY_NAME = "Email schedule";
+        private readonly IMapper __Mapper;
         private readonly IEmailScheduleManager __EmailScheduleManager;
         private readonly IEmailScheduleParameterManager __EmailScheduleParameterManager;
         private readonly IEmailTemplateManager __EmailTemplateManager;
 
-        public EmailScheduleController(IEmailScheduleManager emailScheduleManager, IEmailScheduleParameterManager emailScheduleParameterManager, IEmailTemplateManager emailTemplateManager)
+        public EmailScheduleController(IMapper mapper, IEmailScheduleManager emailScheduleManager, IEmailScheduleParameterManager emailScheduleParameterManager, IEmailTemplateManager emailTemplateManager)
         {
+            __Mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             __EmailScheduleManager = emailScheduleManager ?? throw new ArgumentNullException(nameof(emailScheduleManager));
             __EmailScheduleParameterManager = emailScheduleParameterManager ?? throw new ArgumentNullException(nameof(emailScheduleParameterManager));
             __EmailTemplateManager = emailTemplateManager ?? throw new ArgumentNullException(nameof(emailTemplateManager));
@@ -45,7 +47,7 @@ namespace ELMS.WEB.Areas.Email.Controllers
 
             IndexViewModel _Model = new IndexViewModel
             {
-                EmailSchedules = (await __EmailScheduleManager.GetAsync()).ToViewModel()
+                EmailSchedules = __Mapper.Map<IList<EmailScheduleViewModel>>(await __EmailScheduleManager.GetAsync())
             };
 
             return View(_Model);
@@ -54,7 +56,7 @@ namespace ELMS.WEB.Areas.Email.Controllers
         [HttpGet]
         public async Task<IActionResult> CreateModalAsync()
         {
-            IList<Models.EmailTemplate.EmailTemplateViewModel> _Templates = (await __EmailTemplateManager.GetAsync())?.EmailTemplates?.ToViewModel() ?? Enumerable.Empty<Models.EmailTemplate.EmailTemplateViewModel>().ToList();
+            IList<Models.EmailTemplate.EmailTemplateViewModel> _Templates = (__Mapper.Map<IList<Models.EmailTemplate.EmailTemplateViewModel>>((await __EmailTemplateManager.GetAsync())?.EmailTemplates)) ?? new List<Models.EmailTemplate.EmailTemplateViewModel>();
 
             if (_Templates.Count <= 0)
             {
@@ -75,7 +77,7 @@ namespace ELMS.WEB.Areas.Email.Controllers
             if (!ModelState.IsValid)
             {
                 ViewData["ErrorMessage"] = "Invalid form submission";
-                model.EmailTemplates = (await __EmailTemplateManager.GetAsync())?.EmailTemplates?.ToViewModel();
+                model.EmailTemplates = __Mapper.Map<IList<Models.EmailTemplate.EmailTemplateViewModel>>((await __EmailTemplateManager.GetAsync())?.EmailTemplates);
                 return PartialView("_CreateModal", model);
             }
 

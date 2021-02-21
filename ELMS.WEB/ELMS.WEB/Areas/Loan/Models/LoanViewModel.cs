@@ -20,7 +20,7 @@ namespace ELMS.WEB.Areas.Loan.Models
         public string LoaneeEmail { get; set; }
 
         [Display(Name = "Start Date")]
-        public DateTime StartTimestamp { get; set; }
+        public DateTime FromTimestamp { get; set; }
 
         [Display(Name = "Expiry Date")]
         public DateTime ExpiryTimestamp { get; set; }

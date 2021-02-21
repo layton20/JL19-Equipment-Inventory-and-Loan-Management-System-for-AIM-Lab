@@ -10,7 +10,7 @@ namespace ELMS.WEB.Models.Loan.Request
     {
         [Required]
         [MaxLength(50)]
-        public string Name { get; set; } = "Untitled";
+        public string Name { get; set; }
 
         [Required]
         [EmailAddress]
@@ -35,6 +35,6 @@ namespace ELMS.WEB.Models.Loan.Request
         public bool AcceptedTermsAndConditions { get; set; } = false;
 
         [Required]
-        public IList<Guid> EquipmentList { get; set; }
+        public IList<Guid> Equipment { get; set; }
     }
 }
