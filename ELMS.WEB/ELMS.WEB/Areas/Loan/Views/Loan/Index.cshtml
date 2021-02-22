@@ -192,9 +192,9 @@
                                         </a>
 
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                            <a class="dropdown-item" asp-area="Loan" asp-controller="Loan" asp-action="DetailsView" asp-route-uid="@loan.UID">Edit</a>
-                                            <a class="dropdown-item forceComplete" href="javascript:;" data-url="/Loan/Loan/ForceCompleteModal" data-uid="@loan.UID">Force Complete Loan</a>
-                                            <a class="dropdown-item" asp-area="Loan" asp-controller="Loan" asp-action="AcceptTermsAndConditionsView" asp-route-loanuid="@loan.UID">Terms & Conditions</a>
+                                            <a class="dropdown-item" asp-area="Loan" asp-controller="Loan" asp-action="DetailsView" asp-route-uid="@loan.UID"><i class="fas fa-pen mr-2"></i> Edit</a>
+                                            <a class="dropdown-item forceComplete" href="javascript:;" data-url="/Loan/Loan/ForceCompleteModal" data-uid="@loan.UID"><i class="fas fa-undo mr-2"></i> Force Complete Loan</a>
+                                            <a class="dropdown-item" asp-area="Loan" asp-controller="Loan" asp-action="AcceptTermsAndConditionsView" asp-route-loanuid="@loan.UID"><i class="fas fa-clipboard-check mr-2"></i> Terms & Conditions</a>
                                         </div>
                                     </div>
                                 </td>
