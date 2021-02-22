@@ -9,9 +9,6 @@ namespace ELMS.WEB.Areas.Loan.Models
         public Guid UID { get; set; }
 
         [Required]
-        public string Name { get; set; }
-
-        [Required]
         public bool AcceptedTermsAndConditions { get; set; }
 
         [Required]

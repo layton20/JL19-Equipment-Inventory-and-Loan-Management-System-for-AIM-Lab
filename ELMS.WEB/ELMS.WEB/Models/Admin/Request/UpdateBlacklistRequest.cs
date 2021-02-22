@@ -13,6 +13,6 @@ namespace ELMS.WEB.Models.Admin.Request
         public bool Active { get; set; }
 
         [Required]
-        public BlacklistType Type { get; set; }
+        public BlacklistTypeEnum Type { get; set; }
     }
 }

@@ -8,17 +8,14 @@ namespace ELMS.WEB.Models.Loan.Request
 {
     public class CreateLoanRequest
     {
-        [Required]
-        [MaxLength(50)]
-        public string Name { get; set; }
 
         [Required]
         [EmailAddress]
-        public string LoanerEmailAddress { get; set; }
+        public string LoanerEmail { get; set; }
 
         [Required]
         [EmailAddress]
-        public string LoaneeEmailAddress { get; set; }
+        public string LoaneeEmail { get; set; }
 
         [Required]
         [FutureOrTodayDate]

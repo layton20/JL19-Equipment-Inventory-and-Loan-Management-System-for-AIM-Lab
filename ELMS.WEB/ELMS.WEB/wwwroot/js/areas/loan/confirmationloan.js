@@ -41,6 +41,10 @@
         loadModalAjax($(this).data('url'), `equipmentUID=${$(this).data('uid')}`);
     });
 
+    $('.blacklistModal').click(function () {
+        loadModalAjax($(this).data('url'), `email=${$(this).data('email')}`);
+    });
+
     $(".datatable-confirm-loan").dataTable({
         searching: false,
         paging: false,

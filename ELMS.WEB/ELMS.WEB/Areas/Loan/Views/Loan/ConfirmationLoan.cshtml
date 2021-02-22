@@ -20,45 +20,10 @@
 <form asp-area="Loan" asp-controller="Loan" asp-action="Create">
     <div class="container-fluid">
         <div class="row">
-            @if (Model.Blacklists.Count > 0)
+            @if (Model.BlacklistState == ELMS.WEB.Enums.Admin.BlacklistStateEnum.ActiveBlacklist)
             {
-                <div class="card mb-0">
-                    <div class="card-header card-header-primary card-header-icon">
-                        <h4 class="card-title">Blacklists from Loans</h4>
-                        <p class="card-subtitle text-dark">This user has previously or currently is blacklisted. You can may still continue to create the loan if you wish to do so.</p>
-                    </div>
-                    <div class="card-body">
-                        <table class="display table datatable-export responsive hover compact" cellspacing="0" width="100%">
-                            <thead>
-                                <tr>
-                                    <td>Blacklisted User</td>
-                                    <td>Reason</td>
-                                    <td>Active</td>
-                                    <td>Created on</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var blacklist in Model.Blacklists)
-                                {
-                                    <tr>
-                                        <td>@blacklist.Email</td>
-                                        <td>@blacklist.Reason</td>
-                                        <td>
-                                            @if (blacklist.Active)
-                                            {
-                                                <span class="badge badge-danger">Active Blacklist</span>
-                                            }
-                                            else
-                                            {
-                                                <span class="badge badge-warning">Historic Blacklist</span>
-                                            }
-                                        </td>
-                                        <td>@blacklist.CreatedTimestamp</td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
+                <div class="col-12 text-center align-items-center mt-4">
+                    <p class="text-danger m-0"><strong>THIS USER IS BLACKLISTED FROM BEING ASSIGNED TO LOANS</strong></p>
                 </div>
             }
 
@@ -67,33 +32,29 @@
                     <table class="display table datatable-confirm-loan responsive hover compact" cellspacing="0" width="100%">
                         <thead>
                             <tr>
-                                <th>Loan Name</th>
                                 <th>Loaner</th>
                                 <th>Loanee</th>
                                 <th>Equipment</th>
-                                <th>Start Date</th>
-                                <th>End Date</th>
+                                <th>Scheduled From</th>
+                                <th>Scheduled To</th>
+                                <th>Additional Information</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <td>
-                                    @Model.Name
-                                    <input type="hidden" asp-for="Name" />
+                                    @Model.LoanerEmail
+                                    <input type="hidden" asp-for="LoanerEmail" />
                                 </td>
                                 <td>
-                                    @Model.LoanerEmailAddress
-                                    <input type="hidden" asp-for="LoanerEmailAddress" />
-                                </td>
-                                <td>
-                                    @Model.LoaneeEmailAddress
-                                    <input type="hidden" asp-for="LoaneeEmailAddress" />
+                                    @Model.LoaneeEmail
+                                    <input type="hidden" asp-for="LoaneeEmail" />
                                 </td>
                                 <td>
                                     <ul class="list-group list-group-flush">
                                         @foreach (var equipment in Model.SelectedEquipmentList)
                                         {
-                                            <li class="list-group-item">
+                                            <li class="list-group-item px-0">
                                                 <a class="equipmentDetailsModal text-primary" data-url="/Equipment/Equipment/DetailsModal" data-uid="@equipment.UID" style="cursor: pointer">@equipment.Name</a>
                                             </li>
                                         }
@@ -110,6 +71,14 @@
                                 <td>
                                     @Model.ExpiryTimestamp
                                     <input type="hidden" asp-for="ExpiryTimestamp" />
+                                </td>
+                                <td>
+                                    <ul class="pl-3 my-2">
+                                        @if (Model.BlacklistState != ELMS.WEB.Enums.Admin.BlacklistStateEnum.None)
+                                        {
+                                            <li><a class="blacklistModal text-primary" data-url="/Admin/Blacklist/DetailsModal" data-email="@Model.LoaneeEmail" style="cursor: pointer">View Blacklist History</a></li>
+                                        }
+                                    </ul>
                                 </td>
                             </tr>
                         </tbody>

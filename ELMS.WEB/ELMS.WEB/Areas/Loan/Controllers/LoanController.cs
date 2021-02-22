@@ -200,13 +200,12 @@ namespace ELMS.WEB.Areas.Loan.Controllers
 
             ConfirmationLoanViewModel _Model = new ConfirmationLoanViewModel
             {
-                Name = model.Name,
                 ExpiryTimestamp = model.ExpiryTimestamp,
                 FromTimestamp = model.FromTimestamp,
-                LoaneeEmailAddress = model.LoaneeEmailAddress,
+                LoaneeEmail = model.LoaneeEmailAddress,
                 SelectedEquipmentList = __Mapper.Map<IList<Equipment.Models.EquipmentViewModel>>((await __EquipmentManager.GetAsync(model.SelectedEquipment)).Equipments),
-                LoanerEmailAddress = __UserManager.GetUserAsync(HttpContext.User).Result.Email,
-                Blacklists = __Mapper.Map<IList<Admin.Models.Blacklist.BlacklistViewModel>>((await __BlacklistManager.GetAsync(model.LoaneeEmailAddress)).Where(x => x.Type == Enums.Admin.BlacklistType.Loan))
+                LoanerEmail = __UserManager.GetUserAsync(HttpContext.User).Result.Email,
+                BlacklistState = await __BlacklistManager.GetState(model.LoaneeEmailAddress)
             };
 
             return View("ConfirmationLoan", _Model);
@@ -238,7 +237,7 @@ namespace ELMS.WEB.Areas.Loan.Controllers
                 return View("CreateLoan", _CreateLoanViewModel);
             }
 
-            model.LoanerEmailAddress = __UserManager.GetUserAsync(HttpContext.User).Result.Email;
+            model.LoanerEmail = __UserManager.GetUserAsync(HttpContext.User).Result.Email;
             LoanResponse _Response = await __LoanManager.CreateAsync(__Mapper.Map<CreateLoanRequest>(model));
 
             if (!_Response.Success)
@@ -390,7 +389,6 @@ namespace ELMS.WEB.Areas.Loan.Controllers
             UpdateLoanRequest _Request = new UpdateLoanRequest
             {
                 UID = model.UID,
-                Name = model.Name,
                 FromTimestamp = model.StartTimestamp,
                 ExpiryTimestamp = model.ExpiryTimestamp,
                 AcceptedTermsAndConditions = model.AcceptedTermsAndConditions
@@ -439,7 +437,6 @@ namespace ELMS.WEB.Areas.Loan.Controllers
             ForceCompleteLoanViewModel _Model = new ForceCompleteLoanViewModel
             {
                 UID = uid,
-                Name = _Loan.Name,
                 LoaneeEmail = _Loan.LoaneeEmail,
                 StartTimestamp = _Loan.FromTimestamp,
                 ExpiryTimestamp = _Loan.ExpiryTimestamp

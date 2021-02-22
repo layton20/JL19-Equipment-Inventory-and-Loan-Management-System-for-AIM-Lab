@@ -17,6 +17,6 @@ namespace ELMS.WEB.Entities.Admin
         public bool Active { get; set; }
 
         [Required]
-        public BlacklistType Type { get; set; }
+        public BlacklistTypeEnum Type { get; set; }
     }
 }

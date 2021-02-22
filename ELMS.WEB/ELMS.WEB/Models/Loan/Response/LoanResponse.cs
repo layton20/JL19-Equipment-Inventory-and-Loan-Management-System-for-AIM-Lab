@@ -9,7 +9,6 @@ namespace ELMS.WEB.Models.Loan.Response
     public class LoanResponse : BaseResponse
     {
         public Guid UID { get; set; }
-        public string Name { get; set; } = "Untitled";
         public string LoanerEmail { get; set; }
         public string LoaneeEmail { get; set; }
         public DateTime FromTimestamp { get; set; } = DateTime.Now;

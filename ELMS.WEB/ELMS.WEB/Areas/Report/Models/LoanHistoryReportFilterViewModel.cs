@@ -8,7 +8,6 @@ namespace ELMS.WEB.Areas.Report.Models
 {
     public class LoanHistoryReportFilterViewModel
     {
-        public string Name { get; set; }
 
         [Display(Name = "Loaner Email")]
         public string LoanerEmail { get; set; }

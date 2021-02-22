@@ -3,7 +3,7 @@
 <table class="display table datatable responsive hover compact" cellspacing="0" width="100%">
     <thead>
         <tr>
-            <th class="th-description font-weight-normal">Loan name</th>
+            <th class="th-description font-weight-normal">Reference ID</th>
             <th class="th-description font-weight-normal">Loaner</th>
             <th class="th-description font-weight-normal">Loanee</th>
             <th class="th-description font-weight-normal">Equipment</th>
@@ -18,7 +18,7 @@
         @foreach (var loan in Model.OrderByDescending(x => x.CreatedTimestamp))
         {
             <tr>
-                <td>@loan.Name</td>
+                <td>@loan.UID</td>
                 <td>@(loan.LoanerEmail ?? "Not found")</td>
                 <td>@(loan.LoaneeEmail ?? "Not found")</td>
                 <td>

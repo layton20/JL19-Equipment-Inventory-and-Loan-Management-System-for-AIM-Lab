@@ -1,4 +1,5 @@
 ﻿using ELMS.WEB.Entities.Admin;
+using ELMS.WEB.Enums.Admin;
 using ELMS.WEB.Models;
 using ELMS.WEB.Repositories.Admin.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -63,6 +64,22 @@ namespace ELMS.WEB.Repositories.Admin.Concrete
         public async Task<BlacklistEntity> GetByUIDAsync(Guid uid)
         {
             return await __Context.Blacklists.FirstOrDefaultAsync(x => x.UID == uid);
+        }
+
+        public async Task<BlacklistStateEnum> GetState(string email)
+        {
+            IList<BlacklistEntity> _Blacklists = await __Context.Blacklists.Where(x => x.Email.ToUpper() == email.ToUpper()).ToListAsync();
+
+            if (_Blacklists == null || _Blacklists?.Count <= 0)
+            {
+                return BlacklistStateEnum.None;
+            }
+            else if (_Blacklists.Any(x => x.Active))
+            {
+                return BlacklistStateEnum.ActiveBlacklist;
+            }
+
+            return BlacklistStateEnum.HistoricBlacklist;
         }
 
         public async Task<bool> UpdateAsync(BlacklistEntity entity)

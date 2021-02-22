@@ -8,9 +8,6 @@ namespace ELMS.WEB.Entities.Loan
 {
     public class LoanEntity : BaseEntity
     {
-        [Required]
-        [MaxLength(50)]
-        public string Name { get; set; } = "Untitled";
 
         [Required]
         [EmailAddress]

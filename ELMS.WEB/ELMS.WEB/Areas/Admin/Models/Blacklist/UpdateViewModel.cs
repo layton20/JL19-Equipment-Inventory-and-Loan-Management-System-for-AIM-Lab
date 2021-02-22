@@ -16,7 +16,7 @@ namespace ELMS.WEB.Areas.Admin.Models.Blacklist
         public string Email { get; set; }
 
         [Required]
-        public BlacklistType Type { get; set; }
+        public BlacklistTypeEnum Type { get; set; }
 
         [Required]
         public string Reason { get; set; }

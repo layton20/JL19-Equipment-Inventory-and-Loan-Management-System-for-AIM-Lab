@@ -7,7 +7,7 @@ namespace ELMS.WEB.Models.Admin.Response
     {
         public string Email { get; set; }
         public string Reason { get; set; }
-        public BlacklistType Type { get; set; }
+        public BlacklistTypeEnum Type { get; set; }
         public bool Active { get; set; }
     }
 }
