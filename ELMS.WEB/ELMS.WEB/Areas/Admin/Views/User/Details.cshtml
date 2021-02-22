@@ -86,9 +86,9 @@
                                         @foreach (var loan in Model.Loans.OrderByDescending(x => x.CreatedTimestamp))
                                         {
                                             <tr>
-                                                <td>@loan.UID</td>
-                                                <td>@loan.LoanerEmail</td>
-                                                <td>
+                                                <td class="td-name">@loan.UID</td>
+                                                <td class="td-name">@loan.LoanerEmail</td>
+                                                <td class="td-name">
                                                     <ul class="list-group list-group-flush">
                                                         @foreach (var equipment in Model.Loans.FirstOrDefault(x => x.UID == loan.UID).EquipmentList)
                                                         {
@@ -96,13 +96,21 @@
                                                         }
                                                     </ul>
                                                 </td>
-                                                <td>@loan.FromTimestamp</td>
-                                                <td>@loan.ExpiryTimestamp</td>
-                                                <td>@loan.Status.ToString()</td>
-                                                <td class="td-actions">
-                                                    <a class="btn btn-primary text-white m-1" asp-area="Loan" asp-controller="Loan" asp-action="DetailsView" asp-route-uid="@loan.UID"><i class="fas fa-eye p-1"></i></a>
-                                                    <a class="deleteEquipment btn btn-danger text-white m-1" href="#" data-toggle="tooltip" data-placement="left" title="Manually end loan"><i class="fas fa-backward p-1"></i></a>
-                                                    <a class="deleteEquipment btn btn-danger text-white m-1" asp-area="Loan" asp-controller="Loan" asp-action="AcceptTermsAndConditionsView" asp-route-loanuid="@loan.UID"><span class="p-1">TAC</span></a>
+                                                <td class="td-name">@loan.FromTimestamp</td>
+                                                <td class="td-name">@loan.ExpiryTimestamp</td>
+                                                <td class="td-name">@loan.Status.ToString()</td>
+                                                <td class="td-name">
+                                                    <div class="dropdown show">
+                                                        <a class="btn btn-primary dropdown-toggle" href="javascript:;" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                            ACTION
+                                                        </a>
+
+                                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                                            <a class="dropdown-item" asp-area="Loan" asp-controller="Loan" asp-action="DetailsView" asp-route-uid="@loan.UID">Edit</a>
+                                                            <a class="dropdown-item" href="javascript:;">Force Complete Loan</a>
+                                                            <a class="dropdown-item" asp-area="Loan" asp-controller="Loan" asp-action="AcceptTermsAndConditionsView" asp-route-loanuid="@loan.UID">Terms & Conditions</a>
+                                                        </div>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         }

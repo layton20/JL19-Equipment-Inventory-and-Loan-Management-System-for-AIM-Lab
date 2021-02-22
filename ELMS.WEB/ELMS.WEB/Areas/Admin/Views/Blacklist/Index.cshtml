@@ -40,9 +40,18 @@
                                 <td class="td-name">@blacklist.Type.ToString()</td>
                                 <td class="td-name">@blacklist.Active</td>
                                 <td class="td-name">@blacklist.CreatedTimestamp</td>
-                                <td class="td-actions">
-                                    <a class="modifyBlacklist btn btn-primary text-white" data-url="/Admin/Blacklist/EditModal" data-uid="@blacklist.UID"><i class="fas fa-pen p-1"></i></a>
-                                    <a class="modifyBlacklist btn btn-danger text-white" data-url="/Admin/Blacklist/DeleteModal" data-uid="@blacklist.UID"><i class="fas fa-trash p-1"></i></a>
+                                <td class="td-name">
+                                    <div class="dropdown show">
+                                        <a class="btn btn-primary dropdown-toggle" href="javascript:;" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Action
+                                        </a>
+
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                            <a class="dropdown-item modifyBlacklist" href="javascript:;" data-url="/Admin/Blacklist/EditModal" data-uid="@blacklist.UID">Edit</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item modifyBlacklist" href="javascript:;" data-url="/Admin/Blacklist/DeleteModal" data-uid="@blacklist.UID">Delete</a>
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                         }

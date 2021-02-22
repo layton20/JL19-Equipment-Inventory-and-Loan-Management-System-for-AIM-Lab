@@ -171,9 +171,18 @@
                                     <td class="td-name">@equipment.WarrantyExpirationDate</td>
                                     <td class="td-name">@equipment.PurchasePrice</td>
                                     <td class="td-name">@equipment.PurchaseDate</td>
-                                    <td class="td-actions">
-                                        <a class="btn btn-primary" asp-area="Equipment" asp-controller="Equipment" asp-action="DetailsView" asp-route-equipmentUID="@equipment.UID"><i class="fas fa-pen p-1"></i></a>
-                                        <a class="deleteEquipment btn btn-danger text-white" data-url="/Equipment/Equipment/DeleteModal" data-uid="@equipment.UID"><i class="fas fa-trash p-1"></i></a>
+                                    <td class="td-name">
+                                        <div class="dropdown show">
+                                            <a class="btn btn-primary dropdown-toggle" href="javascript:;" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                Action
+                                            </a>
+
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                                <a class="dropdown-item" asp-area="Equipment" asp-controller="Equipment" asp-action="DetailsView" asp-route-equipmentUID="@equipment.UID"><i class="fas fa-pen mr-2"></i>Edit</a>
+                                                <div class="dropdown-divider"></div>
+                                                <a class="dropdown-item deleteEquipment" href="javascript:;" data-url="/Equipment/Equipment/DeleteModal" data-uid="@equipment.UID"><i class="fas fa-trash mr-2"></i> Delete</a>
+                                            </div>
+                                        </div>
                                     </td>
                                 </tr>
                             }
