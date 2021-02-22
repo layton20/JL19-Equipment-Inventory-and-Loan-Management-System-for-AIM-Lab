@@ -194,7 +194,7 @@
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                             <a class="dropdown-item" asp-area="Loan" asp-controller="Loan" asp-action="DetailsView" asp-route-uid="@loan.UID">Edit</a>
                                             <a class="dropdown-item forceComplete" href="javascript:;" data-url="/Loan/Loan/ForceCompleteModal" data-uid="@loan.UID">Force Complete Loan</a>
-                                            <a class="dropdown-item deleteEquipment" asp-area="Loan" asp-controller="Loan" asp-action="AcceptTermsAndConditionsView" asp-route-loanuid="@loan.UID">Terms & Conditions</a>
+                                            <a class="dropdown-item" asp-area="Loan" asp-controller="Loan" asp-action="AcceptTermsAndConditionsView" asp-route-loanuid="@loan.UID">Terms & Conditions</a>
                                         </div>
                                     </div>
                                 </td>

@@ -178,7 +178,8 @@
                                             </a>
 
                                             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                                <a class="dropdown-item"  asp-area="Equipment" asp-controller="Equipment" asp-action="DetailsView" asp-route-equipmentUID="@equipment.UID">Edit</a>
+                                                <a class="dropdown-item" asp-area="Equipment" asp-controller="Equipment" asp-action="DetailsView" asp-route-equipmentUID="@equipment.UID">Edit</a>
+                                                <div class="dropdown-divider"></div>
                                                 <a class="dropdown-item deleteEquipment" href="javascript:;" data-url="/Equipment/Equipment/DeleteModal" data-uid="@equipment.UID">Delete</a>
                                             </div>
                                         </div>
