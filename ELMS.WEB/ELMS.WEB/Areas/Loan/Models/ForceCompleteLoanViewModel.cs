@@ -10,9 +10,6 @@ namespace ELMS.WEB.Areas.Loan.Models
         [NonDefaultGuid]
         public Guid UID { get; set; }
 
-        [Display(Name = "Loan Name")]
-        public string Name { get; set; }
-
         public string LoaneeEmail { get; set; }
 
         [Display(Name = "Start Date")]

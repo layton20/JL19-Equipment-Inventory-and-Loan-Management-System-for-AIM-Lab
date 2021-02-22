@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ELMS.WEB.Entities.Admin;
+using ELMS.WEB.Enums.Admin;
 using ELMS.WEB.Helpers;
 using ELMS.WEB.Managers.Admin.Interfaces;
 using ELMS.WEB.Models.Admin.Request;
@@ -91,6 +92,11 @@ namespace ELMS.WEB.Managers.Admin.Concrete
         public async Task<BlacklistResponse> GetByUIDAsync(Guid uid)
         {
             return __Mapper.Map<BlacklistResponse>(await __BlacklistRepository.GetByUIDAsync(uid));
+        }
+
+        public async Task<BlacklistStateEnum> GetState(string email)
+        {
+            return await __BlacklistRepository.GetState(email);
         }
     }
 }

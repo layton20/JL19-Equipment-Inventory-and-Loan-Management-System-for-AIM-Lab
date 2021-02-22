@@ -157,5 +157,19 @@ namespace ELMS.WEB.Areas.Admin.Controllers
 
             return Json(new { success = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} deleted {ENTITY_NAME}." });
         }
+
+        [HttpGet]
+        public async Task<IActionResult> DetailsModalAsync(string email) 
+        {
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                return Json(new { message = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} find associated email." });
+            }
+
+            return PartialView("_DetailsModal", new DetailsModalViewModel
+            {
+                Blacklists = __Mapper.Map<IList<BlacklistViewModel>>(await __BlacklistManager.GetAsync(email))
+            });
+        }
     }
 }

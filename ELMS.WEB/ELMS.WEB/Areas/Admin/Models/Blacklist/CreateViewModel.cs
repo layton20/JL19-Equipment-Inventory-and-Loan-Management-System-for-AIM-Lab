@@ -14,7 +14,7 @@ namespace ELMS.WEB.Areas.Admin.Models.Blacklist
 
         [Required]
         [Display(Name = "Blacklist Type")]
-        public BlacklistType Type { get; set; }
+        public BlacklistTypeEnum Type { get; set; }
 
         [Required]
         public bool Active { get; set; } = true;

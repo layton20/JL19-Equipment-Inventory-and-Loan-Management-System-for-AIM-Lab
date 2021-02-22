@@ -128,7 +128,6 @@ namespace ELMS.WEB.Repositories.Loan.Concrete
             }
 
             _Loan.AcceptedTermsAndConditions = loan.AcceptedTermsAndConditions;
-            _Loan.Name = loan.Name;
             _Loan.Status = loan.Status;
             _Loan.FromTimestamp = loan.FromTimestamp;
             _Loan.ExpiryTimestamp = loan.ExpiryTimestamp;

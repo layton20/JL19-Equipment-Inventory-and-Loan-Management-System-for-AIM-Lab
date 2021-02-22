@@ -13,7 +13,7 @@ namespace ELMS.WEB.Models.Admin.Request
         public string Reason { get; set; } = "Reason not provided.";
 
         [Required]
-        public BlacklistType Type { get; set; }
+        public BlacklistTypeEnum Type { get; set; }
 
         [Required]
         public bool Active { get; set; }

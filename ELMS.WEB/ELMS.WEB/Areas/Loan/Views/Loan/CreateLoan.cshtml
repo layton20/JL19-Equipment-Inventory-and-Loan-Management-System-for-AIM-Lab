@@ -19,149 +19,128 @@
 
 <form asp-area="Loan" asp-controller="Loan" asp-action="ConfirmView" enctype="multipart/form-data">
     <div asp-validation-summary="All" class="text-danger"></div>
-    <div class="card my-3">
-        <div class="card-header card-header-primary card-header-icon">
-            <h4 class="card-title">Provide general details</h4>
-        </div>
-        <div class="card-body">
-            <div class="form-group">
-                <label asp-for="Name">Loan Name</label>
-                <input class="form-control" asp-for="Name">
-                <small>The name should roughly describe what the loan is about</small>
-            </div>
-            <div class="row">
-                <div class="col">
-                    <div class="form-group">
-                        <label asp-for="FromTimestamp"></label>
-                        <input type="date" class="form-control datetimepicker" asp-for="FromTimestamp" />
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="form-group">
-                        <label asp-for="ExpiryTimestamp"></label>
-                        <input type="date" class="form-control datetimepicker" asp-for="ExpiryTimestamp" />
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <div class="card my-3">
-        <div class="card-header card-header-primary card-header-icon">
-            <h4 class="card-title">Select Available Equipment</h4>
-        </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="display table datatable-export responsive hover compact" cellspacing="0" width="100%">
-                    <thead>
-                        <tr>
-                            <th class="text-center"></th>
-                            <th class="th-description font-weight-normal">Name</th>
-                            <th class="th-description font-weight-normal">Status</th>
-                            <th class="th-description font-weight-normal">Warranty Expiration Date</th>
-                            <th class="th-description font-weight-normal">Purchase Price (&pound;)</th>
-                            <th class="th-description font-weight-normal">Purchase Date</th>
-                            <th class="th-description font-weight-normal">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @for (int i = 0; i < Model.EquipmentSelectList.Count; i++)
-                        {
+    <div class="equipment-container">
+        <div id="card-equipment" class="card my-3">
+            <div class="card-header card-header-primary card-header-icon">
+                <h4 class="card-title">Select Available Equipment</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="display table datatable-export responsive hover compact" cellspacing="0" width="100%">
+                        <thead>
                             <tr>
-                                <td>
-                                    <input type="checkbox" class="checkbox-equipment" />
-                                    <input class="equipment-selection" type="hidden" asp-for="SelectedEquipment" value="@Model.EquipmentSelectList[i].UID" disabled />
-                                </td>
-                                <td>@Model.EquipmentSelectList[i].Name</td>
-                                <td>@Model.EquipmentSelectList[i].Status.ToString()</td>
-                                <td>@Model.EquipmentSelectList[i].WarrantyExpirationDate</td>
-                                <td>@Model.EquipmentSelectList[i].PurchasePrice</td>
-                                <td>@Model.EquipmentSelectList[i].PurchaseDate</td>
-                                <td>
-                                    <a class="btn btn-primary" asp-area="Equipment" asp-controller="Equipment" asp-action="DetailsView" asp-route-equipmentUID="@Model.EquipmentSelectList[i].UID"><i class="fas fa-eye p-1"></i></a>
-                                </td>
+                                <th class="text-center"></th>
+                                <th class="th-description font-weight-normal">Name</th>
+                                <th class="th-description font-weight-normal">Status</th>
+                                <th class="th-description font-weight-normal">Warranty Expiration Date</th>
+                                <th class="th-description font-weight-normal">Purchase Price (&pound;)</th>
+                                <th class="th-description font-weight-normal">Purchase Date</th>
+                                <th class="th-description font-weight-normal">Actions</th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < Model.EquipmentSelectList.Count; i++)
+                            {
+                                <tr>
+                                    <td class="td-name">
+                                        <input type="checkbox" class="checkbox-equipment" />
+                                        <input class="equipment-selection" type="hidden" asp-for="SelectedEquipment" value="@Model.EquipmentSelectList[i].UID" disabled />
+                                    </td>
+                                    <td class="td-name">@Model.EquipmentSelectList[i].Name</td>
+                                    <td class="td-name">@Model.EquipmentSelectList[i].Status.ToString()</td>
+                                    <td class="td-name">@Model.EquipmentSelectList[i].WarrantyExpirationDate</td>
+                                    <td class="td-name">@Model.EquipmentSelectList[i].PurchasePrice</td>
+                                    <td class="td-name">@Model.EquipmentSelectList[i].PurchaseDate</td>
+                                    <td class="td-actions">
+                                        <a class="btn btn-primary" asp-area="Equipment" asp-controller="Equipment" asp-action="DetailsView" asp-route-equipmentUID="@Model.EquipmentSelectList[i].UID"><i class="fas fa-eye p-1"></i></a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="card my-3">
-        <div class="card-header card-header-primary card-header-icon">
-            <h4 class="card-title">Select User</h4>
-        </div>
-        <div class="card-body">
-            <div id="accordion" role="tablist">
-                <div class="card card-collapse">
-                    <div class="card-header pt-0" role="tab" id="headingExistingUser">
-                        <h5 class="mb-0">
-                            <a id="collapseLinkExistingUser" data-toggle="collapse" href="#collapseExistingUser" aria-expanded="true" aria-controls="collapseExistingUser">
-                                Option 1: Select by existing user
-                                <i class="material-icons">keyboard_arrow_down</i>
-                            </a>
-                        </h5>
-                    </div>
-                    <div id="collapseExistingUser" class="collapse show" role="tabpanel" aria-labelledby="headingExistingUser" data-parent="#accordion">
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="display table datatable responsive hover compact" cellspacing="0" width="100%">
-                                    <thead>
-                                        <tr>
-                                            <th class="th-description font-weight-normal">Select</th>
-                                            <th class="th-description font-weight-normal">Username</th>
-                                            <th class="th-description font-weight-normal">Normalised Email</th>
-                                            <th class="th-description font-weight-normal">Email Confirmed</th>
-                                            <th class="th-description font-weight-normal">Additional Information</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var user in Model.UserSelectList)
-                                        {
+    <div class="user-container" style="display: none">
+        <hr />
+        <div id="card-user" class="card my-3">
+            <div class="card-header card-header-primary card-header-icon">
+                <h4 class="card-title">Select User</h4>
+            </div>
+            <div class="card-body">
+                <div id="accordion" role="tablist">
+                    <div class="card card-collapse">
+                        <div class="card-header pt-0" role="tab" id="headingExistingUser">
+                            <h5 class="mb-0">
+                                <a id="collapseLinkExistingUser" data-toggle="collapse" href="#collapseExistingUser" aria-expanded="true" aria-controls="collapseExistingUser">
+                                    Option 1: Select by existing user
+                                    <i class="material-icons">keyboard_arrow_down</i>
+                                </a>
+                            </h5>
+                        </div>
+                        <div id="collapseExistingUser" class="collapse show" role="tabpanel" aria-labelledby="headingExistingUser" data-parent="#accordion">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="display table datatable responsive hover compact" cellspacing="0" width="100%">
+                                        <thead>
                                             <tr>
-                                                <td>
-                                                    <input class="user-radio" type="radio" asp-for="LoaneeUID" value="@user.Id">
-                                                    <input class="user-detail" type="hidden" asp-for="LoaneeEmailAddress" value="@user.Email" />
-                                                    <input class="user-detail" type="hidden" asp-for="LoaneeUID" value="@user.Id" />
-                                                </td>
-                                                <td>@user.UserName</td>
-                                                <td>@user.NormalizedEmail</td>
-                                                <td>@user.EmailConfirmed</td>
-                                                <td>
-                                                    @if (Model.Blacklists.Any(x => x.Active && x.Email.ToUpper() == user.NormalizedEmail))
-                                                    {
-                                                        <span class="badge badge-danger">Blacklisted</span>
-                                                    }
-                                                    else if (Model.Blacklists.Any(x => x.Email.ToUpper() == user.NormalizedEmail))
-                                                    {
-                                                        <span class="badge badge-warning">Previously blacklisted</span>
-                                                    }
-                                                </td>
+                                                <th class="th-description font-weight-normal">Select</th>
+                                                <th class="th-description font-weight-normal">Username</th>
+                                                <th class="th-description font-weight-normal">Normalised Email</th>
+                                                <th class="th-description font-weight-normal">Email Confirmed</th>
+                                                <th class="th-description font-weight-normal">Additional Information</th>
                                             </tr>
-                                        }
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var user in Model.UserSelectList)
+                                            {
+                                                <tr>
+                                                    <td class="td-name">
+                                                        <input class="user-radio" type="radio" asp-for="LoaneeUID" value="@user.Id">
+                                                        <input class="user-detail" type="hidden" asp-for="LoaneeEmailAddress" value="@user.Email" />
+                                                        <input class="user-detail" type="hidden" asp-for="LoaneeUID" value="@user.Id" />
+                                                    </td>
+                                                    <td class="td-name">@user.UserName</td>
+                                                    <td class="td-name">@user.NormalizedEmail</td>
+                                                    <td class="td-name">@user.EmailConfirmed</td>
+                                                    <td class="td-name">
+                                                        @if (Model.Blacklists.Any(x => x.Active && x.Email.ToUpper() == user.NormalizedEmail))
+                                                        {
+                                                            <span class="badge badge-danger">Blacklisted</span>
+                                                        }
+                                                        else if (Model.Blacklists.Any(x => x.Email.ToUpper() == user.NormalizedEmail))
+                                                        {
+                                                            <span class="badge badge-warning">Previously blacklisted</span>
+                                                        }
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="card card-collapse">
-                    <div class="card-header" role="tab" id="headingManualUser">
-                        <h5 class="mb-0">
-                            <a id="collapseLinkManualUser" class="collapsed" data-toggle="collapse" href="#collapseManualUser" aria-expanded="false" aria-controls="collapseManualUser">
-                                Option 2: Select by manual details
-                                <i class="material-icons">keyboard_arrow_down</i>
-                            </a>
-                        </h5>
-                    </div>
-                    <div id="collapseManualUser" class="collapse" role="tabpanel" aria-labelledby="headingManualUser" data-parent="#accordion">
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label asp-for="LoaneeEmailAddress"></label>
-                                <input type="email" class="manualUserEmail form-control" asp-for="LoaneeEmailAddress" placeholder="AstonAIM@aston.ac.uk">
-                                <small>The confirmation link will be sent to this email. Ensure it is correct</small>
+                    <div class="card card-collapse">
+                        <div class="card-header" role="tab" id="headingManualUser">
+                            <h5 class="mb-0">
+                                <a id="collapseLinkManualUser" class="collapsed" data-toggle="collapse" href="#collapseManualUser" aria-expanded="false" aria-controls="collapseManualUser">
+                                    Option 2: Select by manual details
+                                    <i class="material-icons">keyboard_arrow_down</i>
+                                </a>
+                            </h5>
+                        </div>
+                        <div id="collapseManualUser" class="collapse" role="tabpanel" aria-labelledby="headingManualUser" data-parent="#accordion">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label asp-for="LoaneeEmailAddress"></label>
+                                    <input type="email" class="manualUserEmail form-control" asp-for="LoaneeEmailAddress" placeholder="AstonAIM@aston.ac.uk">
+                                    <small>The confirmation link will be sent to this email. Ensure it is correct</small>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -170,10 +149,35 @@
         </div>
     </div>
 
-    <div class="text-center">
+    <div class="loan-period-container" style="display: none">
+        <hr />
+        <div class="card my-3">
+            <div class="card-header card-header-primary card-header-icon">
+                <h4 class="card-title">Loan Period</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label asp-for="FromTimestamp"></label>
+                            <input type="date" class="form-control datetimepicker" asp-for="FromTimestamp" />
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label asp-for="ExpiryTimestamp"></label>
+                            <input type="date" class="form-control datetimepicker" asp-for="ExpiryTimestamp" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="submit-container text-center" style="display: none">
         <div>
-            <input type="submit" class="btn btn-success" value="Continue to Loan Preview" />
-            <a class="btn text-white">Cancel</a>
+            <input type="submit" class="btn btn-success" value="Preview Loan" />
+            <a class="btn btn-white">Cancel</a>
         </div>
     </div>
 </form>
@@ -187,7 +191,31 @@
     </environment>
     <script>
         $(document).ready(function () {
-            $('#navItemLoans').addClass('active');
-        });
+            $('#navItemLoans').addClass('active')
+
+            $('.checkbox-equipment').click(() => {
+                if ($('.user-container:hidden').css('display') == 'none') {
+                    $('.user-container').show()
+                    console.log('yes')
+                }
+                else {
+                    console.log('no')
+                }
+            })
+
+            $('.user-radio').click(() => {
+                if ($('.loan-period-container').css('display') == 'none' || $('.submit-container').css('display') == 'none') {
+                    $('.loan-period-container').show()
+                    $('.submit-container').show()
+                }
+            })
+
+            $('.manualUserEmail').on('input', () => {
+                if ($('.loan-period-container:hidden').css('display') == 'none' || $('.submit-container').css('display') == 'none') {
+                    $('.loan-period-container').show()
+                    $('.submit-container').show()
+                }
+            })
+        })
     </script>
 }

@@ -74,7 +74,6 @@ namespace ELMS.WEB.Areas.Report.Controllers
                 LoanerEmail = x.LoanerEmail,
                 AcceptedTermsAndConditions = x.AcceptedTermsAndConditions,
                 FromTimestamp = x.FromTimestamp,
-                Name = x.Name,
                 Status = x.Status
             }).ToList();
 
@@ -85,11 +84,6 @@ namespace ELMS.WEB.Areas.Report.Controllers
         public async Task<IActionResult> LoanHistoryReportFilterAsync(LoanHistoryReportFilterViewModel filter)
         {
             IList<LoanResponse> _Response = await __LoanManager.GetAsync();
-
-            if (!string.IsNullOrWhiteSpace(filter.Name))
-            {
-                _Response = _Response.Where(x => x.Name.ToUpper().Contains(filter.Name.ToUpper())).ToList();
-            }
 
             if (!string.IsNullOrWhiteSpace(filter.LoaneeEmail))
             {
@@ -154,7 +148,6 @@ namespace ELMS.WEB.Areas.Report.Controllers
                 LoanerEmail = x.LoanerEmail,
                 AcceptedTermsAndConditions = x.AcceptedTermsAndConditions,
                 FromTimestamp = x.FromTimestamp,
-                Name = x.Name,
                 Status = x.Status
             }).ToList();
 

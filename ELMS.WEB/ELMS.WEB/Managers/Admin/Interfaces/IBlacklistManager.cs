@@ -1,4 +1,5 @@
-﻿using ELMS.WEB.Models.Admin.Request;
+﻿using ELMS.WEB.Enums.Admin;
+using ELMS.WEB.Models.Admin.Request;
 using ELMS.WEB.Models.Admin.Response;
 using ELMS.WEB.Models.Base.Response;
 using System;
@@ -20,5 +21,6 @@ namespace ELMS.WEB.Managers.Admin.Interfaces
         Task<BlacklistResponse> GetByUIDAsync(Guid uid);
 
         Task<BaseResponse> DeleteAsync(Guid uid);
+        Task<BlacklistStateEnum> GetState(string email);
     }
 }

@@ -10,10 +10,6 @@ namespace ELMS.WEB.Areas.Loan.Models
 {
     public class CreateLoanViewModel
     {
-        [Required]
-        [MaxLength(50)]
-        [Display(Name = "Loan Name")]
-        public string Name { get; set; }
 
         public IList<EquipmentViewModel> EquipmentSelectList { get; set; }
         public IList<IdentityUser> UserSelectList { get; set; }

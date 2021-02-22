@@ -10,7 +10,6 @@
     <div class="modal-body">
         <div>You are making an irreversible change to complete a loan manually.</div>
         <ul class="list-group rounded-0 mt-3">
-            <li class="list-group-item border my-1"><strong>Loan Name: </strong><span>@Model.Name</span></li>
             <li class="list-group-item border my-1"><strong>Loanee Email: </strong><span>@Model.LoaneeEmail</span></li>
             <li class="list-group-item border my-1"><strong>Loan Period: </strong><span>@Model.StartTimestamp to @Model.ExpiryTimestamp</span></li>
             <li class="list-group-item border my-1"><a target="_blank" asp-area="Loan" asp-controller="Loan" asp-action="DetailsView" asp-route-uid="@Model.UID">View more details of the loan</a></li>
