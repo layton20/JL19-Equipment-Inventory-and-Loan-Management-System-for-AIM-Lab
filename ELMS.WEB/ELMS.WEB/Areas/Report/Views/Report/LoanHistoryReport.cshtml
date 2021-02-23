@@ -87,7 +87,6 @@
                 <table class="display table datatable-export responsive hover compact" cellspacing="0" width="100%">
                     <thead>
                         <tr>
-                            <th class="th-description">Name</th>
                             <th class="th-description">Loaner Email</th>
                             <th class="th-description">Loanee Email</th>
                             <th class="th-description">From</th>
@@ -102,7 +101,6 @@
                         @foreach (var loan in Model.Loans)
                         {
                             <tr>
-                                <td class="td-name">@loan.Name</td>
                                 <td class="td-name">@loan.LoanerEmail</td>
                                 <td class="td-name">@loan.LoaneeEmail</td>
                                 <td class="td-name">@loan.FromTimestamp</td>
@@ -110,10 +108,10 @@
                                 <td class="td-name">@loan.Status.ToString()</td>
                                 <td class="td-name">@loan.AcceptedTermsAndConditions</td>
                                 <td class="td-name">
-                                    <ul>
-                                        @foreach (var equipment in loan.EquipmentList)
+                                    <ul class="list-group list-group-flush">
+                                        @foreach (var equipment in Model.Loans.FirstOrDefault(x => x.UID == loan.UID).EquipmentList)
                                         {
-                                            <li>@equipment.ToString()</li>
+                                            <li class="list-group-item px-0"><a class="equipmentDetails text-primary" data-url="/Equipment/Equipment/DetailsModal" data-uid="@equipment.UID" style="cursor: pointer">@equipment.Name</a></li>
                                         }
                                     </ul>
                                 </td>
@@ -131,6 +129,16 @@
 </div>
 
 @section Scripts {
+    <environment include="Development">
+        <script src="~/js/areas/report/loanhistory.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/areas/report/loanhistory.min.js"></script>
+    </environment>
     <script>
+        $(document).ready(function () {
+            $('#navItemReports').addClass('active');
+            $('#navItemReportHistoricLoans').addClass('active');
+        });
     </script>
 } 
