@@ -17,6 +17,7 @@ namespace ELMS.WEB.Models
         public DbSet<EquipmentEntity> Equipment { get; set; }
         public DbSet<NoteEntity> Notes { get; set; }
         public DbSet<LoanEntity> Loans { get; set; }
+        public DbSet<LoanExtensionEntity> LoanExtensions { get; set; }
         public DbSet<LoanEquipmentEntity> LoanEquipmentList { get; set; }
         public DbSet<EmailTemplateEntity> EmailTemplates { get; set; }
         public DbSet<EmailScheduleEntity> EmailSchedules { get; set; }

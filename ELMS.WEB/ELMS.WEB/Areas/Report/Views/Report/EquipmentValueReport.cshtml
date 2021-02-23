@@ -42,16 +42,7 @@
                                 <td class="td-name">@reportItem.PurchasePrice</td>
                                 <td class="td-name">@reportItem.PurchaseDate</td>
                                 <td class="td-name">@reportItem.WarrantyExpirationDate</td>
-                                <td class="td-name">
-                                    @if (reportItem.Status == ELMS.WEB.Enums.Equipment.Status.Available)
-                                    {
-                                        <span class="badge badge-success">Available</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="badge badge-primary">@reportItem.Status</span>
-                                    }
-                                </td>
+                                <td class="td-name">@reportItem.Status.ToString()</td>
                             </tr>
                         }
                         <tr style="display: none">
@@ -83,3 +74,12 @@
     <div class="row">
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#navItemReports').addClass('active');
+            $('#navItemReportLabInventory').addClass('active');
+        });
+    </script>
+}

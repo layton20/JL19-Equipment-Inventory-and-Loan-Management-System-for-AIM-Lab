@@ -31,7 +31,7 @@ namespace ELMS.WEB.Managers.Equipment.Concrete
             if (_Response == null)
             {
                 _Response.Success = false;
-                _Response.Message = $"Error: ${GlobalConstants.ERROR_ACTION_PREFIX} create ${MODEL_NAME}.";
+                _Response.Message = $"{GlobalConstants.ERROR_ACTION_PREFIX} create {MODEL_NAME}.";
             }
 
             return _Response;
@@ -62,7 +62,7 @@ namespace ELMS.WEB.Managers.Equipment.Concrete
             if (_Response == null)
             {
                 _Response.Success = false;
-                _Response.Message = $"Error: ${GlobalConstants.ERROR_ACTION_PREFIX} get ${MODEL_NAME}.";
+                _Response.Message = $"{GlobalConstants.ERROR_ACTION_PREFIX} get {MODEL_NAME}.";
             }
 
             return _Response;
@@ -75,7 +75,7 @@ namespace ELMS.WEB.Managers.Equipment.Concrete
             if (request.UID == Guid.Empty || !await __NoteRepository.UpdateAsync(__Mapper.Map<NoteEntity>(request)))
             {
                 _Response.Success = false;
-                _Response.Message = $"Error: ${GlobalConstants.ERROR_ACTION_PREFIX} update ${MODEL_NAME}.";
+                _Response.Message = $"{GlobalConstants.ERROR_ACTION_PREFIX} update {MODEL_NAME}.";
             }
 
             return _Response;

@@ -94,5 +94,11 @@
     "inputFiles": [
       "wwwroot/js/areas/loan/confirmationloan.js"
     ]
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/report/loanhistory.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/report/loanhistory.js"
+    ]
   }
 ]

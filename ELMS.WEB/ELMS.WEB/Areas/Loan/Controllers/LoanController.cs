@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ELMS.WEB.Areas.Loan.Models;
+using ELMS.WEB.Areas.Loan.Models.LoanExtension;
 using ELMS.WEB.Enums.Equipment;
 using ELMS.WEB.Enums.General;
 using ELMS.WEB.Helpers;
@@ -36,12 +37,13 @@ namespace ELMS.WEB.Areas.Loan.Controllers
         private readonly IApplicationEmailSender __EmailSender;
         private readonly IBlacklistManager __BlacklistManager;
         private readonly UserManager<IdentityUser> __UserManager;
+        private readonly ILoanExtensionManager __LoanExtensionManager;
         private readonly string ENTITY_NAME = "Loan";
 
         public LoanController(IMapper mapper, ILoanManager loanManager, IEquipmentManager equipmentManager, IUserRepository userRepository,
             ILoanEquipmentManager loanEquipmentManager, IEmailScheduleManager emailScheduleManager,
             IApplicationEmailSender emailSender, IBlacklistManager blacklistManager,
-            UserManager<IdentityUser> userManager)
+            UserManager<IdentityUser> userManager, ILoanExtensionManager loanExtensionManager)
         {
             __Mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             __LoanManager = loanManager ?? throw new ArgumentNullException(nameof(loanManager));
@@ -52,6 +54,7 @@ namespace ELMS.WEB.Areas.Loan.Controllers
             __EmailSender = emailSender ?? throw new ArgumentNullException(nameof(emailSender));
             __BlacklistManager = blacklistManager ?? throw new ArgumentNullException(nameof(blacklistManager));
             __UserManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+            __LoanExtensionManager = loanExtensionManager ?? throw new ArgumentNullException(nameof(loanExtensionManager));
         }
 
         [Authorize(Policy = "ViewLoanPolicy")]
@@ -323,24 +326,19 @@ namespace ELMS.WEB.Areas.Loan.Controllers
         [Authorize(Policy = "ViewLoanPolicy")]
         public async Task<IActionResult> DetailsViewAsync(Guid uid, string successMessage = "", string errorMessage = "")
         {
-            if (!String.IsNullOrEmpty(successMessage))
+            if (!string.IsNullOrEmpty(successMessage))
             {
                 ViewData["SuccessMessage"] = successMessage;
             }
-
-            if (!String.IsNullOrEmpty(errorMessage))
+            else if (!string.IsNullOrEmpty(errorMessage))
             {
                 ViewData["ErrorMessage"] = errorMessage;
             }
 
-            LoanViewModel _Model = __Mapper.Map<LoanViewModel>(await __LoanManager.GetByUIDAsync(uid));
-            IList<Guid> _EquipmentUIDs = (await __LoanEquipmentManager.GetAsync(_Model.UID)).Select(x => x.EquipmentUID).ToList();
-            if (_EquipmentUIDs != null && _EquipmentUIDs.Count > 0)
-            {
-                _Model.EquipmentList = __Mapper.Map<IList<Equipment.Models.EquipmentViewModel>>((await __EquipmentManager.GetAsync(_EquipmentUIDs)).Equipments);
-            }
-
-            return View("Details", _Model);
+            return View("Details", new DetailsViewModel {
+                Loan = __Mapper.Map<LoanViewModel>(await __LoanManager.GetByUIDAsync(uid)),
+                Extensions = __Mapper.Map<IList<LoanExtensionViewModel>>(await __LoanExtensionManager.GetAsync(uid))
+            });
         }
 
         [HttpGet]

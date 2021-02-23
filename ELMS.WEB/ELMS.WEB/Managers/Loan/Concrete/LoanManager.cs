@@ -78,7 +78,12 @@ namespace ELMS.WEB.Managers.Loan.Concrete
 
         public async Task<LoanResponse> GetByUIDAsync(Guid uid)
         {
-            return __Mapper.Map<LoanResponse>(await __LoanRepository.GetByUIDAsync(uid));
+            LoanResponse _Response = __Mapper.Map<LoanResponse>(await __LoanRepository.GetByUIDAsync(uid));
+
+            IList<Guid> _EquipmentUIDs = (await __LoanEquipmentRepository.GetAsync(_Response.UID)).Select(x => x.EquipmentUID).ToList();
+            _Response.EquipmentList = __Mapper.Map<IList<EquipmentResponse>>(await __EquipmentRepository.GetAsync(_EquipmentUIDs));
+
+            return _Response;
         }
 
         public async Task<BaseResponse> UpdateAsync(UpdateLoanRequest request)
