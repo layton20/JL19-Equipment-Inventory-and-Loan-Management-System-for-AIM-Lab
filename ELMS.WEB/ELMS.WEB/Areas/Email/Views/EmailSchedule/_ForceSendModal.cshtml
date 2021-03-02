@@ -1,0 +1,52 @@
+﻿@model ELMS.WEB.Areas.Email.Models.EmailSchedule.ForceSendScheduleViewModel
+@using Microsoft.AspNetCore.Identity
+
+<div class="modal-content">
+    <div class="modal-header d-flex align-content-center">
+        <div><h2 class="modal-title text-left font-weight-bold">Force send email</h2></div>
+        <div>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <i class="fas fa-times-circle 2x"></i>
+            </button>
+        </div>
+    </div>
+    <form id="formForceSend" asp-area="Email" asp-controller="EmailSchedule" asp-action="ForceSend" enctype="multipart/form-data">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="modal-body">
+            <div>
+                <p>You are about to force-send an email schedule to the recipient email @(Model.RecipientEmailAddress).</p>
+            </div>
+            <input type="hidden" asp-for="UID" />
+
+            <div class="check-container border p-4">
+                <div class="form-check">
+                    <label class="form-check-label" asp-for="RetainSchedule">
+                        <input class="forceSendCheck form-check-input" asp-for="RetainSchedule">
+                        Retain original email schedule
+                        <span class="form-check-sign">
+                            <span class="check"></span>
+                        </span>
+                    </label>
+                </div>
+                <small class="d-block">If checked, the email schedule will not be deleted and will still be scheduled to be sent.</small>
+            </div>
+            <br />
+            <div class="check-container border p-4">
+                <div class="form-check">
+                    <label class="form-check-label" asp-for="SendCopyToSelf">
+                        <input class="forceSendCheck form-check-input" asp-for="SendCopyToSelf">
+                        Send me an email copy
+                        <span class="form-check-sign">
+                            <span class="check"></span>
+                        </span>
+                    </label>
+                </div>
+                <small class="d-block">If checked, the email will be sent to the recipent (@Model.RecipientEmailAddress) and yourself (@User.Identity.Name)</small>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Send Email</button>
+            <button type="submit" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        </div>
+    </form>
+</div>

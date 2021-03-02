@@ -5,7 +5,9 @@ using ELMS.WEB.Managers.Email.Interface;
 using ELMS.WEB.Models.Base.Response;
 using ELMS.WEB.Models.Email.Request;
 using ELMS.WEB.Models.Email.Response;
+using ELMS.WEB.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -22,13 +24,19 @@ namespace ELMS.WEB.Areas.Email.Controllers
         private readonly IEmailScheduleManager __EmailScheduleManager;
         private readonly IEmailScheduleParameterManager __EmailScheduleParameterManager;
         private readonly IEmailTemplateManager __EmailTemplateManager;
+        private readonly IApplicationEmailSender __EmailSender;
+        private readonly UserManager<IdentityUser> __UserManager;
 
-        public EmailScheduleController(IMapper mapper, IEmailScheduleManager emailScheduleManager, IEmailScheduleParameterManager emailScheduleParameterManager, IEmailTemplateManager emailTemplateManager)
+        public EmailScheduleController(IMapper mapper, IEmailScheduleManager emailScheduleManager, 
+            IEmailScheduleParameterManager emailScheduleParameterManager, IEmailTemplateManager emailTemplateManager, 
+            IApplicationEmailSender applicationEmailSender, UserManager<IdentityUser> userManager)
         {
             __Mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             __EmailScheduleManager = emailScheduleManager ?? throw new ArgumentNullException(nameof(emailScheduleManager));
             __EmailScheduleParameterManager = emailScheduleParameterManager ?? throw new ArgumentNullException(nameof(emailScheduleParameterManager));
             __EmailTemplateManager = emailTemplateManager ?? throw new ArgumentNullException(nameof(emailTemplateManager));
+            __EmailSender = applicationEmailSender ?? throw new ArgumentNullException(nameof(applicationEmailSender));
+            __UserManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
         }
 
         [HttpGet]
@@ -38,8 +46,7 @@ namespace ELMS.WEB.Areas.Email.Controllers
             {
                 ViewData["SuccessMessage"] = successMessage;
             }
-
-            if (!string.IsNullOrWhiteSpace(errorMessage))
+            else if (!string.IsNullOrWhiteSpace(errorMessage))
             {
                 ViewData["ErrorMessage"] = errorMessage;
             }
@@ -143,9 +150,53 @@ namespace ELMS.WEB.Areas.Email.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ForceSendAsync(Guid uid)
+        public async Task<IActionResult> ForceSendModalAsync(Guid uid)
         {
-            return null;
+            EmailScheduleResponse _ScheduleResponse = await __EmailScheduleManager.GetByUIDAsync(uid);
+
+            if (!_ScheduleResponse.Success)
+            {
+                return Json(new { message = $"{GlobalConstants.ERROR_ACTION_PREFIX} find {ENTITY_NAME}." });
+            }
+
+            return PartialView("_ForceSendModal", new ForceSendScheduleViewModel 
+            {
+                UID = uid,
+                RecipientEmailAddress = _ScheduleResponse.RecipientEmailAddress
+            });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ForceSendAsync(ForceSendScheduleViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return Json(new { message = $"{GlobalConstants.ERROR_ACTION_PREFIX} send {ENTITY_NAME}." });
+            }
+
+            EmailScheduleResponse _ScheduleResponse = await __EmailScheduleManager.GetByUIDAsync(model.UID);
+
+            if (!_ScheduleResponse.Success)
+            {
+                return Json(new { message = $"{GlobalConstants.ERROR_ACTION_PREFIX} find {ENTITY_NAME}." });
+            }
+
+            if (!model.RetainSchedule)
+            {
+                await __EmailScheduleManager.SendScheduledEmail(_ScheduleResponse);
+            }
+            else
+            {
+                await __EmailScheduleManager.SendScheduledEmail(_ScheduleResponse, false);
+            }
+
+            if (model.SendCopyToSelf)
+            {
+                _ScheduleResponse.RecipientEmailAddress = __UserManager.GetUserAsync(HttpContext.User).Result.Email;
+                await __EmailScheduleManager.SendScheduledEmail(_ScheduleResponse, false);
+            }
+
+            return RedirectToAction("Index", "EmailSchedule", new { Area = "Email", successMessage = $"Successfully attempted to send {ENTITY_NAME}s." });
         }
     }
 }

@@ -66,7 +66,7 @@
                                     <td class="td-name">
                                         @schedule.EmailTemplateUID
                                     </td>
-                                    <td class="td-name">@schedule.RecipientEmail</td>
+                                    <td class="td-name">@schedule.RecipientEmailAddress</td>
                                     <td class="td-name">@schedule.EmailType.ToString()</td>
                                     <td class="td-name">@schedule.EmailSent</td>
                                     <td class="td-name">@schedule.SendTimestamp</td>
@@ -77,7 +77,7 @@
                                             </a>
 
                                             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                                <a class="dropdown-item" asp-area="Email" asp-controller="EmailSchedule" asp-action="Send" asp-route-uid="@schedule.UID"><i class="fas fa-paper-plane mr-2"></i> Send Email</a>
+                                                <button class="dropdown-item forceSendModal" data-url="/Email/EmailSchedule/ForceSendModal" data-uid="@schedule.UID"><i class="fas fa-paper-plane mr-2"></i>Force Send Email</button>
                                                 <div class="dropdown-divider"></div>
                                                 <a class="dropdown-item deleteSchedule" href="javascript:;" data-url="/Email/EmailSchedule/DeleteModal" data-uid="@schedule.UID"><i class="fas fa-trash mr-2"></i> Delete</a>
                                             </div>

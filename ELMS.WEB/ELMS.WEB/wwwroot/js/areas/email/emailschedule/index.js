@@ -60,4 +60,17 @@
     $('.deleteSchedule').click(function () {
         loadModalAjax($(this).data('url'), `uid=${$(this).data('uid')}`);
     });
+
+    $('.forceSendModal').click(function () {
+        loadModalAjax($(this).data('url'), `uid=${$(this).data('uid')}`);
+    });
+
+    $('#modalRoot').on("change", ".forceSendCheck", function (e) {
+        if (this.checked) {
+            $(this).closest('.check-container').addClass('border-primary');
+        }
+        else {
+            $(this).closest('.check-container').removeClass('border-primary');
+        }
+    });
 });

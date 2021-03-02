@@ -31,6 +31,7 @@ namespace ELMS.WEB.Managers.Email.Interface
 
         public Task<BaseResponse> CreateLoanExpiryScheduleAsync(LoanResponse loan, string baseURL, bool forceSend = false);
 
+        public Task SendScheduledEmail(EmailScheduleResponse schedule, bool updateSentFlag = true);
         public Task SendScheduledEmails();
     }
 }
