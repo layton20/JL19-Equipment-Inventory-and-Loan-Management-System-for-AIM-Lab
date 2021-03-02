@@ -9,11 +9,14 @@ namespace ELMS.WEB.Areas.Loan.Models.LoanExtension
         [NonDefaultGuid]
         [Required]
         public Guid UID { get; set; }
+
         [Required]
         [EmailAddress]
         public string ExtenderEmail { get; set; }
+
         [Required]
         public DateTime PreviousExpiryDate { get; set; }
+
         [Required]
         [FutureOrTodayDate]
         public DateTime NewExpiryDate { get; set; }

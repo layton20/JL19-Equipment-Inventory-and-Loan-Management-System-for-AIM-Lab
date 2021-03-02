@@ -1,5 +1,4 @@
-﻿using ELMS.WEB.Areas.Admin.Models.Blacklist;
-using ELMS.WEB.Areas.Equipment.Models;
+﻿using ELMS.WEB.Areas.Equipment.Models;
 using ELMS.WEB.CustomDataAnnotations;
 using ELMS.WEB.Enums.Admin;
 using System;
@@ -10,7 +9,6 @@ namespace ELMS.WEB.Areas.Loan.Models
 {
     public class ConfirmationLoanViewModel
     {
-
         [Required]
         [EmailAddress]
         public string LoanerEmail { get; set; }
@@ -31,6 +29,7 @@ namespace ELMS.WEB.Areas.Loan.Models
 
         [Required]
         public IList<Guid> Equipment { get; set; }
+
         public BlacklistStateEnum BlacklistState { get; set; } = BlacklistStateEnum.None;
     }
 }

@@ -10,9 +10,13 @@ namespace ELMS.WEB.Managers.Loan.Interface
     public interface ILoanExtensionManager
     {
         Task<LoanExtensionResponse> CreateAsync(CreateLoanExtensionRequest request);
+
         Task<BaseResponse> DeleteAsync(Guid uid);
+
         Task<BaseResponse> UpdateAsync(UpdateLoanExtensionRequest request);
+
         Task<LoanExtensionResponse> GetByUIDAsync(Guid uid);
+
         Task<IList<LoanExtensionResponse>> GetAsync(Guid loanUID);
     }
 }
