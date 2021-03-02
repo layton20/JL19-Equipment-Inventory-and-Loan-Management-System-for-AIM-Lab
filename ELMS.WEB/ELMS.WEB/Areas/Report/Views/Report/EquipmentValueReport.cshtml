@@ -18,6 +18,76 @@
 
 <div class="container-fluid">
     <div class="row">
+        <div class="card mb-0">
+            <div class="card-header">
+                <h3 class="card-title">Filters</h3>
+                <p class="category">Fields will filter based on whether the attribute (e.g. Equipment name) <u>contains</u> the given input.</p>
+            </div>
+            <div class="card-body">
+                <form asp-area="Report" asp-controller="Report" asp-action="EquipmentValueReportFilter">
+                    <div class="form-row">
+                        <div class="form-group col-sm-12 col-md-3">
+                            <label asp-for="Filter.Name"></label>
+                            <input type="text" class="form-control" asp-for="Filter.Name" />
+                        </div>
+                        <div class="form-group col-sm-12 col-md-3">
+                            <label asp-for="Filter.SerialNumber"></label>
+                            <input type="text" class="form-control" asp-for="Filter.SerialNumber" />
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-sm-6 col-md-3">
+                            <label asp-for="Filter.PurchasePriceFrom"></label>
+                            <input type="number" step="0.01" class="form-control" asp-for="Filter.PurchasePriceFrom" />
+                        </div>
+                        <div class="form-group col-sm-6 col-md-3">
+                            <label asp-for="Filter.PurchasePriceTo"></label>
+                            <input type="number" step="0.01" class="form-control" asp-for="Filter.PurchasePriceTo" />
+                        </div>
+
+                        <div class="form-group col-sm-6 col-md-3">
+                            <label asp-for="Filter.ReplacementPriceFrom"></label>
+                            <input type="number" step="0.01" class="form-control" asp-for="Filter.ReplacementPriceFrom" />
+                        </div>
+                        <div class="form-group col-sm-6 col-md-3">
+                            <label asp-for="Filter.ReplacementPriceTo"></label>
+                            <input type="number" step="0.01" class="form-control" asp-for="Filter.ReplacementPriceTo" />
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-sm-6 col-md-3">
+                            <label asp-for="Filter.PurchaseDateFrom"></label>
+                            <input type="date" step="0.01" class="form-control" asp-for="Filter.PurchaseDateFrom" />
+                        </div>
+                        <div class="form-group col-sm-6 col-md-3">
+                            <label asp-for="Filter.PurchaseDateTo">Scheduled To</label>
+                            <input type="date" step="0.01" class="form-control" asp-for="Filter.PurchaseDateTo" />
+                        </div>
+
+                        <div class="form-group col-sm-6 col-md-3">
+                            <label asp-for="Filter.WarrantyExpirationDateFrom"></label>
+                            <input type="date" step="0.01" class="form-control" asp-for="Filter.WarrantyExpirationDateFrom" />
+                        </div>
+                        <div class="form-group col-sm-6 col-md-3">
+                            <label asp-for="Filter.WarrantyExpirationDateTo"></label>
+                            <input type="date" step="0.01" class="form-control" asp-for="Filter.WarrantyExpirationDateTo" />
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-sm-12 col-md-3">
+                            <label class="w-100" asp-for="Filter.Statuses"></label>
+                            <select class="selectpicker" data-width="100%" data-style="select-with-transition" multiple asp-for="Filter.Statuses" asp-items="Html.GetEnumSelectList<ELMS.WEB.Enums.Equipment.Status>()">
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Filter Report</button>
+                </form>
+            </div>
+        </div>
+
         <div class="card">
             <div class="card-body">
                 <table class="display table datatable-export responsive hover compact" cellspacing="0" width="100%">

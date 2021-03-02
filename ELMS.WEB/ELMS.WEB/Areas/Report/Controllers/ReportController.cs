@@ -44,18 +44,79 @@ namespace ELMS.WEB.Areas.Report.Controllers
             EquipmentValueReportViewModel _Model = new EquipmentValueReportViewModel();
 
             EquipmentListResponse _EquipmentList = await __EquipmentManager.GetAsync();
-            _Model.ReportItems = _EquipmentList?.Equipments?.Select(x => new EquipmentValueReportItemViewModel
-            {
-                Name = x.Name,
-                SerialNumber = x.SerialNumber,
-                PurchasePrice = x.PurchasePrice,
-                ReplacementPrice = x.PurchasePrice,
-                WarrantyExpirationDate = x.WarrantyExpirationDate,
-                PurchaseDate = x.PurchaseDate,
-                Status = x.Status
-            })?.ToList();
 
-            return View(_Model);
+            return View(new EquipmentValueReportViewModel 
+            {
+                Filter = new EquipmentValueReportFilterViewModel(),
+                ReportItems = __Mapper.Map<IList<EquipmentValueReportItemViewModel>>(_EquipmentList.Equipments)
+            });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EquipmentValueReportFilterAsync(EquipmentValueReportFilterViewModel filter)
+        {
+            IList<EquipmentResponse> _EquipmentResponses = (await __EquipmentManager.GetAsync()).Equipments;
+
+            if (!string.IsNullOrWhiteSpace(filter.Name))
+            {
+                _EquipmentResponses = _EquipmentResponses.Where(x => x.Name.ToUpper().Contains(filter.Name.ToUpper())).ToList();
+            }
+
+            if (!string.IsNullOrWhiteSpace(filter.SerialNumber))
+            {
+                _EquipmentResponses = _EquipmentResponses.Where(x => x.SerialNumber.ToUpper().Contains(filter.SerialNumber.ToUpper())).ToList();
+            }
+
+            if (filter.PurchaseDateFrom != null)
+            {
+                _EquipmentResponses = _EquipmentResponses.Where(x => x.PurchaseDate >= filter.PurchaseDateFrom).ToList();
+            }
+
+            if (filter.PurchaseDateTo != null)
+            {
+                _EquipmentResponses = _EquipmentResponses.Where(x => x.PurchaseDate <= filter.PurchaseDateTo).ToList();
+            }
+
+            if (filter.WarrantyExpirationDateFrom != null)
+            {
+                _EquipmentResponses = _EquipmentResponses.Where(x => x.PurchaseDate >= filter.WarrantyExpirationDateFrom).ToList();
+            }
+
+            if (filter.WarrantyExpirationDateTo != null)
+            {
+                _EquipmentResponses = _EquipmentResponses.Where(x => x.PurchaseDate <= filter.WarrantyExpirationDateTo).ToList();
+            }
+
+            if (filter.PurchasePriceFrom > 0)
+            {
+                _EquipmentResponses = _EquipmentResponses.Where(x => x.PurchasePrice >= filter.PurchasePriceFrom).ToList();
+            }
+
+            if (filter.PurchasePriceTo < 999999)
+            {
+                _EquipmentResponses = _EquipmentResponses.Where(x => x.PurchasePrice <= filter.PurchasePriceTo).ToList();
+            }
+            
+            if (filter.ReplacementPriceFrom > 0)
+            {
+                _EquipmentResponses = _EquipmentResponses.Where(x => x.ReplacementPrice >= filter.PurchasePriceFrom).ToList();
+            }
+
+            if (filter.ReplacementPriceTo < 999999)
+            {
+                _EquipmentResponses = _EquipmentResponses.Where(x => x.ReplacementPrice <= filter.PurchasePriceFrom).ToList();
+            }
+
+            if (filter.Statuses != null && filter.Statuses?.Count > 0)
+            {
+                _EquipmentResponses = _EquipmentResponses.Where(x => filter.Statuses.Contains(x.Status)).ToList();
+            }
+
+            return View("EquipmentValueReport", new EquipmentValueReportViewModel
+            {
+                ReportItems = __Mapper.Map<IList<EquipmentValueReportItemViewModel>>(_EquipmentResponses),
+                Filter = filter
+            });
         }
 
         [HttpGet]
