@@ -7,7 +7,7 @@ namespace ELMS.WEB.Areas.Email.Models.EmailSchedule
     {
         public Guid UID { get; set; }
         public Guid EmailTemplateUID { get; set; }
-        public string RecipientEmail { get; set; }
+        public string RecipientEmailAddress { get; set; }
         public EmailType EmailType { get; set; }
         public DateTime SendTimestamp { get; set; }
         public bool EmailSent { get; set; }

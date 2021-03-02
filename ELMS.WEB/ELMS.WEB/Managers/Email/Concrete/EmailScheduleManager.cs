@@ -26,6 +26,7 @@ namespace ELMS.WEB.Managers.Email.Concrete
         private readonly IApplicationEmailSender __EmailSender;
         private readonly IEmailTemplateRepository __EmailTemplateRepository;
         private const string ENTITY_NAME = "Email Schedule";
+        private const string EMAIL_RECIPIENT = "lej1@aston.ac.uk";
 
         public EmailScheduleManager(IMapper mapper, IEmailScheduleRepository emailScheduleRepository, IEmailScheduleParameterRepository emailScheduleParameterRepository, IApplicationEmailSender emailSender, IEmailTemplateRepository emailTemplateRepository)
         {
@@ -33,7 +34,7 @@ namespace ELMS.WEB.Managers.Email.Concrete
             __EmailScheduleRepository = emailScheduleRepository ?? throw new ArgumentNullException(nameof(emailScheduleRepository));
             __EmailScheduleParameterRepository = emailScheduleParameterRepository ?? throw new ArgumentNullException(nameof(emailScheduleParameterRepository));
             __EmailSender = emailSender ?? throw new ArgumentNullException(nameof(emailSender));
-            this.__EmailTemplateRepository = emailTemplateRepository;
+            __EmailTemplateRepository = emailTemplateRepository ?? throw new ArgumentNullException(nameof(emailTemplateRepository));
         }
 
         public async Task<EmailScheduleResponse> CreateAsync(CreateEmailScheduleRequest request)
@@ -78,7 +79,7 @@ namespace ELMS.WEB.Managers.Email.Concrete
             CreateEmailScheduleRequest _NearlyExpiredScheduleRequest = new CreateEmailScheduleRequest
             {
                 EmailType = EmailType.Warranty_Nearly_Expired,
-                RecipientEmailAddress = "lej1@aston.ac.uk",
+                RecipientEmailAddress = EMAIL_RECIPIENT,
                 SendTimestamp = equipment.WarrantyExpirationDate.Date.AddDays(-3)
             };
             EmailScheduleEntity _NearlyExpiredScheduleEntity = await __EmailScheduleRepository.CreateAsync(__Mapper.Map<EmailScheduleEntity>(_NearlyExpiredScheduleRequest));
@@ -87,7 +88,7 @@ namespace ELMS.WEB.Managers.Email.Concrete
             {
                 EmailScheduleUID = _NearlyExpiredScheduleEntity.UID,
                 Name = "Warranty_Expiry_URL",
-                Value = $"{baseURL}/Equipment/Equipment/EquipmentDetails?uid={equipment.UID}"
+                Value = $"{baseURL}/Equipment/Equipment/DetailsView?uid={equipment.UID}"
             };
             await __EmailScheduleParameterRepository.CreateAsync(__Mapper.Map<EmailScheduleParameterEntity>(_ParameterNearlyExpiredRequest));
 
@@ -95,7 +96,7 @@ namespace ELMS.WEB.Managers.Email.Concrete
             CreateEmailScheduleRequest _ExpiredScheduleRequest = new CreateEmailScheduleRequest
             {
                 EmailType = EmailType.Warranty_Expired,
-                RecipientEmailAddress = "lej1@aston.ac.uk",
+                RecipientEmailAddress = EMAIL_RECIPIENT,
                 SendTimestamp = equipment.WarrantyExpirationDate.Date
             };
             EmailScheduleEntity _ExpiredScheduleEntity = await __EmailScheduleRepository.CreateAsync(__Mapper.Map<EmailScheduleEntity>(_ExpiredScheduleRequest));
@@ -104,7 +105,7 @@ namespace ELMS.WEB.Managers.Email.Concrete
             {
                 EmailScheduleUID = _ExpiredScheduleEntity.UID,
                 Name = "Warranty_Expiry_URL",
-                Value = $"{baseURL}/Equipment/Equipment/EquipmentDetails?uid={equipment.UID}"
+                Value = $"{baseURL}/Equipment/Equipment/DetailsView?uid={equipment.UID}"
             };
             await __EmailScheduleParameterRepository.CreateAsync(__Mapper.Map<EmailScheduleParameterEntity>(_ParameterExpiredRequest));
 
@@ -119,7 +120,7 @@ namespace ELMS.WEB.Managers.Email.Concrete
                 CreateEmailScheduleRequest _NearlyExpiredScheduleRequest = new CreateEmailScheduleRequest
                 {
                     EmailType = EmailType.Warranty_Nearly_Expired,
-                    RecipientEmailAddress = "lej1@aston.ac.uk",
+                    RecipientEmailAddress = EMAIL_RECIPIENT,
                     SendTimestamp = equipment.WarrantyExpirationDate.Date.AddDays(-3)
                 };
                 EmailScheduleEntity _NearlyExpiredScheduleEntity = await __EmailScheduleRepository.CreateAsync(__Mapper.Map<EmailScheduleEntity>(_NearlyExpiredScheduleRequest));
@@ -128,7 +129,7 @@ namespace ELMS.WEB.Managers.Email.Concrete
                 {
                     EmailScheduleUID = _NearlyExpiredScheduleEntity.UID,
                     Name = "Warranty_Expiry_URL",
-                    Value = $"{baseURL}/Equipment/Equipment/EquipmentDetails?uid={equipment.UID}"
+                    Value = $"{baseURL}/Equipment/Equipment/DetailsView?uid={equipment.UID}"
                 };
                 await __EmailScheduleParameterRepository.CreateAsync(__Mapper.Map<EmailScheduleParameterEntity>(_ParameterNearlyExpiredRequest));
 
@@ -136,7 +137,7 @@ namespace ELMS.WEB.Managers.Email.Concrete
                 CreateEmailScheduleRequest _ExpiredScheduleRequest = new CreateEmailScheduleRequest
                 {
                     EmailType = EmailType.Warranty_Expired,
-                    RecipientEmailAddress = "lej1@aston.ac.uk",
+                    RecipientEmailAddress = EMAIL_RECIPIENT,
                     SendTimestamp = equipment.WarrantyExpirationDate.Date
                 };
                 EmailScheduleEntity _ExpiredScheduleEntity = await __EmailScheduleRepository.CreateAsync(__Mapper.Map<EmailScheduleEntity>(_ExpiredScheduleRequest));
@@ -145,7 +146,7 @@ namespace ELMS.WEB.Managers.Email.Concrete
                 {
                     EmailScheduleUID = _ExpiredScheduleEntity.UID,
                     Name = "Warranty_Expiry_URL",
-                    Value = $"{baseURL}/Equipment/Equipment/EquipmentDetails?uid={equipment.UID}"
+                    Value = $"{baseURL}/Equipment/Equipment/DetailsView?uid={equipment.UID}"
                 };
                 await __EmailScheduleParameterRepository.CreateAsync(__Mapper.Map<EmailScheduleParameterEntity>(_ParameterExpiredRequest));
             }
@@ -290,7 +291,7 @@ namespace ELMS.WEB.Managers.Email.Concrete
             }
         }
 
-        private async Task SendScheduledEmail(EmailScheduleResponse schedule)
+        public async Task SendScheduledEmail(EmailScheduleResponse schedule, bool updateSentFlag = true)
         {
             IList<EmailScheduleParameterResponse> _Parameters = __Mapper.Map<IList<EmailScheduleParameterResponse>>(await __EmailScheduleParameterRepository.GetAsync(schedule.UID));
 
@@ -299,15 +300,15 @@ namespace ELMS.WEB.Managers.Email.Concrete
                 case EmailType.Loan_Confirm:
                     await __EmailSender.SendLoanConfirmEmail(schedule.RecipientEmailAddress, "AIM - Loan Confirm", new ConfirmEmailTemplate
                     {
-                        Confirm_Loan_URL = _Parameters.FirstOrDefault(p => p.Name.ToUpper() == "Confirm_Loan_URL")?.Value ?? GlobalConstants.ASTON_URL
+                        Confirm_Loan_URL = _Parameters.FirstOrDefault(p => p.Name.ToUpper() == "Confirm_Loan_URL".ToUpper())?.Value ?? GlobalConstants.ASTON_URL
                     });
                     break;
 
                 case EmailType.Loan_Confirmed:
                     await __EmailSender.SendLoanConfirmedEmail(schedule.RecipientEmailAddress, "AIM - Loan Confirmed", new ConfirmedEmailTemplate
                     {
-                        Loan_Details_URL = _Parameters.FirstOrDefault(p => p.Name.ToUpper() == "Loan_Details_URL")?.Value ?? GlobalConstants.ASTON_URL,
-                        Start_Timestamp = _Parameters.FirstOrDefault(p => p.Name.ToUpper() == "Start_Timestamp")?.Value ?? "[Value not found]"
+                        Loan_Details_URL = _Parameters.FirstOrDefault(p => p.Name.ToUpper() == "Loan_Details_URL".ToUpper())?.Value ?? GlobalConstants.ASTON_URL,
+                        Start_Timestamp = _Parameters.FirstOrDefault(p => p.Name.ToUpper() == "Start_Timestamp".ToUpper())?.Value ?? "[Value not found]"
                     });
                     break;
 
@@ -315,29 +316,29 @@ namespace ELMS.WEB.Managers.Email.Concrete
                     await __EmailSender.SendLoanNearlyDueEmail(schedule.RecipientEmailAddress, "AIM - Loan Nearly Due", new LoanNearlyDueTemplate
                     {
                         Due_days = int.Parse(_Parameters.FirstOrDefault(p => p.Name.ToUpper() == "Due_days").Value),
-                        Loan_Details_URL = _Parameters.FirstOrDefault(p => p.Name.ToUpper() == "Loan_Details_URL")?.Value ?? "[Value not found]"
+                        Loan_Details_URL = _Parameters.FirstOrDefault(p => p.Name.ToUpper() == "Loan_Details_URL".ToUpper())?.Value ?? "[Value not found]"
                     });
                     break;
 
                 case EmailType.Loan_Overdue:
                     await __EmailSender.SendLoanOverdueEmail(schedule.RecipientEmailAddress, "AIM - Loan Overdue", new LoanOverdueTemplate
                     {
-                        Loan_Expiry_Date = _Parameters.FirstOrDefault(p => p.Name.ToUpper() == "Loan_Expiry_Date")?.Value ?? "[Value not found]",
-                        Overdue_Loan_URL = _Parameters.FirstOrDefault(p => p.Name.ToUpper() == "Overdue_Loan_URL")?.Value ?? "[Value not found]",
+                        Loan_Expiry_Date = _Parameters.FirstOrDefault(p => p.Name.ToUpper() == "Loan_Expiry_Date".ToUpper())?.Value ?? "[Value not found]",
+                        Overdue_Loan_URL = _Parameters.FirstOrDefault(p => p.Name.ToUpper() == "Overdue_Loan_URL".ToUpper())?.Value ?? "[Value not found]",
                     });
                     break;
 
                 case EmailType.Warranty_Nearly_Expired:
                     await __EmailSender.SendWarrantyNearlyExpiredEmail(schedule.RecipientEmailAddress, "AIM - Warranty Nearly Expired", new WarrantyNearlyExpiredTemplate
                     {
-                        Warranty_Expiry_URL = _Parameters.FirstOrDefault(p => p.Name.ToUpper() == "Warranty_Expiry_URL")?.Value ?? "[Value not found]"
+                        Warranty_Expiry_URL = _Parameters.FirstOrDefault(p => p.Name.ToUpper() == "Warranty_Expiry_URL".ToUpper())?.Value ?? "[Value not found]"
                     });
                     break;
 
                 case EmailType.Warranty_Expired:
                     await __EmailSender.SendWarrantyExpiredEmail(schedule.RecipientEmailAddress, "AIM - Warranty Expired", new WarrantyExpiredTemplate
                     {
-                        Warranty_Expiry_URL = _Parameters.FirstOrDefault(p => p.Name.ToUpper() == "Warranty_Expiry_URL")?.Value ?? "[Value not found]",
+                        Warranty_Expiry_URL = _Parameters.FirstOrDefault(p => p.Name.ToUpper() == "Warranty_Expiry_URL".ToUpper())?.Value ?? "[Value not found]",
                     });
                     break;
 
@@ -351,7 +352,10 @@ namespace ELMS.WEB.Managers.Email.Concrete
                     break;
             }
 
-            await __EmailScheduleRepository.UpdateSentAsync(schedule.UID, true);
+            if (updateSentFlag)
+            {
+                await __EmailScheduleRepository.UpdateSentAsync(schedule.UID, true);
+            }
         }
 
         public async Task<BaseResponse> UpdateSentAsync(Guid uid, bool sent)

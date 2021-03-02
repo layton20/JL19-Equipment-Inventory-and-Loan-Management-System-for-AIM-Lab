@@ -34,7 +34,6 @@ namespace ELMS.WEB.Areas.Loan.Controllers
         private readonly IUserRepository __UserRepository;
         private readonly ILoanEquipmentManager __LoanEquipmentManager;
         private readonly IEmailScheduleManager __EmailScheduleManager;
-        private readonly IApplicationEmailSender __EmailSender;
         private readonly IBlacklistManager __BlacklistManager;
         private readonly UserManager<IdentityUser> __UserManager;
         private readonly ILoanExtensionManager __LoanExtensionManager;
@@ -51,7 +50,6 @@ namespace ELMS.WEB.Areas.Loan.Controllers
             __UserRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
             __LoanEquipmentManager = loanEquipmentManager ?? throw new ArgumentNullException(nameof(loanEquipmentManager));
             __EmailScheduleManager = emailScheduleManager ?? throw new ArgumentNullException(nameof(emailScheduleManager));
-            __EmailSender = emailSender ?? throw new ArgumentNullException(nameof(emailSender));
             __BlacklistManager = blacklistManager ?? throw new ArgumentNullException(nameof(blacklistManager));
             __UserManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             __LoanExtensionManager = loanExtensionManager ?? throw new ArgumentNullException(nameof(loanExtensionManager));
