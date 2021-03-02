@@ -94,7 +94,7 @@
                             <th class="th-description">Status</th>
                             <th class="th-description">Accepted Terms and Conditions?</th>
                             <th class="th-description">Equipment</th>
-                            <th class="th-description">Created On</th>
+                            <th class="th-description">Loan Created On</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -103,8 +103,17 @@
                             <tr>
                                 <td class="td-name">@loan.LoanerEmail</td>
                                 <td class="td-name">@loan.LoaneeEmail</td>
-                                <td class="td-name">@loan.FromTimestamp</td>
-                                <td class="td-name">@loan.ExpiryTimestamp</td>
+                                <td class="td-name">@loan.FromTimestamp.ToShortDateString()</td>
+                                <td class="td-name">
+                                    @if (loan.Extensions.Count > 0)
+                                    {
+                                        @loan.Extensions.OrderByDescending(x => x.NewExpiryDate).ToList()[0].NewExpiryDate.ToShortDateString()
+                                    }
+                                    else
+                                    {
+                                        @loan.ExpiryTimestamp.ToShortDateString()
+                                    }
+                                </td>
                                 <td class="td-name">@loan.Status.ToString()</td>
                                 <td class="td-name">@loan.AcceptedTermsAndConditions</td>
                                 <td class="td-name">

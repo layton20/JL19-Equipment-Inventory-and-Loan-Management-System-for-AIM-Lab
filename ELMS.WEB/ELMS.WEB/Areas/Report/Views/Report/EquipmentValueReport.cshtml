@@ -25,10 +25,10 @@
                         <tr>
                             <th class="th-description">Name</th>
                             <th class="th-description">Serial Number</th>
+                            <th class="th-description">Warranty Expiration Date</th>
+                            <th class="th-description">Purchase Date</th>
                             <th class="th-description">Purchase Price (&pound;)</th>
                             <th class="th-description">Replacement Price (&pound;)</th>
-                            <th class="th-description">Purchase Date</th>
-                            <th class="th-description">Warranty Expiration Date</th>
                             <th class="th-description">Status</th>
                         </tr>
                     </thead>
@@ -38,10 +38,10 @@
                             <tr>
                                 <td class="td-name">@reportItem.Name</td>
                                 <td class="td-name">@reportItem.SerialNumber</td>
+                                <td class="td-name">@reportItem.WarrantyExpirationDate.ToShortDateString()</td>
+                                <td class="td-name">@reportItem.PurchaseDate.ToShortDateString()</td>
                                 <td class="td-name">@reportItem.PurchasePrice</td>
                                 <td class="td-name">@reportItem.PurchasePrice</td>
-                                <td class="td-name">@reportItem.PurchaseDate</td>
-                                <td class="td-name">@reportItem.WarrantyExpirationDate</td>
                                 <td class="td-name">@reportItem.Status.ToString()</td>
                             </tr>
                         }

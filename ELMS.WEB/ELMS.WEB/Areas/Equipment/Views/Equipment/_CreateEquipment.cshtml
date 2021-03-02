@@ -39,6 +39,11 @@
                 <input type="number" step=".01" class="form-control" asp-for="PurchasePrice" />
             </div>
             <div class="form-group">
+                <label asp-for="ReplacementPrice"></label>
+                <input type="number" step=".01" class="form-control" asp-for="ReplacementPrice" />
+                <small>If not provided, the price will default to the same value as Purchase Price</small>
+            </div>
+            <div class="form-group">
                 <label asp-for="PurchaseDate"></label>
                 <input type="date" class="form-control datetimepicker" asp-for="PurchaseDate" />
             </div>

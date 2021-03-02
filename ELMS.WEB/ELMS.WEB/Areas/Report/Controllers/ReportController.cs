@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ELMS.WEB.Areas.Equipment.Models;
+using ELMS.WEB.Areas.Loan.Models.LoanExtension;
 using ELMS.WEB.Areas.Report.Models;
 using ELMS.WEB.Enums.General;
 using ELMS.WEB.Managers.Equipment.Interfaces;
@@ -22,12 +23,14 @@ namespace ELMS.WEB.Areas.Report.Controllers
         private readonly IMapper __Mapper;
         private readonly IEquipmentManager __EquipmentManager;
         private readonly ILoanManager __LoanManager;
+        private readonly ILoanExtensionManager __LoanExtensionManager;
 
-        public ReportController(IMapper mapper, IEquipmentManager equipmentManager, ILoanManager loanManager)
+        public ReportController(IMapper mapper, IEquipmentManager equipmentManager, ILoanManager loanManager, ILoanExtensionManager loanExtensionManager)
         {
             __Mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             __EquipmentManager = equipmentManager ?? throw new ArgumentNullException(nameof(equipmentManager));
             __LoanManager = loanManager ?? throw new ArgumentNullException(nameof(loanManager));
+            __LoanExtensionManager = loanExtensionManager ?? throw new ArgumentNullException(nameof(loanExtensionManager));
         }
 
         [HttpGet]
@@ -59,23 +62,15 @@ namespace ELMS.WEB.Areas.Report.Controllers
         [HttpGet]
         public async Task<IActionResult> LoanHistoryReportAsync()
         {
-            LoanHistoryViewModel _Model = new LoanHistoryViewModel();
-
-            IList<LoanResponse> _Response = await __LoanManager.GetAsync();
-
-            _Model.Loans = _Response?.Select(x => new LoanHistoryItemViewModel
+            LoanHistoryViewModel _Model = new LoanHistoryViewModel
             {
-                UID = x.UID,
-                CreatedTimestamp = x.CreatedTimestamp,
-                AmendedTimestamp = x.AmendedTimestamp,
-                EquipmentList = __Mapper.Map<IList<EquipmentViewModel>>(x.EquipmentList),
-                ExpiryTimestamp = x.ExpiryTimestamp,
-                LoaneeEmail = x.LoaneeEmail,
-                LoanerEmail = x.LoanerEmail,
-                AcceptedTermsAndConditions = x.AcceptedTermsAndConditions,
-                FromTimestamp = x.FromTimestamp,
-                Status = x.Status
-            }).ToList();
+                Loans = __Mapper.Map<IList<LoanHistoryItemViewModel>>(await __LoanManager.GetAsync())
+            };
+
+            foreach (LoanHistoryItemViewModel loan in _Model.Loans)
+            {
+                loan.ExpiryTimestamp = await __LoanManager.GetExpiryDate(loan.UID);
+            }
 
             return View(_Model);
         }

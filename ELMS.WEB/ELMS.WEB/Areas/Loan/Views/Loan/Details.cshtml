@@ -36,60 +36,29 @@
                     <div class="col-sm-12 col-md-10 border-left">
                         <div class="tab-content tab-space pt-2">
                             <div class="tab-pane active" id="tabDetails">
-                                <div class="mb-4">
-                                    <h3 class="my-0">Editable fields</h3>
-                                </div>
-
-                                <form asp-area="Loan" asp-controller="Loan" asp-action="Edit" enctype="multipart/form-data">
-                                    <div asp-validation-summary="All" class="text-danger"></div>
-                                    <input asp-for="Loan.UID" type="hidden" />
-
-                                    <div class="form-group">
-                                        <label asp-for="Loan.FromTimestamp" class="bmd-label-floating"></label>
-                                        <input type="date" class="form-control" asp-for="Loan.FromTimestamp">
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label asp-for="Loan.ExpiryTimestamp" class="bmd-label-floating"></label>
-                                        <input type="date" class="form-control" asp-for="Loan.ExpiryTimestamp">
-                                    </div>
-
-                                    @if (Model.Loan.Status == Status.Pending && !Model.Loan.AcceptedTermsAndConditions)
-                                    {
-                                        <div class="form-check mt-3">
-                                            <label class="form-check-label ml-1">
-                                                <input class="form-check-input" type="checkbox" asp-for="Loan.AcceptedTermsAndConditions">
-                                                Terms and Conditions Accepted
-                                                <span class="form-check-sign">
-                                                    <span class="check"></span>
-                                                </span>
-                                            </label>
-                                        </div>
-                                    }
-
-                                    <div class="mt-3">
-                                        <button type="submit" class="btn btn-primary">Update Details</button>
-                                    </div>
-                                </form>
-                                <hr />
-                                <div>
-                                    <h3 class="my-0 mb-1">Non-editable fields</h3>
-                                    <ul class="list-group">
-                                        <li class="list-group-item pl-0"><strong>Reference ID: </strong>@Model.Loan.UID</li>
-                                        <li class="list-group-item pl-0">
-                                            <strong>Equipment: </strong>
-                                            @foreach (var equipment in Model.Loan.EquipmentList)
-                                            {
-                                                <a class="equipmentDetails text-primary" data-url="/Equipment/Equipment/DetailsModal" data-uid="@equipment.UID" style="cursor: pointer">@equipment.Name</a>
-                                            }
-                                        </li>
-                                        @if (Model.Loan.Status == Status.Pending)
+                                <ul class="list-group">
+                                    <li class="list-group-item pl-0"><strong>Reference ID: </strong>@Model.Loan.UID</li>
+                                    <li class="list-group-item pl-0"><strong>Loan Starting Date: </strong>@Model.Loan.FromTimestamp.ToShortDateString()</li>
+                                    <li class="list-group-item pl-0">
+                                        <strong>Loan Expiry Date: </strong>@Model.Loan.ExpiryTimestamp.ToShortDateString()
+                                        @if (Model.Extensions.Count > 0)
                                         {
-                                            <li class="list-group-item pl-0"><strong>Terms and Conditions Accepted: </strong>@Model.Loan.AcceptedTermsAndConditions</li>
+                                            <a href="javascript;;">- @Model.Extensions.Count extension(s) applied</a>
                                         }
-                                        <li class="list-group-item pl-0"><strong>Status: </strong>@Model.Loan.Status.ToString()</li>
-                                    </ul>
-                                </div>
+                                    </li>
+                                    <li class="list-group-item pl-0">
+                                        <strong>Equipment: </strong>
+                                        @foreach (var equipment in Model.Loan.EquipmentList)
+                                        {
+                                            <a class="equipmentDetails text-primary" data-url="/Equipment/Equipment/DetailsModal" data-uid="@equipment.UID" style="cursor: pointer">@equipment.Name</a>
+                                        }
+                                    </li>
+                                    @if (Model.Loan.Status == Status.Pending)
+                                    {
+                                        <li class="list-group-item pl-0"><strong>Terms and Conditions Accepted: </strong>@Model.Loan.AcceptedTermsAndConditions</li>
+                                    }
+                                    <li class="list-group-item pl-0"><strong>Status: </strong>@Model.Loan.Status.ToString()</li>
+                                </ul>
                                 <hr />
                                 <div>
                                     <a class="btn btn-primary" asp-area="Loan" asp-controller="Loan" asp-action="LoanPreview" asp-route-uid="@Model.Loan.UID" data-toggle="tooltip" data-placement="top" title="What a loanee would see when viewing details about their loan.">Loan Preview</a>
@@ -114,7 +83,7 @@
                                     <div class="border list-group-item flex-column align-items-start text-dark mb-2">
                                         <div class="d-flex w-100 justify-content-between">
                                             <div class="col-sm-12 col-md-8 p-0">
-                                                <h5 class="mb-1 font-weight-bold">@extension.PreviousExpiryDate <i class="fas fa-arrow-right"></i> @extension.NewExpiryDate</h5>
+                                                <h5 class="mb-1 font-weight-bold">@extension.PreviousExpiryDate.ToShortDateString() <i class="fas fa-arrow-right"></i> @extension.NewExpiryDate.ToShortDateString()</h5>
                                                 <p>Loan extended by @((extension.NewExpiryDate - extension.PreviousExpiryDate).TotalDays) days.</p>
                                                 <small>Made by @extension.ExtenderEmail</small>
                                             </div>

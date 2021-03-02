@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using ELMS.WEB.Areas.Report.Models;
+using ELMS.WEB.Models.Loan.Response;
 
 namespace ELMS.WEB.Profiles.Report
 {
@@ -6,6 +8,7 @@ namespace ELMS.WEB.Profiles.Report
     {
         public ReportProfile()
         {
+            CreateMap<LoanResponse, LoanHistoryItemViewModel>();
         }
     }
 }

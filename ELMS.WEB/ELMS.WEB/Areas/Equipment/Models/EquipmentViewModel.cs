@@ -24,6 +24,9 @@ namespace ELMS.WEB.Areas.Equipment.Models
         [Display(Name = "Purchase Price (£)")]
         public double PurchasePrice { get; set; }
 
+        [Display(Name = "Replacement Price (£)")]
+        public double ReplacementPrice { get; set; }
+
         [Display(Name = "Purchase Date")]
         public DateTime PurchaseDate { get; set; }
 

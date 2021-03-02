@@ -20,6 +20,7 @@ namespace ELMS.WEB.Entities.Equipment
         public string SerialNumber { get; set; }
 
         public double PurchasePrice { get; set; }
+        public double ReplacementPrice { get; set; }
 
         public DateTime PurchaseDate { get; set; }
 
