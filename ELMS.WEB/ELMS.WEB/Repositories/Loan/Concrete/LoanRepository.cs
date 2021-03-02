@@ -72,6 +72,7 @@ namespace ELMS.WEB.Repositories.Loan.Concrete
                 return null;
             }
 
+            loan.ExpiryTimestamp = loan.ExpiryTimestamp.Date.AddDays(1).AddSeconds(-1);
             await __ApplicationContext.Loans.AddAsync(loan);
             await __ApplicationContext.LoanEquipmentList.AddRangeAsync(_EquipmentList.Select(x => new LoanEquipmentEntity
             {
@@ -129,8 +130,8 @@ namespace ELMS.WEB.Repositories.Loan.Concrete
 
             _Loan.AcceptedTermsAndConditions = loan.AcceptedTermsAndConditions;
             _Loan.Status = loan.Status;
-            _Loan.FromTimestamp = loan.FromTimestamp;
-            _Loan.ExpiryTimestamp = loan.ExpiryTimestamp;
+            _Loan.FromTimestamp = loan.FromTimestamp.Date;
+            _Loan.ExpiryTimestamp = loan.ExpiryTimestamp.Date.AddDays(1).AddSeconds(-1);
             _Loan.AmendedTimestamp = DateTime.Now;
 
             return await __ApplicationContext.SaveChangesAsync() > 0;

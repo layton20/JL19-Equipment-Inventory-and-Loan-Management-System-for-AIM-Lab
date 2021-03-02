@@ -25,6 +25,7 @@ namespace ELMS.WEB.Repositories.Loan.Concrete
                 return null;
             }
 
+            entity.NewExpiryDate = entity.NewExpiryDate.Date.AddDays(1).AddSeconds(-1);
             await __ApplicationContext.LoanExtensions.AddAsync(entity);
             return (await __ApplicationContext.SaveChangesAsync() > 0) ? entity : null;
         }
@@ -73,8 +74,8 @@ namespace ELMS.WEB.Repositories.Loan.Concrete
             }
 
             _Entity.ExtenderEmail = entity.ExtenderEmail;
-            _Entity.PreviousExpiryDate = entity.PreviousExpiryDate;
-            _Entity.NewExpiryDate = entity.NewExpiryDate;
+            _Entity.PreviousExpiryDate = entity.PreviousExpiryDate.Date;
+            _Entity.NewExpiryDate = entity.NewExpiryDate.Date.AddDays(1).AddSeconds(-1);
             _Entity.AmendedTimestamp = DateTime.Now;
 
             return await __ApplicationContext.SaveChangesAsync() > 0;
