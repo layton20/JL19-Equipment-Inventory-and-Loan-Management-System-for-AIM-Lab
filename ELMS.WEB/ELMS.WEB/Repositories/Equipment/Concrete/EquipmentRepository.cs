@@ -25,6 +25,7 @@ namespace ELMS.WEB.Repositories.Equipment.Concrete
                 return null;
             }
 
+            equipment.WarrantyExpirationDate = equipment.WarrantyExpirationDate.Date.AddDays(1).AddSeconds(-1);
             await __Context.Equipment.AddAsync(equipment);
             bool _Added = await __Context.SaveChangesAsync() > 0;
 
@@ -46,7 +47,7 @@ namespace ELMS.WEB.Repositories.Equipment.Concrete
                 {
                     Name = $"{equipment.Name} ({i + 1})",
                     Description = equipment.Description,
-                    WarrantyExpirationDate = equipment.WarrantyExpirationDate,
+                    WarrantyExpirationDate = equipment.WarrantyExpirationDate.Date.AddDays(1).AddSeconds(-1),
                     Status = equipment.Status,
                     PurchaseDate = equipment.PurchaseDate,
                     PurchasePrice = equipment.PurchasePrice,
@@ -110,7 +111,7 @@ namespace ELMS.WEB.Repositories.Equipment.Concrete
             _Equipment.Name = equipment.Name;
             _Equipment.Description = equipment.Description;
             _Equipment.SerialNumber = equipment.SerialNumber;
-            _Equipment.WarrantyExpirationDate = equipment.WarrantyExpirationDate;
+            _Equipment.WarrantyExpirationDate = equipment.WarrantyExpirationDate.AddDays(1).AddSeconds(-1);
             _Equipment.PurchaseDate = equipment.PurchaseDate;
             _Equipment.PurchasePrice = equipment.PurchasePrice;
             _Equipment.ReplacementPrice = equipment.ReplacementPrice;

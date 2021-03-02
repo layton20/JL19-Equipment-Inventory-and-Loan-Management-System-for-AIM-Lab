@@ -74,6 +74,7 @@ namespace ELMS.WEB.Areas.Report.Controllers
 
             if (filter.PurchaseDateTo != null)
             {
+                filter.PurchaseDateTo = filter.PurchaseDateTo.Date.AddDays(1).AddSeconds(-1);
                 _EquipmentResponses = _EquipmentResponses.Where(x => x.PurchaseDate <= filter.PurchaseDateTo).ToList();
             }
 
@@ -84,6 +85,7 @@ namespace ELMS.WEB.Areas.Report.Controllers
 
             if (filter.WarrantyExpirationDateTo != null)
             {
+                filter.WarrantyExpirationDateTo = filter.WarrantyExpirationDateTo.AddDays(1).AddSeconds(-1);
                 _EquipmentResponses = _EquipmentResponses.Where(x => x.PurchaseDate <= filter.WarrantyExpirationDateTo).ToList();
             }
 
@@ -157,6 +159,7 @@ namespace ELMS.WEB.Areas.Report.Controllers
 
             if (filter.ExpiryTimestamp != null)
             {
+                filter.ExpiryTimestamp = filter.ExpiryTimestamp.Date.AddDays(1).AddSeconds(-1);
                 _Response = _Response.Where(x => x.FromTimestamp <= filter.ExpiryTimestamp).ToList();
             }
 
@@ -175,16 +178,6 @@ namespace ELMS.WEB.Areas.Report.Controllers
                 _Response = (filter.AcceptedTermsAndConditions == BooleanFilter.True) ?
                     _Response.Where(x => x.AcceptedTermsAndConditions).ToList() :
                     _Response.Where(x => !x.AcceptedTermsAndConditions).ToList();
-            }
-
-            if (filter.FromTimestamp != null)
-            {
-                _Response = _Response.Where(x => x.FromTimestamp >= filter.FromTimestamp).ToList();
-            }
-
-            if (filter.ExpiryTimestamp != null)
-            {
-                _Response = _Response.Where(x => x.ExpiryTimestamp <= filter.ExpiryTimestamp).ToList();
             }
 
             if (filter.Statuses != null && filter.Statuses?.Count > 0)
