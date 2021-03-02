@@ -161,8 +161,9 @@
                             <th class="th-description font-weight-normal">Equipment</th>
                             <th class="th-description font-weight-normal">Start Date</th>
                             <th class="th-description font-weight-normal">End Date</th>
+                            <th class="th-description font-weight-normal">Extensions</th>
                             <th class="th-description font-weight-normal">Status</th>
-                            <th class="th-description font-weight-normal">Accepted TAC <i class="fas fa-info-circle text-gray" data-toggle="tooltip" data-placement="left" title="If the user has accepted the Terms and Conditions of the loan."></i></th>
+                            <th class="th-description font-weight-normal">TAC<i class="fas fa-info-circle text-gray" data-toggle="tooltip" data-placement="left" title="If the user has accepted the Terms and Conditions of the loan."></i></th>
                             <th class="th-description font-weight-normal">Actions</th>
                         </tr>
                     </thead>
@@ -177,14 +178,22 @@
                                     <ul class="list-group list-group-flush">
                                         @foreach (var equipment in Model.Loans.FirstOrDefault(x => x.UID == loan.UID).EquipmentList)
                                         {
-                                            <li class="list-group-item"><a class="loanDetailsModal text-primary" data-url="/Equipment/Equipment/DetailsModal" data-uid="@equipment.UID" style="cursor: pointer">@equipment.Name</a></li>
+                                            <li class="list-group-item pl-0"><a class="loanDetailsModal text-primary" data-url="/Equipment/Equipment/DetailsModal" data-uid="@equipment.UID" style="cursor: pointer">@equipment.Name</a></li>
                                         }
                                     </ul>
                                 </td>
-                                <td class="td-name">@loan.FromTimestamp</td>
-                                <td class="td-name">@loan.ExpiryTimestamp</td>
+                                <td class="td-name">@loan.FromTimestamp.ToShortDateString()</td>
+                                <td class="td-name">@loan.ExpiryTimestamp.ToShortDateString()</td>
+                                <td class="td-name">
+                                    <ul class="list-group list-group-flush">
+                                        @foreach (var extension in loan.Extensions)
+                                        {
+                                            <li class="list-group-item pl-0">@extension.PreviousExpiryDate.ToShortDateString() <i class="fas fa-arrow-right"></i> @extension.NewExpiryDate.ToShortDateString()</li>
+                                        }
+                                    </ul>
+                                </td>
                                 <td class="td-name">@loan.Status.ToString()</td>
-                                <td class="td-name">@loan.AcceptedTermsAndConditions</td>
+                                <td class="td-name">@(loan.AcceptedTermsAndConditions ? "Accepted" : "Pending")</td>
                                 <td class="td-name">
                                     <div class="dropdown show">
                                         <a class="btn btn-primary dropdown-toggle" href="javascript:;" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

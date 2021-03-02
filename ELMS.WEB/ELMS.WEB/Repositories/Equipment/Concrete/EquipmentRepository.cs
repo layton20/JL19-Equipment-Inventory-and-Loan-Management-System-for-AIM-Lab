@@ -113,6 +113,7 @@ namespace ELMS.WEB.Repositories.Equipment.Concrete
             _Equipment.WarrantyExpirationDate = equipment.WarrantyExpirationDate;
             _Equipment.PurchaseDate = equipment.PurchaseDate;
             _Equipment.PurchasePrice = equipment.PurchasePrice;
+            _Equipment.ReplacementPrice = equipment.ReplacementPrice;
             _Equipment.Status = equipment.Status;
 
             return await __Context.SaveChangesAsync() > 0;

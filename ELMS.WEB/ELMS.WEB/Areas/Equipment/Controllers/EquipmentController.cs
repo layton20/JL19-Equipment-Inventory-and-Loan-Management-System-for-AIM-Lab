@@ -142,6 +142,11 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
             BaseResponse _Response = new BaseResponse();
             model.OwnerUID = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
+            if (model.PurchasePrice != 0 && model.ReplacementPrice == 0)
+            {
+                model.ReplacementPrice = model.PurchasePrice;
+            }
+
             if (model.Quantity <= 1)
             {
                 EquipmentResponse _EquipmentResponse = await __EquipmentManager.CreateAsync(__Mapper.Map<CreateEquipmentRequest>(model));

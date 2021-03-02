@@ -1,4 +1,5 @@
 ﻿using ELMS.WEB.Areas.Equipment.Models;
+using ELMS.WEB.Areas.Loan.Models.LoanExtension;
 using ELMS.WEB.Enums.Loan;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,7 @@ namespace ELMS.WEB.Areas.Loan.Models
         public bool AcceptedTermsAndConditions { get; set; }
         public DateTime CreatedTimestamp { get; set; }
         public DateTime AmendedTimestamp { get; set; }
-        public IList<EquipmentViewModel> EquipmentList { get; set; }
+        public IList<EquipmentViewModel> EquipmentList { get; set; } = new List<EquipmentViewModel>();
+        public IList<LoanExtensionViewModel> Extensions { get; set; } = new List<LoanExtensionViewModel>();
     }
 }

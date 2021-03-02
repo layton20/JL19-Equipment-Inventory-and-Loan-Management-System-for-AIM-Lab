@@ -156,8 +156,9 @@
                                 <th class="th-description font-weight-normal">Serial Number</th>
                                 <th class="th-description font-weight-normal">Status</th>
                                 <th class="th-description font-weight-normal">Warranty Expiration Date</th>
-                                <th class="th-description font-weight-normal">Purchase Price (&pound;)</th>
                                 <th class="th-description font-weight-normal">Purchase Date</th>
+                                <th class="th-description font-weight-normal">Purchase Price (&pound;)</th>
+                                <th class="th-description font-weight-normal">Replacement Price (&pound;)</th>
                                 <th class="th-description font-weight-normal">Actions</th>
                             </tr>
                         </thead>
@@ -168,9 +169,10 @@
                                     <td class="td-name">@equipment.Name</td>
                                     <td class="td-name">@equipment.SerialNumber</td>
                                     <td class="td-name">@equipment.Status.ToString()</td>
-                                    <td class="td-name">@equipment.WarrantyExpirationDate</td>
+                                    <td class="td-name">@equipment.WarrantyExpirationDate.ToShortDateString()</td>
+                                    <td class="td-name">@equipment.PurchaseDate.ToShortDateString()</td>
                                     <td class="td-name">@equipment.PurchasePrice</td>
-                                    <td class="td-name">@equipment.PurchaseDate</td>
+                                    <td class="td-name">@equipment.ReplacementPrice</td>
                                     <td class="td-name">
                                         <div class="dropdown show">
                                             <a class="btn btn-primary dropdown-toggle" href="javascript:;" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

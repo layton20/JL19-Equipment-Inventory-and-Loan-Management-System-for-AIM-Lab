@@ -8,7 +8,6 @@ using ELMS.WEB.Models.Loan.Response;
 using ELMS.WEB.Repositories.Loan.Interface;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ELMS.WEB.Managers.Loan.Concrete

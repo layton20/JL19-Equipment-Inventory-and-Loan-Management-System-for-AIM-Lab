@@ -22,14 +22,16 @@ namespace ELMS.WEB.Managers.Loan.Concrete
         private readonly ILoanRepository __LoanRepository;
         private readonly IEquipmentRepository __EquipmentRepository;
         private readonly ILoanEquipmentRepository __LoanEquipmentRepository;
+        private readonly ILoanExtensionRepository __LoanExtensionRepository;
         private const string MODEL_NAME = "Loan";
 
-        public LoanManager(IMapper mapper, ILoanRepository loanRepository, IEquipmentRepository equipmentRepository, ILoanEquipmentRepository loanEquipmentRepository)
+        public LoanManager(IMapper mapper, ILoanRepository loanRepository, IEquipmentRepository equipmentRepository, ILoanEquipmentRepository loanEquipmentRepository, ILoanExtensionRepository loanExtensionRepository)
         {
             __Mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             __LoanRepository = loanRepository ?? throw new ArgumentNullException(nameof(loanRepository));
             __EquipmentRepository = equipmentRepository ?? throw new ArgumentNullException(nameof(equipmentRepository));
             __LoanEquipmentRepository = loanEquipmentRepository ?? throw new ArgumentNullException(nameof(loanEquipmentRepository));
+            __LoanExtensionRepository = loanExtensionRepository ?? throw new ArgumentNullException(nameof(loanExtensionRepository));
         }
 
         public async Task<BaseResponse> AcceptTermsAndConditions(Guid uid)
@@ -125,6 +127,25 @@ namespace ELMS.WEB.Managers.Loan.Concrete
         public async Task<IList<LoanResponse>> GetByUserAsync(string loaneeEmail)
         {
             return __Mapper.Map<IList<LoanResponse>>(await __LoanRepository.GetByUserAsync(loaneeEmail));
+        }
+
+        public async Task<DateTime> GetExpiryDate(Guid loanUID)
+        {
+            LoanEntity _Response = await __LoanRepository.GetByUIDAsync(loanUID);
+
+            if (_Response == null)
+            {
+                return DateTime.MinValue;
+            }
+
+            IList<LoanExtensionEntity> _Extensions = (await __LoanExtensionRepository.GetAsync(loanUID))?.OrderByDescending(x => x.NewExpiryDate)?.ToList();
+
+            if (_Extensions == null || _Extensions.Count <= 0)
+            {
+                return _Response.ExpiryTimestamp;
+            }
+
+            return _Extensions[0].NewExpiryDate;
         }
     }
 }

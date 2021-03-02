@@ -11,6 +11,7 @@ namespace ELMS.WEB.Models.Equipment.Response
         public string Description { get; set; }
         public string SerialNumber { get; set; }
         public double PurchasePrice { get; set; }
+        public double ReplacementPrice { get; set; }
         public DateTime PurchaseDate { get; set; }
         public DateTime WarrantyExpirationDate { get; set; }
         public Status Status { get; set; }
