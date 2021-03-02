@@ -8,7 +8,6 @@ namespace ELMS.WEB.Models.Loan.Request
 {
     public class CreateLoanRequest
     {
-
         [Required]
         [EmailAddress]
         public string LoanerEmail { get; set; }

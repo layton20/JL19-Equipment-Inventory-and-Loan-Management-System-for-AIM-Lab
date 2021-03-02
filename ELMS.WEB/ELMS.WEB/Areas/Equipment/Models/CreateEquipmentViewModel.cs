@@ -21,6 +21,7 @@ namespace ELMS.WEB.Areas.Equipment.Models
         [Required]
         [Display(Name = "Purchase Price (£)")]
         public double PurchasePrice { get; set; }
+
         [Required]
         [Display(Name = "Replacement Price (£)")]
         public double ReplacementPrice { get; set; }

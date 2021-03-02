@@ -27,6 +27,7 @@ namespace ELMS.WEB.Managers.Loan.Interface
         public Task<IntResponse> GetCountByStatus(Status status);
 
         public Task<IList<LoanResponse>> GetByUserAsync(string loaneeEmail);
+
         public Task<DateTime> GetExpiryDate(Guid loanUID);
     }
 }

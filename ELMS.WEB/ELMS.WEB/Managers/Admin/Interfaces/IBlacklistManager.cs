@@ -21,6 +21,7 @@ namespace ELMS.WEB.Managers.Admin.Interfaces
         Task<BlacklistResponse> GetByUIDAsync(Guid uid);
 
         Task<BaseResponse> DeleteAsync(Guid uid);
+
         Task<BlacklistStateEnum> GetState(string email);
     }
 }

@@ -8,7 +8,6 @@ namespace ELMS.WEB.Entities.Loan
 {
     public class LoanEntity : BaseEntity
     {
-
         [Required]
         [EmailAddress]
         public string LoanerEmail { get; set; }

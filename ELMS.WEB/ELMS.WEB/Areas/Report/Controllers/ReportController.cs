@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using ELMS.WEB.Areas.Equipment.Models;
-using ELMS.WEB.Areas.Loan.Models.LoanExtension;
 using ELMS.WEB.Areas.Report.Models;
 using ELMS.WEB.Enums.General;
 using ELMS.WEB.Managers.Equipment.Interfaces;

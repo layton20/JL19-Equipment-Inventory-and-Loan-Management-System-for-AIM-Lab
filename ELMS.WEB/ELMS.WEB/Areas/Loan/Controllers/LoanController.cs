@@ -341,7 +341,8 @@ namespace ELMS.WEB.Areas.Loan.Controllers
                 ViewData["ErrorMessage"] = errorMessage;
             }
 
-            return View("Details", new DetailsViewModel {
+            return View("Details", new DetailsViewModel
+            {
                 Loan = __Mapper.Map<LoanViewModel>(await __LoanManager.GetByUIDAsync(uid)),
                 Extensions = __Mapper.Map<IList<LoanExtensionViewModel>>(await __LoanExtensionManager.GetAsync(uid))
             });

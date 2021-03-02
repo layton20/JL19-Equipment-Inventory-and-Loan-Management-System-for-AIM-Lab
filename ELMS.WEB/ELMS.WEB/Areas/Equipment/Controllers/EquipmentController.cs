@@ -115,7 +115,7 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
                 _Equipment.Equipments = _Equipment.Equipments.Where(x => filter.Statuses.Contains(x.Status)).ToList();
             }
 
-            return View("Index", new IndexViewModel 
+            return View("Index", new IndexViewModel
             {
                 Filter = filter,
                 Equipment = __Mapper.Map<IList<EquipmentViewModel>>(_Equipment.Equipments)

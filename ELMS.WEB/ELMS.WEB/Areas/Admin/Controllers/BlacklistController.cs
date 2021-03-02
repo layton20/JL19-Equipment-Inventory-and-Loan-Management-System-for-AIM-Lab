@@ -159,7 +159,7 @@ namespace ELMS.WEB.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> DetailsModalAsync(string email) 
+        public async Task<IActionResult> DetailsModalAsync(string email)
         {
             if (string.IsNullOrWhiteSpace(email))
             {

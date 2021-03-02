@@ -12,14 +12,18 @@ namespace ELMS.WEB.Entities.Loan
         [NonDefaultGuid]
         [Required]
         public Guid LoanUID { get; set; }
+
         [Required]
         [EmailAddress]
         public string ExtenderEmail { get; set; }
+
         [Required]
         public DateTime PreviousExpiryDate { get; set; }
+
         [Required]
         [FutureOrTodayDate]
         public DateTime NewExpiryDate { get; set; }
+
         public LoanEntity Loan { get; set; }
     }
 }

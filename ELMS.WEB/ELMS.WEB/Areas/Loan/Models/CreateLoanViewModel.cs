@@ -10,7 +10,6 @@ namespace ELMS.WEB.Areas.Loan.Models
 {
     public class CreateLoanViewModel
     {
-
         public IList<EquipmentViewModel> EquipmentSelectList { get; set; }
         public IList<IdentityUser> UserSelectList { get; set; }
         public string LoaneeUID { get; set; } = Guid.Empty.ToString();
