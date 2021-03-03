@@ -7,6 +7,12 @@
         <ul class="nav">
             <li class="nav-item" id="navItemDashboard">
                 <a asp-area="" asp-controller="Home" asp-action="Index" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    <p> Home</p>
+                </a>
+            </li>
+            <li class="nav-item" id="navItemDashboard">
+                <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" class="nav-link">
                     <i class="material-icons">dashboard</i>
                     <p> Dashboard</p>
                 </a>
@@ -19,7 +25,7 @@
             </li>
             <li class="nav-item" id="navItemLoans">
                 <a class="nav-link" asp-area="Loan" asp-controller="Loan" asp-action="Index">
-                    <i class="fas fa-file-signature"></i>
+                    <i class="fas fa-file-contract"></i>
                     <p> Loans</p>
                 </a>
             </li>

@@ -1,0 +1,181 @@
+﻿@model ELMS.WEB.Areas.Admin.Models.Dashboard.IndexViewModel
+
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-4 col-sm-12">
+        <div class="card card-stats">
+            <div class="card-header card-header-icon card-header-primary">
+                <div class="card-icon">
+                    <i class="fas fa-warehouse"></i>
+                </div>
+                <div class="card-category">Equipment Lab Value</div>
+                <h2 class="card-title">&pound;@Model.EquipmentList.Where(x => x.WarrantyExpirationDate <= DateTime.Now).Sum(x => x.PurchasePrice)</h2>
+            </div>
+            <div class="card-footer">
+                <div class="stats">
+                    <a asp-area="Report" asp-controller="Report" asp-action="EquipmentValueReport">View equipment value report</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 col-sm-12" ">
+        <div class="card card-stats">
+            <div class="card-header card-header-icon card-header-primary">
+                <div class="card-icon">
+                    <i class="fas fa-warehouse"></i>
+                </div>
+                <div class="card-category">Written off Equipment</div>
+                <h2 class="card-title">@Model.EquipmentList.Where(x => x.WarrantyExpirationDate >= DateTime.Now).Count()</h2>
+            </div>
+            <div class="card-footer">
+                <div class="stats">
+                    <a href="#">View written off equipment</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 col-sm-12">
+        <div class="card card-stats">
+            <div class="card-header card-header-icon card-header-danger">
+                <div class="card-icon">
+                    <i class="fas fa-sign-in-alt"></i>
+                </div>
+                <div class="card-category">Overdue Loans</div>
+                <h2 class="card-title">@Model.Loans.Where(x => x.ExpiryTimestamp >= DateTime.Now).Count()</h2>
+            </div>
+            <div class="card-footer">
+                <div class="stats">
+                    <a href="#">View overdue loans</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card mt-0">
+            <div class="card-header card-header-primary card-header-icon">
+                <h4 class="card-title">Current Active Loans</h4>
+            </div>
+            <div class="card-body">
+                <table class="display table datatable responsive hover compact" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th class="th-description font-weight-normal">Reference ID</th>
+                            <th class="th-description font-weight-normal">Loaner</th>
+                            <th class="th-description font-weight-normal">Loanee</th>
+                            <th class="th-description font-weight-normal">Equipment</th>
+                            <th class="th-description font-weight-normal">Start Date</th>
+                            <th class="th-description font-weight-normal">End Date</th>
+                            <th class="th-description font-weight-normal">Extensions</th>
+                            <th class="th-description font-weight-normal">Status</th>
+                            <th class="th-description font-weight-normal">TAC<i class="fas fa-info-circle text-gray" data-toggle="tooltip" data-placement="left" title="If the user has accepted the Terms and Conditions of the loan."></i></th>
+                            <th class="th-description font-weight-normal">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var loan in Model.Loans.Where(x => x.Status == ELMS.WEB.Enums.Loan.Status.ActiveLoan && x.ExpiryTimestamp <= DateTime.Now).OrderByDescending(x => x.CreatedTimestamp))
+                        {
+                            <tr>
+                                <td class="td-name">@loan.UID</td>
+                                <td class="td-name">@(loan.LoanerEmail ?? "Not found")</td>
+                                <td class="td-name">@(loan.LoaneeEmail ?? "Not found")</td>
+                                <td class="td-name">
+                                    <ul class="list-group list-group-flush">
+                                        @foreach (var equipment in Model.Loans.FirstOrDefault(x => x.UID == loan.UID).EquipmentList)
+                                        {
+                                            <li class="list-group-item pl-0"><a class="loanDetailsModal text-primary" data-url="/Equipment/Equipment/DetailsModal" data-uid="@equipment.UID" style="cursor: pointer">@equipment.Name</a></li>
+                                        }
+                                    </ul>
+                                </td>
+                                <td class="td-name">@loan.FromTimestamp.ToShortDateString()</td>
+                                <td class="td-name">@loan.ExpiryTimestamp.ToShortDateString()</td>
+                                <td class="td-name">
+                                    <ul class="list-group list-group-flush">
+                                        @foreach (var extension in loan.Extensions)
+                                        {
+                                            <li class="list-group-item pl-0">@extension.PreviousExpiryDate.ToShortDateString() <i class="fas fa-arrow-right"></i> @extension.NewExpiryDate.ToShortDateString()</li>
+                                        }
+                                    </ul>
+                                </td>
+                                <td class="td-name">@loan.Status.ToString()</td>
+                                <td class="td-name">@(loan.AcceptedTermsAndConditions ? "Accepted" : "Pending")</td>
+                                <td class="td-name">
+                                    <div class="dropdown show">
+                                        <a class="btn btn-primary dropdown-toggle" href="javascript:;" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            ACTION
+                                        </a>
+
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                            <a class="dropdown-item" asp-area="Loan" asp-controller="Loan" asp-action="DetailsView" asp-route-uid="@loan.UID"><i class="fas fa-pen mr-2"></i> Edit</a>
+                                            <a class="dropdown-item forceComplete" href="javascript:;" data-url="/Loan/Loan/ForceCompleteModal" data-uid="@loan.UID"><i class="fas fa-undo mr-2"></i> Force Complete Loan</a>
+                                            <a class="dropdown-item" asp-area="Loan" asp-controller="Loan" asp-action="AcceptTermsAndConditionsView" asp-route-loanuid="@loan.UID"><i class="fas fa-clipboard-check mr-2"></i> Terms & Conditions</a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card mt-0">
+            <div class="card-header card-header-primary card-header-icon">
+                <h4 class="card-title">Recently added equipment</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="display table datatable-no-options responsive hover compact" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th class="th-description font-weight-normal">Name</th>
+                                <th class="th-description font-weight-normal">Serial Number</th>
+                                <th class="th-description font-weight-normal">Status</th>
+                                <th class="th-description font-weight-normal">Warranty Expiration Date</th>
+                                <th class="th-description font-weight-normal">Purchase Date</th>
+                                <th class="th-description font-weight-normal">Purchase Price (&pound;)</th>
+                                <th class="th-description font-weight-normal">Replacement Price (&pound;)</th>
+                                <th class="th-description font-weight-normal">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var equipment in Model.EquipmentList.OrderByDescending(x => x.CreatedTimestamp).Take(5))
+                            {
+                                <tr>
+                                    <td class="td-name">@equipment.Name</td>
+                                    <td class="td-name">@equipment.SerialNumber</td>
+                                    <td class="td-name">@equipment.Status.ToString()</td>
+                                    <td class="td-name">@equipment.WarrantyExpirationDate.ToShortDateString()</td>
+                                    <td class="td-name">@equipment.PurchaseDate.ToShortDateString()</td>
+                                    <td class="td-name">@equipment.PurchasePrice</td>
+                                    <td class="td-name">@equipment.ReplacementPrice</td>
+                                    <td class="td-name">
+                                        <div class="dropdown show">
+                                            <a class="btn btn-primary dropdown-toggle" href="javascript:;" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                Action
+                                            </a>
+
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                                <a class="dropdown-item" asp-area="Equipment" asp-controller="Equipment" asp-action="DetailsView" asp-route-equipmentUID="@equipment.UID"><i class="fas fa-pen mr-2"></i>Edit</a>
+                                                <div class="dropdown-divider"></div>
+                                                <a class="dropdown-item deleteEquipment" href="javascript:;" data-url="/Equipment/Equipment/DeleteModal" data-uid="@equipment.UID"><i class="fas fa-trash mr-2"></i> Delete</a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
