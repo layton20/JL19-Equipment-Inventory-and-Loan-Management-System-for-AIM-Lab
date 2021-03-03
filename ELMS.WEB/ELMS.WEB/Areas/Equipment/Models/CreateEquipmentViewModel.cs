@@ -12,7 +12,7 @@ namespace ELMS.WEB.Areas.Equipment.Models
         [Required]
         public string Name { get; set; }
 
-        public string Description { get; set; } = "No description set.";
+        public string Description { get; set; }
 
         [Required]
         [Display(Name = "Serial Number")]

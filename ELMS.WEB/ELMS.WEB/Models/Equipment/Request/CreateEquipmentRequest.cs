@@ -13,7 +13,7 @@ namespace ELMS.WEB.Models.Equipment.Request
         [MaxLength(50)]
         public string Name { get; set; }
 
-        public string Description { get; set; } = "No description set.";
+        public string Description { get; set; }
 
         [Required]
         public string SerialNumber { get; set; }
