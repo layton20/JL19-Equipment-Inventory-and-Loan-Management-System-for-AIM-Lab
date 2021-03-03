@@ -31,6 +31,12 @@ $('.datatable-export').DataTable({
     }
 });
 
+$('.datatable-no-options').DataTable({
+    paging: false,
+    searching: false,
+    info: false
+});
+
 $('[data-toggle="tooltip"]').tooltip();
 
 tinymce.init({
