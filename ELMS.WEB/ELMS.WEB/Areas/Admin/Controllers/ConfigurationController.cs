@@ -108,10 +108,10 @@ namespace ELMS.WEB.Areas.Admin.Controllers
 
             if (!_UpdateResponse.Success)
             {
-                return Json(new { message = $"{GlobalConstants.ERROR_ACTION_PREFIX} update {ENTITY_NAME}." });
+                return Json(new { error = $"{GlobalConstants.ERROR_ACTION_PREFIX} update {ENTITY_NAME}." });
             }
 
-            return Json(new { message = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} updated {ENTITY_NAME}." });
+            return Json(new { success = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} updated {ENTITY_NAME}." });
         }
 
         [HttpGet]
