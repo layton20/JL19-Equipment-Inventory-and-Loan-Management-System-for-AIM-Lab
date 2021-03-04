@@ -38,7 +38,6 @@
     }
 
     $('.create').click(function () {
-        console.log('hello')
         loadModalAjax($(this).data('url'), null);
 
         var observer = new MutationObserver(function (mutationRecords) {
@@ -58,10 +57,6 @@
         e.preventDefault();
         var form = $(this);
         postModalFormAjax(form);
-    });
-
-    $('.editEmailTemplate').click(function () {
-        loadModalAjax($(this).data('url'), `uid=${$(this).data('uid')}`);
     });
 
     $('.deleteEmailTemplate').click(function () {
