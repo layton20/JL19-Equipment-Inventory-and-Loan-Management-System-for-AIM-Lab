@@ -1,4 +1,5 @@
 ﻿using ELMS.WEB.Entities.Equipment;
+using ELMS.WEB.Entities.Loan;
 using ELMS.WEB.Models;
 using ELMS.WEB.Repositories.Equipment.Interfaces;
 using Microsoft.EntityFrameworkCore;

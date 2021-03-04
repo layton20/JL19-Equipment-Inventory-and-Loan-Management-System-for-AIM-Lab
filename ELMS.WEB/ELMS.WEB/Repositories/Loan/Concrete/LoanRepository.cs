@@ -84,6 +84,29 @@ namespace ELMS.WEB.Repositories.Loan.Concrete
             return loan;
         }
 
+        public async Task<bool> DeleteAsync(Guid uid)
+        {
+            if (uid == Guid.Empty)
+            {
+                return false;
+            }
+
+            LoanEntity _Loan = await __ApplicationContext.Loans.FindAsync(uid);
+
+            if (_Loan == null)
+            {
+                return false;
+            }
+            
+            __ApplicationContext.Loans.Remove(_Loan);
+
+            IList<LoanEquipmentEntity> _LoanEquipmentList = await __ApplicationContext.LoanEquipmentList.Where(x => x.LoanUID == uid).ToListAsync();
+
+            __ApplicationContext.LoanEquipmentList.RemoveRange(_LoanEquipmentList);
+
+            return await __ApplicationContext.SaveChangesAsync() > 0;
+        }
+
         public async Task<IList<LoanEntity>> GetAsync(Guid equipmentUID, bool all = false)
         {
             if (all)

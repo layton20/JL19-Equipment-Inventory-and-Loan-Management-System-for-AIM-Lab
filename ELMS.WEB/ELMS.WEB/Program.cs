@@ -20,7 +20,8 @@ namespace ELMS.WEB
                 })
                 .ConfigureServices(services =>
                 {
-                    services.AddHostedService<BackgroundWorker>();
+                    services.AddHostedService<BackgroundEmailWorker>();
+                    services.AddHostedService<BackgroundLoanWorker>();
                 });
     }
 }

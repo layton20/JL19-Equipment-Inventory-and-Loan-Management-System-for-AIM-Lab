@@ -29,5 +29,6 @@ namespace ELMS.WEB.Managers.Loan.Interface
         public Task<IList<LoanResponse>> GetByUserAsync(string loaneeEmail);
 
         public Task<DateTime> GetExpiryDate(Guid loanUID);
+        public Task<BaseResponse> DeleteAsync(Guid uid);
     }
 }
