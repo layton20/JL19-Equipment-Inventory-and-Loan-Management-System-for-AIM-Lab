@@ -44,6 +44,13 @@ namespace ELMS.WEB.Managers.Loan.Concrete
                 _Response.Message = $"{GlobalConstants.ERROR_ACTION_PREFIX} accept Terms and Conditions for the {MODEL_NAME}.";
             }
 
+            IList<LoanEquipmentEntity> _LoanEquipmentResponses = await __LoanEquipmentRepository.GetAsync(uid);
+
+            foreach (LoanEquipmentEntity loanEquipment in _LoanEquipmentResponses)
+            {
+                await __EquipmentRepository.UpdateStatusAsync(loanEquipment.EquipmentUID, Enums.Equipment.Status.ActiveLoan);
+            }
+
             return _Response;
         }
 

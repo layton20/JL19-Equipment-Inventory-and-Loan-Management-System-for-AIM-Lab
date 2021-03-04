@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ELMS.WEB.Areas.Equipment.Models;
 using ELMS.WEB.Entities.Equipment;
+using ELMS.WEB.Enums.Equipment;
 using ELMS.WEB.Helpers;
 using ELMS.WEB.Managers.Equipment.Interfaces;
 using ELMS.WEB.Models.Base.Response;
@@ -107,6 +108,19 @@ namespace ELMS.WEB.Managers.Equipment.Concrete
             else
             {
                 _Response.Message = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} updated {MODEL_NAME} details.";
+            }
+
+            return _Response;
+        }
+
+        public async Task<BaseResponse> UpdateStatusAsync(Guid uid, Status status)
+        {
+            BaseResponse _Response = new BaseResponse();
+
+            if (!await __EquipmentRepository.UpdateStatusAsync(uid, status))
+            {
+                _Response.Success = false;
+                _Response.Message = $"{GlobalConstants.ERROR_ACTION_PREFIX} update status of {MODEL_NAME}.";
             }
 
             return _Response;

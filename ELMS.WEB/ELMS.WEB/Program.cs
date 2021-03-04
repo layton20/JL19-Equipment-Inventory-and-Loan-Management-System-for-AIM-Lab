@@ -22,6 +22,7 @@ namespace ELMS.WEB
                 {
                     services.AddHostedService<BackgroundEmailWorker>();
                     services.AddHostedService<BackgroundLoanWorker>();
+                    services.AddHostedService<BackgroundEquipmentWorker>();
                 });
     }
 }

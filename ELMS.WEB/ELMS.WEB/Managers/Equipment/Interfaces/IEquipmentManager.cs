@@ -1,4 +1,5 @@
 ﻿using ELMS.WEB.Areas.Equipment.Models;
+using ELMS.WEB.Enums.Equipment;
 using ELMS.WEB.Models.Base.Response;
 using ELMS.WEB.Models.Equipment.Request;
 using ELMS.WEB.Models.Equipment.Response;
@@ -19,6 +20,8 @@ namespace ELMS.WEB.Managers.Equipment.Interfaces
         public Task<EquipmentListResponse> GetAsync(IList<Guid> uids);
 
         public Task<BaseResponse> UpdateAsync(EquipmentViewModel model);
+
+        public Task<BaseResponse> UpdateStatusAsync(Guid uid, Status status);
 
         public Task<BaseResponse> DeleteAsync(DeleteEquipmentViewModel model);
 
