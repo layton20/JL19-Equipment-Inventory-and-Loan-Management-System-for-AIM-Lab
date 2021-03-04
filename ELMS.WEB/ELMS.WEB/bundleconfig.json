@@ -100,5 +100,11 @@
     "inputFiles": [
       "wwwroot/js/areas/report/loanhistory.js"
     ]
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/admin/configuration/index.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/admin/configuration/index.js"
+    ]
   }
 ]

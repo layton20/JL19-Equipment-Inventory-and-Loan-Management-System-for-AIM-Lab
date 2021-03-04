@@ -1,0 +1,27 @@
+﻿@model ELMS.WEB.Areas.Admin.Models.Configuration.DeleteConfigurationViewModel
+
+<div class="modal-content">
+    <div class="modal-header">
+        <h5 class="modal-title"><strong>Delete Configuration</strong></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <form id="formConfiguration" class="formConfiguration" asp-area="Admin" asp-controller="Configuration" asp-action="Delete">
+        <div class="modal-body">
+            <div><span class="text-danger">WARNING:</span> You are making an irreversible change to delete a configuration. This can have a critical effect on parts of the application.</div>
+
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <input type="hidden" asp-for="UID" />
+            <input type="hidden" asp-for="Name" />
+            <br />
+            <p>Please confirm by writing out the following name in the text box below (case-sensitive) and clicking 'Delete configuration'.</p>
+            <code>@Model.Name</code>
+            <input class="form-control" asp-for="VerificationName" />
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-danger">Delete Configuration</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        </div>
+    </form>
+</div>
