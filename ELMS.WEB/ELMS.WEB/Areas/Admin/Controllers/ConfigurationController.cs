@@ -28,6 +28,7 @@ namespace ELMS.WEB.Areas.Admin.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "ViewConfigurationPolicy")]
         public async Task<IActionResult> Index(string successMessage = "", string errorMessage = "")
         {
             if (!string.IsNullOrWhiteSpace(successMessage))
@@ -46,12 +47,14 @@ namespace ELMS.WEB.Areas.Admin.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "CreateConfigurationPolicy")]
         public async Task<IActionResult> CreateModalAsync()
         {
             return PartialView("_CreateModal", new CreateConfigurationViewModel());
         }
 
         [HttpPost]
+        [Authorize(Policy = "CreateConfigurationPolicy")]
         public async Task<IActionResult> CreateAsync(CreateConfigurationViewModel model)
         {
             if (!ModelState.IsValid)
@@ -71,6 +74,7 @@ namespace ELMS.WEB.Areas.Admin.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "EditConfigurationPolicy")]
         public async Task<IActionResult> EditModalAsync(Guid uid)
         {
             if (uid == Guid.Empty)
@@ -89,6 +93,7 @@ namespace ELMS.WEB.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "EditConfigurationPolicy")]
         public async Task<IActionResult> EditAsync(UpdateConfigurationViewModel model)
         {
             if (!ModelState.IsValid)
@@ -115,6 +120,7 @@ namespace ELMS.WEB.Areas.Admin.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "DeleteConfigurationPolicy")]
         public async Task<IActionResult> DeleteModalAsync(Guid uid)
         {
             if (uid == Guid.Empty)
@@ -138,6 +144,7 @@ namespace ELMS.WEB.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "DeleteConfigurationPolicy")]
         public async Task<IActionResult> DeleteAsync(DeleteConfigurationViewModel model)
         {
             if (model == null || model.UID == Guid.Empty)

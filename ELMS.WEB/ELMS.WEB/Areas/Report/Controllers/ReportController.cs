@@ -39,6 +39,7 @@ namespace ELMS.WEB.Areas.Report.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "ViewReportPolicy")]
         public async Task<IActionResult> EquipmentValueReportAsync()
         {
             EquipmentValueReportViewModel _Model = new EquipmentValueReportViewModel();
@@ -53,6 +54,7 @@ namespace ELMS.WEB.Areas.Report.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "FilterReportPolicy")]
         public async Task<IActionResult> EquipmentValueReportFilterAsync(EquipmentValueReportFilterViewModel filter)
         {
             IList<EquipmentResponse> _EquipmentResponses = (await __EquipmentManager.GetAsync()).Equipments;
@@ -122,6 +124,7 @@ namespace ELMS.WEB.Areas.Report.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "ViewReportPolicy")]
         public async Task<IActionResult> LoanHistoryReportAsync()
         {
             LoanHistoryViewModel _Model = new LoanHistoryViewModel
@@ -138,6 +141,7 @@ namespace ELMS.WEB.Areas.Report.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "FilterReportPolicy")]
         public async Task<IActionResult> LoanHistoryReportFilterAsync(LoanHistoryReportFilterViewModel filter)
         {
             IList<LoanResponse> _Response = await __LoanManager.GetAsync();

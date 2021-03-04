@@ -1,16 +1,10 @@
 ﻿<nav class="sidebar" data-color="purple" data-background-color="black">
     <div class="logo">
-        <a href="#" class="simple-text logo-mini">AL</a>
-        <a href="#" class="simple-text logo-normal">AIM LAB</a>
+        <a asp-area="" asp-controller="Home" asp-action="Index" class="simple-text logo-mini">AL</a>
+        <a asp-area="" asp-controller="Home" asp-action="Index" class="simple-text logo-normal">AIM LAB</a>
     </div>
     <div class="sidebar-wrapper">
         <ul class="nav">
-            <li class="nav-item" id="navItemDashboard">
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="nav-link">
-                    <i class="fas fa-home"></i>
-                    <p> Home</p>
-                </a>
-            </li>
             <li class="nav-item" id="navItemDashboard">
                 <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" class="nav-link">
                     <i class="material-icons">dashboard</i>
@@ -30,11 +24,11 @@
                 </a>
             </li>
             <li class="nav-item" id="navItemReports">
-                <a class="nav-link" data-toggle="collapse" href="#navReports">
+                <a class="nav-link" data-toggle="collapse" href="#navCollapseReports">
                     <i class="material-icons">analytics</i>
                     <p> Reports <b class="caret"></b></p>
                 </a>
-                <div class="collapse" id="navReports">
+                <div class="collapse" id="navCollapseReports">
                     <ul class="nav">
                         <li id="navItemReportLabInventory" class="nav-item">
                             <a class="nav-link" asp-area="Report" asp-controller="Report" asp-action="EquipmentValueReport">
@@ -48,21 +42,15 @@
                                 <span class="sidebar-normal"> Historic Loans </span>
                             </a>
                         </li>
-                        <li id="navItemReportWrittenOffEquipment" class="nav-item">
-                            <a href="#" class="nav-link">
-                                <span class="sidebar-mini"> WE </span>
-                                <span class="sidebar-normal"> Written Off Equipment </span>
-                            </a>
-                        </li>
                     </ul>
                 </div>
             </li>
             <li class="nav-item" id="navItemEmails">
-                <a class="nav-link" data-toggle="collapse" href="#navEmails">
+                <a class="nav-link" data-toggle="collapse" href="#navCollapseEmails">
                     <i class="fas fa-envelope"></i>
                     <p> Emails <b class="caret"></b></p>
                 </a>
-                <div class="collapse" id="navEmails">
+                <div class="collapse" id="navCollapseEmails">
                     <ul class="nav">
                         <li id="navItemEmailTemplates" class="nav-item">
                             <a class="nav-link" asp-area="Email" asp-controller="EmailTemplate" asp-action="Index">
@@ -92,11 +80,11 @@
                 </div>
             </li>
             <li class="nav-item" id="navItemAdmin">
-                <a class="nav-link" data-toggle="collapse" href="#navUsers">
+                <a class="nav-link" data-toggle="collapse" href="#navCollapseAdmin">
                     <i class="material-icons">groups</i>
                     <p> Admin <b class="caret"></b></p>
                 </a>
-                <div class="collapse" id="navUsers">
+                <div class="collapse" id="navCollapseAdmin">
                     <ul class="nav">
                         <li class="nav-item" id="navItemUserManagement">
                             <a class="nav-link" asp-area="Admin" asp-controller="User" asp-action="Index">

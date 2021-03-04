@@ -33,6 +33,7 @@ namespace ELMS.WEB.Areas.Loan.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "CreateLoanExtensionPolicy")]
         public async Task<IActionResult> CreateModalAsync(Guid loanUID)
         {
             if (loanUID == Guid.Empty)
@@ -67,6 +68,7 @@ namespace ELMS.WEB.Areas.Loan.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "CreateLoanExtensionPolicy")]
         public async Task<IActionResult> CreateAsync(CreateLoanExtensionViewModel model)
         {
             if (model == null)

@@ -36,6 +36,31 @@ namespace ELMS.WEB.Entities.Admin
             new Claim("Edit User", "Edit User"),
             new Claim("Delete User", "Delete User"),
             new Claim("View User", "View User"),
+
+            // Configurations
+            new Claim("Create Configuration", "Create Configuration"),
+            new Claim("Edit Configuration", "Edit Configuration"),
+            new Claim("Delete Configuration", "Delete Configuration"),
+            new Claim("View Configuration", "View Configuration"),
+
+            // LoanExtensions
+            new Claim("Create LoanExtension", "Create LoanExtension"),
+            new Claim("Edit LoanExtension", "Edit LoanExtension"),
+            new Claim("Delete LoanExtension", "Delete LoanExtension"),
+            new Claim("View LoanExtension", "View LoanExtension"),
+
+            // Reports
+            new Claim("View Report", "View Report"),
+            new Claim("Filter Report", "Filter Report"),
+
+            // EmailTemplates
+            new Claim("Create EmailTemplate", "Create EmailTemplate"),
+            new Claim("Edit EmailTemplate", "Edit EmailTemplate"),
+            new Claim("Delete EmailTemplate", "Delete EmailTemplate"),
+            new Claim("View EmailTemplate", "View EmailTemplate"),
+            
+            // EmailLogs
+            new Claim("View EmailLog", "View EmailLog"),
         };
     }
 }

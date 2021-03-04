@@ -4,8 +4,13 @@
     {
         Equipment,
         Loan,
+        LoanExtension,
         Note,
         User,
-        EmailSchedule
+        EmailSchedule,
+        EmailTemplate,
+        EmailLog,
+        Configuration,
+        Report,
     }
 }
