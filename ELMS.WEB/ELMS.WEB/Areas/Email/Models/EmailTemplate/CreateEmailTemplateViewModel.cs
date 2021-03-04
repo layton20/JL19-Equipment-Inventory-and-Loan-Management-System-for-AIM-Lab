@@ -13,9 +13,11 @@ namespace ELMS.WEB.Areas.Email.Models.EmailTemplate
         public EmailTemplateType TemplateType { get; set; }
 
         [Required]
+        [Display(Name = "Email Subject")]
         public string Subject { get; set; }
 
         [Required]
+        [Display(Name = "Email Body")]
         public string Body { get; set; }
 
         public string OwnerUID { get; set; }

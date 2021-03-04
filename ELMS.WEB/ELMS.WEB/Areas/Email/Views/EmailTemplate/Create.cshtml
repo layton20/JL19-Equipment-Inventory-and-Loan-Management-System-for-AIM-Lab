@@ -1,0 +1,57 @@
+﻿@model ELMS.WEB.Areas.Email.Models.EmailTemplate.CreateEmailTemplateViewModel
+
+@{
+    ViewData["Title"] = "Create email template";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row bg-dark">
+        <div class="m-auto text-white text-center">
+            <div class="m-5">
+                <h1 class="display-2"><strong>@ViewData["Title"]</strong></h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form asp-area="Email" asp-controller="EmailTemplate" asp-action="Create">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="card mb-0">
+                <div class="card-header">
+                    <h3 class="card-title">Enter details</h3>
+                </div>
+                <div class="card-body">
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="form-row">
+                        <div class="form-group col-sm-12 col-md-6">
+                            <label asp-for="Name"></label>
+                            <input type="text" class="form-control" asp-for="Name" />
+                        </div>
+                        <div class="form-group col-sm-12 col-md-6">
+                            <label asp-for="Subject"></label>
+                            <input type="text" class="form-control" asp-for="Subject" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-sm-12 col-md-6">
+                            <label class="w-100" asp-for="TemplateType"></label>
+                            <select class="selectpicker" data-width="100%" data-style="select-with-transition" asp-for="TemplateType" asp-items="Html.GetEnumSelectList<ELMS.WEB.Enums.Email.EmailTemplateType>()">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-sm-12">
+                            <label asp-for="Body" class="d-block"></label>
+                            <textarea class="tinymce w-100" cols="3" asp-for="Body"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer justify-content-end">
+                    <button type="submit" class="btn btn-primary">Create Email Template</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

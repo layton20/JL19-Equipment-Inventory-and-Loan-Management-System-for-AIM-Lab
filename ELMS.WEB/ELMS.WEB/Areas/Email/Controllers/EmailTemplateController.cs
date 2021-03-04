@@ -29,8 +29,17 @@ namespace ELMS.WEB.Areas.Email.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> IndexAsync()
+        public async Task<IActionResult> IndexAsync(string successMessage = "", string errorMessage = "")
         {
+            if (!string.IsNullOrWhiteSpace(successMessage))
+            {
+                ViewData["SuccessMessage"] = successMessage;
+            }
+            else if (!string.IsNullOrWhiteSpace(errorMessage))
+            {
+                ViewData["ErrorMessage"] = errorMessage;
+            }
+
             IndexViewModel _Model = new IndexViewModel
             {
                 EmailTemplates = __Mapper.Map<IList<EmailTemplateViewModel>>((await __EmailTemplateManager.GetAsync()).EmailTemplates)
@@ -40,10 +49,10 @@ namespace ELMS.WEB.Areas.Email.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> CreateModalAsync()
+        public async Task<IActionResult> CreateViewAsync()
         {
             CreateEmailTemplateViewModel _Model = new CreateEmailTemplateViewModel();
-            return PartialView("_CreateModal", _Model);
+            return View("Create", _Model);
         }
 
         [HttpPost]
@@ -52,7 +61,7 @@ namespace ELMS.WEB.Areas.Email.Controllers
             if (!ModelState.IsValid)
             {
                 ViewData["ErrorMessage"] = "Invalid form submission";
-                return PartialView("_CreateModal", model);
+                return PartialView("Create", model);
             }
 
             model.OwnerUID = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -60,24 +69,23 @@ namespace ELMS.WEB.Areas.Email.Controllers
 
             if (!_Response.Success)
             {
-                ModelState.AddModelError("Error", _Response.Message);
-                return await CreateModalAsync();
+                return RedirectToAction("Index", new { error = _Response.Message });
             }
-
-            return Json(new { success = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} created {ENTITY_NAME}." });
+            
+            return RedirectToAction("Index", new { success = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} created {ENTITY_NAME}." });
         }
 
         [HttpGet]
-        public async Task<IActionResult> EditModalAsync(Guid uid)
+        public async Task<IActionResult> EditViewAsync(Guid uid)
         {
             EmailTemplateResponse _Response = await __EmailTemplateManager.GetByUIDAsync(uid);
 
             if (_Response == null)
             {
-                return Json(new { error = $"{GlobalConstants.ERROR_ACTION_PREFIX} find {ENTITY_NAME}" });
+                return RedirectToAction("Index", new { error = $"{GlobalConstants.ERROR_ACTION_PREFIX} find {ENTITY_NAME}." });
             }
 
-            return PartialView("_EditModal", __Mapper.Map<EmailTemplateViewModel>(_Response));
+            return View("Edit", __Mapper.Map<EmailTemplateViewModel>(_Response));
         }
 
         [HttpPost]
@@ -92,12 +100,10 @@ namespace ELMS.WEB.Areas.Email.Controllers
 
             if (!_Response.Success)
             {
-                ViewData["ErrorMessage"] = _Response.Message;
-                return Json(new { error = $"{GlobalConstants.ERROR_ACTION_PREFIX} update {ENTITY_NAME}" });
+                return RedirectToAction("Index", new { error = $"{GlobalConstants.ERROR_ACTION_PREFIX} find {ENTITY_NAME}." });
             }
 
-            ViewData["SuccessMessage"] = _Response.Message;
-            return Json(new { success = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} update {ENTITY_NAME}" });
+            return RedirectToAction("Index", new { success = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} created {ENTITY_NAME}." });
         }
 
         [HttpGet]
@@ -126,10 +132,10 @@ namespace ELMS.WEB.Areas.Email.Controllers
 
             if (!_Response.Success)
             {
-                return RedirectToAction("Index", "EmailTemplate", new { Area = "Email", errorMessage = _Response.Message });
+                return Json(new { error = _Response.Message });
             }
 
-            return RedirectToAction("Index", "EmailTemplate", new { Area = "Email", successMessage = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} deleted {ENTITY_NAME}" });
+            return Json(new { success = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} created {ENTITY_NAME}." });
         }
 
         [HttpGet]
