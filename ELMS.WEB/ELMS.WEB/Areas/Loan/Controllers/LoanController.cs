@@ -459,13 +459,21 @@ namespace ELMS.WEB.Areas.Loan.Controllers
             }
 
             LoanResponse _Loan = await __LoanManager.GetByUIDAsync(model.UID);
+
             if (_Loan == null)
             {
                 return Json(new { error = $"{GlobalConstants.ERROR_ACTION_PREFIX} find {ENTITY_NAME}." });
             }
+
             await __LoanManager.ChangeStatusAsync(_Loan.UID, Enums.Loan.Status.ManualComplete);
 
+            foreach (LoanEquipmentResponse loanEquipment in await __LoanEquipmentManager.GetAsync(model.UID))
+            {
+                await __EquipmentManager.UpdateStatusAsync(loanEquipment.EquipmentUID, Status.Available);
+            }
+
             EmailScheduleResponse _Schedule = (await __EmailScheduleManager.GetAsync()).FirstOrDefault(s => s.Sent == false && s.RecipientEmailAddress == _Loan.LoaneeEmail && s.SendTimestamp == _Loan.ExpiryTimestamp);
+
             if (_Schedule != null)
             {
                 await __EmailScheduleManager.UpdateSentAsync(_Schedule.UID, true);

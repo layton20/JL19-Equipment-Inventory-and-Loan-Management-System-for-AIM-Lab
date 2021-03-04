@@ -1,11 +1,11 @@
 ﻿using ELMS.WEB.Background.Interfaces;
-using ELMS.WEB.Managers.Admin.Interfaces;
+using ELMS.WEB.Managers.Equipment.Interfaces;
 using ELMS.WEB.Managers.Loan.Interface;
+using ELMS.WEB.Models.Equipment.Response;
 using ELMS.WEB.Models.Loan.Response;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -29,6 +29,7 @@ namespace ELMS.WEB.Background.Concrete
         {
             while (!cancellationToken.IsCancellationRequested)
             {
+                await Task.Delay(await UpdateExpiredLoansStatusesAsync());
                 await Task.Delay(await PruneDanglingLoanEquipmentRecordsAsync());
                 await Task.Delay(await PrunePendingLoansAsync());
             }
@@ -94,5 +95,39 @@ namespace ELMS.WEB.Background.Concrete
 
             return delaySeconds;
         }
+
+        private async Task<int> UpdateExpiredLoansStatusesAsync() 
+        {
+            int delaySeconds = 1000 * 60 * 60 * 2;
+
+            using (var scope = __ServiceProvider.CreateScope())
+            {
+                ILoanManager _LoanManager = scope.ServiceProvider.GetRequiredService<ILoanManager>();
+
+                int updatedLoans = 0;
+
+                foreach (LoanResponse loan in await _LoanManager.GetAsync())
+                {
+                    if (await _LoanManager.GetExpiryDate(loan.UID) <= DateTime.Now && (loan.Status != Enums.Loan.Status.Complete || loan.Status != Enums.Loan.Status.ManualComplete))
+                    {
+                        await _LoanManager.ChangeStatusAsync(loan.UID, Enums.Loan.Status.Complete);
+
+                        IEquipmentManager _EquipmentManager = scope.ServiceProvider.GetRequiredService<IEquipmentManager>();
+
+                        foreach (EquipmentResponse equipment in loan.EquipmentList.Where(x => x.Status != Enums.Equipment.Status.Available))
+                        {
+                            await _EquipmentManager.UpdateStatusAsync(equipment.UID, Enums.Equipment.Status.Available);
+                        }
+
+                        updatedLoans++;
+                    }
+                }
+
+                __Logger.LogInformation($"LoanWorker: {updatedLoans} loans have expired and their statuses have been updated to 'Expired'. Task scheduled again in {delaySeconds} milliseconds.");
+            }
+
+            return delaySeconds;
+        }
+
     }
 }

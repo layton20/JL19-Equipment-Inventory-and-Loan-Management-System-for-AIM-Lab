@@ -1,5 +1,6 @@
 ﻿using ELMS.WEB.Entities.Equipment;
 using ELMS.WEB.Entities.Loan;
+using ELMS.WEB.Enums.Equipment;
 using ELMS.WEB.Models;
 using ELMS.WEB.Repositories.Equipment.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -124,6 +125,26 @@ namespace ELMS.WEB.Repositories.Equipment.Concrete
         public async Task<IList<EquipmentEntity>> GetAsync(IList<Guid> uids)
         {
             return await __Context.Equipment.Where(x => uids.Contains(x.UID)).OrderByDescending(x => x.CreatedTimestamp).ToListAsync();
+        }
+
+        public async Task<bool> UpdateStatusAsync(Guid uid, Status status)
+        {
+            if (uid == Guid.Empty)
+            {
+                return false;
+            }
+
+            EquipmentEntity _EquipmentEntity = await __Context.Equipment.FindAsync(uid);
+
+            if (_EquipmentEntity == null)
+            {
+                return false;
+            }
+
+            _EquipmentEntity.Status = status;
+            _EquipmentEntity.AmendedTimestamp = DateTime.Now;
+
+            return await __Context.SaveChangesAsync() > 0;
         }
     }
 }

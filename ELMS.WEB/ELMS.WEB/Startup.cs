@@ -70,6 +70,7 @@ namespace ELMS.WEB
 
             services.AddSingleton<IEmailWorker, EmailWorker>();
             services.AddSingleton<ILoanWorker, LoanWorker>();
+            services.AddSingleton<IEquipmentWorker, EquipmentWorker>();
 
             services.AddTransient<IApplicationEmailSender, ApplicationEmailSender>();
             services.Configure<SendGridEmailSenderOptions>(options =>

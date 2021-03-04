@@ -7,15 +7,13 @@ namespace ELMS.WEB.Enums.Equipment
         Unavailable = 0,
         Available = 1,
 
-        [Display(Name = "On Loan")]
-        OnLoan = 2,
+        [Display(Name = "Assigned to Pending Loan")]
+        PendingLoan = 2,
 
-        Expired = 3,
+        [Display(Name = "Assigned to Active Loan")]
+        ActiveLoan = 3,
 
         [Display(Name = "Written Off")]
-        WrittenOff = 4,
-
-        [Display(Name = "Not Loanable")]
-        NonLoanable = 5
+        WrittenOff = 4
     }
 }
