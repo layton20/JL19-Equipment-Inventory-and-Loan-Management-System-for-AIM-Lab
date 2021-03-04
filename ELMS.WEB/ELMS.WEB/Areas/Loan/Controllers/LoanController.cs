@@ -423,6 +423,7 @@ namespace ELMS.WEB.Areas.Loan.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "EditLoanPolicy")]
         public async Task<IActionResult> ForceCompleteModalAsync(Guid uid)
         {
             if (uid == Guid.Empty)
@@ -449,6 +450,7 @@ namespace ELMS.WEB.Areas.Loan.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "EditLoanPolicy")]
         public async Task<IActionResult> ForceCompleteAsync(ForceCompleteLoanViewModel model)
         {
             if (!ModelState.IsValid)

@@ -1,5 +1,7 @@
 ﻿@model ELMS.WEB.Areas.Admin.Models.Configuration.IndexViewModel
 @using ELMS.WEB.Enums.Configuration
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
 
 @{
     ViewData["Title"] = "Configurations";
@@ -19,164 +21,194 @@
 
 <div class="container-fluid">
     <div class="row my-2 justify-content-end">
-        <a class="btn btn-success text-white createConfiguration" data-url="/Admin/Configuration/CreateModal">New Configuration</a>
+        @if ((await AuthorizationService.AuthorizeAsync(User, "CreateConfigurationPolicy")).Succeeded)
+        {
+            <a class="btn btn-success text-white col-sm-12 createConfiguration" data-url="/Admin/Configuration/CreateModal">New Configuration</a>
+        }
     </div>
 </div>
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="card mb-0 my-0">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-2">
-                        <ul class="nav nav-pills nav-pills-primary nav-pills-icons flex-column">
-                            <li class="nav-item"><a class="nav-link active" href="#tab@(ConfigurationType.General)" data-toggle="tab" role="tablist"><i class="fas fa-globe-europe"></i> General</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#tab@(ConfigurationType.Equipment)" data-toggle="tab" role="tablist"><i class="fas fa-cubes"></i> Equipment</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#tab@(ConfigurationType.Loan)" data-toggle="tab" role="tablist"><i class="fas fa-file-contract"></i> Loan</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#tab@(ConfigurationType.User)" data-toggle="tab" role="tablist"><i class="fas fa-user"></i> User</a></li>
-                        </ul>
-                    </div>
-                    <div class="col-md-10">
-                        <div class="tab-content">
-                            <div class="tab-pane active" id="tab@(ConfigurationType.General)">
-                                <table class="display table datatable responsive hover compact" cellspacing="0" width="100%">
-                                    <thead>
-                                        <tr>
-                                            <th class="th-description">Name</th>
-                                            <th class="th-description">Description</th>
-                                            <th class="th-description">Value</th>
-                                            <th class="th-description">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var config in Model.Configurations.Where(x => x.Type == ConfigurationType.General))
-                                        {
+@if ((await AuthorizationService.AuthorizeAsync(User, "ViewConfigurationPolicy")).Succeeded)
+{
+    <div class="container-fluid">
+        <div class="row">
+            <div class="card mb-0 my-0">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <ul class="nav nav-pills nav-pills-primary nav-pills-icons flex-column">
+                                <li class="nav-item"><a class="nav-link active" href="#tab@(ConfigurationType.General)" data-toggle="tab" role="tablist"><i class="fas fa-globe-europe"></i> General</a></li>
+                                <li class="nav-item"><a class="nav-link" href="#tab@(ConfigurationType.Equipment)" data-toggle="tab" role="tablist"><i class="fas fa-cubes"></i> Equipment</a></li>
+                                <li class="nav-item"><a class="nav-link" href="#tab@(ConfigurationType.Loan)" data-toggle="tab" role="tablist"><i class="fas fa-file-contract"></i> Loan</a></li>
+                                <li class="nav-item"><a class="nav-link" href="#tab@(ConfigurationType.User)" data-toggle="tab" role="tablist"><i class="fas fa-user"></i> User</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-md-10">
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="tab@(ConfigurationType.General)">
+                                    <table class="display table datatable responsive hover compact" cellspacing="0" width="100%">
+                                        <thead>
                                             <tr>
-                                                <td class="td-name">@config.Name</td>
-                                                <td class="td-name">@config.Description</td>
-                                                <td class="td-name">@config.Value</td>
-                                                <td class="td-name">
-                                                    <div class="dropdown show">
-                                                        <a class="btn btn-primary dropdown-toggle" href="javascript:;" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                            Action
-                                                        </a>
-
-                                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                                            <a class="dropdown-item editConfiguration" href="javascript:;" data-url="/Admin/Configuration/EditModal" data-uid="@config.UID"><i class="fas fa-pen mr-2"></i> Edit</a>
-                                                            <div class="dropdown-divider"></div>
-                                                            <a class="dropdown-item deleteConfiguration" href="javascript:;" data-url="/Admin/Configuration/DeleteModal" data-uid="@config.UID"><i class="fas fa-trash mr-2"></i> Delete</a>
-                                                        </div>
-                                                    </div>
-                                                </td>
+                                                <th class="th-description">Name</th>
+                                                <th class="th-description">Description</th>
+                                                <th class="th-description">Value</th>
+                                                <th class="th-description">Action</th>
                                             </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="tab-pane" id="tab@(ConfigurationType.Equipment)">
-                                <table class="display table datatable responsive hover compact" cellspacing="0" width="100%">
-                                    <thead>
-                                        <tr>
-                                            <th class="th-description">Name</th>
-                                            <th class="th-description">Description</th>
-                                            <th class="th-description">Value</th>
-                                            <th class="th-description">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var config in Model.Configurations.Where(x => x.Type == ConfigurationType.Equipment))
-                                        {
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var config in Model.Configurations.Where(x => x.Type == ConfigurationType.General))
+                                            {
+                                                <tr>
+                                                    <td class="td-name">@config.Name</td>
+                                                    <td class="td-name">@config.Description</td>
+                                                    <td class="td-name">@config.Value</td>
+                                                    <td class="td-name">
+                                                        <div class="dropdown show">
+                                                            <a class="btn btn-primary dropdown-toggle" href="javascript:;" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                Action
+                                                            </a>
+
+                                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                                                @if ((await AuthorizationService.AuthorizeAsync(User, "EditConfigurationPolicy")).Succeeded)
+                                                                {
+                                                                    <a class="dropdown-item editConfiguration" href="javascript:;" data-url="/Admin/Configuration/EditModal" data-uid="@config.UID"><i class="fas fa-pen mr-2"></i> Edit</a>
+                                                                }
+                                                                @if ((await AuthorizationService.AuthorizeAsync(User, "DeleteConfigurationPolicy")).Succeeded)
+                                                                {
+                                                                    <div class="dropdown-divider"></div>
+                                                                    <a class="dropdown-item deleteConfiguration" href="javascript:;" data-url="/Admin/Configuration/DeleteModal" data-uid="@config.UID"><i class="fas fa-trash mr-2"></i> Delete</a>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane" id="tab@(ConfigurationType.Equipment)">
+                                    <table class="display table datatable responsive hover compact" cellspacing="0" width="100%">
+                                        <thead>
                                             <tr>
-                                                <td class="td-name">@config.Name</td>
-                                                <td class="td-name">@config.Description</td>
-                                                <td class="td-name">@config.Value</td>
-                                                <td class="td-name">
-                                                    <div class="dropdown show">
-                                                        <a class="btn btn-primary dropdown-toggle" href="javascript:;" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                            Action
-                                                        </a>
-
-                                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                                            <a class="dropdown-item editConfiguration" href="javascript:;" data-url="/Admin/Configuration/EditModal" data-uid="@config.UID"><i class="fas fa-pen mr-2"></i> Edit</a>
-                                                            <div class="dropdown-divider"></div>
-                                                            <a class="dropdown-item deleteConfiguration" href="javascript:;" data-url="/Admin/Configuration/DeleteModal" data-uid="@config.UID"><i class="fas fa-trash mr-2"></i> Delete</a>
-                                                        </div>
-                                                    </div>
-                                                </td>
+                                                <th class="th-description">Name</th>
+                                                <th class="th-description">Description</th>
+                                                <th class="th-description">Value</th>
+                                                <th class="th-description">Action</th>
                                             </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="tab-pane" id="tab@(ConfigurationType.Loan)">
-                                <table class="display table datatable responsive hover compact" cellspacing="0" width="100%">
-                                    <thead>
-                                        <tr>
-                                            <th class="th-description">Name</th>
-                                            <th class="th-description">Description</th>
-                                            <th class="th-description">Value</th>
-                                            <th class="th-description">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var config in Model.Configurations.Where(x => x.Type == ConfigurationType.Loan))
-                                        {
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var config in Model.Configurations.Where(x => x.Type == ConfigurationType.Equipment))
+                                            {
+                                                <tr>
+                                                    <td class="td-name">@config.Name</td>
+                                                    <td class="td-name">@config.Description</td>
+                                                    <td class="td-name">@config.Value</td>
+                                                    <td class="td-name">
+                                                        <div class="dropdown show">
+                                                            <a class="btn btn-primary dropdown-toggle" href="javascript:;" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                Action
+                                                            </a>
+
+                                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                                                @if ((await AuthorizationService.AuthorizeAsync(User, "EditConfigurationPolicy")).Succeeded)
+                                                                {
+                                                                    <a class="dropdown-item editConfiguration" href="javascript:;" data-url="/Admin/Configuration/EditModal" data-uid="@config.UID"><i class="fas fa-pen mr-2"></i> Edit</a>
+                                                                }
+                                                                @if ((await AuthorizationService.AuthorizeAsync(User, "DeleteConfigurationPolicy")).Succeeded)
+                                                                {
+                                                                    <div class="dropdown-divider"></div>
+                                                                    <a class="dropdown-item deleteConfiguration" href="javascript:;" data-url="/Admin/Configuration/DeleteModal" data-uid="@config.UID"><i class="fas fa-trash mr-2"></i> Delete</a>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane" id="tab@(ConfigurationType.Loan)">
+                                    <table class="display table datatable responsive hover compact" cellspacing="0" width="100%">
+                                        <thead>
                                             <tr>
-                                                <td class="td-name">@config.Name</td>
-                                                <td class="td-name">@config.Description</td>
-                                                <td class="td-name">@config.Value</td>
-                                                <td class="td-name">
-                                                    <div class="dropdown show">
-                                                        <a class="btn btn-primary dropdown-toggle" href="javascript:;" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                            Action
-                                                        </a>
-
-                                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                                            <a class="dropdown-item editConfiguration" href="javascript:;" data-url="/Admin/Configuration/EditModal" data-uid="@config.UID"><i class="fas fa-pen mr-2"></i> Edit</a>
-                                                            <div class="dropdown-divider"></div>
-                                                            <a class="dropdown-item deleteConfiguration" href="javascript:;" data-url="/Admin/Configuration/DeleteModal" data-uid="@config.UID"><i class="fas fa-trash mr-2"></i> Delete</a>
-                                                        </div>
-                                                    </div>
-                                                </td>
+                                                <th class="th-description">Name</th>
+                                                <th class="th-description">Description</th>
+                                                <th class="th-description">Value</th>
+                                                <th class="th-description">Action</th>
                                             </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="tab-pane" id="tab@(ConfigurationType.User)">
-                                <table class="display table datatable responsive hover compact" cellspacing="0" width="100%">
-                                    <thead>
-                                        <tr>
-                                            <th class="th-description">Name</th>
-                                            <th class="th-description">Description</th>
-                                            <th class="th-description">Value</th>
-                                            <th class="th-description">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var config in Model.Configurations.Where(x => x.Type == ConfigurationType.User))
-                                        {
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var config in Model.Configurations.Where(x => x.Type == ConfigurationType.Loan))
+                                            {
+                                                <tr>
+                                                    <td class="td-name">@config.Name</td>
+                                                    <td class="td-name">@config.Description</td>
+                                                    <td class="td-name">@config.Value</td>
+                                                    <td class="td-name">
+                                                        <div class="dropdown show">
+                                                            <a class="btn btn-primary dropdown-toggle" href="javascript:;" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                Action
+                                                            </a>
+
+                                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                                                @if ((await AuthorizationService.AuthorizeAsync(User, "EditConfigurationPolicy")).Succeeded)
+                                                                {
+                                                                    <a class="dropdown-item editConfiguration" href="javascript:;" data-url="/Admin/Configuration/EditModal" data-uid="@config.UID"><i class="fas fa-pen mr-2"></i> Edit</a>
+                                                                }
+                                                                @if ((await AuthorizationService.AuthorizeAsync(User, "DeleteConfigurationPolicy")).Succeeded)
+                                                                {
+                                                                    <div class="dropdown-divider"></div>
+                                                                    <a class="dropdown-item deleteConfiguration" href="javascript:;" data-url="/Admin/Configuration/DeleteModal" data-uid="@config.UID"><i class="fas fa-trash mr-2"></i> Delete</a>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane" id="tab@(ConfigurationType.User)">
+                                    <table class="display table datatable responsive hover compact" cellspacing="0" width="100%">
+                                        <thead>
                                             <tr>
-                                                <td class="td-name">@config.Name</td>
-                                                <td class="td-name">@config.Description</td>
-                                                <td class="td-name">@config.Value</td>
-                                                <td class="td-name">
-                                                    <div class="dropdown show">
-                                                        <a class="btn btn-primary dropdown-toggle" href="javascript:;" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                            Action
-                                                        </a>
-
-                                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                                            <a class="dropdown-item editConfiguration" href="javascript:;" data-url="/Admin/Configuration/EditModal" data-uid="@config.UID"><i class="fas fa-pen mr-2"></i> Edit</a>
-                                                            <div class="dropdown-divider"></div>
-                                                            <a class="dropdown-item deleteConfiguration" href="javascript:;" data-url="/Admin/Configuration/DeleteModal" data-uid="@config.UID"><i class="fas fa-trash mr-2"></i> Delete</a>
-                                                        </div>
-                                                    </div>
-                                                </td>
+                                                <th class="th-description">Name</th>
+                                                <th class="th-description">Description</th>
+                                                <th class="th-description">Value</th>
+                                                <th class="th-description">Action</th>
                                             </tr>
-                                        }
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var config in Model.Configurations.Where(x => x.Type == ConfigurationType.User))
+                                            {
+                                                <tr>
+                                                    <td class="td-name">@config.Name</td>
+                                                    <td class="td-name">@config.Description</td>
+                                                    <td class="td-name">@config.Value</td>
+                                                    <td class="td-name">
+                                                        <div class="dropdown show">
+                                                            <a class="btn btn-primary dropdown-toggle" href="javascript:;" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                Action
+                                                            </a>
+
+                                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                                                @if ((await AuthorizationService.AuthorizeAsync(User, "EditConfigurationPolicy")).Succeeded)
+                                                                {
+                                                                    <a class="dropdown-item editConfiguration" href="javascript:;" data-url="/Admin/Configuration/EditModal" data-uid="@config.UID"><i class="fas fa-pen mr-2"></i> Edit</a>
+                                                                }
+                                                                @if ((await AuthorizationService.AuthorizeAsync(User, "DeleteConfigurationPolicy")).Succeeded)
+                                                                {
+                                                                    <div class="dropdown-divider"></div>
+                                                                    <a class="dropdown-item deleteConfiguration" href="javascript:;" data-url="/Admin/Configuration/DeleteModal" data-uid="@config.UID"><i class="fas fa-trash mr-2"></i> Delete</a>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -184,9 +216,16 @@
             </div>
         </div>
     </div>
-</div>
+}
 
 @section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#navItemAdmin').addClass('active');
+            $('#navCollapseAdmin').addClass('show');
+            $('#navItemConfigurations').addClass('active');
+        });
+    </script>
     <environment include="Development">
         <script src="~/js/areas/admin/configuration/index.js"></script>
     </environment>

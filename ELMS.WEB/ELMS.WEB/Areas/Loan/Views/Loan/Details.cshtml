@@ -1,5 +1,7 @@
 ﻿@model ELMS.WEB.Areas.Loan.Models.DetailsViewModel
 @using ELMS.WEB.Enums.Loan
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
 
 @{
     ViewData["Title"] = "Loan Details";
@@ -65,35 +67,45 @@
                                 </div>
                             </div>
                             <div class="tab-pane" id="tabNotes">
-                                <div class="mb-2">
-                                    <a class="createLoanExtension btn btn-primary text-white" data-url="/Loan/LoanExtension/CreateModal" data-uid="@Model.Loan.UID">New Extension</a>
-                                </div>
-
-                                @if (Model?.Extensions?.Count <= 0)
+                                @if ((await AuthorizationService.AuthorizeAsync(User, "CreateLoanExtensionPolicy")).Succeeded)
                                 {
-                                    <div>
-                                        <p>No extensions have been added to this loan yet.</p>
+                                    <div class="mb-2">
+                                        <a class="createLoanExtension btn btn-primary text-white" data-url="/Loan/LoanExtension/CreateModal" data-uid="@Model.Loan.UID">New Extension</a>
                                     </div>
+                                }
+
+                                @if ((await AuthorizationService.AuthorizeAsync(User, "ViewEquipmentPolicy")).Succeeded)
+                                {
+                                    @if (Model?.Extensions?.Count <= 0)
+                                    {
+                                        <div>
+                                            <p>No extensions have been added to this loan yet.</p>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="list-group">
+                                            @foreach (var extension in Model.Extensions.OrderByDescending(x => x.NewExpiryDate).ToList())
+                                            {
+                                                <div class="border list-group-item flex-column align-items-start text-dark mb-2">
+                                                    <div class="d-flex w-100 justify-content-between">
+                                                        <div class="col-sm-12 col-md-8 p-0">
+                                                            <h5 class="mb-1 font-weight-bold">@extension.PreviousExpiryDate.ToShortDateString() <i class="fas fa-arrow-right"></i> @extension.NewExpiryDate.ToShortDateString()</h5>
+                                                            <p>Loan extended by @((extension.NewExpiryDate - extension.PreviousExpiryDate).TotalDays) days.</p>
+                                                            <small>Made by @extension.ExtenderEmail</small>
+                                                        </div>
+                                                        <div class="col-sm-12 col-md-4 p-0 text-right">
+                                                            <p class="mb-1">Extended by @extension.CreatedTimestamp</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                    }
                                 }
                                 else
                                 {
-                                    <div class="list-group">
-                                        @foreach (var extension in Model.Extensions.OrderByDescending(x => x.NewExpiryDate).ToList())
-                                        {
-                                            <div class="border list-group-item flex-column align-items-start text-dark mb-2">
-                                                <div class="d-flex w-100 justify-content-between">
-                                                    <div class="col-sm-12 col-md-8 p-0">
-                                                        <h5 class="mb-1 font-weight-bold">@extension.PreviousExpiryDate.ToShortDateString() <i class="fas fa-arrow-right"></i> @extension.NewExpiryDate.ToShortDateString()</h5>
-                                                        <p>Loan extended by @((extension.NewExpiryDate - extension.PreviousExpiryDate).TotalDays) days.</p>
-                                                        <small>Made by @extension.ExtenderEmail</small>
-                                                    </div>
-                                                    <div class="col-sm-12 col-md-4 p-0 text-right">
-                                                        <p class="mb-1">Extended by @extension.CreatedTimestamp</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        }
-                                    </div>
+                                    <p><span class="text-warning">Denied Access: </span>You do not have access to view loan extensions.</p>
                                 }
                             </div>
                             <div class="tab-pane" id="tabHistory">

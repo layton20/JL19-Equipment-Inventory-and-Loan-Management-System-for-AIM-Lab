@@ -104,6 +104,23 @@ namespace ELMS.WEB
                 options.AddPolicy("EditUserPolicy", policy => policy.RequireClaim("Edit User", "true"));
                 options.AddPolicy("DeleteUserPolicy", policy => policy.RequireClaim("Delete User", "true"));
                 options.AddPolicy("ViewUserPolicy", policy => policy.RequireClaim("View User", "true"));
+
+                options.AddPolicy("CreateConfigurationPolicy", policy => policy.RequireClaim("Create Configuration", "true"));
+                options.AddPolicy("EditConfigurationPolicy", policy => policy.RequireClaim("Edit Configuration", "true"));
+                options.AddPolicy("DeleteConfigurationPolicy", policy => policy.RequireClaim("Delete Configuration", "true"));
+                options.AddPolicy("ViewConfigurationPolicy", policy => policy.RequireClaim("View Configuration", "true"));
+
+                options.AddPolicy("CreateLoanExtensionPolicy", policy => policy.RequireClaim("Create LoanExtension", "true"));
+
+                options.AddPolicy("ViewReportPolicy", policy => policy.RequireClaim("View Report", "true"));
+                options.AddPolicy("FilterReportPolicy", policy => policy.RequireClaim("Filter Report", "true"));
+
+                options.AddPolicy("CreateEmailTemplatePolicy", policy => policy.RequireClaim("Create EmailTemplate", "true"));
+                options.AddPolicy("EditEmailTemplatePolicy", policy => policy.RequireClaim("Edit EmailTemplate", "true"));
+                options.AddPolicy("DeleteEmailTemplatePolicy", policy => policy.RequireClaim("Delete EmailTemplate", "true"));
+                options.AddPolicy("ViewEmailTemplatePolicy", policy => policy.RequireClaim("View EmailTemplate", "true"));
+
+                options.AddPolicy("ViewEmailLogPolicy", policy => policy.RequireClaim("View EmailLog", "true"));
             });
         }
 
