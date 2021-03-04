@@ -147,5 +147,18 @@ namespace ELMS.WEB.Managers.Loan.Concrete
 
             return _Extensions[0].NewExpiryDate;
         }
+
+        public async Task<BaseResponse> DeleteAsync(Guid uid)
+        {
+            BaseResponse _Response = new BaseResponse();
+
+            if (!await __LoanRepository.DeleteAsync(uid))
+            {
+                _Response.Success = false;
+                _Response.Message = $"{GlobalConstants.ERROR_ACTION_PREFIX} delete {MODEL_NAME}.";
+            }
+
+            return _Response;
+        }
     }
 }

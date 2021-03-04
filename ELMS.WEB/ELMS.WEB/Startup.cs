@@ -68,7 +68,8 @@ namespace ELMS.WEB
             services.AddScoped<ILoanExtensionRepository, LoanExtensionRepository>();
             services.AddScoped<IConfigurationRepository, ConfigurationRepository>();
 
-            services.AddScoped<IEmailWorker, EmailWorker>();
+            services.AddSingleton<IEmailWorker, EmailWorker>();
+            services.AddSingleton<ILoanWorker, LoanWorker>();
 
             services.AddTransient<IApplicationEmailSender, ApplicationEmailSender>();
             services.Configure<SendGridEmailSenderOptions>(options =>
