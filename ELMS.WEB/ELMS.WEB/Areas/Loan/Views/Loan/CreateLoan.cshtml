@@ -206,12 +206,26 @@
             }
 
             $('.checkbox-equipment').click(() => {
-                if ($('.user-container:hidden').css('display') == 'none') {
-                    $('.user-container').show()
+                if ($(".checkbox-equipment:checked").length > 0) {
+                    if ($('.user-container:hidden').css('display') == 'none') {
+                        $('.user-container').show()
+                    }
+                }
+                else {
+                    $('.user-container').hide()
                 }
             })
 
             $('.user-radio').click(() => {
+                if ($(".user-radio:checked").length > 0) {
+                    if ($('.user-container:hidden').css('display') == 'none') {
+                        $('.loan-period-container').show()
+                    }
+                }
+                else {
+                    $('.loan-period-container').hide()
+                }
+
                 if ($('.loan-period-container').css('display') == 'none' || $('.submit-container').css('display') == 'none') {
                     $('.loan-period-container').show()
                     $('.submit-container').show()

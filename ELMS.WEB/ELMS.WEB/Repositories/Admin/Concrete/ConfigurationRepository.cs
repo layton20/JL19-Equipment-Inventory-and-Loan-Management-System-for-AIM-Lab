@@ -74,6 +74,7 @@ namespace ELMS.WEB.Repositories.Admin.Concrete
             }
 
             _Entity.Value = entity.Value;
+            _Entity.Description = entity.Description;
             _Entity.AmendedTimestamp = entity.AmendedTimestamp;
 
             return await __Context.SaveChangesAsync() > 0;

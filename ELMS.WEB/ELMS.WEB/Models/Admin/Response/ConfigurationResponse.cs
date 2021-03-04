@@ -8,6 +8,7 @@ namespace ELMS.WEB.Models.Admin.Response
     {
         public Guid UID { get; set; }
         public string Name { get; set; }
+        public string Description { get; set; }
         public string Value { get; set; }
         public ConfigurationType Type { get; set; }
     }
