@@ -91,10 +91,10 @@
                     </ul>
                 </div>
             </li>
-            <li class="nav-item" id="navItemUsers">
+            <li class="nav-item" id="navItemAdmin">
                 <a class="nav-link" data-toggle="collapse" href="#navUsers">
                     <i class="material-icons">groups</i>
-                    <p> Users <b class="caret"></b></p>
+                    <p> Admin <b class="caret"></b></p>
                 </a>
                 <div class="collapse" id="navUsers">
                     <ul class="nav">
@@ -120,6 +120,12 @@
                             <a class="nav-link" asp-area="Admin" asp-controller="Blacklist" asp-action="Index">
                                 <span class="sidebar-mini"> BL </span>
                                 <span class="sidebar-normal"> Blacklists </span>
+                            </a>
+                        </li>
+                        <li class="nav-item" id="navItemConfigurations">
+                            <a class="nav-link" asp-area="Admin" asp-controller="Configuration" asp-action="Index">
+                                <span class="sidebar-mini"> CO </span>
+                                <span class="sidebar-normal"> Configurations </span>
                             </a>
                         </li>
                     </ul>

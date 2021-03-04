@@ -53,6 +53,7 @@ namespace ELMS.WEB
             services.AddScoped<IEmailScheduleParameterManager, EmailScheduleParameterManager>();
             services.AddScoped<IBlacklistManager, BlacklistManager>();
             services.AddScoped<ILoanExtensionManager, LoanExtensionManager>();
+            services.AddScoped<IConfigurationManager, ConfigurationManager>();
 
             // Repository
             services.AddScoped<IUserRepository, UserRepository>();
@@ -65,6 +66,7 @@ namespace ELMS.WEB
             services.AddScoped<IEmailScheduleParameterRepository, EmailScheduleParameterRepository>();
             services.AddScoped<IBlacklistRepository, BlacklistRepository>();
             services.AddScoped<ILoanExtensionRepository, LoanExtensionRepository>();
+            services.AddScoped<IConfigurationRepository, ConfigurationRepository>();
 
             services.AddScoped<IEmailWorker, EmailWorker>();
 

@@ -23,5 +23,6 @@ namespace ELMS.WEB.Models
         public DbSet<EmailScheduleEntity> EmailSchedules { get; set; }
         public DbSet<EmailScheduleParameterEntity> EmailScheduleParameters { get; set; }
         public DbSet<BlacklistEntity> Blacklists { get; set; }
+        public DbSet<ConfigurationEntity> Configurations { get; set; }
     }
 }
