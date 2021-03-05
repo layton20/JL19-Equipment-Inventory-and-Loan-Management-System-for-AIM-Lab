@@ -54,12 +54,16 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
                 ViewData["SuccessMessage"] = successMessage;
             }
 
-            IndexViewModel _Model = new IndexViewModel
+            IList<EquipmentViewModel> _EquipmentList = __Mapper.Map<IList<EquipmentViewModel>>((await __EquipmentManager.GetAsync()).Equipments);
+            foreach (EquipmentViewModel equipment in _EquipmentList)
             {
-                Equipment = __Mapper.Map<IList<EquipmentViewModel>>((await __EquipmentManager.GetAsync()).Equipments),
-            };
+                equipment.Blobs = (await __EquipmentBlobManager.GetAsync(equipment.UID)).Select(x => x.Blob).ToList();
+            }
 
-            return View(_Model);
+            return View("Index", new IndexViewModel 
+            {
+                Equipment = _EquipmentList
+            });
         }
 
         [Authorize(Policy = "ViewEquipmentPolicy")]
@@ -234,14 +238,13 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
                 ViewData["ErrorMessage"] = errorMessage;
             }
 
-            IList<Guid> _BlobUIDs = (await __EquipmentBlobManager.GetAsync(equipmentUID)).Select(x => x.BlobUID).ToList();
-            IList<BlobResponse> _MediaList = (await __BlobManager.GetAsync()).Where(x => _BlobUIDs.Contains(x.UID)).ToList();
+            IList<EquipmentBlobResponse> _EquipmentBlobs = await __EquipmentBlobManager.GetAsync(equipmentUID);
 
             DetailsViewModel _Model = new DetailsViewModel
             {
                 Equipment = __Mapper.Map<EquipmentViewModel>(await __EquipmentManager.GetAsync(equipmentUID)),
                 Notes = __Mapper.Map<IList<NoteViewModel>>(await __NoteManager.GetAsync(equipmentUID)),
-                MediaList = __Mapper.Map<IList<MediaViewModel>>(_MediaList),
+                MediaList = __Mapper.Map<IList<MediaViewModel>>(_EquipmentBlobs.Select(x => x.Blob)),
                 UploadMedia = new CreateEquipmentMediaViewModel {
                     EquipmentUID = equipmentUID
                 }

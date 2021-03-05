@@ -1,6 +1,8 @@
 ﻿using ELMS.WEB.Enums.Equipment;
 using ELMS.WEB.Models.Base.Response;
+using ELMS.WEB.Models.General.Response;
 using System;
+using System.Collections.Generic;
 
 namespace ELMS.WEB.Models.Equipment.Response
 {
@@ -15,5 +17,6 @@ namespace ELMS.WEB.Models.Equipment.Response
         public DateTime PurchaseDate { get; set; }
         public DateTime WarrantyExpirationDate { get; set; }
         public Status Status { get; set; }
+        public IList<BlobResponse> Blobs { get; set; }
     }
 }

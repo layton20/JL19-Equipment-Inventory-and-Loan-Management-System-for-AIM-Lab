@@ -12,7 +12,7 @@ namespace ELMS.WEB.Profiles.General
         {
             CreateMap<CreateBlobRequest, BlobEntity>();
             CreateMap<UpdateBlobRequest, BlobEntity>();
-            CreateMap<BlobEntity, BlobResponse>();
+            CreateMap<BlobEntity, BlobResponse>().ReverseMap();
             CreateMap<CreateEquipmentMediaViewModel, CreateBlobRequest>();
             CreateMap<BlobResponse, MediaViewModel>();
         }

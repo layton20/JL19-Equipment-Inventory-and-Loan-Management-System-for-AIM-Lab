@@ -1,5 +1,7 @@
 ﻿using ELMS.WEB.Enums.Equipment;
+using ELMS.WEB.Models.General.Response;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace ELMS.WEB.Areas.Equipment.Models
@@ -39,5 +41,6 @@ namespace ELMS.WEB.Areas.Equipment.Models
 
         public DateTime CreatedTimestamp { get; set; }
         public DateTime AmendedTimestamp { get; set; }
+        public IList<BlobResponse> Blobs { get; set; } = new List<BlobResponse>();
     }
 }

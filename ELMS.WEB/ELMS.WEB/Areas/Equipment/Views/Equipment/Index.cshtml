@@ -152,6 +152,7 @@
                     <table class="display table datatable-export responsive hover compact" cellspacing="0" width="100%">
                         <thead>
                             <tr>
+                                <th class="th-description font-weight-normal">Photos</th>
                                 <th class="th-description font-weight-normal">Name</th>
                                 <th class="th-description font-weight-normal">Serial Number</th>
                                 <th class="th-description font-weight-normal">Status</th>
@@ -166,6 +167,18 @@
                             @foreach (var equipment in Model.Equipment)
                             {
                                 <tr>
+                                    <td class="td-name">
+                                        <div class="justify-content-center py-2 text-center">
+                                            @if (equipment.Blobs.Count > 0)
+                                            {
+                                                <img class="" width="100" src="@equipment.Blobs[0].Path" alt="Image" />
+                                            }
+                                            else
+                                            {
+                                                <i class="far fa-image fa-6x text-gray"></i>
+                                            }
+                                        </div>
+                                    </td>
                                     <td class="td-name">@equipment.Name</td>
                                     <td class="td-name">@equipment.SerialNumber</td>
                                     <td class="td-name">@equipment.Status.ToString()</td>
