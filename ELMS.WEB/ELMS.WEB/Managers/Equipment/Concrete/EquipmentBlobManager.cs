@@ -52,12 +52,13 @@ namespace ELMS.WEB.Managers.Equipment.Concrete
 
         public async Task<IList<EquipmentBlobResponse>> GetAsync(Guid equipmentUID)
         {
-            return __Mapper.Map<IList<EquipmentBlobResponse>>(await __EquipmentBlobRepository.GetAsync(equipmentUID));
+            var _Response = __Mapper.Map<IList<EquipmentBlobResponse>>(await __EquipmentBlobRepository.GetAsync(equipmentUID));
+            return _Response;
         }
 
         public async Task<EquipmentBlobResponse> GetByUIDAsync(Guid uid)
         {
-            EquipmentBlobResponse _Response = __Mapper.Map<EquipmentBlobResponse>(await __EquipmentBlobRepository.GetByUIDAsync(uid));
+            EquipmentBlobResponse _Response = __Mapper.Map<EquipmentBlobResponse>(await __EquipmentBlobRepository.GetByUIDAsync(uid)) ?? new EquipmentBlobResponse();
 
             if (_Response == null)
             {

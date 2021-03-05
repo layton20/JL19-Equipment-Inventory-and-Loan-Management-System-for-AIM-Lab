@@ -13,5 +13,6 @@ namespace ELMS.WEB.Managers.General.Interface
         Task<IList<BlobResponse>> GetAsync();
         Task<BlobResponse> GetAsync(Guid uid);
         Task<BaseResponse> UpdateAsync(UpdateBlobRequest request);
+        Task<BaseResponse> DeleteAsync(Guid uid);
     }
 }

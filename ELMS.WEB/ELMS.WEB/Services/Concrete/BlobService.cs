@@ -83,12 +83,12 @@ namespace ELMS.WEB.Services.Concrete
             return true;
         }
 
-        public async Task<string> UploadFormFile(IFormFile file)
+        public async Task<string> UploadFormFile(IFormFile file, string blobName)
         {
             StreamReader _StreamReader = new StreamReader(file.OpenReadStream());
 
             BlobContainerClient _ContainerClient = __BlobServiceClient.GetBlobContainerClient("image");
-            BlobClient _BlobClient = _ContainerClient.GetBlobClient($"{Guid.NewGuid()}_{DateTime.Now.ToString(@"yyyy-MM-dd")}_{file.FileName}");
+            BlobClient _BlobClient = _ContainerClient.GetBlobClient(blobName);
 
             using (Stream stream = file.OpenReadStream())
             {

@@ -74,4 +74,8 @@
     $('.deleteNote').click(function () {
         loadModalAjax($(this).data('url'), `NoteUID=${$(this).data('uid')}`);
     });
+
+    $('.deleteImage').click(function () {
+        loadModalAjax($(this).data('url'), `uid=${$(this).data('uid')}`);
+    });
 });
