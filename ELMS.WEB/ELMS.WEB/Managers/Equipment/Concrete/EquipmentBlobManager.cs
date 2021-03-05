@@ -12,21 +12,21 @@ using System.Threading.Tasks;
 
 namespace ELMS.WEB.Managers.Equipment.Concrete
 {
-    public class NoteManager : INoteManager
+    public class EquipmentBlobManager : IEquipmentBlobManager
     {
         private readonly IMapper __Mapper;
-        private readonly INoteRepository __NoteRepository;
-        private const string MODEL_NAME = "Note";
+        private readonly IEquipmentBlobRepository __EquipmentBlobRepository;
+        private readonly string MODEL_NAME = "Equipment-media association";
 
-        public NoteManager(IMapper mapper, INoteRepository noteRepository)
+        public EquipmentBlobManager(IMapper mapper, IEquipmentBlobRepository equipmentBlobRepository)
         {
             __Mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-            __NoteRepository = noteRepository ?? throw new ArgumentNullException(nameof(noteRepository));
+            __EquipmentBlobRepository = equipmentBlobRepository ?? throw new ArgumentNullException(nameof(equipmentBlobRepository));
         }
 
-        public async Task<NoteResponse> CreateAsync(CreateNoteRequest request)
+        public async Task<EquipmentBlobResponse> CreateAsync(CreateEquipmentBlobRequest request)
         {
-            NoteResponse _Response = __Mapper.Map<NoteResponse>(await __NoteRepository.CreateAsync(__Mapper.Map<NoteEntity>(request)));
+            EquipmentBlobResponse _Response = __Mapper.Map<EquipmentBlobResponse>(await __EquipmentBlobRepository.CreateAsync(__Mapper.Map<EquipmentBlobEntity>(request)));
 
             if (_Response == null)
             {
@@ -41,7 +41,7 @@ namespace ELMS.WEB.Managers.Equipment.Concrete
         {
             BaseResponse _Response = new BaseResponse();
 
-            if (!await __NoteRepository.DeleteAsync(uid))
+            if (!await __EquipmentBlobRepository.DeleteAsync(uid))
             {
                 _Response.Success = false;
                 _Response.Message = $"{GlobalConstants.ERROR_ACTION_PREFIX} delete {MODEL_NAME}.";
@@ -50,32 +50,19 @@ namespace ELMS.WEB.Managers.Equipment.Concrete
             return _Response;
         }
 
-        public async Task<IList<NoteResponse>> GetAsync(Guid equipmentUID)
+        public async Task<IList<EquipmentBlobResponse>> GetAsync(Guid equipmentUID)
         {
-            return __Mapper.Map<IList<NoteResponse>>(await __NoteRepository.GetAsync(equipmentUID));
+            return __Mapper.Map<IList<EquipmentBlobResponse>>(await __EquipmentBlobRepository.GetAsync(equipmentUID));
         }
 
-        public async Task<NoteResponse> GetByUIDAsync(Guid uid)
+        public async Task<EquipmentBlobResponse> GetByUIDAsync(Guid uid)
         {
-            NoteResponse _Response = __Mapper.Map<NoteResponse>(await __NoteRepository.GetByUIDAsync(uid));
+            EquipmentBlobResponse _Response = __Mapper.Map<EquipmentBlobResponse>(await __EquipmentBlobRepository.GetByUIDAsync(uid));
 
             if (_Response == null)
             {
                 _Response.Success = false;
                 _Response.Message = $"{GlobalConstants.ERROR_ACTION_PREFIX} get {MODEL_NAME}.";
-            }
-
-            return _Response;
-        }
-
-        public async Task<BaseResponse> UpdateAsync(UpdateNoteRequest request)
-        {
-            BaseResponse _Response = new BaseResponse();
-
-            if (request.UID == Guid.Empty || !await __NoteRepository.UpdateAsync(__Mapper.Map<NoteEntity>(request)))
-            {
-                _Response.Success = false;
-                _Response.Message = $"{GlobalConstants.ERROR_ACTION_PREFIX} update {MODEL_NAME}.";
             }
 
             return _Response;

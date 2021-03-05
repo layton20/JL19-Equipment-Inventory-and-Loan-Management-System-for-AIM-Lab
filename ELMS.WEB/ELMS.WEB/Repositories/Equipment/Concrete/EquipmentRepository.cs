@@ -1,5 +1,4 @@
 ﻿using ELMS.WEB.Entities.Equipment;
-using ELMS.WEB.Entities.Loan;
 using ELMS.WEB.Enums.Equipment;
 using ELMS.WEB.Models;
 using ELMS.WEB.Repositories.Equipment.Interfaces;
@@ -118,6 +117,7 @@ namespace ELMS.WEB.Repositories.Equipment.Concrete
             _Equipment.PurchasePrice = equipment.PurchasePrice;
             _Equipment.ReplacementPrice = equipment.ReplacementPrice;
             _Equipment.Status = equipment.Status;
+            _Equipment.AmendedTimestamp = DateTime.Now;
 
             return await __Context.SaveChangesAsync() > 0;
         }
