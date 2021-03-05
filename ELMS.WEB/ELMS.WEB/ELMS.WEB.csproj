@@ -24,6 +24,7 @@
   <ItemGroup>
     <Folder Include="Areas\Email\Data\Templates\" />
     <Folder Include="Areas\Equipment\Data\" />
+    <Folder Include="Areas\General\Data\" />
     <Folder Include="Areas\Loan\Data\" />
     <Folder Include="Areas\Report\Data\" />
     <Folder Include="Migrations\ELMSWEB\" />
@@ -42,6 +43,7 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.8.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.11" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.11" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.11" />

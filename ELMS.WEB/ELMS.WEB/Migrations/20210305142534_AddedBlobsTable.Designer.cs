@@ -4,14 +4,16 @@ using ELMS.WEB.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ELMS.WEB.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20210305142534_AddedBlobsTable")]
+    partial class AddedBlobsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -175,29 +177,6 @@ namespace ELMS.WEB.Migrations
                     b.HasKey("UID");
 
                     b.ToTable("EmailTemplates");
-                });
-
-            modelBuilder.Entity("ELMS.WEB.Entities.Equipment.EquipmentBlobEntity", b =>
-                {
-                    b.Property<Guid>("UID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("AmendedTimestamp")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("BlobUID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedTimestamp")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("EquipmentUID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("UID");
-
-                    b.ToTable("EquipmentBlobs");
                 });
 
             modelBuilder.Entity("ELMS.WEB.Entities.Equipment.EquipmentEntity", b =>

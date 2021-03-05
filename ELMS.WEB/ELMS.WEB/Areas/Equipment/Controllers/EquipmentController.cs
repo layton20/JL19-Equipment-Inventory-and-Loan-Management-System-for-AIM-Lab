@@ -1,12 +1,15 @@
 ﻿using AutoMapper;
 using ELMS.WEB.Areas.Equipment.Models;
 using ELMS.WEB.Areas.Equipment.Models.Note;
+using ELMS.WEB.Areas.General.Models.Media;
 using ELMS.WEB.Helpers;
 using ELMS.WEB.Managers.Email.Interface;
 using ELMS.WEB.Managers.Equipment.Interfaces;
+using ELMS.WEB.Managers.General.Interface;
 using ELMS.WEB.Models.Base.Response;
 using ELMS.WEB.Models.Equipment.Request;
 using ELMS.WEB.Models.Equipment.Response;
+using ELMS.WEB.Models.General.Response;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -25,14 +28,18 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
         private readonly IEquipmentManager __EquipmentManager;
         private readonly INoteManager __NoteManager;
         private readonly IEmailScheduleManager __EmailScheduleManager;
+        private readonly IBlobManager __BlobManager;
+        private readonly IEquipmentBlobManager __EquipmentBlobManager;
         private readonly String ENTITY_NAME = "Equipment";
 
-        public EquipmentController(IMapper mapper, IEquipmentManager equipmentManager, INoteManager noteManager, IEmailScheduleManager emailScheduleManager)
+        public EquipmentController(IMapper mapper, IEquipmentManager equipmentManager, INoteManager noteManager, IEmailScheduleManager emailScheduleManager, IBlobManager blobManager, IEquipmentBlobManager equipmentBlobManager)
         {
             __Mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             __EquipmentManager = equipmentManager ?? throw new ArgumentNullException(nameof(equipmentManager));
             __NoteManager = noteManager ?? throw new ArgumentNullException(nameof(noteManager));
             __EmailScheduleManager = emailScheduleManager ?? throw new ArgumentNullException(nameof(emailScheduleManager));
+            __BlobManager = blobManager ?? throw new ArgumentNullException(nameof(blobManager));
+            __EquipmentBlobManager = equipmentBlobManager ?? throw new ArgumentNullException(nameof(equipmentBlobManager));
         }
 
         [Authorize(Policy = "ViewEquipmentPolicy")]
@@ -227,10 +234,17 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
                 ViewData["ErrorMessage"] = errorMessage;
             }
 
+            IList<Guid> _BlobUIDs = (await __EquipmentBlobManager.GetAsync(equipmentUID)).Select(x => x.BlobUID).ToList();
+            IList<BlobResponse> _MediaList = (await __BlobManager.GetAsync()).Where(x => _BlobUIDs.Contains(x.UID)).ToList();
+
             DetailsViewModel _Model = new DetailsViewModel
             {
                 Equipment = __Mapper.Map<EquipmentViewModel>(await __EquipmentManager.GetAsync(equipmentUID)),
-                Notes = __Mapper.Map<IList<NoteViewModel>>(await __NoteManager.GetAsync(equipmentUID))
+                Notes = __Mapper.Map<IList<NoteViewModel>>(await __NoteManager.GetAsync(equipmentUID)),
+                MediaList = __Mapper.Map<IList<MediaViewModel>>(_MediaList),
+                UploadMedia = new CreateEquipmentMediaViewModel {
+                    EquipmentUID = equipmentUID
+                }
             };
 
             return View("Details", _Model);

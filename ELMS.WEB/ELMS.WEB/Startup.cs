@@ -1,3 +1,4 @@
+using Azure.Storage.Blobs;
 using ELMS.WEB.Background.Concrete;
 using ELMS.WEB.Background.Interfaces;
 using ELMS.WEB.Managers.Admin.Concrete;
@@ -6,6 +7,8 @@ using ELMS.WEB.Managers.Email.Concrete;
 using ELMS.WEB.Managers.Email.Interface;
 using ELMS.WEB.Managers.Equipment.Concrete;
 using ELMS.WEB.Managers.Equipment.Interfaces;
+using ELMS.WEB.Managers.General.Concrete;
+using ELMS.WEB.Managers.General.Interface;
 using ELMS.WEB.Managers.Loan.Concrete;
 using ELMS.WEB.Managers.Loan.Interface;
 using ELMS.WEB.Repositories.Admin.Concrete;
@@ -14,11 +17,15 @@ using ELMS.WEB.Repositories.Email.Concrete;
 using ELMS.WEB.Repositories.Email.Interface;
 using ELMS.WEB.Repositories.Equipment.Concrete;
 using ELMS.WEB.Repositories.Equipment.Interfaces;
+using ELMS.WEB.Repositories.General.Concrete;
+using ELMS.WEB.Repositories.General.Interface;
 using ELMS.WEB.Repositories.Identity.Concrete;
 using ELMS.WEB.Repositories.Identity.Interface;
 using ELMS.WEB.Repositories.Loan.Concrete;
 using ELMS.WEB.Repositories.Loan.Interface;
 using ELMS.WEB.Services;
+using ELMS.WEB.Services.Concrete;
+using ELMS.WEB.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -54,6 +61,8 @@ namespace ELMS.WEB
             services.AddScoped<IBlacklistManager, BlacklistManager>();
             services.AddScoped<ILoanExtensionManager, LoanExtensionManager>();
             services.AddScoped<IConfigurationManager, ConfigurationManager>();
+            services.AddScoped<IBlobManager, BlobManager>();
+            services.AddScoped<IEquipmentBlobManager, EquipmentBlobManager>();
 
             // Repository
             services.AddScoped<IUserRepository, UserRepository>();
@@ -67,10 +76,15 @@ namespace ELMS.WEB
             services.AddScoped<IBlacklistRepository, BlacklistRepository>();
             services.AddScoped<ILoanExtensionRepository, LoanExtensionRepository>();
             services.AddScoped<IConfigurationRepository, ConfigurationRepository>();
+            services.AddScoped<IBlobRepository, BlobRepository>();
+            services.AddScoped<IEquipmentBlobRepository, EquipmentBlobRepository>();
 
             services.AddSingleton<IEmailWorker, EmailWorker>();
             services.AddSingleton<ILoanWorker, LoanWorker>();
             services.AddSingleton<IEquipmentWorker, EquipmentWorker>();
+
+            services.AddSingleton(x => new BlobServiceClient(Configuration.GetValue<string>("AzureBlobStorage:ConnectionString")));
+            services.AddSingleton<IBlobService, BlobService>();
 
             services.AddTransient<IApplicationEmailSender, ApplicationEmailSender>();
             services.Configure<SendGridEmailSenderOptions>(options =>
