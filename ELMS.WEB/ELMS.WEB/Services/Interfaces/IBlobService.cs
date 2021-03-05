@@ -12,6 +12,6 @@ namespace ELMS.WEB.Services.Interfaces
         public Task<bool> UploadFileBlobAsync(string filePath, string fileName);
         public Task UploadContentBlobAsync(string content, string fileName);
         public Task DeleteBlobAsync(string blobName);
-        public Task<string> UploadFormFile(IFormFile file);
+        public Task<string> UploadFormFile(IFormFile file, string blobName);
     }
 }

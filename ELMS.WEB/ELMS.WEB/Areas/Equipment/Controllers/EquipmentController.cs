@@ -9,7 +9,6 @@ using ELMS.WEB.Managers.General.Interface;
 using ELMS.WEB.Models.Base.Response;
 using ELMS.WEB.Models.Equipment.Request;
 using ELMS.WEB.Models.Equipment.Response;
-using ELMS.WEB.Models.General.Response;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -60,7 +59,7 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
                 equipment.Blobs = (await __EquipmentBlobManager.GetAsync(equipment.UID)).Select(x => x.Blob).ToList();
             }
 
-            return View("Index", new IndexViewModel 
+            return View("Index", new IndexViewModel
             {
                 Equipment = _EquipmentList
             });
@@ -238,14 +237,13 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
                 ViewData["ErrorMessage"] = errorMessage;
             }
 
-            IList<EquipmentBlobResponse> _EquipmentBlobs = await __EquipmentBlobManager.GetAsync(equipmentUID);
-
             DetailsViewModel _Model = new DetailsViewModel
             {
                 Equipment = __Mapper.Map<EquipmentViewModel>(await __EquipmentManager.GetAsync(equipmentUID)),
                 Notes = __Mapper.Map<IList<NoteViewModel>>(await __NoteManager.GetAsync(equipmentUID)),
-                MediaList = __Mapper.Map<IList<MediaViewModel>>(_EquipmentBlobs.Select(x => x.Blob)),
-                UploadMedia = new CreateEquipmentMediaViewModel {
+                EquipmentMedia = __Mapper.Map<IList<EquipmentMediaViewModel>>(await __EquipmentBlobManager.GetAsync(equipmentUID)),
+                UploadMedia = new CreateEquipmentMediaViewModel
+                {
                     EquipmentUID = equipmentUID
                 }
             };

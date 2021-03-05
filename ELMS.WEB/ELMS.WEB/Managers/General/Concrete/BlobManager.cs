@@ -39,6 +39,19 @@ namespace ELMS.WEB.Managers.General.Concrete
             return _Response;
         }
 
+        public async Task<BaseResponse> DeleteAsync(Guid uid)
+        {
+            BaseResponse _Response = new BaseResponse();
+
+            if (!await __BlobRepository.DeleteAsync(uid))
+            {
+                _Response.Success = false;
+                _Response.Message = $"{GlobalConstants.ERROR_ACTION_PREFIX} delete {MODEL_NAME}.";
+            }
+
+            return _Response;
+        }
+
         public async Task<IList<BlobResponse>> GetAsync()
         {
             return __Mapper.Map<IList<BlobResponse>>(await __BlobRepository.GetAsync());
