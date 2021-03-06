@@ -48,6 +48,11 @@ namespace ELMS.WEB.Background.Concrete
 
                 if (_EquipmentToUpdateStatus != null && _EquipmentToUpdateStatus?.Count > 0)
                 {
+                    foreach (EquipmentResponse equipmentResponse in _EquipmentToUpdateStatus)
+                    {
+                        await _EquipmentManager.UpdateStatusAsync(equipmentResponse.UID, Enums.Equipment.Status.WrittenOff);
+                    }
+
                     __Logger.LogInformation($"{WORKER_NAME}: Switched {_EquipmentToUpdateStatus.Count} Equipment statuses to status 'WrittenOff'.");
                 }
             }
@@ -79,7 +84,6 @@ namespace ELMS.WEB.Background.Concrete
                         await _EquipmentBlobManager.DeleteAsync(equipmentBlob.UID);
                         await _BlobManager.DeleteAsync(equipmentBlob.Blob.UID);
                     }
-
                 }
 
                 __Logger.LogInformation($"{WORKER_NAME}: Pruned {_EquipmentBlobs?.Count ?? 0} dangling equipment-media.");
