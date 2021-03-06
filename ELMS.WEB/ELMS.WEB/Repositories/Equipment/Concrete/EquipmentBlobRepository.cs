@@ -55,6 +55,11 @@ namespace ELMS.WEB.Repositories.Equipment.Concrete
             return await __ApplicationContext.EquipmentBlobs.Include(x => x.Equipment).Include(x => x.Blob).Where(x => x.EquipmentUID == equipmentUID).ToListAsync();
         }
 
+        public async Task<IList<EquipmentBlobEntity>> GetAsync()
+        {
+            return await __ApplicationContext.EquipmentBlobs.Include(x => x.Equipment).Include(x => x.Blob).ToListAsync();
+        }
+
         public async Task<EquipmentBlobEntity> GetByUIDAsync(Guid uid)
         {
             return await __ApplicationContext.EquipmentBlobs.Where(x => x.UID == uid).Include(x => x.Blob).FirstOrDefaultAsync();

@@ -18,6 +18,7 @@ namespace ELMS.WEB.Background
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             await __EmailWorker.DoWork(stoppingToken);
+            await Task.CompletedTask;
         }
     }
 }
