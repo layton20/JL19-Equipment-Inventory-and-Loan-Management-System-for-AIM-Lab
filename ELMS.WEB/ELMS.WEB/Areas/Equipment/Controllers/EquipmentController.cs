@@ -9,7 +9,11 @@ using ELMS.WEB.Managers.General.Interface;
 using ELMS.WEB.Models.Base.Response;
 using ELMS.WEB.Models.Equipment.Request;
 using ELMS.WEB.Models.Equipment.Response;
+using ELMS.WEB.Models.General.Request;
+using ELMS.WEB.Models.General.Response;
+using ELMS.WEB.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -29,9 +33,10 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
         private readonly IEmailScheduleManager __EmailScheduleManager;
         private readonly IBlobManager __BlobManager;
         private readonly IEquipmentBlobManager __EquipmentBlobManager;
+        private readonly IBlobService __BlobService;
         private readonly String ENTITY_NAME = "Equipment";
 
-        public EquipmentController(IMapper mapper, IEquipmentManager equipmentManager, INoteManager noteManager, IEmailScheduleManager emailScheduleManager, IBlobManager blobManager, IEquipmentBlobManager equipmentBlobManager)
+        public EquipmentController(IMapper mapper, IEquipmentManager equipmentManager, INoteManager noteManager, IEmailScheduleManager emailScheduleManager, IBlobManager blobManager, IEquipmentBlobManager equipmentBlobManager, IBlobService blobService)
         {
             __Mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             __EquipmentManager = equipmentManager ?? throw new ArgumentNullException(nameof(equipmentManager));
@@ -39,6 +44,7 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
             __EmailScheduleManager = emailScheduleManager ?? throw new ArgumentNullException(nameof(emailScheduleManager));
             __BlobManager = blobManager ?? throw new ArgumentNullException(nameof(blobManager));
             __EquipmentBlobManager = equipmentBlobManager ?? throw new ArgumentNullException(nameof(equipmentBlobManager));
+            __BlobService = blobService ?? throw new ArgumentNullException(nameof(blobService));
         }
 
         [Authorize(Policy = "ViewEquipmentPolicy")]
@@ -140,13 +146,20 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
         }
 
         [Authorize(Policy = "CreateEquipmentPolicy")]
+        [HttpGet]
+        public async Task<IActionResult> CreateViewAsync()
+        {
+            return View("Create", new CreateEquipmentViewModel());
+        }
+
+        [Authorize(Policy = "CreateEquipmentPolicy")]
         [HttpPost]
         public async Task<IActionResult> CreateAsync(CreateEquipmentViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 ViewData["ErrorMessage"] = "Invalid form submission";
-                return PartialView("_CreateEquipment", model);
+                return View("Create", model);
             }
 
             BaseResponse _Response = new BaseResponse();
@@ -164,6 +177,14 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
                 if (_EquipmentResponse.Success)
                 {
                     await __EmailScheduleManager.CreateEquipmentWarrantyScheduleAsync(_EquipmentResponse, $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}");
+
+                    if (model.MediaFiles != null && model.MediaFiles.Count > 0)
+                    {
+                        foreach (IFormFile file in model.MediaFiles)
+                        {
+                            await UploadEquipmentMediaAsync(file, _EquipmentResponse.UID);
+                        }
+                    }
                 }
             }
             else
@@ -176,9 +197,41 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
                 }
 
                 await __EmailScheduleManager.BulkCreateEquipmentWarrantyScheduleAsync(_EquipmentResponses, $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}");
+
+                if (model.MediaFiles != null && model.MediaFiles.Count > 0)
+                {
+                    foreach (IFormFile file in model.MediaFiles)
+                    {
+                        foreach (EquipmentResponse createdEquipment in _EquipmentResponses)
+                        {
+                            await UploadEquipmentMediaAsync(file, createdEquipment.UID);
+                        }
+                    }
+                }
             }
 
-            return Json(new { success = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} created {ENTITY_NAME}." });
+            return RedirectToAction("Index", "Equipment", new { Area = "Equipment", successMessage = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} created {ENTITY_NAME}." });
+        }
+
+        private async Task UploadEquipmentMediaAsync(IFormFile file, Guid equipmentUID)
+        {
+            string blobName = $"{Guid.NewGuid()}_{file.FileName}";
+            string uri = await __BlobService.UploadFormFile(file, blobName);
+
+            if (!string.IsNullOrWhiteSpace(uri))
+            {
+                BlobResponse _BlobResponse = await __BlobManager.CreateAsync(new CreateBlobRequest
+                {
+                    Name = blobName,
+                    Path = uri
+                });
+
+                await __EquipmentBlobManager.CreateAsync(new CreateEquipmentBlobRequest
+                {
+                    EquipmentUID = equipmentUID,
+                    BlobUID = _BlobResponse.UID
+                });
+            }
         }
 
         [Authorize(Policy = "EditEquipmentPolicy")]

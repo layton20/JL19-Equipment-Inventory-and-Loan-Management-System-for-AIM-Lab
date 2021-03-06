@@ -24,6 +24,8 @@
             method: form.attr('method'),
             url: form.attr('action'),
             data: form.serialize(),
+            processData: false,
+            enctype: 'multipart/form-data',
             success: function (response) {
                 if (response.success) {
                     window.location.href = encodeURI(`/Equipment/Equipment?successMessage=${response.success}`);

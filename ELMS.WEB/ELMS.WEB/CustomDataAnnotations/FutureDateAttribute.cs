@@ -7,7 +7,7 @@ namespace ELMS.WEB.CustomDataAnnotations
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            DateTime Date = (DateTime)value;
+            DateTime Date = ((DateTime)value).AddDays(1).AddSeconds(-1);
 
             if (Date <= DateTime.Now.Date)
             {
