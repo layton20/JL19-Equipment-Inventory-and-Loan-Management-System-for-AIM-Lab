@@ -79,9 +79,9 @@ namespace ELMS.WEB
             services.AddScoped<IBlobRepository, BlobRepository>();
             services.AddScoped<IEquipmentBlobRepository, EquipmentBlobRepository>();
 
+            services.AddSingleton<IEquipmentWorker, EquipmentWorker>();
             services.AddSingleton<IEmailWorker, EmailWorker>();
             services.AddSingleton<ILoanWorker, LoanWorker>();
-            services.AddSingleton<IEquipmentWorker, EquipmentWorker>();
 
             services.AddSingleton(x => new BlobServiceClient(Configuration.GetValue<string>("AzureBlobStorage:ConnectionString")));
             services.AddSingleton<IBlobService, BlobService>();
