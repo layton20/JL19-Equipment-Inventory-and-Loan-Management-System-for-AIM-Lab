@@ -31,14 +31,20 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Quartz;
+using Quartz.Impl;
+using System.Collections.Specialized;
 
 namespace ELMS.WEB
 {
     public class Startup
     {
+        private IScheduler _QuartsScheduler;
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            _QuartsScheduler = ConfigureQuartz();
         }
 
         public IConfiguration Configuration { get; }
@@ -78,6 +84,8 @@ namespace ELMS.WEB
             services.AddScoped<IConfigurationRepository, ConfigurationRepository>();
             services.AddScoped<IBlobRepository, BlobRepository>();
             services.AddScoped<IEquipmentBlobRepository, EquipmentBlobRepository>();
+
+            services.AddSingleton(provider => _QuartsScheduler);
 
             services.AddSingleton<IEquipmentWorker, EquipmentWorker>();
             services.AddSingleton<IEmailWorker, EmailWorker>();
@@ -173,6 +181,29 @@ namespace ELMS.WEB
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+        }
+
+        private void OnShutdown()
+        {
+            if (!_QuartsScheduler.IsShutdown)
+            {
+                _QuartsScheduler.Shutdown();
+            }
+        }
+
+        private IScheduler ConfigureQuartz()
+        {
+            NameValueCollection _Properties = new NameValueCollection
+            {
+                { "quartz.serializer.type", "binary" }
+            };
+
+            StdSchedulerFactory _Factory = new StdSchedulerFactory(_Properties);
+            IScheduler _Scheduler = _Factory.GetScheduler().Result;
+
+            _Scheduler.Start().Wait();
+
+            return _Scheduler;
         }
     }
 }
