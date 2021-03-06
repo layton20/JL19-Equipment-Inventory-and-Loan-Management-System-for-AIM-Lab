@@ -1,0 +1,93 @@
+﻿@model ELMS.WEB.Areas.Equipment.Models.CreateEquipmentViewModel
+
+@{
+    ViewData["Title"] = "Create equipment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row bg-dark">
+        <div class="m-auto text-white text-center">
+            <div class="m-5">
+                <h1 class="display-2"><strong>@ViewData["Title"]</strong></h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="card mb-0">
+            <div class="card-header">
+                <h3 class="card-title">Enter equipment details</h3>
+            </div>
+            <div class="card-body">
+                <form asp-area="Equipment" asp-controller="Equipment" asp-action="Create" enctype="multipart/form-data">
+                    <div class="form-row">
+                        <div class="form-group col-sm-12 col-md-3">
+                            <label asp-for="Name"></label>
+                            <input type="text" class="form-control" asp-for="Name" />
+                        </div>
+                        <div class="form-group col-sm-12 col-md-3">
+                            <label asp-for="SerialNumber"></label>
+                            <input type="text" class="form-control" asp-for="SerialNumber" />
+                        </div>
+                        <div class="form-group col-sm-12 col-md-3">
+                            <label asp-for="Quantity"></label>
+                            <input type="number" min="1" step="1" class="form-control" asp-for="SerialNumber" />
+                        </div>
+                        <div class="form-group form-file-upload form-file-multiple col-sm-12 col-md-3">
+                            <label asp-for="MediaFiles"></label>
+                            <input type="file" multiple="" class="inputFileHidden" asp-for="MediaFiles">
+                            <div class="input-group">
+                                <input type="text" class="form-control inputFileVisible" placeholder="Browse files on your computer" multiple>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            <label asp-for="Description"></label>
+                            <textarea class="form-control" asp-for="Description" cols="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-sm-12 col-md-3">
+                            <label asp-for="WarrantyExpirationDate"></label>
+                            <input type="date" class="form-control" asp-for="WarrantyExpirationDate" />
+                        </div>
+                        <div class="form-group col-sm-12 col-md-3">
+                            <label asp-for="PurchaseDate"></label>
+                            <input type="date" class="form-control" asp-for="PurchaseDate" />
+                        </div>
+                        <div class="form-group col-sm-12 col-md-3">
+                            <label asp-for="PurchasePrice"></label>
+                            <input type="number" step="0.01" class="form-control" asp-for="PurchasePrice" />
+                        </div>
+                        <div class="form-group col-sm-12 col-md-3">
+                            <label asp-for="ReplacementPrice"></label>
+                            <input type="number" step="0.01" class="form-control" asp-for="ReplacementPrice" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label asp-for="Status"></label>
+                            <select class="form-control selectpicker" data-style="btn btn-link" asp-for="Status" asp-items="Html.GetEnumSelectList<ELMS.WEB.Enums.Equipment.InitialStatus>()">
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <button class="btn btn-success" type="submit">Create Equipment</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#navItemEquipment').addClass('active');
+        });
+    </script>
+}

@@ -1,6 +1,9 @@
 ﻿using ELMS.WEB.CustomDataAnnotations;
 using ELMS.WEB.Enums.Equipment;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace ELMS.WEB.Areas.Equipment.Models
@@ -42,5 +45,8 @@ namespace ELMS.WEB.Areas.Equipment.Models
         [Required]
         [Range(0, 500)]
         public int Quantity { get; set; } = 1;
+
+        [Display(Name = "Upload File(s)")]
+        public IList<IFormFile> MediaFiles { get; set; }
     }
 }
