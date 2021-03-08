@@ -7,6 +7,7 @@ namespace ELMS.WEB.Models.Equipment.Request
     {
         [Required]
         public Guid EquipmentUID { get; set; }
+
         [Required]
         public Guid BlobUID { get; set; }
     }

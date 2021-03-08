@@ -7,8 +7,10 @@ namespace ELMS.WEB.Models.General.Request
     {
         [Required]
         public Guid UID { get; set; }
+
         [Required]
         public string Name { get; set; }
+
         [Required]
         public string Value { get; set; }
     }

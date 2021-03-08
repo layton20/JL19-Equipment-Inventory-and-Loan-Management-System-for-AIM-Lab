@@ -22,10 +22,13 @@ namespace ELMS.WEB.Areas.General.Controllers
     public class MediaController : Controller
     {
         private readonly IMapper __Mapper;
+
         // BlobManager manages the DB records that track each stored blob (uploaded onto Azure)
         private readonly IBlobManager __BlobManager;
+
         // BlobService manages the Azure storage blob container
         private readonly IBlobService __BlobService;
+
         private readonly IEquipmentBlobManager __EquipmentBlobManager;
         private readonly string ENTITY_NAME = "Media";
 

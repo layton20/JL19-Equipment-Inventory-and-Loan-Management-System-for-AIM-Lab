@@ -46,7 +46,7 @@ namespace ELMS.WEB.Areas.Report.Controllers
 
             EquipmentListResponse _EquipmentList = await __EquipmentManager.GetAsync();
 
-            return View(new EquipmentValueReportViewModel 
+            return View(new EquipmentValueReportViewModel
             {
                 Filter = new EquipmentValueReportFilterViewModel(),
                 ReportItems = __Mapper.Map<IList<EquipmentValueReportItemViewModel>>(_EquipmentList.Equipments)
@@ -100,7 +100,7 @@ namespace ELMS.WEB.Areas.Report.Controllers
             {
                 _EquipmentResponses = _EquipmentResponses.Where(x => x.PurchasePrice <= filter.PurchasePriceTo).ToList();
             }
-            
+
             if (filter.ReplacementPriceFrom > 0)
             {
                 _EquipmentResponses = _EquipmentResponses.Where(x => x.ReplacementPrice >= filter.PurchasePriceFrom).ToList();

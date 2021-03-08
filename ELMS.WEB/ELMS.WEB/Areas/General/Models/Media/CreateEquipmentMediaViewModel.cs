@@ -11,6 +11,7 @@ namespace ELMS.WEB.Areas.General.Models.Media
         [Required]
         [NonDefaultGuid]
         public Guid EquipmentUID { get; set; }
+
         [Required]
         public IList<IFormFile> MediaFiles { get; set; }
     }

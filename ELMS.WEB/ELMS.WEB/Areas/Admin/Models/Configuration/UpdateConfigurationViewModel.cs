@@ -9,8 +9,10 @@ namespace ELMS.WEB.Areas.Admin.Models.Configuration
         [Required]
         [NonDefaultGuid]
         public Guid UID { get; set; }
+
         public string Name { get; set; }
         public string Description { get; set; }
+
         [Required]
         public string Value { get; set; }
     }

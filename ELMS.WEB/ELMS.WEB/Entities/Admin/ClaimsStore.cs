@@ -58,7 +58,7 @@ namespace ELMS.WEB.Entities.Admin
             new Claim("Edit EmailTemplate", "Edit EmailTemplate"),
             new Claim("Delete EmailTemplate", "Delete EmailTemplate"),
             new Claim("View EmailTemplate", "View EmailTemplate"),
-            
+
             // EmailLogs
             new Claim("View EmailLog", "View EmailLog"),
         };

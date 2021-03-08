@@ -71,7 +71,7 @@ namespace ELMS.WEB.Areas.Email.Controllers
             {
                 return RedirectToAction("Index", new { error = _Response.Message });
             }
-            
+
             return RedirectToAction("Index", new { success = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} created {ENTITY_NAME}." });
         }
 

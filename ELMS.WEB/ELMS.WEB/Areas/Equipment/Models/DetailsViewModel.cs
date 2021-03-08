@@ -1,6 +1,5 @@
 ﻿using ELMS.WEB.Areas.Equipment.Models.Note;
 using ELMS.WEB.Areas.General.Models.Media;
-using System;
 using System.Collections.Generic;
 
 namespace ELMS.WEB.Areas.Equipment.Models
