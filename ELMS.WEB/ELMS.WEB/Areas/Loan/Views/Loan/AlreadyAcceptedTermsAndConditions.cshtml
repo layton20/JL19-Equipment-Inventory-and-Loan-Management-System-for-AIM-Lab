@@ -1,7 +1,7 @@
 ﻿@model ELMS.WEB.Areas.Loan.Models.AlreadyAcceptedTermsAndConditionsViewModel
 
 @{
-    ViewData["Title"] = "This Loan has already been accepted";
+    ViewData["Title"] = "Already Accepted";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -10,7 +10,7 @@
         <div class="m-auto text-white text-center">
             <div class="m-5">
                 <h1 class="display-2"><strong>AIM LAB</strong></h1>
-                <h2 class="display-4 text-center">@ViewData["Title"]</h2>
+                <h2 class="display-4 text-center">This loan has already been accepted</h2>
                 <p><strong>@Model.Loan.FromTimestamp.ToString("d") to @Model.Loan.ExpiryTimestamp.ToString("d")</strong></p>
             </div>
         </div>
