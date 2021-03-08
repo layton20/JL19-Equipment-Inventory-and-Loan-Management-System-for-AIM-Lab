@@ -1,0 +1,48 @@
+﻿@model ELMS.WEB.Areas.Admin.Models.Configuration.UpdateConfigurationViewModel
+
+@{
+    ViewData["Title"] = "Update Configuration";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row bg-dark">
+        <div class="m-auto text-white text-center">
+            <div class="m-5">
+                <h1 class="display-2"><strong>@ViewData["Title"]</strong></h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form asp-area="Admin" asp-controller="Configuration" asp-action="Edit" enctype="multipart/form-data">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="card mb-0">
+                <div class="card-header">
+                    <h3 class="card-title">Enter new configuration details</h3>
+                </div>
+                <div class="card-body pt-0">
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <br />
+                    <input type="hidden" asp-for="UID"/>
+                    <div class="form-group">
+                        <label asp-for="Name"></label>
+                        <input type="text" class="form-control" asp-for="Name" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Description"></label>
+                        <textarea class="tinymce" asp-for="Description"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Value"></label>
+                        <input class="form-control" asp-for="Value" />
+                    </div>
+                </div>
+                <div class="card-footer justify-content-end">
+                    <button type="submit" class="btn btn-success">@ViewData["Title"]</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

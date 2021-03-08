@@ -44,6 +44,14 @@ tinymce.init({
     menubar: false,
 });
 
+tinymce.init({
+    selector: '.tinymce-no-menubar',
+    menubar: false,
+    toolbar: false,
+    plugins: 'noneditable',
+    readonly: 1
+});
+
 // FileInput
 $('.form-file-simple .inputFileVisible').click(function () {
     $(this).siblings('.inputFileHidden').trigger('click');

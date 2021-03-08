@@ -48,9 +48,9 @@ namespace ELMS.WEB.Areas.Admin.Controllers
 
         [HttpGet]
         [Authorize(Policy = "CreateConfigurationPolicy")]
-        public async Task<IActionResult> CreateModalAsync()
+        public async Task<IActionResult> CreateViewAsync()
         {
-            return PartialView("_CreateModal", new CreateConfigurationViewModel());
+            return PartialView("Create", new CreateConfigurationViewModel());
         }
 
         [HttpPost]
@@ -67,15 +67,15 @@ namespace ELMS.WEB.Areas.Admin.Controllers
 
             if (!_Response.Success)
             {
-                return Json(new { error = $"{GlobalConstants.ERROR_ACTION_PREFIX} create {ENTITY_NAME}." });
+                return RedirectToAction("Index", "Configuration", new { area = "Admin", successMessage = $"{GlobalConstants.ERROR_ACTION_PREFIX} create {ENTITY_NAME}." });
             }
 
-            return Json(new { success = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} created {ENTITY_NAME}." });
+            return RedirectToAction("Index", "Configuration", new { area = "Admin", successMessage = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} created {ENTITY_NAME}." });
         }
 
         [HttpGet]
         [Authorize(Policy = "EditConfigurationPolicy")]
-        public async Task<IActionResult> EditModalAsync(Guid uid)
+        public async Task<IActionResult> EditViewAsync(Guid uid)
         {
             if (uid == Guid.Empty)
             {
@@ -89,7 +89,7 @@ namespace ELMS.WEB.Areas.Admin.Controllers
                 return Json(new { message = $"{GlobalConstants.ERROR_ACTION_PREFIX} find {ENTITY_NAME}." });
             }
 
-            return PartialView("_EditModal", __Mapper.Map<UpdateConfigurationViewModel>(_Response));
+            return View("Edit", __Mapper.Map<UpdateConfigurationViewModel>(_Response));
         }
 
         [HttpPost]
@@ -106,17 +106,17 @@ namespace ELMS.WEB.Areas.Admin.Controllers
 
             if (!_ConfigurationResponse.Success)
             {
-                return Json(new { message = $"{GlobalConstants.ERROR_ACTION_PREFIX} find {ENTITY_NAME}." });
+                return RedirectToAction("Index", "Configuration", new { area = "Admin", successMessage = $"{GlobalConstants.ERROR_ACTION_PREFIX} update {ENTITY_NAME}." });
             }
 
             BaseResponse _UpdateResponse = await __ConfigurationManager.UpdateAsync(__Mapper.Map<UpdateConfigurationRequest>(model));
 
             if (!_UpdateResponse.Success)
             {
-                return Json(new { error = $"{GlobalConstants.ERROR_ACTION_PREFIX} update {ENTITY_NAME}." });
+                return RedirectToAction("Index", "Configuration", new { area = "Admin", successMessage = $"{GlobalConstants.ERROR_ACTION_PREFIX} update {ENTITY_NAME}." });
             }
 
-            return Json(new { success = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} updated {ENTITY_NAME}." });
+            return RedirectToAction("Index", "Configuration", new { area = "Admin", successMessage = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} updated {ENTITY_NAME}." });
         }
 
         [HttpGet]

@@ -23,7 +23,7 @@
     <div class="row my-2 justify-content-end">
         @if ((await AuthorizationService.AuthorizeAsync(User, "CreateConfigurationPolicy")).Succeeded)
         {
-            <a class="btn btn-success text-white col-sm-12 createConfiguration" data-url="/Admin/Configuration/CreateModal">New Configuration</a>
+            <a class="btn btn-success text-white" asp-area="Admin" asp-controller="Configuration" asp-action="CreateView">New Configuration</a>
         }
     </div>
 </div>
@@ -46,7 +46,7 @@
                         <div class="col-md-10">
                             <div class="tab-content">
                                 <div class="tab-pane active" id="tab@(ConfigurationType.General)">
-                                    <table class="display table datatable responsive hover compact" cellspacing="0" width="100%">
+                                    <table class="display table datatable-configuration responsive hover compact" cellspacing="0" width="100%">
                                         <thead>
                                             <tr>
                                                 <th class="th-description">Name</th>
@@ -60,7 +60,9 @@
                                             {
                                                 <tr>
                                                     <td class="td-name">@config.Name</td>
-                                                    <td class="td-name">@config.Description</td>
+                                                    <td class="td-name">
+                                                        <textarea class="tinymce-no-menubar mceNonEditable">@config.Description</textarea>
+                                                    </td>
                                                     <td class="td-name">@config.Value</td>
                                                     <td class="td-name">
                                                         <div class="dropdown show">
@@ -71,7 +73,7 @@
                                                             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                                                 @if ((await AuthorizationService.AuthorizeAsync(User, "EditConfigurationPolicy")).Succeeded)
                                                                 {
-                                                                    <a class="dropdown-item editConfiguration" href="javascript:;" data-url="/Admin/Configuration/EditModal" data-uid="@config.UID"><i class="fas fa-pen mr-2"></i> Edit</a>
+                                                                    <a class="dropdown-item editConfiguration" asp-area="Admin" asp-controller="Configuration" asp-action="EditView" asp-route-uid="@config.UID"><i class="fas fa-pen mr-2"></i> Edit</a>
                                                                 }
                                                                 @if ((await AuthorizationService.AuthorizeAsync(User, "DeleteConfigurationPolicy")).Succeeded)
                                                                 {
@@ -87,7 +89,7 @@
                                     </table>
                                 </div>
                                 <div class="tab-pane" id="tab@(ConfigurationType.Equipment)">
-                                    <table class="display table datatable responsive hover compact" cellspacing="0" width="100%">
+                                    <table class="display table datatable-configuration responsive hover compact" cellspacing="0" width="100%">
                                         <thead>
                                             <tr>
                                                 <th class="th-description">Name</th>
@@ -101,7 +103,9 @@
                                             {
                                                 <tr>
                                                     <td class="td-name">@config.Name</td>
-                                                    <td class="td-name">@config.Description</td>
+                                                    <td class="td-name">
+                                                        <textarea class="tinymce-no-menubar mceNonEditable">@config.Description</textarea>
+                                                    </td>
                                                     <td class="td-name">@config.Value</td>
                                                     <td class="td-name">
                                                         <div class="dropdown show">
@@ -112,7 +116,7 @@
                                                             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                                                 @if ((await AuthorizationService.AuthorizeAsync(User, "EditConfigurationPolicy")).Succeeded)
                                                                 {
-                                                                    <a class="dropdown-item editConfiguration" href="javascript:;" data-url="/Admin/Configuration/EditModal" data-uid="@config.UID"><i class="fas fa-pen mr-2"></i> Edit</a>
+                                                                    <a class="dropdown-item editConfiguration" asp-area="Admin" asp-controller="Configuration" asp-action="EditView" asp-route-uid="@config.UID"><i class="fas fa-pen mr-2"></i> Edit</a>
                                                                 }
                                                                 @if ((await AuthorizationService.AuthorizeAsync(User, "DeleteConfigurationPolicy")).Succeeded)
                                                                 {
@@ -128,7 +132,7 @@
                                     </table>
                                 </div>
                                 <div class="tab-pane" id="tab@(ConfigurationType.Loan)">
-                                    <table class="display table datatable responsive hover compact" cellspacing="0" width="100%">
+                                    <table class="display table datatable-configuration responsive hover compact" cellspacing="0" width="100%">
                                         <thead>
                                             <tr>
                                                 <th class="th-description">Name</th>
@@ -142,7 +146,9 @@
                                             {
                                                 <tr>
                                                     <td class="td-name">@config.Name</td>
-                                                    <td class="td-name">@config.Description</td>
+                                                    <td class="td-name">
+                                                        <textarea class="tinymce-no-menubar mceNonEditable">@config.Description</textarea>
+                                                    </td>
                                                     <td class="td-name">@config.Value</td>
                                                     <td class="td-name">
                                                         <div class="dropdown show">
@@ -153,7 +159,7 @@
                                                             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                                                 @if ((await AuthorizationService.AuthorizeAsync(User, "EditConfigurationPolicy")).Succeeded)
                                                                 {
-                                                                    <a class="dropdown-item editConfiguration" href="javascript:;" data-url="/Admin/Configuration/EditModal" data-uid="@config.UID"><i class="fas fa-pen mr-2"></i> Edit</a>
+                                                                    <a class="dropdown-item editConfiguration" asp-area="Admin" asp-controller="Configuration" asp-action="EditView" asp-route-uid="@config.UID"><i class="fas fa-pen mr-2"></i> Edit</a>
                                                                 }
                                                                 @if ((await AuthorizationService.AuthorizeAsync(User, "DeleteConfigurationPolicy")).Succeeded)
                                                                 {
@@ -169,7 +175,7 @@
                                     </table>
                                 </div>
                                 <div class="tab-pane" id="tab@(ConfigurationType.User)">
-                                    <table class="display table datatable responsive hover compact" cellspacing="0" width="100%">
+                                    <table class="display table datatable-configuration responsive hover compact" cellspacing="0" width="100%">
                                         <thead>
                                             <tr>
                                                 <th class="th-description">Name</th>
@@ -183,7 +189,9 @@
                                             {
                                                 <tr>
                                                     <td class="td-name">@config.Name</td>
-                                                    <td class="td-name">@config.Description</td>
+                                                    <td class="td-name">
+                                                        <textarea class="tinymce-no-menubar mceNonEditable">@config.Description</textarea>
+                                                    </td>
                                                     <td class="td-name">@config.Value</td>
                                                     <td class="td-name">
                                                         <div class="dropdown show">
@@ -194,7 +202,7 @@
                                                             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                                                 @if ((await AuthorizationService.AuthorizeAsync(User, "EditConfigurationPolicy")).Succeeded)
                                                                 {
-                                                                    <a class="dropdown-item editConfiguration" href="javascript:;" data-url="/Admin/Configuration/EditModal" data-uid="@config.UID"><i class="fas fa-pen mr-2"></i> Edit</a>
+                                                                    <a class="dropdown-item editConfiguration" asp-area="Admin" asp-controller="Configuration" asp-action="EditView" asp-route-uid="@config.UID"><i class="fas fa-pen mr-2"></i> Edit</a>
                                                                 }
                                                                 @if ((await AuthorizationService.AuthorizeAsync(User, "DeleteConfigurationPolicy")).Succeeded)
                                                                 {
@@ -224,6 +232,12 @@
             $('#navItemAdmin').addClass('active');
             $('#navCollapseAdmin').addClass('show');
             $('#navItemConfigurations').addClass('active');
+
+            $('.datatable-configuration').dataTable({
+                "columnDefs": [
+                    { "width": "20%", "targets": 0 }
+                ]
+            });
         });
     </script>
     <environment include="Development">
