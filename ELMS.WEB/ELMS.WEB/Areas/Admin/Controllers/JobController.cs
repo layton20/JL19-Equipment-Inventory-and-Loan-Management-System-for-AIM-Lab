@@ -1,4 +1,5 @@
-﻿using ELMS.WEB.Jobs;
+﻿using ELMS.WEB.Areas.Admin.Models.Job;
+using ELMS.WEB.Jobs;
 using ELMS.WEB.Managers.Admin.Interfaces;
 using ELMS.WEB.Models.Admin.Response;
 using Microsoft.AspNetCore.Authorization;
@@ -26,7 +27,9 @@ namespace ELMS.WEB.Areas.Admin.Controllers
             __Configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
 
-        public IActionResult Index(string successMessage = "", string errorMessage = "")
+        [HttpGet]
+        [Authorize(Policy = "RunJobSchedulerPolicy")]
+        public async Task<IActionResult> Index(string successMessage = "", string errorMessage = "")
         {
             if (!string.IsNullOrWhiteSpace(successMessage))
             {
@@ -37,10 +40,14 @@ namespace ELMS.WEB.Areas.Admin.Controllers
                 ViewData["ErrorMessage"] = errorMessage;
             }
 
-            return View();
+            return View(new IndexViewModel
+            {
+                JobRunningStatuses = await GetStatuses()
+            });
         }
 
         [HttpGet]
+        [Authorize(Policy = "RunJobSchedulerPolicy")]
         public async Task<IActionResult> StartEquipmentJobAsync()
         {
             IJobDetail _Job = JobBuilder.Create<EquipmentJob>()
@@ -77,6 +84,7 @@ namespace ELMS.WEB.Areas.Admin.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "RunJobSchedulerPolicy")]
         public async Task<IActionResult> StartLoanJobAsync()
         {
             IJobDetail _Job = JobBuilder.Create<LoanJob>()
@@ -113,6 +121,7 @@ namespace ELMS.WEB.Areas.Admin.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "RunJobSchedulerPolicy")]
         public async Task<IActionResult> StartEmailJobAsync()
         {
             IJobDetail _Job = JobBuilder.Create<EmailJob>()
@@ -146,6 +155,40 @@ namespace ELMS.WEB.Areas.Admin.Controllers
             }
 
             return RedirectToAction("Index", "Job", new { Area = "Admin", successMessage = $"Successfully triggered Email job scheduler." });
+        }
+
+        private async Task<JobRunningStatuses> GetStatuses()
+        {
+            JobRunningStatuses _Statuses = new JobRunningStatuses();
+
+            IJobDetail _EquipmentJob = JobBuilder.Create<EquipmentJob>()
+                .WithIdentity("equipment", "elmsJobs")
+                .Build();
+
+            if (await __Scheduler.CheckExists(_EquipmentJob.Key))
+            {
+                _Statuses.IsEquipmentJobRunning = true;
+            }
+
+            IJobDetail _LoanJob = JobBuilder.Create<LoanJob>()
+                .WithIdentity("loan", "elmsJobs")
+                .Build();
+
+            if (await __Scheduler.CheckExists(_LoanJob.Key))
+            {
+                _Statuses.IsLoanJobRunning = true;
+            }
+
+            IJobDetail _EmailJob = JobBuilder.Create<EmailJob>()
+                .WithIdentity("email", "elmsJobs")
+                .Build();
+
+            if (await __Scheduler.CheckExists(_EmailJob.Key))
+            {
+                _Statuses.IsEmailJobRunning = true;
+            }
+
+            return _Statuses;
         }
     }
 }

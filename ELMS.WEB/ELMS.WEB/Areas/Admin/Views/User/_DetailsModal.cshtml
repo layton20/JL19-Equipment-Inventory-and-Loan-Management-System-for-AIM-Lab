@@ -43,40 +43,48 @@
                 <div id="collapseLoans" class="collapse" role="tabpanel" aria-labelledby="headingLoans" data-parent="#accordion">
                     <div class="card-body">
                         <p><strong>Current Loans</strong></p>
-                        <ul class="list-group rounded-0">
-                            <li class="list-group-item border my-1"><strong>ID: </strong><span>@Model.User.Id</span></li>
-                        </ul>
-                        <br />
-                        <p><strong>Past Loans</strong></p>
-                        <ul class="list-group rounded-0">
-                            <li class="list-group-item border my-1"><strong>ID: </strong><span>@Model.User.Id</span></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card card-collapse">
-                <div class="card-header" role="tab" id="headingRoles">
-                    <h5 class="mb-0">
-                        <a class="collapsed" data-toggle="collapse" href="#collapseRoles" aria-expanded="false" aria-controls="collapseRoles">
-                            Roles
-                            <i class="material-icons">keyboard_arrow_down</i>
-                        </a>
-                    </h5>
-                </div>
-                <div id="collapseRoles" class="collapse" role="tabpanel" aria-labelledby="headingRoles" data-parent="#accordion">
-                    <div class="card-body">
-                        @if (Model.Roles.Count > 0)
+                        @{
+                            var currentLoans = Model.Loans.Where(x => x.Status == ELMS.WEB.Enums.Loan.Status.ActiveLoan || x.Status == ELMS.WEB.Enums.Loan.Status.Pending)?.ToList();
+                        }
+                        @if (currentLoans != null && currentLoans.Count > 0)
                         {
-                            <div class="border">
-                                <div>
-                                    <p><strong></strong></p>
-                                </div>
-                            </div>
+                            <ul class="list-group rounded-0">
+                                @foreach (var currentLoan in currentLoans)
+                                {
+                                    <li class="list-group-item border my-1">
+                                        <span class="d-block"><strong>ID: </strong>@currentLoan.UID</span>
+                                        <span class="d-block"><strong>Loan period: </strong>@currentLoan.FromTimestamp - @currentLoan.ExpiryTimestamp</span>
+                                        <span class="d-block"><a asp-area="Loan" asp-controller="Loan" asp-action="DetailsView" asp-route-uid="@currentLoan.UID" target="_blank">View loan</a></span>
+                                    </li>
+                                }
+                            </ul>
                         }
                         else
                         {
-                            <p><strong>No roles assigned to this user.</strong></p>
+                            <p>This user is not assigned to any active/pending loans.</p>
+                        }
+                        <br />
+                        <p><strong>Past Loans</strong></p>
+                        @{
+                            var historicLoans = Model.Loans.Where(x => x.Status == ELMS.WEB.Enums.Loan.Status.Complete || x.Status == ELMS.WEB.Enums.Loan.Status.ManualComplete)?.ToList();
+                        }
+                        @if (historicLoans != null || historicLoans?.Count > 0)
+                        {
+                            <ul class="list-group rounded-0">
+                                @foreach (var historicLoan in historicLoans)
+                                {
+                                    <li class="list-group-item border my-1">
+                                        <span class="d-block"><strong>Reference ID: </strong>@Model.User.Id</span>
+                                        <span class="d-block"><strong>Loan period: </strong>@historicLoan.FromTimestamp - @historicLoan.ExpiryTimestamp</span>
+                                        <span class="d-block"><strong>Loan Equipment: </strong>@(string.Join(", ", historicLoan.EquipmentList.Select(x => x.Name)))</span>
+                                        <span class="d-block"><a asp-area="Loan" asp-controller="Loan" asp-action="DetailsView" asp-route-uid="@historicLoan.UID" target="_blank">View loan</a></span>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <p>This user has no historic loans.</p>
                         }
                     </div>
                 </div>
