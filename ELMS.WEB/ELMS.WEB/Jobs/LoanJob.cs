@@ -1,45 +1,40 @@
-﻿using ELMS.WEB.Background.Interfaces;
-using ELMS.WEB.Managers.Equipment.Interfaces;
+﻿using ELMS.WEB.Managers.Equipment.Interfaces;
 using ELMS.WEB.Managers.Loan.Interface;
 using ELMS.WEB.Models.Equipment.Response;
 using ELMS.WEB.Models.Loan.Response;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
+using Quartz;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
-namespace ELMS.WEB.Background.Concrete
+namespace ELMS.WEB.Jobs
 {
-    public class LoanWorker : ILoanWorker
+    public class LoanJob : IJob
     {
-        private readonly ILogger __Logger;
         private readonly IServiceProvider __ServiceProvider;
-        private readonly string WORKER_NAME = "LoanWorker";
+        private readonly string WORKER_NAME = "Loan Job Worker";
 
-        public LoanWorker(ILogger<LoanWorker> logger, IServiceProvider serviceProvider)
+        public LoanJob(IServiceProvider serviceProvider)
         {
-            __Logger = logger ?? throw new ArgumentNullException(nameof(logger));
             __ServiceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
         }
 
-        public async Task DoWork(CancellationToken cancellationToken)
+        public async Task Execute(IJobExecutionContext context)
         {
-            while (!cancellationToken.IsCancellationRequested)
-            {
-                await Task.Delay(await UpdateExpiredLoansStatusesAsync());
-                await Task.Delay(await PruneDanglingLoanEquipmentRecordsAsync());
-                await Task.Delay(await PrunePendingLoansAsync());
-            }
+            Debug.WriteLine($"{WORKER_NAME}: Task Beginning");
+
+            await PrunePendingLoansAsync();
+            await PruneDanglingLoanEquipmentRecordsAsync();
+
+            Debug.WriteLine($"{WORKER_NAME}: Task Complete");
         }
 
-        private async Task<int> PrunePendingLoansAsync()
+        private async Task PrunePendingLoansAsync()
         {
-            int delaySeconds = 1000 * 60 * 60;
-
-            __Logger.LogInformation($"{WORKER_NAME}: Pruning pending loans");
+            Debug.WriteLine($"{WORKER_NAME}: Pruning pending loans");
 
             using (var scope = __ServiceProvider.CreateScope())
             {
@@ -54,25 +49,15 @@ namespace ELMS.WEB.Background.Concrete
                         await _LoanManager.DeleteAsync(loan.UID);
                     }
 
-                    __Logger.LogInformation($"{WORKER_NAME}: Pruned {_PendingLoans.Count} pending loans.");
-                }
-                else
-                {
-                    __Logger.LogInformation($"{WORKER_NAME}: No pending loans found to prune.");
+                    Debug.WriteLine($"{WORKER_NAME}: Pruned {_PendingLoans.Count} pending loans.");
                 }
 
                 // IConfiguration to retrieve Lead delay time for Pruning
             }
-
-            __Logger.LogInformation($"LoanWorker: Pruning pending loans completed. Task scheduled again in {delaySeconds} milliseconds.");
-
-            return delaySeconds;
         }
 
-        private async Task<int> PruneDanglingLoanEquipmentRecordsAsync()
+        private async Task PruneDanglingLoanEquipmentRecordsAsync()
         {
-            int delaySeconds = 1000 * 60 * 60 * 6;
-
             using (var scope = __ServiceProvider.CreateScope())
             {
                 ILoanManager _LoanManager = scope.ServiceProvider.GetRequiredService<ILoanManager>();
@@ -87,19 +72,13 @@ namespace ELMS.WEB.Background.Concrete
 
                 if (_UnassociatedLoanEquipmentUIDList?.Count > 0)
                 {
-                    __Logger.LogInformation($"{WORKER_NAME}: Removed {_UnassociatedLoanEquipmentUIDList.Count} dangling LoanEquipment records.");
+                    Debug.WriteLine($"{WORKER_NAME}: Removed {_UnassociatedLoanEquipmentUIDList.Count} dangling LoanEquipment records.");
                 }
             }
-
-            __Logger.LogInformation($"LoanWorker: Pruning dangling Loan-equipment records completed. Task scheduled again in {delaySeconds} milliseconds.");
-
-            return delaySeconds;
         }
 
-        private async Task<int> UpdateExpiredLoansStatusesAsync() 
+        private async Task UpdateExpiredLoansStatusesAsync()
         {
-            int delaySeconds = 1000 * 60 * 60 * 2;
-
             using (var scope = __ServiceProvider.CreateScope())
             {
                 ILoanManager _LoanManager = scope.ServiceProvider.GetRequiredService<ILoanManager>();
@@ -123,11 +102,8 @@ namespace ELMS.WEB.Background.Concrete
                     }
                 }
 
-                __Logger.LogInformation($"LoanWorker: {updatedLoans} loans have expired and their statuses have been updated to 'Expired'. Task scheduled again in {delaySeconds} milliseconds.");
+                Debug.WriteLine($"LoanWorker: {updatedLoans} loans have expired and their statuses have been updated to 'Expired'.");
             }
-
-            return delaySeconds;
         }
-
     }
 }
