@@ -9,8 +9,10 @@ using ELMS.WEB.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ELMS.WEB.Areas.Email.Controllers
@@ -53,10 +55,69 @@ namespace ELMS.WEB.Areas.Email.Controllers
 
             IndexViewModel _Model = new IndexViewModel
             {
-                EmailSchedules = __Mapper.Map<IList<EmailScheduleViewModel>>(await __EmailScheduleManager.GetAsync())
+                EmailSchedules = __Mapper.Map<IList<EmailScheduleViewModel>>(await __EmailScheduleManager.GetAsync()),
+                Filter = new EmailScheduleFilterViewModel
+                {
+                    EmailTemplatesSelectList = (await __EmailTemplateManager.GetAsync()).EmailTemplates.Select(x => new SelectListItem
+                    {
+                        Text = x.Name,
+                        Value = x.UID.ToString()
+                    }).ToList()
+                }
             };
 
             return View(_Model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> FilterAsync(IndexViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("Index", model);
+            }
+
+            IList<EmailScheduleResponse> _EmailScheduleResponses = await __EmailScheduleManager.GetAsync();
+
+            if (!string.IsNullOrWhiteSpace(model.Filter.RecipientEmailAddress))
+            {
+                _EmailScheduleResponses = _EmailScheduleResponses.Where(x => x.RecipientEmailAddress.ToUpper().Contains(model.Filter.RecipientEmailAddress.ToUpper())).ToList();
+            }
+
+            if (model.Filter.EmailSent == Enums.General.BooleanFilter.True)
+            {
+                _EmailScheduleResponses = _EmailScheduleResponses.Where(x => x.Sent).ToList();
+            }
+            else if (model.Filter.EmailSent == Enums.General.BooleanFilter.False)
+            {
+                _EmailScheduleResponses = _EmailScheduleResponses.Where(x => !x.Sent).ToList();
+            }
+
+            if (model.Filter.ScheduledForFrom != DateTime.MinValue)
+            {
+                _EmailScheduleResponses = _EmailScheduleResponses.Where(x => x.SendTimestamp >= model.Filter.ScheduledForFrom).ToList();
+            }
+
+            if (model.Filter.ScheduledForTo != DateTime.MaxValue)
+            {
+                _EmailScheduleResponses = _EmailScheduleResponses.Where(x => x.SendTimestamp <= model.Filter.ScheduledForTo).ToList();
+            }
+
+            if (model.Filter.EmailTemplateUIs != null && model.Filter.EmailTemplateUIs.Count > 0)
+            {
+                _EmailScheduleResponses = _EmailScheduleResponses.Where(x => model.Filter.EmailTemplateUIs.Contains(x.EmailTemplateUID)).ToList();
+            }
+
+            if (model.Filter.EmailTypes != null && model.Filter.EmailTypes.Count > 0)
+            {
+                _EmailScheduleResponses = _EmailScheduleResponses.Where(x => model.Filter.EmailTypes.Contains(x.EmailType)).ToList();
+            }
+
+            return View("Index", new IndexViewModel
+            {
+                EmailSchedules = __Mapper.Map<IList<EmailScheduleViewModel>>(_EmailScheduleResponses),
+                Filter = model.Filter
+            });
         }
 
         [HttpGet]

@@ -10,7 +10,7 @@ namespace ELMS.WEB.Areas.Email.Models.EmailSchedule
         public string RecipientEmailAddress { get; set; }
         public EmailType EmailType { get; set; }
         public DateTime SendTimestamp { get; set; }
-        public bool EmailSent { get; set; }
+        public bool Sent { get; set; }
         public DateTime CreatedTimestamp { get; set; }
         public DateTime AmendedTimestamp { get; set; }
     }

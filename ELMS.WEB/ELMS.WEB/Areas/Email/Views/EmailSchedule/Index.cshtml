@@ -10,15 +10,6 @@
         <div class="row">
             <div class="col-12">
                 <div class="d-flex pull-left">
-                    <div class="dropdown">
-                        <button class="btn btn-primary dropdown-toggle" id="statusDropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">All Statuses</button>
-                        <div class="dropdown-menu" aria-labelledby="statusDropdownMenuButton">
-                            <a class="dropdown-item" href="javascript:;">All Statuses</a>
-                            <a class="dropdown-item" href="javascript:;">Scheduled</a>
-                            <a class="dropdown-item" href="javascript:;">Sent</a>
-                            <a class="dropdown-item" href="javascript:;">ManuallySent</a>
-                        </div>
-                    </div>
                     <div class="ml-1">
                         <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseFilters" aria-expanded="false" aria-controls="collapseFilters">
                             <i class="material-icons mr-2">filter_alt</i>Show Filters
@@ -27,28 +18,62 @@
                 </div>
                 <div class="pull-right">
                     <a class="create btn btn-success text-white" data-url="/Email/EmailSchedule/CreateModal">New Email Schedule</a>
-                    <div class="btn-group">
-                        <a class="btn btn-primary"><i class="text-white fas fa-th-large"></i></a>
-                        <a class="btn btn-primary active"><i class="text-white fas fa-bars"></i></a>
-                    </div>
                 </div>
             </div>
             <div class="col-12 collapse" id="collapseFilters">
                 <div class="card my-3">
                     <div class="card-header">
-                        HIDDEN FILTERS
+                        Filters
+                    </div>
+                    <div class="card-body">
+                        <form asp-area="Email" asp-controller="EmailSchedule" asp-action="Filter">
+                            <div class="form-row">
+                                <div class="form-group col-sm-12 col-md-3">
+                                    <label asp-for="Filter.RecipientEmailAddress"></label>
+                                    <input type="text" class="form-control" asp-for="Filter.RecipientEmailAddress" />
+                                </div>
+                                <div class="form-group col-sm-12 col-md-3">
+                                    <label asp-for="Filter.ScheduledForFrom"></label>
+                                    <input type="date" class="form-control" asp-for="Filter.ScheduledForFrom" />
+                                </div>
+                                <div class="form-group col-sm-12 col-md-3">
+                                    <label asp-for="Filter.ScheduledForTo"></label>
+                                    <input type="date" class="form-control" asp-for="Filter.ScheduledForTo" />
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-sm-12 col-md-3">
+                                    <label class="w-100" asp-for="Filter.EmailTemplateUIs"></label>
+                                    <select class="selectpicker" data-width="100%" data-style="select-with-transition" multiple asp-for="Filter.EmailTemplateUIs" asp-items="Model.Filter.EmailTemplatesSelectList">
+                                    </select>
+                                </div>
+                                <div class="form-group col-sm-12 col-md-3">
+                                    <label class="w-100" asp-for="Filter.EmailSent"></label>
+                                    <select class="selectpicker" data-width="100%" data-style="select-with-transition" asp-for="Filter.EmailSent" asp-items="Html.GetEnumSelectList<ELMS.WEB.Enums.General.BooleanFilter>()">
+                                    </select>
+                                </div>
+                                <div class="form-group col-sm-12 col-md-3">
+                                    <label class="w-100" asp-for="Filter.EmailTypes"></label>
+                                    <select class="selectpicker" data-width="100%" data-style="select-with-transition" multiple asp-for="Filter.EmailTypes" asp-items="Html.GetEnumSelectList<ELMS.WEB.Enums.Email.EmailType>()">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <button class="btn btn-primary" type="submit">Filter Schedules</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="card mt-0">
+        <div class="card my-3">
             <div class="card-header card-header-primary card-header-icon">
                 <h4 class="card-title">All Email Templates</h4>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="display table datatable responsive hover compact" cellspacing="0" width="100%">
+                    <table class="display table datatable-export responsive hover compact" cellspacing="0" width="100%">
                         <thead>
                             <tr>
                                 <th class="th-description font-weight-normal">Email Template</th>
@@ -56,7 +81,7 @@
                                 <th class="th-description font-weight-normal">Email Type</th>
                                 <th class="th-description font-weight-normal">Email Sent?</th>
                                 <th class="th-description font-weight-normal">Scheduled For</th>
-                                <th class="th-description font-weight-normal">Actions</th>
+                                <th class="th-description font-weight-normal th-actions">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -64,11 +89,18 @@
                             {
                                 <tr>
                                     <td class="td-name">
-                                        @schedule.EmailTemplateUID
+                                        @if (schedule.EmailTemplateUID != Guid.Empty)
+                                        {
+                                            <p>@schedule.EmailTemplateUID</p>
+                                        }
+                                        else
+                                        {
+                                            <p>No template assigned</p>
+                                        }
                                     </td>
                                     <td class="td-name">@schedule.RecipientEmailAddress</td>
                                     <td class="td-name">@schedule.EmailType.ToString()</td>
-                                    <td class="td-name">@schedule.EmailSent</td>
+                                    <td class="td-name">@schedule.Sent</td>
                                     <td class="td-name">@schedule.SendTimestamp</td>
                                     <td class="td-name">
                                         <div class="dropdown show">
