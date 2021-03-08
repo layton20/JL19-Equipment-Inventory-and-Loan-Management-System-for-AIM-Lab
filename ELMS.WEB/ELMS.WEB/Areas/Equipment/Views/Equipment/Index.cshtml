@@ -14,8 +14,8 @@
                 <div class="card-icon">
                     <i class="fas fa-warehouse"></i>
                 </div>
-                <div class="card-category">Equipment In-Stock</div>
-                <h2 class="card-title">64</h2>
+                <div class="card-category">Available Equipment</div>
+                <h2 class="card-title">@Model.Equipment.Where(x => x.Status == ELMS.WEB.Enums.Equipment.Status.Available).Count()</h2>
             </div>
             <div class="card-footer">
                 <div class="stats">
@@ -32,7 +32,7 @@
                     <i class="fas fa-sign-in-alt"></i>
                 </div>
                 <div class="card-category">Equipment On-Loan</div>
-                <h2 class="card-title">64</h2>
+                <h2 class="card-title">@Model.Equipment.Where(x => x.Status == ELMS.WEB.Enums.Equipment.Status.PendingLoan || x.Status == ELMS.WEB.Enums.Equipment.Status.ActiveLoan).Count()</h2>
             </div>
             <div class="card-footer">
                 <div class="stats">
@@ -48,8 +48,8 @@
                 <div class="card-icon">
                     <i class="fas fa-warehouse"></i>
                 </div>
-                <div class="card-category">Due Loans</div>
-                <h2 class="card-title">64</h2>
+                <div class="card-category">Warranty Expired Equipment</div>
+                <h2 class="card-title">@Model.Equipment.Where(x => x.Status == ELMS.WEB.Enums.Equipment.Status.WrittenOff).Count()</h2>
             </div>
             <div class="card-footer">
                 <div class="stats">
@@ -71,7 +71,6 @@
             <div>
                 @if ((await AuthorizationService.AuthorizeAsync(User, "CreateEquipmentPolicy")).Succeeded)
                 {
-                    <a class="create btn btn-primary text-white" data-url="/Equipment/Equipment/CreateModal">New Equipment</a>
                     <a class="create btn btn-success text-white" asp-area="Equipment" asp-controller="Equipment" asp-action="CreateView">New Equipment</a>
                 }
                 <div class="btn-group">
