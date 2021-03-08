@@ -11,17 +11,26 @@ $('.datatable-export').DataTable({
     buttons: [
         {
             extend: 'csv',
-            text: 'Export as CSV'
+            text: 'Export as CSV',
+            exportOptions: {
+                columns: ':not(.th-actions)'
+            }
         },
         {
             extend: 'pdfHtml5',
             text: 'Export as PDF',
             orientation: 'landscape',
             pageSize: 'LEGAL',
+            exportOptions: {
+                columns: ':not(.th-actions)'
+            }
         },
         {
             extend: 'excel',
-            text: 'Export as Excel'
+            text: 'Export as Excel',
+            exportOptions: {
+                columns: ':not(.th-actions)'
+            }
         },
     ],
     responsive: {
