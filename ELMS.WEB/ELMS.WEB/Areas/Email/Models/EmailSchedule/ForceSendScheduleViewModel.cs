@@ -9,9 +9,12 @@ namespace ELMS.WEB.Areas.Email.Models.EmailSchedule
         [Required]
         [NonDefaultGuid]
         public Guid UID { get; set; }
+
         public string RecipientEmailAddress { get; set; }
+
         [Display(Name = "Retain Schedule")]
         public bool RetainSchedule { get; set; }
+
         [Display(Name = "Send me an email copy")]
         public bool SendCopyToSelf { get; set; }
     }

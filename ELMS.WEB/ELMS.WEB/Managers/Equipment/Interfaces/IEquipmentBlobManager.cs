@@ -10,9 +10,13 @@ namespace ELMS.WEB.Managers.Equipment.Interfaces
     public interface IEquipmentBlobManager
     {
         public Task<EquipmentBlobResponse> CreateAsync(CreateEquipmentBlobRequest request);
+
         public Task<IList<EquipmentBlobResponse>> GetAsync(Guid equipmentUID);
+
         public Task<IList<EquipmentBlobResponse>> GetAsync();
+
         public Task<EquipmentBlobResponse> GetByUIDAsync(Guid uid);
+
         public Task<BaseResponse> DeleteAsync(Guid uid);
     }
 }

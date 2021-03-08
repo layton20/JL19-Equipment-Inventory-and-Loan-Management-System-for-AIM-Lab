@@ -135,7 +135,7 @@ namespace ELMS.WEB.Areas.Admin.Controllers
                 return Json(new { message = $"{GlobalConstants.ERROR_ACTION_PREFIX} find {ENTITY_NAME}." });
             }
 
-            return PartialView("_DeleteModal", new DeleteConfigurationViewModel 
+            return PartialView("_DeleteModal", new DeleteConfigurationViewModel
             {
                 UID = uid,
                 Name = _Response.Name,

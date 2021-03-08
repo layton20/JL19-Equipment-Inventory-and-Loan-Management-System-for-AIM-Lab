@@ -10,10 +10,13 @@ namespace ELMS.WEB.Entities.Equipment
     {
         [Required]
         public Guid EquipmentUID { get; set; }
+
         [Required]
         public Guid BlobUID { get; set; }
+
         [ForeignKey("EquipmentUID")]
         public EquipmentEntity Equipment { get; set; }
+
         [ForeignKey("BlobUID")]
         public BlobEntity Blob { get; set; }
     }

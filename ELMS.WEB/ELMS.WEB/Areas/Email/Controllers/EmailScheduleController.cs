@@ -27,8 +27,8 @@ namespace ELMS.WEB.Areas.Email.Controllers
         private readonly IApplicationEmailSender __EmailSender;
         private readonly UserManager<IdentityUser> __UserManager;
 
-        public EmailScheduleController(IMapper mapper, IEmailScheduleManager emailScheduleManager, 
-            IEmailScheduleParameterManager emailScheduleParameterManager, IEmailTemplateManager emailTemplateManager, 
+        public EmailScheduleController(IMapper mapper, IEmailScheduleManager emailScheduleManager,
+            IEmailScheduleParameterManager emailScheduleParameterManager, IEmailTemplateManager emailTemplateManager,
             IApplicationEmailSender applicationEmailSender, UserManager<IdentityUser> userManager)
         {
             __Mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
@@ -159,7 +159,7 @@ namespace ELMS.WEB.Areas.Email.Controllers
                 return Json(new { message = $"{GlobalConstants.ERROR_ACTION_PREFIX} find {ENTITY_NAME}." });
             }
 
-            return PartialView("_ForceSendModal", new ForceSendScheduleViewModel 
+            return PartialView("_ForceSendModal", new ForceSendScheduleViewModel
             {
                 UID = uid,
                 RecipientEmailAddress = _ScheduleResponse.RecipientEmailAddress

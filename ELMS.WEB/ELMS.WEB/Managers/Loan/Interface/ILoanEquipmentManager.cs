@@ -9,7 +9,9 @@ namespace ELMS.WEB.Managers.Loan.Interface
     public interface ILoanEquipmentManager
     {
         public Task<IList<LoanEquipmentResponse>> GetAsync();
+
         public Task<IList<LoanEquipmentResponse>> GetAsync(Guid loanUID);
+
         public Task<BaseResponse> DeleteAsync(Guid uid);
     }
 }

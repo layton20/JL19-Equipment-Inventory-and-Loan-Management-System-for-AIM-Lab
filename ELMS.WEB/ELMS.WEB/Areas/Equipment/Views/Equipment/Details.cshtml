@@ -15,7 +15,7 @@
                 <div class="col-md-2 col-sm-12 px-0">
                     @if (Model.EquipmentMedia.Count > 0)
                     {
-                        <img src="@Model.EquipmentMedia[0].Blob.Path" alt="Image" class="w-100 rounded"/>
+                        <img src="@Model.EquipmentMedia[0].Blob.Path" alt="Image" class="w-100 rounded" />
                     }
                     else
                     {
@@ -213,7 +213,7 @@
                                                 @foreach (var mediaItem in Model.EquipmentMedia)
                                                 {
                                                     <tr>
-                                                        <td class="td-name"><img width="350" src="@mediaItem.Blob.Path" alt="Image"/></td>
+                                                        <td class="td-name"><img width="350" src="@mediaItem.Blob.Path" alt="Image" /></td>
                                                         <td class="td-name">@mediaItem.CreatedTimestamp</td>
                                                         <td class="td-name">
                                                             <a class="btn btn-danger text-white deleteImage" data-url="/General/Media/DeleteEquipmentMediaModal" data-uid="@mediaItem.UID"><i class="fas fa-trash mr-2"></i> Remove Image</a>

@@ -7,9 +7,12 @@ namespace ELMS.WEB.Models.Admin.Request
     {
         [Required]
         public string Name { get; set; }
+
         public string Description { get; set; }
+
         [Required]
         public string Value { get; set; }
+
         [Required]
         public ConfigurationType Type { get; set; }
     }

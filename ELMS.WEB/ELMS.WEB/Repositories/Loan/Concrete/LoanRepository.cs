@@ -97,7 +97,7 @@ namespace ELMS.WEB.Repositories.Loan.Concrete
             {
                 return false;
             }
-            
+
             __ApplicationContext.Loans.Remove(_Loan);
 
             IList<LoanEquipmentEntity> _LoanEquipmentList = await __ApplicationContext.LoanEquipmentList.Where(x => x.LoanUID == uid).ToListAsync();

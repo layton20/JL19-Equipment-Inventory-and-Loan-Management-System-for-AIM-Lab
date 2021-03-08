@@ -2,12 +2,10 @@
 using ELMS.WEB.Areas.Admin.Models.Dashboard;
 using ELMS.WEB.Managers.Equipment.Interfaces;
 using ELMS.WEB.Managers.Loan.Interface;
-using ELMS.WEB.Models.Loan.Response;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using NsEquipment = ELMS.WEB.Areas.Equipment;
 using NsLoan = ELMS.WEB.Areas.Loan;

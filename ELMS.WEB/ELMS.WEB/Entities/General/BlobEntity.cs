@@ -7,6 +7,7 @@ namespace ELMS.WEB.Entities.General
     {
         [Required]
         public string Name { get; set; }
+
         [Required]
         public string Path { get; set; }
     }

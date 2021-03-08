@@ -6,6 +6,7 @@ namespace ELMS.WEB.Models.General.Request
     {
         [Required]
         public string Name { get; set; }
+
         [Required]
         public string Path { get; set; }
     }

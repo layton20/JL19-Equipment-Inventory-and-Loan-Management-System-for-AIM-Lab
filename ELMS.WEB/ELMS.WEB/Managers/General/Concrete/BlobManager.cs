@@ -8,7 +8,6 @@ using ELMS.WEB.Models.General.Response;
 using ELMS.WEB.Repositories.General.Interface;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ELMS.WEB.Managers.General.Concrete

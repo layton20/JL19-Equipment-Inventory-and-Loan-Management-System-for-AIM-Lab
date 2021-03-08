@@ -57,7 +57,7 @@ namespace ELMS.WEB.Services.Concrete
             byte[] _Bytes = Encoding.UTF8.GetBytes(content);
 
             using MemoryStream _MemoryStream = new MemoryStream(_Bytes);
-            await _BlobClient.UploadAsync(_MemoryStream, new BlobHttpHeaders 
+            await _BlobClient.UploadAsync(_MemoryStream, new BlobHttpHeaders
             {
                 ContentType = fileName.GetContentType()
             });

@@ -6,9 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Quartz;
 using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ELMS.WEB.Areas.Admin.Controllers
@@ -57,7 +54,7 @@ namespace ELMS.WEB.Areas.Admin.Controllers
 
             ConfigurationResponse _IntervalResponse = await __ConfigurationManager.GetByNormalizedNameAsync(__Configuration.GetValue<string>("Configuration:Equipment:EQUIPMENT_EXPIRY_INTERVAL"));
 
-            if (int.TryParse(_IntervalResponse.Value, out int _IntervalHours)) 
+            if (int.TryParse(_IntervalResponse.Value, out int _IntervalHours))
             {
                 ITrigger _Trigger = TriggerBuilder.Create()
                     .WithIdentity("equipmentTrigger", "elmsJobs")
@@ -92,7 +89,7 @@ namespace ELMS.WEB.Areas.Admin.Controllers
             }
 
             ConfigurationResponse _IntervalResponse = await __ConfigurationManager.GetByNormalizedNameAsync(__Configuration.GetValue<string>("Configuration:General:SCHEDULED_EMAIL_INTERVAL"));
-            
+
             if (int.TryParse(_IntervalResponse.Value, out int _IntervalHours))
             {
                 ITrigger _Trigger = TriggerBuilder.Create()
@@ -112,7 +109,6 @@ namespace ELMS.WEB.Areas.Admin.Controllers
                 await __Scheduler.ScheduleJob(_Job, _Trigger);
             }
 
-
             return RedirectToAction("Index", "Job", new { Area = "Admin", successMessage = $"Successfully triggered Loan job scheduler." });
         }
 
@@ -130,7 +126,7 @@ namespace ELMS.WEB.Areas.Admin.Controllers
 
             ConfigurationResponse _IntervalResponse = await __ConfigurationManager.GetByNormalizedNameAsync(__Configuration.GetValue<string>("Configuration:Loan:LOAN_EXPIRY_INTERVAL"));
 
-            if (int.TryParse(_IntervalResponse.Value, out int _IntervalHours)) 
+            if (int.TryParse(_IntervalResponse.Value, out int _IntervalHours))
             {
                 ITrigger _Trigger = TriggerBuilder.Create()
                     .WithIdentity("emailTrigger", "elmsJobs")
