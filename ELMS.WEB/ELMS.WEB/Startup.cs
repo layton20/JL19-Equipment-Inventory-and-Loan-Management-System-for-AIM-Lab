@@ -1,6 +1,5 @@
 using Azure.Storage.Blobs;
-using ELMS.WEB.Background.Concrete;
-using ELMS.WEB.Background.Interfaces;
+using ELMS.WEB.Jobs;
 using ELMS.WEB.Managers.Admin.Concrete;
 using ELMS.WEB.Managers.Admin.Interfaces;
 using ELMS.WEB.Managers.Email.Concrete;
@@ -86,10 +85,9 @@ namespace ELMS.WEB
             services.AddScoped<IEquipmentBlobRepository, EquipmentBlobRepository>();
 
             services.AddSingleton(provider => _QuartsScheduler);
-
-            services.AddSingleton<IEquipmentWorker, EquipmentWorker>();
-            services.AddSingleton<IEmailWorker, EmailWorker>();
-            services.AddSingleton<ILoanWorker, LoanWorker>();
+            services.AddTransient<EquipmentJob>();
+            services.AddTransient<LoanJob>();
+            services.AddTransient<EmailJob>();
 
             services.AddSingleton(x => new BlobServiceClient(Configuration.GetValue<string>("AzureBlobStorage:ConnectionString")));
             services.AddSingleton<IBlobService, BlobService>();
@@ -161,6 +159,8 @@ namespace ELMS.WEB
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            _QuartsScheduler.JobFactory = new AspNetCoreJobFactory(app.ApplicationServices);
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
