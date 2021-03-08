@@ -13,6 +13,7 @@ namespace ELMS.WEB.Managers.Admin.Interfaces
         public Task<BaseResponse> DeleteAsync(Guid uid);
         public Task<IList<ConfigurationResponse>> GetAsync();
         public Task<ConfigurationResponse> GetByUIDAsync(Guid uid);
+        public Task<ConfigurationResponse> GetByNormalizedNameAsync(string name);
         public Task<BaseResponse> UpdateAsync(UpdateConfigurationRequest request);
     }
 }

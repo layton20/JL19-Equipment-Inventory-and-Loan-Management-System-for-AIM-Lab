@@ -1,7 +1,10 @@
-﻿using ELMS.WEB.Managers.Equipment.Interfaces;
+﻿using ELMS.WEB.Managers.Admin.Interfaces;
+using ELMS.WEB.Managers.Equipment.Interfaces;
 using ELMS.WEB.Managers.Loan.Interface;
+using ELMS.WEB.Models.Admin.Response;
 using ELMS.WEB.Models.Equipment.Response;
 using ELMS.WEB.Models.Loan.Response;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Quartz;
 using System;
@@ -15,11 +18,13 @@ namespace ELMS.WEB.Jobs
     public class LoanJob : IJob
     {
         private readonly IServiceProvider __ServiceProvider;
+        private readonly IConfiguration __Configuration;
         private readonly string WORKER_NAME = "Loan Job Worker";
 
-        public LoanJob(IServiceProvider serviceProvider)
+        public LoanJob(IServiceProvider serviceProvider, IConfiguration configuration)
         {
             __ServiceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
+            __Configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
 
         public async Task Execute(IJobExecutionContext context)
@@ -28,6 +33,7 @@ namespace ELMS.WEB.Jobs
 
             await PrunePendingLoansAsync();
             await PruneDanglingLoanEquipmentRecordsAsync();
+            await UpdateExpiredLoansStatusesAsync();
 
             Debug.WriteLine($"{WORKER_NAME}: Task Complete");
         }
@@ -39,8 +45,19 @@ namespace ELMS.WEB.Jobs
             using (var scope = __ServiceProvider.CreateScope())
             {
                 ILoanManager _LoanManager = scope.ServiceProvider.GetRequiredService<ILoanManager>();
+                IConfigurationManager _ConfigurationManager = scope.ServiceProvider.GetRequiredService<IConfigurationManager>();
+                ConfigurationResponse _ExpiryDaysResponse = await _ConfigurationManager.GetByNormalizedNameAsync(__Configuration.GetValue<string>("Configuration:Loan:PENDING_LOAN_EXPIRY_DAYS"));
 
-                IList<LoanResponse> _PendingLoans = (await _LoanManager.GetAsync()).Where(x => !x.AcceptedTermsAndConditions && (DateTime.Now - x.CreatedTimestamp).TotalDays >= 3).ToList();
+                IList<LoanResponse> _PendingLoans = new List<LoanResponse>();
+
+                if (int.TryParse(_ExpiryDaysResponse.Value, out int _ExpiryDays))
+                {
+                    _PendingLoans = (await _LoanManager.GetAsync()).Where(x => !x.AcceptedTermsAndConditions && (DateTime.Now - x.CreatedTimestamp).TotalDays >= 3).ToList();
+                }
+                else
+                {
+                    _PendingLoans = (await _LoanManager.GetAsync()).Where(x => !x.AcceptedTermsAndConditions && (DateTime.Now - x.CreatedTimestamp).TotalDays >= 3).ToList();
+                }
 
                 if (_PendingLoans != null && _PendingLoans.Count > 0)
                 {
@@ -51,8 +68,6 @@ namespace ELMS.WEB.Jobs
 
                     Debug.WriteLine($"{WORKER_NAME}: Pruned {_PendingLoans.Count} pending loans.");
                 }
-
-                // IConfiguration to retrieve Lead delay time for Pruning
             }
         }
 

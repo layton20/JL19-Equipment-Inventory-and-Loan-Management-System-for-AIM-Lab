@@ -87,5 +87,10 @@ namespace ELMS.WEB.Managers.Admin.Concrete
 
             return _Response;
         }
+
+        public async Task<ConfigurationResponse> GetByNormalizedNameAsync(string name)
+        {
+            return __Mapper.Map<ConfigurationResponse>(await __ConfigurationRepository.GetByNormalizedNameAsync(name));
+        }
     }
 }

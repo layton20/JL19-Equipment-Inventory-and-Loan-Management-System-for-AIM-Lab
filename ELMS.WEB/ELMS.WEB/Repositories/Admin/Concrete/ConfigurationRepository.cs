@@ -4,6 +4,7 @@ using ELMS.WEB.Repositories.Admin.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ELMS.WEB.Repositories.Admin.Concrete
@@ -52,6 +53,11 @@ namespace ELMS.WEB.Repositories.Admin.Concrete
         public async Task<IList<ConfigurationEntity>> GetAsync()
         {
             return await __Context.Configurations.ToListAsync();
+        }
+
+        public async Task<ConfigurationEntity> GetByNormalizedNameAsync(string name)
+        {
+            return await __Context.Configurations.Where(x => x.Name.ToUpper() == name.ToUpper()).FirstOrDefaultAsync();
         }
 
         public async Task<ConfigurationEntity> GetByUIDAsync(Guid uid)
