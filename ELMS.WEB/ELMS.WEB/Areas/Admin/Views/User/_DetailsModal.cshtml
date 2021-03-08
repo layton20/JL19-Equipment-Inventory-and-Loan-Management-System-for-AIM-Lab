@@ -66,7 +66,7 @@
                         <br />
                         <p><strong>Past Loans</strong></p>
                         @{
-                            var historicLoans = Model.Loans.Where(x => x.Status == ELMS.WEB.Enums.Loan.Status.Complete || x.Status == ELMS.WEB.Enums.Loan.Status.ManualComplete)?.ToList();
+                            var historicLoans = Model.Loans.Where(x => x.Status == ELMS.WEB.Enums.Loan.Status.Complete || x.Status == ELMS.WEB.Enums.Loan.Status.EarlyComplete)?.ToList();
                         }
                         @if (historicLoans != null || historicLoans?.Count > 0)
                         {

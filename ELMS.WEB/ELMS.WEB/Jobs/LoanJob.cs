@@ -102,9 +102,9 @@ namespace ELMS.WEB.Jobs
 
                 foreach (LoanResponse loan in await _LoanManager.GetAsync())
                 {
-                    if (await _LoanManager.GetExpiryDate(loan.UID) <= DateTime.Now && (loan.Status != Enums.Loan.Status.Complete || loan.Status != Enums.Loan.Status.ManualComplete))
+                    if (await _LoanManager.GetExpiryDate(loan.UID) <= DateTime.Now && (loan.Status != Enums.Loan.Status.Complete || loan.Status != Enums.Loan.Status.EarlyComplete))
                     {
-                        await _LoanManager.ChangeStatusAsync(loan.UID, Enums.Loan.Status.Complete);
+                        await _LoanManager.ChangeStatusAsync(loan.UID, Enums.Loan.Status.Expired);
 
                         IEquipmentManager _EquipmentManager = scope.ServiceProvider.GetRequiredService<IEquipmentManager>();
 

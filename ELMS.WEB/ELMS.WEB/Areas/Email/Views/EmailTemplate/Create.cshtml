@@ -21,9 +21,9 @@
             <div class="card mb-0">
                 <div class="card-header">
                     <h3 class="card-title">Enter details</h3>
+                    <div asp-validation-summary="All" class="text-danger"></div>
                 </div>
                 <div class="card-body">
-                    <div asp-validation-summary="All" class="text-danger"></div>
                     <div class="form-row">
                         <div class="form-group col-sm-12 col-md-6">
                             <label asp-for="Name"></label>
@@ -55,3 +55,13 @@
         </div>
     </div>
 </form>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#navItemEmailTemplates').addClass('active');
+            $('#navItemEmails').addClass('active');
+            $('#navCollapseEmails').show();
+        });
+    </script>
+}

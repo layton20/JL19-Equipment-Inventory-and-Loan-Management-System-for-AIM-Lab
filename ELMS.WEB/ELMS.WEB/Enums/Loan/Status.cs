@@ -16,7 +16,10 @@ namespace ELMS.WEB.Enums.Loan
         [Display(Name = "Completed")]
         Complete = 3,
 
-        [Display(Name = "Manually Completed")]
-        ManualComplete = 4,
+        [Display(Name = "Completed Early")]
+        EarlyComplete = 4,
+
+        [Display(Name = "Expired Loan")]
+        Expired = 5
     }
 }

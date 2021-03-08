@@ -163,7 +163,7 @@ namespace ELMS.WEB.Areas.Loan.Controllers
         [Authorize(Policy = "CreateLoanPolicy")]
         public async Task<IActionResult> CreateViewAsync()
         {
-            IList<LoanResponse> _Loans = (await __LoanManager.GetAsync()).Where(loan => loan.Status != Enums.Loan.Status.Complete && loan.Status != Enums.Loan.Status.ManualComplete).ToList();
+            IList<LoanResponse> _Loans = (await __LoanManager.GetAsync()).Where(loan => loan.Status != Enums.Loan.Status.Complete && loan.Status != Enums.Loan.Status.EarlyComplete).ToList();
 
             List<Guid> _ExcludeEquipment = new List<Guid>();
             foreach (LoanResponse loan in _Loans)
@@ -189,7 +189,7 @@ namespace ELMS.WEB.Areas.Loan.Controllers
         {
             if (!ModelState.IsValid)
             {
-                IList<LoanResponse> _Loans = (await __LoanManager.GetAsync()).Where(loan => loan.Status != Enums.Loan.Status.Complete && loan.Status != Enums.Loan.Status.ManualComplete).ToList();
+                IList<LoanResponse> _Loans = (await __LoanManager.GetAsync()).Where(loan => loan.Status != Enums.Loan.Status.Complete && loan.Status != Enums.Loan.Status.EarlyComplete).ToList();
                 List<Guid> _ExcludeEquipment = new List<Guid>();
                 foreach (LoanResponse loan in _Loans)
                 {
@@ -224,7 +224,7 @@ namespace ELMS.WEB.Areas.Loan.Controllers
         {
             if (!ModelState.IsValid)
             {
-                IList<LoanResponse> _Loans = (await __LoanManager.GetAsync()).Where(loan => loan.Status != Enums.Loan.Status.Complete && loan.Status != Enums.Loan.Status.ManualComplete).ToList();
+                IList<LoanResponse> _Loans = (await __LoanManager.GetAsync()).Where(loan => loan.Status != Enums.Loan.Status.Complete && loan.Status != Enums.Loan.Status.EarlyComplete).ToList();
                 List<Guid> _ExcludeEquipment = new List<Guid>();
                 foreach (LoanResponse loan in _Loans)
                 {
@@ -465,7 +465,16 @@ namespace ELMS.WEB.Areas.Loan.Controllers
                 return Json(new { error = $"{GlobalConstants.ERROR_ACTION_PREFIX} find {ENTITY_NAME}." });
             }
 
-            await __LoanManager.ChangeStatusAsync(_Loan.UID, Enums.Loan.Status.ManualComplete);
+            DateTime _ExpiryDate = await __LoanManager.GetExpiryDate(model.UID);
+
+            if (DateTime.Now >= _ExpiryDate)
+            {
+                await __LoanManager.ChangeStatusAsync(_Loan.UID, Enums.Loan.Status.Complete);
+            }
+            else
+            {
+                await __LoanManager.ChangeStatusAsync(_Loan.UID, Enums.Loan.Status.EarlyComplete);
+            }
 
             foreach (LoanEquipmentResponse loanEquipment in await __LoanEquipmentManager.GetAsync(model.UID))
             {
