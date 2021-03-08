@@ -9,14 +9,15 @@ namespace ELMS.WEB.Entities.Loan
     public class LoanEquipmentEntity : BaseEntity
     {
         [Required]
-        [ForeignKey("Loan")]
         public Guid LoanUID { get; set; }
 
         [Required]
-        [ForeignKey("Equipment")]
         public Guid EquipmentUID { get; set; }
 
+        [ForeignKey("LoanUID")]
         public LoanEntity Loan { get; set; }
+
+        [ForeignKey("EquipmentUID")]
         public EquipmentEntity Equipment { get; set; }
     }
 }

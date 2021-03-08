@@ -61,6 +61,9 @@ namespace ELMS.WEB.Entities.Admin
 
             // EmailLogs
             new Claim("View EmailLog", "View EmailLog"),
+
+            // JobScheduler
+            new Claim("Run JobScheduler", "Run JobScheduler"),
         };
     }
 }

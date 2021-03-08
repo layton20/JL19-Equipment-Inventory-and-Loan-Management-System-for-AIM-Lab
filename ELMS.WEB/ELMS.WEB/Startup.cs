@@ -143,6 +143,8 @@ namespace ELMS.WEB
                 options.AddPolicy("ViewEmailTemplatePolicy", policy => policy.RequireClaim("View EmailTemplate", "true"));
 
                 options.AddPolicy("ViewEmailLogPolicy", policy => policy.RequireClaim("View EmailLog", "true"));
+
+                options.AddPolicy("RunJobSchedulerPolicy", policy => policy.RequireClaim("Run JobScheduler", "true"));
             });
         }
 

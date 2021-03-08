@@ -1,4 +1,6 @@
-﻿@{
+﻿@model ELMS.WEB.Areas.Admin.Models.Job.IndexViewModel
+
+@{
     ViewData["Title"] = "Job Configuration Area";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -31,7 +33,14 @@
 
                         <div id="collapseOne" class="collapse show" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion">
                             <div class="card-body">
-                                <a class="btn btn-primary" asp-area="Admin" asp-controller="Job" asp-action="StartEquipmentJob">Trigger Scheduler</a>
+                                @if (Model.JobRunningStatuses.IsEquipmentJobRunning)
+                                {
+                                    <a class="btn btn-primary disabled" href="#">Already Triggered</a>
+                                }
+                                else
+                                {
+                                    <a class="btn btn-primary" asp-area="Admin" asp-controller="Job" asp-action="StartEquipmentJob">Trigger Scheduler</a>
+                                }
                             </div>
                         </div>
                     </div>
@@ -46,7 +55,14 @@
                         </div>
                         <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo" data-parent="#accordion">
                             <div class="card-body">
-                                <a class="btn btn-primary" asp-area="Admin" asp-controller="Job" asp-action="StartLoanJob">Trigger Scheduler</a>
+                                @if (Model.JobRunningStatuses.IsLoanJobRunning)
+                                {
+                                    <a class="btn btn-primary disabled" href="#">Already Triggered</a>
+                                }
+                                else
+                                {
+                                    <a class="btn btn-primary" asp-area="Admin" asp-controller="Job" asp-action="StartLoanJob">Trigger Scheduler</a>
+                                }
                             </div>
                         </div>
                     </div>
@@ -61,7 +77,14 @@
                         </div>
                         <div id="collapseThree" class="collapse" role="tabpanel" aria-labelledby="headingThree" data-parent="#accordion">
                             <div class="card-body">
-                                <a class="btn btn-primary" asp-area="Admin" asp-controller="Job" asp-action="StartEmailJob">Trigger Scheduler</a>
+                                @if (Model.JobRunningStatuses.IsEmailJobRunning)
+                                {
+                                    <a class="btn btn-primary disabled" href="#">Already Triggered</a>
+                                }
+                                else
+                                {
+                                    <a class="btn btn-primary" asp-area="Admin" asp-controller="Job" asp-action="StartEmailJob">Trigger Scheduler</a>
+                                }
                             </div>
                         </div>
                     </div>

@@ -133,7 +133,15 @@ namespace ELMS.WEB.Managers.Loan.Concrete
 
         public async Task<IList<LoanResponse>> GetByUserAsync(string loaneeEmail)
         {
-            return __Mapper.Map<IList<LoanResponse>>(await __LoanRepository.GetByUserAsync(loaneeEmail));
+            IList<LoanResponse> _LoanResponses = __Mapper.Map<IList<LoanResponse>>(await __LoanRepository.GetByUserAsync(loaneeEmail));
+
+            foreach (LoanResponse loanResponse in _LoanResponses)
+            {
+                IList<LoanEquipmentEntity> _LoanEquipments = await __LoanEquipmentRepository.GetAsync(loanResponse.UID);
+                loanResponse.EquipmentList = __Mapper.Map<IList<EquipmentResponse>>(_LoanEquipments.Select(x => x.Equipment));
+            }
+
+            return _LoanResponses;
         }
 
         public async Task<DateTime> GetExpiryDate(Guid loanUID)
