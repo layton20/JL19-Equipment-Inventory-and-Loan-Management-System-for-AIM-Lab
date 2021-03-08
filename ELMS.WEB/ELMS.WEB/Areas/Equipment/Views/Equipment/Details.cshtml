@@ -72,10 +72,10 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="col-sm-12 col-md-10 border-left">
+                    <div class="col-sm-12 col-md-10">
                         <div class="tab-content tab-space pt-2">
                             <div class="tab-pane active" id="tabDetails">
-                                <form asp-area="Equipment" asp-controller="Equipment" asp-action="Edit" enctype="multipart/form-data">
+                                <form class="formDetails" asp-area="Equipment" asp-controller="Equipment" asp-action="Edit" enctype="multipart/form-data">
                                     <input asp-for="Equipment.UID" type="hidden" />
                                     <input asp-for="Equipment.OwnerUID" type="hidden" />
 
@@ -129,9 +129,10 @@
                                     </div>
 
                                     <div class="mt-2">
-                                        <button type="submit" class="btn btn-primary">Update Details</button>
+                                        <button type="submit" class="btn btn-success btn-edit-submit">Update Details</button>
                                     </div>
                                 </form>
+                                <button class="btn btn-primary btn-edit-lock"><i class="fas fa-lock-open mr-2"></i> Unlock Edit Mode</button>
                             </div>
                             <div class="tab-pane" id="tabNotes">
                                 @if ((await AuthorizationService.AuthorizeAsync(User, "CreateNotePolicy")).Succeeded)
@@ -195,7 +196,7 @@
                                     <form asp-area="General" asp-controller="Media" asp-action="UploadEquipmentMedia" enctype="multipart/form-data">
                                         <input type="hidden" asp-for="UploadMedia.EquipmentUID" />
                                         <div class="form-group form-file-upload form-file-simple row justify-content-between align-items-center">
-                                            <input type="text" class="form-control inputFileVisible col-sm-12 col-md-9" placeholder="Select file(s)">
+                                            <input type="text" class="form-control inputFileVisible col-sm-12 col-md-9" placeholder="Select file(s)" multiple>
                                             <input type="file" class="inputFileHidden" multiple="" asp-for="UploadMedia.MediaFiles">
                                             <button class="btn btn-primary col-sm-12 col-md-2" type="submit">Upload</button>
                                         </div>

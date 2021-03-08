@@ -1,4 +1,21 @@
 ﻿$(document).ready(function () {
+    $('.btn-edit-submit').hide();
+    $('.formDetails :input').prop("disabled", true);
+
+    $('.btn-edit-lock').click(function ()
+    {
+        if ($('.formDetails :input').prop("disabled")) {
+            $('.formDetails :input').prop("disabled", false);
+            $(this).html('<i class="fas fa-lock mr-2"></i> Lock Edit Mode');
+            $('.btn-edit-submit').show();
+        }
+        else {
+            $('.formDetails :input').prop("disabled", true);
+            $(this).html('<i class="fas fa-lock-open mr-2"></i> Unlock Edit Mode');
+            $('.btn-edit-submit').hide();
+        }
+    });
+
     function loadModalAjax(url, queryString) {
         if (queryString) {
             url += `?${queryString}`;
