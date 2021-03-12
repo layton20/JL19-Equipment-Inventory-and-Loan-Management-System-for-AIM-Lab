@@ -21,23 +21,6 @@ namespace ELMS.WEB.Services
             __OptionsAccessor = optionsAccessor.Value;
         }
 
-        public Task SendEmailAsync(string email, string subject, string message)
-        {
-            return Execute(__OptionsAccessor.SendGridKey, subject, message, email);
-        }
-
-        public async Task<Response> Execute(string apiKey, string subject, string message, string email)
-        {
-            IList<string> _PreconfiguredTemplates = Enum.GetNames(typeof(EmailConfigurationType));
-
-            if (_PreconfiguredTemplates.Contains(subject))
-            {
-                await SendConfirmLoanEmail(email, subject, message);
-            }
-
-            return await SendGeneralEmail(apiKey, subject, message, email);
-        }
-
         public async Task<Response> SendConfirmLoanEmail(string email, string subject, string message)
         {
             SendGridClient _Client = new SendGridClient(__OptionsAccessor.SendGridKey);
@@ -53,19 +36,17 @@ namespace ELMS.WEB.Services
             return await _Client.SendEmailAsync(_Message);
         }
 
-        public async Task<Response> SendGeneralEmail(string apiKey, string subject, string message, string email)
+        public async Task<Response> SendGeneralEmail(string email, string subject, CustomEmailTemplate templateData)
         {
-            SendGridClient _Client = new SendGridClient(apiKey);
-            SendGridMessage _Message = new SendGridMessage()
-            {
-                From = new EmailAddress(__OptionsAccessor.SenderEmail, __OptionsAccessor.SenderName),
-                Subject = subject,
-                PlainTextContent = message,
-                HtmlContent = message
-            };
+            SendGridClient _Client = new SendGridClient(__OptionsAccessor.SendGridKey);
+            SendGridMessage _Message = new SendGridMessage();
 
+            _Message.SetFrom(new EmailAddress(__OptionsAccessor.SenderEmail, __OptionsAccessor.SenderName));
             _Message.AddTo(new EmailAddress(email));
+            _Message.SetSubject(subject);
             _Message.SetClickTracking(false, false);
+            _Message.SetTemplateId(__Configuration["SendGrid:TEMPLATES:CUSTOM_TEMPLATE"]);
+            _Message.SetTemplateData(templateData);
 
             return await _Client.SendEmailAsync(_Message);
         }
@@ -167,6 +148,11 @@ namespace ELMS.WEB.Services
             _Message.SetTemplateData(templateData);
 
             return await _Client.SendEmailAsync(_Message);
+        }
+
+        public Task SendEmailAsync(string email, string subject, string htmlMessage)
+        {
+            throw new NotImplementedException();
         }
     }
 }

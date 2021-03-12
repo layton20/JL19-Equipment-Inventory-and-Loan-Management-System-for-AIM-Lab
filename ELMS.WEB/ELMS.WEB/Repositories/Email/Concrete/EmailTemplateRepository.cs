@@ -75,7 +75,10 @@ namespace ELMS.WEB.Repositories.Email.Concrete
 
             _EmailTemplate.Name = entity.Name;
             _EmailTemplate.Subject = entity.Subject;
+            _EmailTemplate.Header = entity.Header;
+            _EmailTemplate.Subheader = entity.Subheader;
             _EmailTemplate.Body = entity.Body;
+            _EmailTemplate.Footer = entity.Footer;
             _EmailTemplate.TemplateType = entity.TemplateType;
             _EmailTemplate.AmendedTimestamp = DateTime.Now;
 

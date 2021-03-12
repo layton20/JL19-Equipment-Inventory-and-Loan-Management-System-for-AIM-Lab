@@ -25,13 +25,21 @@
                 </div>
                 <div class="card-body">
                     <div class="form-row">
-                        <div class="form-group col-sm-12 col-md-6">
+                        <div class="form-group col-sm-12 col-md-3">
                             <label asp-for="Name"></label>
                             <input type="text" class="form-control" asp-for="Name" />
                         </div>
-                        <div class="form-group col-sm-12 col-md-6">
+                        <div class="form-group col-sm-12 col-md-3">
                             <label asp-for="Subject"></label>
                             <input type="text" class="form-control" asp-for="Subject" />
+                        </div>
+                        <div class="form-group col-sm-12 col-md-3">
+                            <label asp-for="Header"></label>
+                            <input type="text" class="form-control" asp-for="Header" />
+                        </div>
+                        <div class="form-group col-sm-12 col-md-3">
+                            <label asp-for="Subheader"></label>
+                            <input type="text" class="form-control" asp-for="Subheader" />
                         </div>
                     </div>
                     <div class="form-row">
@@ -46,10 +54,23 @@
                             <label asp-for="Body" class="d-block"></label>
                             <textarea class="tinymce w-100" cols="3" asp-for="Body"></textarea>
                         </div>
+                        <div class="form-group col-sm-12">
+                            <label asp-for="Footer" class="d-block"></label>
+                            <textarea class="tinymce w-100" cols="3" asp-for="Footer"></textarea>
+                        </div>
                     </div>
                 </div>
                 <div class="card-footer justify-content-end">
                     <button type="submit" class="btn btn-primary">Create Email Template</button>
+                </div>
+            </div>
+
+            <div class="card mb-0">
+                <div class="card-header">
+                    <h3 class="card-title">Example Preview</h3>
+                </div>
+                <div class="card-body">
+                    <img class="w-100" src="~/resource/images/custom_email_template_example.JPG" />
                 </div>
             </div>
         </div>
