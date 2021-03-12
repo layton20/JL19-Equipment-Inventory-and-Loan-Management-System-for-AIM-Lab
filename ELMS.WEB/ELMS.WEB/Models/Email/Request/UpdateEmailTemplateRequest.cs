@@ -12,6 +12,10 @@ namespace ELMS.WEB.Models.Email.Request
         [Required]
         public string Name { get; set; }
 
+        public string Header { get; set; }
+
+        public string Subheader { get; set; }
+
         [Required]
         public EmailTemplateType TemplateType { get; set; }
 
@@ -20,5 +24,7 @@ namespace ELMS.WEB.Models.Email.Request
 
         [Required]
         public string Body { get; set; }
+
+        public string Footer { get; set; }
     }
 }

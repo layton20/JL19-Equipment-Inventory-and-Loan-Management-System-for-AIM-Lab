@@ -21,7 +21,7 @@ namespace ELMS.WEB.Areas.Email.Models.EmailSchedule
         [Required]
         [FutureOrTodayDate]
         [Display(Name = "Scheduled For")]
-        public DateTime SendTimestamp { get; set; } = DateTime.Today.Date.AddHours(12);
+        public DateTime SendTimestamp { get; set; } = DateTime.Now;
 
         public IList<EmailTemplateViewModel> EmailTemplates { get; set; }
     }

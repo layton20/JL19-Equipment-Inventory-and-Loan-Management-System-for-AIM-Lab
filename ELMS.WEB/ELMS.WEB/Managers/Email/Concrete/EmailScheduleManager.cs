@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ELMS.WEB.Areas.Email.Data;
+using ELMS.WEB.Areas.Email.Models.EmailSchedule;
 using ELMS.WEB.Entities.Email;
 using ELMS.WEB.Enums.Email;
 using ELMS.WEB.Helpers;
@@ -39,15 +40,60 @@ namespace ELMS.WEB.Managers.Email.Concrete
 
         public async Task<EmailScheduleResponse> CreateAsync(CreateEmailScheduleRequest request)
         {
-            EmailScheduleResponse _Response = __Mapper.Map<EmailScheduleResponse>(await __EmailScheduleRepository.CreateAsync(__Mapper.Map<EmailScheduleEntity>(request)));
+            EmailScheduleResponse _EmailScheduleResponse = __Mapper.Map<EmailScheduleResponse>(await __EmailScheduleRepository.CreateAsync(__Mapper.Map<EmailScheduleEntity>(request)));
+            EmailTemplateResponse _EmailTemplateResponse = __Mapper.Map<EmailTemplateResponse>(await __EmailTemplateRepository.GetByUIDAsync(request.EmailTemplateUID));
 
-            if (_Response == null)
+            if (!string.IsNullOrWhiteSpace(_EmailTemplateResponse.Header))
             {
-                _Response.Success = false;
-                _Response.Message = $"{GlobalConstants.ERROR_ACTION_PREFIX} create {ENTITY_NAME}.";
+                CreateEmailScheduleParameterRequest _ParamHeader = new CreateEmailScheduleParameterRequest
+                {
+                    EmailScheduleUID = _EmailScheduleResponse.UID,
+                    Name = "Header_String",
+                    Value = _EmailTemplateResponse.Header
+                };
+                await __EmailScheduleParameterRepository.CreateAsync(__Mapper.Map<EmailScheduleParameterEntity>(_ParamHeader));
             }
 
-            return _Response;
+            if (!string.IsNullOrWhiteSpace(_EmailTemplateResponse.Subheader))
+            {
+                CreateEmailScheduleParameterRequest _ParamSubheader = new CreateEmailScheduleParameterRequest
+                {
+                    EmailScheduleUID = _EmailScheduleResponse.UID,
+                    Name = "Subheader_String",
+                    Value = _EmailTemplateResponse.Subheader
+                };
+                await __EmailScheduleParameterRepository.CreateAsync(__Mapper.Map<EmailScheduleParameterEntity>(_ParamSubheader));
+            }
+
+            if (!string.IsNullOrWhiteSpace(_EmailTemplateResponse.Body))
+            {
+                CreateEmailScheduleParameterRequest _ParamBody = new CreateEmailScheduleParameterRequest
+                {
+                    EmailScheduleUID = _EmailScheduleResponse.UID,
+                    Name = "Body",
+                    Value = _EmailTemplateResponse.Body
+                };
+                await __EmailScheduleParameterRepository.CreateAsync(__Mapper.Map<EmailScheduleParameterEntity>(_ParamBody));
+            }
+
+            if (!string.IsNullOrWhiteSpace(_EmailTemplateResponse.Footer))
+            {
+                CreateEmailScheduleParameterRequest _ParamFooter = new CreateEmailScheduleParameterRequest
+                {
+                    EmailScheduleUID = _EmailScheduleResponse.UID,
+                    Name = "Footer",
+                    Value = _EmailTemplateResponse.Footer
+                };
+                await __EmailScheduleParameterRepository.CreateAsync(__Mapper.Map<EmailScheduleParameterEntity>(_ParamFooter));
+            }
+
+            if (_EmailScheduleResponse == null)
+            {
+                _EmailScheduleResponse.Success = false;
+                _EmailScheduleResponse.Message = $"{GlobalConstants.ERROR_ACTION_PREFIX} create {ENTITY_NAME}.";
+            }
+
+            return _EmailScheduleResponse;
         }
 
         public async Task<IList<EmailScheduleResponse>> GetAsync()
@@ -347,7 +393,13 @@ namespace ELMS.WEB.Managers.Email.Concrete
                     EmailTemplateResponse _Template = __Mapper.Map<EmailTemplateResponse>(await __EmailTemplateRepository.GetByUIDAsync(schedule.EmailTemplateUID));
                     if (_Template != null)
                     {
-                        await __EmailSender.SendEmailAsync(schedule.RecipientEmailAddress, _Template.Subject, _Template.Body);
+                        await __EmailSender.SendGeneralEmail(schedule.RecipientEmailAddress, _Template.Subject, new CustomEmailTemplate 
+                        {
+                            Header_String = _Template.Header,
+                            Body = _Template.Body,
+                            Footer = _Template.Footer,
+                            Subheader_String = _Template.Subheader
+                        });
                     }
                     break;
             }

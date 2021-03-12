@@ -1,4 +1,5 @@
-﻿using ELMS.WEB.Models.Base.Response;
+﻿using ELMS.WEB.Areas.Email.Models.EmailSchedule;
+using ELMS.WEB.Models.Base.Response;
 using ELMS.WEB.Models.Email.Request;
 using ELMS.WEB.Models.Email.Response;
 using ELMS.WEB.Models.Equipment.Response;
