@@ -20,5 +20,6 @@ namespace ELMS.WEB.Services
         public Task<Response> SendWarrantyExpiredEmail(string email, string subject, WarrantyExpiredTemplate templateData);
 
         public Task<Response> SendWarrantyNearlyExpiredEmail(string email, string subject, WarrantyNearlyExpiredTemplate templateData);
+        public Task<Response> SendEmailConfirmationEmail(string email, string subject, EmailConfirmationTemplate templateData);
     }
 }

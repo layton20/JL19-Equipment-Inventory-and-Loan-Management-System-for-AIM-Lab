@@ -10,14 +10,10 @@
         <h1 class="display-3"><strong>@ViewData["Title"]</strong></h1>
         <div class="col-md-12 text-center">
             @{
+                <p>A confirmation link has been sent to the email you provided. The email provider must check the email and click on the authentication link to confirm their account.</p>
                 if (@Model.DisplayConfirmAccountLink)
                 {
-                    <p>This app does not currently have a real email sender registered, see <a href="https://aka.ms/aspaccountconf">these docs</a> for how to configure a real email sender.</p>
-                    <p>Normally this would be emailed: <a id="confirm-link" href="@Model.EmailConfirmationUrl">Click here to confirm your account</a></p>
-                }
-                else
-                {
-                    <p>A confirmation link has been sent to the email you provided. Please check your email and click on the authentication link to confirm your account.</p>
+                    <p>You could also confirm the email directly by clicking on this link which will immediately confirm the account: <a id="confirm-link" href="@Model.EmailConfirmationUrl">Click here to confirm the account</a></p>
                 }
             }
         </div>
