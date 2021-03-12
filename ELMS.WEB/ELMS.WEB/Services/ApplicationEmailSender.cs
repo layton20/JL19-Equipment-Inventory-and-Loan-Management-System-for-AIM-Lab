@@ -156,5 +156,17 @@ namespace ELMS.WEB.Services
 
             return await _Client.SendEmailAsync(_Message);
         }
+
+        public async Task<Response> SendEmailConfirmationEmail(string email, string subject, EmailConfirmationTemplate templateData)
+        {
+            SendGridClient _Client = new SendGridClient(__OptionsAccessor.SendGridKey);
+            SendGridMessage _Message = new SendGridMessage();
+            _Message.SetFrom(new EmailAddress(__OptionsAccessor.SenderEmail, __OptionsAccessor.SenderName));
+            _Message.AddTo(email);
+            _Message.SetTemplateId(__Configuration["SendGrid:TEMPLATES:EMAIL_CONFIRMATION"]);
+            _Message.SetTemplateData(templateData);
+
+            return await _Client.SendEmailAsync(_Message);
+        }
     }
 }

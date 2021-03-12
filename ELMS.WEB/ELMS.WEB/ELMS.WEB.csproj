@@ -22,7 +22,6 @@
     <_ContentIncludedByDefault Remove="wwwroot\js\areas\report\loanhistory.min.js" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Areas\Email\Data\Templates\" />
     <Folder Include="Areas\Equipment\Data\" />
     <Folder Include="Areas\General\Data\" />
     <Folder Include="Areas\Loan\Data\" />
