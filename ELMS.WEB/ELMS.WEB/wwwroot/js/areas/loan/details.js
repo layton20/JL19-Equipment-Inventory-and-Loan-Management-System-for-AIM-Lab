@@ -59,6 +59,7 @@
     $('#modalRoot').on("submit", "#formCreateExtension", function (e) {
         e.preventDefault();
         var form = $(this);
-        postModalFormAjax(form);
+        var loanUID = $("#LoanUID").val();
+        postModalFormAjax(form, `/Loan/Loan/DetailsView?uid=${loanUID}`);
     });
 });

@@ -339,11 +339,18 @@ namespace ELMS.WEB.Areas.Loan.Controllers
                 ViewData["ErrorMessage"] = errorMessage;
             }
 
-            return View("Details", new DetailsViewModel
+            DetailsViewModel _Model = new DetailsViewModel
             {
                 Loan = __Mapper.Map<LoanViewModel>(await __LoanManager.GetByUIDAsync(uid)),
                 Extensions = __Mapper.Map<IList<LoanExtensionViewModel>>(await __LoanExtensionManager.GetAsync(uid))
-            });
+            };
+
+            if (_Model?.Loan?.ExpiryTimestamp != null)
+            {
+                _Model.Loan.ExpiryTimestamp = await __LoanManager.GetExpiryDate(_Model.Loan.UID);
+            }
+
+            return View("Details", _Model);
         }
 
         [HttpGet]
@@ -488,7 +495,7 @@ namespace ELMS.WEB.Areas.Loan.Controllers
                 await __EmailScheduleManager.UpdateSentAsync(_Schedule.UID, true);
             }
 
-            return RedirectToAction("Index", "Loan", new { Area = "Loan", successMessage = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} forced completed {ENTITY_NAME}" });
+            return Json(new { success = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} completed {ENTITY_NAME}." });
         }
     }
 }
