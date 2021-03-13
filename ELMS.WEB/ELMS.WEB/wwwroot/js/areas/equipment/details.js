@@ -63,7 +63,7 @@
     });
 
     $('.createNote').click(function () {
-        loadModalAjax($(this).data('url'), `EquipmentUID=${$(this).data('equipmentuid')}`);
+        loadModalAjax($(this).data('url'), `uid=${$(this).data('uid')}`);
     });
 
     $('.editNote').click(function () {
@@ -73,19 +73,19 @@
     $('#modalRoot').on("submit", ".formCreate", function (e) {
         e.preventDefault();
         var form = $(this);
-        var equipmentUid = $(this).data('equipmentuid');
-        postModalFormAjax(form, `/Equipment/Equipment/DetailsView?EquipmentUID=${equipmentUid}`);
+        var equipmentUid = $(this).data('uid');
+        postModalFormAjax(form, `/Equipment/Equipment/DetailsView?uid=${equipmentUid}`);
     });
 
     $('#modalRoot').on("submit", ".formNote", function (e) {
         e.preventDefault();
         var form = $(this);
-        var equipmentUid = $(this).data('equipmentuid');
-        postModalFormAjax(form, `/Equipment/Equipment/DetailsView?EquipmentUID=${equipmentUid}`);
+        var equipmentUid = $(this).data('uid');
+        postModalFormAjax(form, `/Equipment/Equipment/DetailsView?uid=${equipmentUid}`);
     });
 
     $('.deleteEquipment').click(function () {
-        loadModalAjax($(this).data('url'), `EquipmentUID=${$(this).data('uid')}`);
+        loadModalAjax($(this).data('url'), `uid=${$(this).data('uid')}`);
     });
 
     $('.deleteNote').click(function () {

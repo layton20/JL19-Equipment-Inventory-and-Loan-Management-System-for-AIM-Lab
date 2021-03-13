@@ -18,14 +18,14 @@
                 <div class="col-md-2 col-sm-12 px-0">
                     @if (Model.EquipmentMedia.Count > 0)
                     {
-                        <img src="@Model.EquipmentMedia[0].Blob.Path" alt="Image" class="w-100 rounded" />
+                        <img src="@Model.EquipmentMedia[0].Blob.Path" alt="Image" class="w-50 rounded" />
                     }
                     else
                     {
                         <i class="fas fa-image fa-8x text-gray"></i>
                     }
                 </div>
-                <div class="col-md-10 col-sm-12">
+                <div class="col-md-10 col-sm-12 p-0">
                     <h3><strong>@Model.Equipment.Name</strong></h3>
                     @if (Model.Equipment.Status == ELMS.WEB.Enums.Equipment.Status.Available)
                     {
@@ -141,7 +141,7 @@
                                 @if ((await AuthorizationService.AuthorizeAsync(User, "CreateNotePolicy")).Succeeded)
                                 {
                                     <div class="mb-2">
-                                        <a class="createNote btn btn-primary text-white" data-url="/Equipment/Note/CreateModal" data-equipmentuid="@Model.Equipment.UID">New Note</a>
+                                        <a class="createNote btn btn-primary text-white" data-url="/Equipment/Note/CreateModal" data-uid="@Model.Equipment.UID">New Note</a>
                                     </div>
                                 }
 

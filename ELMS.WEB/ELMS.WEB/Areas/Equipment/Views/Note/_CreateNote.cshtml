@@ -9,7 +9,7 @@
             </button>
         </div>
     </div>
-    <form id="formCreate" class="formCreate" asp-area="Equipment" asp-controller="Note" asp-action="Create" enctype="multipart/form-data" data-equipmentuid="@Model.EquipmentUID">
+    <form id="formCreate" class="formCreate" asp-area="Equipment" asp-controller="Note" asp-action="Create" enctype="multipart/form-data" data-uid="@Model.EquipmentUID">
         <div asp-validation-summary="All" class="text-danger"></div>
         <input type="hidden" asp-for="EquipmentUID" />
         <div class="modal-body">
