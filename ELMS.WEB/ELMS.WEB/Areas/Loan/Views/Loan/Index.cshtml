@@ -212,7 +212,11 @@
                                                     }
                                                 </a>
                                             }
-                                            <a class="dropdown-item" asp-area="Loan" asp-controller="Loan" asp-action="AcceptTermsAndConditionsView" asp-route-loanuid="@loan.UID"><i class="fas fa-clipboard-check mr-2"></i> Terms & Conditions</a>
+
+                                            @if (!loan.AcceptedTermsAndConditions)
+                                            {
+                                                <a class="dropdown-item" asp-area="Loan" asp-controller="Loan" asp-action="AcceptTermsAndConditionsView" asp-route-loanuid="@loan.UID"><i class="fas fa-clipboard-check mr-2"></i>Accept Terms & Conditions</a>
+                                            }
                                         </div>
                                     </div>
                                 </td>

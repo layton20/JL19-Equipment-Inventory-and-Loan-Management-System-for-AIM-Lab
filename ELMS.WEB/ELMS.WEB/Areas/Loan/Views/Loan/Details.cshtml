@@ -13,7 +13,7 @@
         <div>
             <a class="btn btn-outline-primary w-100" asp-area="Loan" asp-controller="Loan" asp-action="Index"><i class="fas fa-backward mr-2"></i> Back to Loans</a>
         </div>
-        <div class="card my-3">
+        <div class="card mt-2">
             <div class="container-fluid card-body">
                 <div class="row">
                     <div class="col-sm-12 col-md-2">
@@ -41,30 +41,33 @@
                     <div class="col-sm-12 col-md-10 border-left">
                         <div class="tab-content tab-space pt-2">
                             <div class="tab-pane active" id="tabDetails">
-                                <ul class="list-group">
-                                    <li class="list-group-item pl-0"><strong>Reference ID: </strong>@Model.Loan.UID</li>
-                                    <li class="list-group-item pl-0"><strong>Loan Starting Date: </strong>@Model.Loan.FromTimestamp.ToShortDateString()</li>
-                                    <li class="list-group-item pl-0">
-                                        <strong>Loan Expiry Date: </strong>@Model.Loan.ExpiryTimestamp.ToShortDateString()
-                                        @if (Model.Extensions.Count > 0)
-                                        {
-                                            <a href="javascript;;">- @Model.Extensions.Count extension(s) applied</a>
-                                        }
-                                    </li>
-                                    <li class="list-group-item pl-0">
-                                        <strong>Equipment: </strong>
-                                        @foreach (var equipment in Model.Loan.EquipmentList)
-                                        {
-                                            <a class="equipmentDetails text-primary" data-url="/Equipment/Equipment/DetailsModal" data-uid="@equipment.UID" style="cursor: pointer">@equipment.Name</a>
-                                        }
-                                    </li>
-                                    @if (Model.Loan.Status == Status.Pending)
-                                    {
-                                        <li class="list-group-item pl-0"><strong>Terms and Conditions Accepted: </strong>@Model.Loan.AcceptedTermsAndConditions</li>
-                                    }
-                                    <li class="list-group-item pl-0"><strong>Status: </strong>@Model.Loan.Status.ToString()</li>
-                                </ul>
-                                <hr />
+                                <table class="display table datatable-no-options responsive hover compact" cellspacing="0" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th class="th-description">Reference ID</th>
+                                            <th class="th-description">Scheduled From</th>
+                                            <th class="th-description">Scheduled To</th>
+                                            <th class="th-description">Equipment</th>
+                                            <th class="th-description">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="td-name">@Model.Loan.UID</td>
+                                            <td class="td-name">@Model.Loan.FromTimestamp.ToShortDateString()</td>
+                                            <td class="td-name">@Model.Loan.ExpiryTimestamp.ToShortDateString()</td>
+                                            <td class="td-name">
+                                                <ul class="list-group list-group-flush">
+                                                    @foreach (var equipment in Model.Loan.EquipmentList)
+                                                    {
+                                                        <li class="list-group-item pl-0"><a class="loanDetailsModal text-primary" data-url="/Equipment/Equipment/DetailsModal" data-uid="@equipment.UID" style="cursor: pointer">@equipment.Name</a></li>
+                                                    }
+                                                </ul>
+                                            </td>
+                                            <td class="td-name">@Model.Loan.Status.ToString()</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                                 <div>
                                     <a class="btn btn-primary" asp-area="Loan" asp-controller="Loan" asp-action="LoanPreview" asp-route-uid="@Model.Loan.UID" data-toggle="tooltip" data-placement="top" title="What a loanee would see when viewing details about their loan.">Loan Preview</a>
                                 </div>
