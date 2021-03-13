@@ -21,21 +21,6 @@ namespace ELMS.WEB.Services
             __OptionsAccessor = optionsAccessor.Value;
         }
 
-        public async Task<Response> SendConfirmLoanEmail(string email, string subject, string message)
-        {
-            SendGridClient _Client = new SendGridClient(__OptionsAccessor.SendGridKey);
-            SendGridMessage _Message = new SendGridMessage();
-            _Message.SetFrom(new EmailAddress(__OptionsAccessor.SenderEmail, __OptionsAccessor.SenderName));
-            _Message.AddTo(email);
-            _Message.SetTemplateId(__Configuration["SendGrid:TEMPLATES:CONFIRM_LOAN"]);
-            _Message.SetTemplateData(new ConfirmEmailTemplate
-            {
-                Confirm_Loan_URL = message
-            });
-
-            return await _Client.SendEmailAsync(_Message);
-        }
-
         public async Task<Response> SendGeneralEmail(string email, string subject, CustomEmailTemplate templateData)
         {
             SendGridClient _Client = new SendGridClient(__OptionsAccessor.SendGridKey);

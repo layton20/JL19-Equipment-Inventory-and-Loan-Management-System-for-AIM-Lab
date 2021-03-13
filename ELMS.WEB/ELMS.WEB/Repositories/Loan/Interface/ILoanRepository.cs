@@ -18,6 +18,8 @@ namespace ELMS.WEB.Repositories.Loan.Interface
 
         public Task<bool> AcceptTermsAndConditions(Guid uid);
 
+        public Task<bool> CompleteLoanAsync(Guid uid);
+
         public Task<bool> ChangeStatusAsync(Guid uid, Status status);
 
         public Task<bool> UpdateAsync(LoanEntity loan);

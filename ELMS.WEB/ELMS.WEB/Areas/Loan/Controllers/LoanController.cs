@@ -483,6 +483,8 @@ namespace ELMS.WEB.Areas.Loan.Controllers
                 await __LoanManager.ChangeStatusAsync(_Loan.UID, Enums.Loan.Status.EarlyComplete);
             }
 
+            await __LoanManager.CompleteLoanAsync(model.UID);
+
             foreach (LoanEquipmentResponse loanEquipment in await __LoanEquipmentManager.GetAsync(model.UID))
             {
                 await __EquipmentManager.UpdateStatusAsync(loanEquipment.EquipmentUID, Status.Available);
