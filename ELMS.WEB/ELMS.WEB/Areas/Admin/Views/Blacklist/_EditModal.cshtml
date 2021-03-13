@@ -29,8 +29,8 @@
                 </div>
             </div>
             <div class="form-group">
-                <label asp-for="Type"></label>
-                <select class="col-12 p-1 mb-2" data-style="btn btn-link" asp-for="Type" asp-items="Html.GetEnumSelectList<ELMS.WEB.Enums.Admin.BlacklistTypeEnum>()">
+                <label class="w-100" asp-for="Type"></label>
+                <select class="selectpicker" data-width="100%" data-style="select-with-transition" asp-for="Type" asp-items="Html.GetEnumSelectList<ELMS.WEB.Enums.Admin.BlacklistTypeEnum>()">
                 </select>
             </div>
             <div class="form-group">
@@ -39,8 +39,12 @@
             </div>
         </div>
         <div class="modal-footer">
-            <button type="submit" class="btn btn-primary">Update details</button>
-            <button type="submit" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn border border-primary btn-primary mr-2">Update details</button>
+            <button type="submit" class="btn btn-outline-primary" data-dismiss="modal">Cancel</button>
         </div>
     </form>
 </div>
+
+<script>
+    $('.selectpicker').selectpicker();
+</script>
