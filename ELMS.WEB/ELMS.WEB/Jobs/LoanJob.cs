@@ -34,6 +34,7 @@ namespace ELMS.WEB.Jobs
             await PrunePendingLoansAsync();
             await PruneDanglingLoanEquipmentRecordsAsync();
             await UpdateExpiredLoansStatusesAsync();
+            await UpdateInactiveLoanStatusesAsync();
 
             Debug.WriteLine($"{WORKER_NAME}: Task Complete");
         }
@@ -118,6 +119,26 @@ namespace ELMS.WEB.Jobs
                 }
 
                 Debug.WriteLine($"LoanWorker: {updatedLoans} loans have expired and their statuses have been updated to 'Expired'.");
+            }
+        }
+
+        private async Task UpdateInactiveLoanStatusesAsync()
+        {
+            using (var scope = __ServiceProvider.CreateScope())
+            {
+                ILoanManager _LoanManager = scope.ServiceProvider.GetRequiredService<ILoanManager>();
+
+                IList<LoanResponse> _LoansToActivate = (await _LoanManager.GetAsync()).Where(x => x.Status == Enums.Loan.Status.InactiveLoan && x.FromTimestamp <= DateTime.Now).ToList();
+
+                if (_LoansToActivate != null && _LoansToActivate?.Count > 0)
+                {
+                    foreach (LoanResponse loan in _LoansToActivate)
+                    {
+                        await _LoanManager.ChangeStatusAsync(loan.UID, Enums.Loan.Status.ActiveLoan);
+                    }
+
+                    Debug.WriteLine($"LoanWorker: {_LoansToActivate.Count} inactive loans have been activated.");
+                }
             }
         }
     }
