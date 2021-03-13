@@ -5,6 +5,12 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<div class="container-fluid mb-4">
+    <div class="row">
+        <a class="btn btn-primary w-100" asp-area="Email" asp-controller="EmailTemplate" asp-action="Index"><i class="fas fa-backward mr-2"></i> Back to Email Templates</a>
+    </div>
+</div>
+
 <div class="container-fluid">
     <div class="row bg-dark">
         <div class="m-auto text-white text-center">
@@ -65,7 +71,6 @@
                     <button type="submit" class="btn btn-primary">Update Email Template</button>
                 </div>
             </div>
-
             <div class="card mb-0">
                 <div class="card-header">
                     <h3 class="card-title">Example Preview</h3>
