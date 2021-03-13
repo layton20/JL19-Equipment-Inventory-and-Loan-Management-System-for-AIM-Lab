@@ -132,10 +132,10 @@
                                     </div>
 
                                     <div class="mt-2">
-                                        <button type="submit" class="btn btn-success btn-edit-submit">Update Details</button>
+                                        <button type="submit" class="btn btn-success btn-edit-submit col-sm-12 col-md-2">Update Details</button>
                                     </div>
                                 </form>
-                                <button class="btn btn-primary btn-edit-lock"><i class="fas fa-lock-open mr-2"></i> Unlock Edit Mode</button>
+                                <button class="btn btn-primary btn-edit-lock col-sm-12 col-md-2"><i class="fas fa-lock-open mr-2"></i> Unlock Edit Mode</button>
                             </div>
                             <div class="tab-pane" id="tabNotes">
                                 @if ((await AuthorizationService.AuthorizeAsync(User, "CreateNotePolicy")).Succeeded)
