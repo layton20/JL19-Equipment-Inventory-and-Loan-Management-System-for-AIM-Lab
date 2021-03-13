@@ -77,7 +77,8 @@
                             }
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary">Filter Report</button>
+                    <button type="submit" class="btn border border-primary btn-primary">Filter Report</button>
+                    <a class="btn btn-outline-primary" asp-area="Report" asp-controller="Report" asp-action="LoanHistoryReport">Reset Filters</a>
                 </form>
             </div>
         </div>
@@ -117,12 +118,19 @@
                                 <td class="td-name">@loan.Status.ToString()</td>
                                 <td class="td-name">@loan.AcceptedTermsAndConditions</td>
                                 <td class="td-name">
-                                    <ul class="list-group list-group-flush">
-                                        @foreach (var equipment in Model.Loans.FirstOrDefault(x => x.UID == loan.UID).EquipmentList)
+                                    @{ 
+                                        var equipmentList = Model.Loans.FirstOrDefault(x => x.UID == loan.UID).EquipmentList;
+                                    }
+                                    <p>
+                                        @for (int i = 0; i < equipmentList.Count(); i++)
                                         {
-                                            <li class="list-group-item px-0"><a class="equipmentDetails text-primary" data-url="/Equipment/Equipment/DetailsModal" data-uid="@equipment.UID" style="cursor: pointer">@equipment.Name</a></li>
+                                            if (i != 0)
+                                            {
+                                                <span>, </span>
+                                            }
+                                            <a class="equipmentDetails text-primary" data-url="/Equipment/Equipment/DetailsModal" data-uid="@equipmentList[i].UID" style="cursor: pointer">@equipmentList[i].Name</a>
                                         }
-                                    </ul>
+                                    </p>
                                 </td>
                                 <td class="td-name">@loan.CreatedTimestamp.ToShortDateString()</td>
                             </tr>
