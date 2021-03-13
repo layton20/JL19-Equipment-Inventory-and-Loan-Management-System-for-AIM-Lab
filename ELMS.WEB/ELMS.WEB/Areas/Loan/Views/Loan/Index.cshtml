@@ -152,7 +152,6 @@
                     <thead>
                         <tr>
                             <th class="th-description font-weight-normal">Reference ID</th>
-                            <th class="th-description font-weight-normal">Loaner</th>
                             <th class="th-description font-weight-normal">Loanee</th>
                             <th class="th-description font-weight-normal">Equipment</th>
                             <th class="th-description font-weight-normal">Start Date</th>
@@ -168,7 +167,6 @@
                         {
                             <tr>
                                 <td class="td-name">@loan.UID</td>
-                                <td class="td-name">@(loan.LoanerEmail ?? "Not found")</td>
                                 <td class="td-name">@(loan.LoaneeEmail ?? "Not found")</td>
                                 <td class="td-name">
                                     <ul class="list-group list-group-flush">
@@ -188,7 +186,16 @@
                                         }
                                     </ul>
                                 </td>
-                                <td class="td-name">@loan.Status.ToString()</td>
+                                <td class="td-name">
+                                    @if (loan.Status == Status.Complete || loan.Status == Status.EarlyComplete)
+                                    {
+                                        <span>Completed on @loan.CompletedTimestamp</span>
+                                    }
+                                    else
+                                    {
+                                        <span>@loan.Status.ToString()</span>
+                                    }
+                                </td>
                                 <td class="td-name">@(loan.AcceptedTermsAndConditions ? "Accepted" : "Pending")</td>
                                 <td class="td-name">
                                     <div class="dropdown show">

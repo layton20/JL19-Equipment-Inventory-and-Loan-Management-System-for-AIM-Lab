@@ -175,5 +175,18 @@ namespace ELMS.WEB.Managers.Loan.Concrete
 
             return _Response;
         }
+
+        public async Task<BaseResponse> CompleteLoanAsync(Guid uid)
+        {
+            BaseResponse _Response = new BaseResponse();
+
+            if (!await __LoanRepository.CompleteLoanAsync(uid))
+            {
+                _Response.Success = false;
+                _Response.Message = $"{GlobalConstants.ERROR_ACTION_PREFIX} complete {MODEL_NAME}.";
+            }
+
+            return _Response;
+        }
     }
 }

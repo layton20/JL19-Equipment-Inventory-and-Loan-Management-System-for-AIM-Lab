@@ -24,6 +24,7 @@ namespace ELMS.WEB.Areas.Loan.Models
         public bool AcceptedTermsAndConditions { get; set; }
         public DateTime CreatedTimestamp { get; set; }
         public DateTime AmendedTimestamp { get; set; }
+        public DateTime CompletedTimestamp { get; set; }
         public IList<EquipmentViewModel> EquipmentList { get; set; } = new List<EquipmentViewModel>();
         public IList<LoanExtensionViewModel> Extensions { get; set; } = new List<LoanExtensionViewModel>();
     }

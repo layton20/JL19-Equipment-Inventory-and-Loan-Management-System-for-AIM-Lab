@@ -34,6 +34,15 @@ namespace ELMS.WEB.Repositories.Loan.Concrete
                 return false;
             }
 
+            if (_Loan.FromTimestamp <= DateTime.Now)
+            {
+                _Loan.Status = Status.ActiveLoan;
+            }
+            else
+            {
+                _Loan.Status = Status.InactiveLoan;
+            }
+
             _Loan.AcceptedTermsAndConditions = true;
 
             return await __ApplicationContext.SaveChangesAsync() > 0;
@@ -55,6 +64,24 @@ namespace ELMS.WEB.Repositories.Loan.Concrete
 
             _Loan.Status = status;
 
+            return await __ApplicationContext.SaveChangesAsync() > 0;
+        }
+
+        public async Task<bool> CompleteLoanAsync(Guid uid)
+        {
+            if (uid == Guid.Empty)
+            {
+                return false;
+            }
+
+            LoanEntity _Entity = await __ApplicationContext.Loans.FindAsync(uid);
+
+            if (_Entity == null || _Entity?.CompletedTimestamp == null)
+            {
+                return false;
+            }
+
+            _Entity.CompletedTimestamp = DateTime.Now;
             return await __ApplicationContext.SaveChangesAsync() > 0;
         }
 

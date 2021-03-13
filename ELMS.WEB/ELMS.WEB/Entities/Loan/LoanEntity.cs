@@ -29,5 +29,7 @@ namespace ELMS.WEB.Entities.Loan
 
         [Required]
         public bool AcceptedTermsAndConditions { get; set; } = false;
+
+        public DateTime CompletedTimestamp { get; set; }
     }
 }
