@@ -31,16 +31,16 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
 
         [Authorize(Policy = "CreateNotePolicy")]
         [HttpGet]
-        public async Task<IActionResult> CreateModalAsync(Guid equipmentUID)
+        public async Task<IActionResult> CreateModalAsync(Guid uid)
         {
-            if (equipmentUID == Guid.Empty)
+            if (uid == Guid.Empty)
             {
-                return Json(0);
+                return Json(new { message = $"{GlobalConstants.ERROR_ACTION_PREFIX} find {ENTITY_NAME}." });
             }
 
             CreateNoteViewModel _Model = new CreateNoteViewModel
             {
-                EquipmentUID = equipmentUID
+                EquipmentUID = uid
             };
 
             return PartialView("_CreateNote", _Model);
@@ -54,7 +54,7 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
 
             if (_Response == null)
             {
-                return Json(new { error = $"{GlobalConstants.ERROR_ACTION_PREFIX} find {ENTITY_NAME}" });
+                return Json(new { error = $"{GlobalConstants.ERROR_ACTION_PREFIX} find {ENTITY_NAME}." });
             }
 
             return PartialView("_EditNote", __Mapper.Map<NoteViewModel>(_Response));
