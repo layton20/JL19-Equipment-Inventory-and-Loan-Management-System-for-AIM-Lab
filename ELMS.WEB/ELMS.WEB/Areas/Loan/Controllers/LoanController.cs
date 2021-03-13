@@ -17,6 +17,7 @@ using ELMS.WEB.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,12 +38,15 @@ namespace ELMS.WEB.Areas.Loan.Controllers
         private readonly IBlacklistManager __BlacklistManager;
         private readonly UserManager<IdentityUser> __UserManager;
         private readonly ILoanExtensionManager __LoanExtensionManager;
+        private readonly IConfigurationManager __ConfigurationManager;
+        private readonly IConfiguration __Configuration;
         private readonly string ENTITY_NAME = "Loan";
 
         public LoanController(IMapper mapper, ILoanManager loanManager, IEquipmentManager equipmentManager, IUserRepository userRepository,
             ILoanEquipmentManager loanEquipmentManager, IEmailScheduleManager emailScheduleManager,
             IApplicationEmailSender emailSender, IBlacklistManager blacklistManager,
-            UserManager<IdentityUser> userManager, ILoanExtensionManager loanExtensionManager)
+            UserManager<IdentityUser> userManager, ILoanExtensionManager loanExtensionManager,
+            IConfigurationManager configurationManager, IConfiguration configuration)
         {
             __Mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             __LoanManager = loanManager ?? throw new ArgumentNullException(nameof(loanManager));
@@ -53,6 +57,8 @@ namespace ELMS.WEB.Areas.Loan.Controllers
             __BlacklistManager = blacklistManager ?? throw new ArgumentNullException(nameof(blacklistManager));
             __UserManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             __LoanExtensionManager = loanExtensionManager ?? throw new ArgumentNullException(nameof(loanExtensionManager));
+            __ConfigurationManager = configurationManager ?? throw new ArgumentNullException(nameof(configurationManager));
+            __Configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
 
         [Authorize(Policy = "ViewLoanPolicy")]
@@ -297,7 +303,8 @@ namespace ELMS.WEB.Areas.Loan.Controllers
             {
                 UID = loanUID,
                 Accepted = _Response.AcceptedTermsAndConditions,
-                Loan = _LoanViewModel
+                Loan = _LoanViewModel,
+                TermsAndConditionsStatement = (await __ConfigurationManager.GetByNormalizedNameAsync(__Configuration.GetValue<string>("Configuration:Loan:TERMS_AND_CONDITIONS")))?.Value ?? string.Empty
             };
 
             return View("AcceptTermsAndConditions", _Model);

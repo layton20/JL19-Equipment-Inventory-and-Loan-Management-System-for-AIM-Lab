@@ -46,7 +46,7 @@
                         <div class="col-md-10">
                             <div class="tab-content">
                                 <div class="tab-pane active" id="tab@(ConfigurationType.General)">
-                                    <table class="display table datatable-configuration responsive hover compact" cellspacing="0" width="100%">
+                                    <table class="display table datatable responsive hover compact" cellspacing="0" width="100%">
                                         <thead>
                                             <tr>
                                                 <th class="th-description">Name</th>
@@ -60,9 +60,7 @@
                                             {
                                                 <tr>
                                                     <td class="td-name">@config.Name</td>
-                                                    <td class="td-name">
-                                                        <textarea class="tinymce-no-menubar mceNonEditable">@config.Description</textarea>
-                                                    </td>
+                                                    <td class="td-name">@config.Description</td>
                                                     <td class="td-name">@config.Value</td>
                                                     <td class="td-name">
                                                         <div class="dropdown show">
@@ -89,7 +87,7 @@
                                     </table>
                                 </div>
                                 <div class="tab-pane" id="tab@(ConfigurationType.Equipment)">
-                                    <table class="display table datatable-configuration responsive hover compact" cellspacing="0" width="100%">
+                                    <table class="display table datatable responsive hover compact" cellspacing="0" width="100%">
                                         <thead>
                                             <tr>
                                                 <th class="th-description">Name</th>
@@ -103,9 +101,7 @@
                                             {
                                                 <tr>
                                                     <td class="td-name">@config.Name</td>
-                                                    <td class="td-name">
-                                                        <textarea class="tinymce-no-menubar mceNonEditable">@config.Description</textarea>
-                                                    </td>
+                                                    <td class="td-name">@config.Description</td>
                                                     <td class="td-name">@config.Value</td>
                                                     <td class="td-name">
                                                         <div class="dropdown show">
@@ -132,7 +128,7 @@
                                     </table>
                                 </div>
                                 <div class="tab-pane" id="tab@(ConfigurationType.Loan)">
-                                    <table class="display table datatable-configuration responsive hover compact" cellspacing="0" width="100%">
+                                    <table class="display table datatable responsive hover compact" cellspacing="0" width="100%">
                                         <thead>
                                             <tr>
                                                 <th class="th-description">Name</th>
@@ -146,9 +142,7 @@
                                             {
                                                 <tr>
                                                     <td class="td-name">@config.Name</td>
-                                                    <td class="td-name">
-                                                        <textarea class="tinymce-no-menubar mceNonEditable">@config.Description</textarea>
-                                                    </td>
+                                                    <td class="td-name">@config.Description</td>
                                                     <td class="td-name">@config.Value</td>
                                                     <td class="td-name">
                                                         <div class="dropdown show">
@@ -175,7 +169,7 @@
                                     </table>
                                 </div>
                                 <div class="tab-pane" id="tab@(ConfigurationType.User)">
-                                    <table class="display table datatable-configuration responsive hover compact" cellspacing="0" width="100%">
+                                    <table class="display table datatable responsive hover compact" cellspacing="0" width="100%">
                                         <thead>
                                             <tr>
                                                 <th class="th-description">Name</th>
@@ -189,9 +183,7 @@
                                             {
                                                 <tr>
                                                     <td class="td-name">@config.Name</td>
-                                                    <td class="td-name">
-                                                        <textarea class="tinymce-no-menubar mceNonEditable">@config.Description</textarea>
-                                                    </td>
+                                                    <td class="td-name">@config.Description</td>
                                                     <td class="td-name">@config.Value</td>
                                                     <td class="td-name">
                                                         <div class="dropdown show">
@@ -232,12 +224,6 @@
             $('#navItemAdmin').addClass('active');
             $('#navCollapseAdmin').addClass('show');
             $('#navItemConfigurations').addClass('active');
-
-            $('.datatable-configuration').dataTable({
-                "columnDefs": [
-                    { "width": "20%", "targets": 0 }
-                ]
-            });
         });
     </script>
     <environment include="Development">

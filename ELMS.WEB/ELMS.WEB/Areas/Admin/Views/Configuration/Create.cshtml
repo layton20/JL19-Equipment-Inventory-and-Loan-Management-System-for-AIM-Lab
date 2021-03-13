@@ -6,7 +6,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container-fluid">
+<div class="container-fluid mb-2">
     <div class="row">
         <a class="btn btn-outline-primary w-100" asp-area="Admin" asp-controller="Configuration" asp-action="Index"><i class="fas fa-backward mr-2"></i> Back to Configurations</a>
     </div>
@@ -40,11 +40,11 @@
                     </div>
                     <div class="form-group">
                         <label asp-for="Description"></label>
-                        <textarea class="tinymce" asp-for="Description"></textarea>
+                        <textarea class="form-control" asp-for="Description"></textarea>
                     </div>
                     <div class="form-group">
                         <label asp-for="Value"></label>
-                        <input class="form-control" asp-for="Value" />
+                        <textarea class="form-control" asp-for="Value"></textarea>
                     </div>
                     <div class="form-group">
                         <label asp-for="Type"></label>

@@ -7,5 +7,6 @@ namespace ELMS.WEB.Areas.Loan.Models
         public Guid UID { get; set; }
         public bool Accepted { get; set; } = false;
         public LoanViewModel Loan { get; set; }
+        public string TermsAndConditionsStatement { get; set; }
     }
 }

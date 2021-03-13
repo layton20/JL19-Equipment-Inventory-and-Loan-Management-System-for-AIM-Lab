@@ -42,7 +42,14 @@
     </div>
     <div class="row justify-content-center text-center col-md-8 m-auto">
         <h3>Terms and Conditions</h3>
-        <p>In signing out the identified equipment, <strong>I accept personal responsibility for the equipment and agree to replace it</strong> with new (to the satisfaction of the AIM Lab director) if lost or damaged whilst on loan to me. Furthermore, I agree to return the identified equipment immediately upon request by the AIM Lab director (or her delegate).</p>
+        @if (!string.IsNullOrWhiteSpace(Model.TermsAndConditionsStatement))
+        {
+            <p class="col-12">@Model.TermsAndConditionsStatement</p>
+        }
+        else
+        {
+            <p class="col-12">In signing out the identified equipment, <strong>I accept personal responsibility for the equipment and agree to replace it</strong> with new (to the satisfaction of the AIM Lab director) if lost or damaged whilst on loan to me. Furthermore, I agree to return the identified equipment immediately upon request by the AIM Lab director (or her delegate).</p>
+        }
 
         <form asp-area="Loan" asp-controller="Loan" asp-action="AcceptTermsAndConditions">
             <input type="hidden" asp-for="UID" />
