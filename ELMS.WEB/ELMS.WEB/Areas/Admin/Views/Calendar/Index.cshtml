@@ -1,0 +1,77 @@
+﻿@model ELMS.WEB.Areas.Admin.Models.Calendar.IndexViewModel
+
+@{
+    ViewData["Title"] = "Calendar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row bg-dark">
+        <div class="m-auto text-white text-center">
+            <div class="m-5">
+                <h1 class="display-2"><strong>@ViewData["Title"]</strong></h1>
+                <p>Calendar view of upcoming expired loans and expired equipment.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="card">
+            <div class="card-body">
+                <div id="calendar" class="w-100">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#navItemCalendar').addClass('active');
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                headerToolbar: { center: 'dayGridMonth,timeGridWeek' },
+                initialView: 'dayGridMonth',
+                events: [
+                    @foreach (var loan in Model.Loans)
+                    {
+                        <text>{</text>
+                            @:title: 'Loan expired for @(loan.LoaneeEmail)',
+                            @:start: new Date(Date.parse('@(loan.EndTimestamp.ToString("yyyy-MM-dd HH:mm:ss"))')),
+                            @:allDay: true,
+                            @:url: '/Loan/Loan/DetailsView?uid=' + '@loan.ReferenceUID',
+                            @:className: 'p-1',
+                            @:color: '#e74c3c'
+                        <text>},</text>
+                    }
+                    @foreach (var equipment in Model.Equipment)
+                    {
+                        <text>{</text>
+                            @:title: 'Equipment warranty expired for @(equipment.Name)',
+                            @:start: new Date(Date.parse('@(equipment.EndTimestamp.ToString("yyyy-MM-dd HH:mm:ss"))')),
+                            @:allDay: true,
+                            @:url: '/Equipment/Equipment/DetailsView?uid=' + '@equipment.ReferenceUID',
+                            @:className: 'p-1',
+                            @:color: '#e74c3c'
+                        <text>},</text>
+                    }
+                ],
+                eventClick: function (event) {
+                    if (event.url) {
+                        window.open(event.url, "_blank");
+                        return false;
+                    }
+                }
+            });
+            calendar.render();
+        });
+    </script>
+} 

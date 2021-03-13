@@ -38,7 +38,7 @@
     }
 
     $('.equipmentDetailsModal').click(function () {
-        loadModalAjax($(this).data('url'), `equipmentUID=${$(this).data('uid')}`);
+        loadModalAjax($(this).data('url'), `uid=${$(this).data('uid')}`);
     });
 
     $('.blacklistModal').click(function () {

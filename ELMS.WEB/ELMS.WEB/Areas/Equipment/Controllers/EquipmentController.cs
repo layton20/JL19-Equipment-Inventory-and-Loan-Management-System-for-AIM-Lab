@@ -273,9 +273,9 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
 
         [Authorize(Policy = "ViewEquipmentPolicy")]
         [HttpGet]
-        public async Task<IActionResult> DetailsViewAsync(Guid equipmentUID, string successMessage = "", string errorMessage = "")
+        public async Task<IActionResult> DetailsViewAsync(Guid uid, string successMessage = "", string errorMessage = "")
         {
-            if (equipmentUID == null || equipmentUID == Guid.Empty)
+            if (uid == null || uid == Guid.Empty)
             {
                 ViewData["ErrorMessage"] = "Invalid equipment UID";
             }
@@ -292,12 +292,12 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
 
             DetailsViewModel _Model = new DetailsViewModel
             {
-                Equipment = __Mapper.Map<EquipmentViewModel>(await __EquipmentManager.GetAsync(equipmentUID)),
-                Notes = __Mapper.Map<IList<NoteViewModel>>(await __NoteManager.GetAsync(equipmentUID)),
-                EquipmentMedia = __Mapper.Map<IList<EquipmentMediaViewModel>>(await __EquipmentBlobManager.GetAsync(equipmentUID)),
+                Equipment = __Mapper.Map<EquipmentViewModel>(await __EquipmentManager.GetAsync(uid)),
+                Notes = __Mapper.Map<IList<NoteViewModel>>(await __NoteManager.GetAsync(uid)),
+                EquipmentMedia = __Mapper.Map<IList<EquipmentMediaViewModel>>(await __EquipmentBlobManager.GetAsync(uid)),
                 UploadMedia = new CreateEquipmentMediaViewModel
                 {
-                    EquipmentUID = equipmentUID
+                    EquipmentUID = uid
                 }
             };
 

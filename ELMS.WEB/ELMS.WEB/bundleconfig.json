@@ -106,5 +106,11 @@
     "inputFiles": [
       "wwwroot/js/areas/admin/configuration/index.js"
     ]
+  },
+  {
+    "outputFileName": "wwwroot/js/site.min.js",
+    "inputFiles": [
+      "wwwroot/js/site.js"
+    ]
   }
 ]
