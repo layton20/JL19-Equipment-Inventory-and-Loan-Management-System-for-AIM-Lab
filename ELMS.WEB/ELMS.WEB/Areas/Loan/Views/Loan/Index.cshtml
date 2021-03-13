@@ -20,7 +20,7 @@
             </div>
             <div class="card-footer">
                 <div class="stats">
-                    <a href="#">View active loans</a>
+                    <a asp-area="Loan" asp-controller="Loan" asp-action="ActiveLoansView">View active loans</a>
                 </div>
             </div>
         </div>
@@ -37,7 +37,7 @@
             </div>
             <div class="card-footer">
                 <div class="stats">
-                    <a href="#">View pending loans</a>
+                    <a asp-area="Loan" asp-controller="Loan" asp-action="PendingLoansView">View pending loans</a>
                 </div>
             </div>
         </div>
@@ -54,7 +54,7 @@
             </div>
             <div class="card-footer">
                 <div class="stats">
-                    <a href="#">View overdue loans</a>
+                    <a asp-area="Loan" asp-controller="Loan" asp-action="ExpiredLoansView">View overdue loans</a>
                 </div>
             </div>
         </div>

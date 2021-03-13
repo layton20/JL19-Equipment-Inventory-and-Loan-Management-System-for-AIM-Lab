@@ -24,18 +24,18 @@ namespace ELMS.WEB.Areas.Equipment.Models
 
         [Display(Name = "Purchase Date From")]
         [PastOrTodayDate]
-        public DateTime PurchaseDateFrom { get; set; } = DateTime.MinValue;
+        public DateTime PurchaseDateFrom { get; set; }
 
         [PastOrTodayDate]
         [Display(Name = "Purchase Date To")]
-        public DateTime PurchaseDateTo { get; set; } = DateTime.Today.AddDays(1);
+        public DateTime PurchaseDateTo { get; set; }
 
         public IList<Status> Statuses { get; set; }
 
         [Display(Name = "Warranty Expiration Date From")]
-        public DateTime WarrantyExpirationDateFrom { get; set; } = DateTime.MinValue;
+        public DateTime WarrantyExpirationDateFrom { get; set; }
 
         [Display(Name = "Warranty Expiration Date To")]
-        public DateTime WarrantyExpirationDateTo { get; set; } = DateTime.MaxValue;
+        public DateTime WarrantyExpirationDateTo { get; set; }
     }
 }

@@ -2,6 +2,7 @@
 using ELMS.WEB.Areas.Equipment.Models;
 using ELMS.WEB.Areas.Equipment.Models.Note;
 using ELMS.WEB.Areas.General.Models.Media;
+using ELMS.WEB.Enums.Equipment;
 using ELMS.WEB.Helpers;
 using ELMS.WEB.Managers.Email.Interface;
 using ELMS.WEB.Managers.Equipment.Interfaces;
@@ -48,6 +49,7 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
         }
 
         [Authorize(Policy = "ViewEquipmentPolicy")]
+        [HttpGet]
         public async Task<IActionResult> IndexAsync(String errorMessage, String successMessage)
         {
             if (!String.IsNullOrWhiteSpace(errorMessage))
@@ -72,6 +74,7 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
         }
 
         [Authorize(Policy = "ViewEquipmentPolicy")]
+        [HttpGet]
         public async Task<IActionResult> FilterIndexAsync(FilterEquipmentViewModel filter)
         {
             if (filter == null)
@@ -106,22 +109,22 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
                 _Equipment.Equipments = _Equipment.Equipments.Where(x => x.PurchasePrice <= filter.PurchasePriceTo).ToList();
             }
 
-            if (filter.PurchaseDateFrom != null)
+            if (filter.PurchaseDateFrom != DateTime.MinValue)
             {
                 _Equipment.Equipments = _Equipment.Equipments.Where(x => x.PurchaseDate >= filter.PurchaseDateFrom).ToList();
             }
 
-            if (filter.PurchaseDateTo != null)
+            if (filter.PurchaseDateTo != DateTime.MinValue)
             {
                 _Equipment.Equipments = _Equipment.Equipments.Where(x => x.PurchaseDate <= filter.PurchaseDateTo).ToList();
             }
 
-            if (filter.WarrantyExpirationDateFrom != null)
+            if (filter.WarrantyExpirationDateFrom != DateTime.MinValue)
             {
                 _Equipment.Equipments = _Equipment.Equipments.Where(x => x.WarrantyExpirationDate >= filter.WarrantyExpirationDateFrom).ToList();
             }
 
-            if (filter.WarrantyExpirationDateTo != null)
+            if (filter.WarrantyExpirationDateTo != DateTime.MinValue)
             {
                 _Equipment.Equipments = _Equipment.Equipments.Where(x => x.WarrantyExpirationDate <= filter.WarrantyExpirationDateTo).ToList();
             }
@@ -131,10 +134,45 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
                 _Equipment.Equipments = _Equipment.Equipments.Where(x => filter.Statuses.Contains(x.Status)).ToList();
             }
 
+            foreach (EquipmentResponse equipment in _Equipment.Equipments)
+            {
+                equipment.Blobs = (await __EquipmentBlobManager.GetAsync(equipment.UID)).Select(x => x.Blob).ToList();
+            }
+            
             return View("Index", new IndexViewModel
             {
                 Filter = filter,
                 Equipment = __Mapper.Map<IList<EquipmentViewModel>>(_Equipment.Equipments)
+            });
+        }
+
+        [Authorize(Policy = "ViewEquipmentPolicy")]
+        [HttpGet]
+        public async Task<IActionResult> AvailableEquipmentViewAsync()
+        {
+            return await FilterIndexAsync(new FilterEquipmentViewModel 
+            {
+                Statuses = new List<Status>() { Status.Available }
+            });
+        }
+
+        [Authorize(Policy = "ViewEquipmentPolicy")]
+        [HttpGet]
+        public async Task<IActionResult> OnLoanEquipmentViewAsync()
+        {
+            return await FilterIndexAsync(new FilterEquipmentViewModel
+            {
+                Statuses = new List<Status>() { Status.ActiveLoan }
+            });
+        }
+
+        [Authorize(Policy = "ViewEquipmentPolicy")]
+        [HttpGet]
+        public async Task<IActionResult> ExpiredEquipmentView()
+        {
+            return await FilterIndexAsync(new FilterEquipmentViewModel
+            {
+                Statuses = new List<Status>() { Status.WrittenOff }
             });
         }
 
