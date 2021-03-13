@@ -69,7 +69,10 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
 
             return View("Index", new IndexViewModel
             {
-                Equipment = _EquipmentList
+                Equipment = _EquipmentList,
+                AvailableEquipmentCount = _EquipmentList.Where(x => x.Status == Status.Available).Count(),
+                OnLoanEquipmentCount = _EquipmentList.Where(x => x.Status == Status.PendingLoan || x.Status == Status.ActiveLoan).Count(),
+                WarrantyExpiredEquipmentCount = _EquipmentList.Where(x => x.Status == Status.WrittenOff).Count()
             });
         }
 
@@ -83,6 +86,14 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
             }
 
             EquipmentListResponse _Equipment = await __EquipmentManager.GetAsync();
+
+            IndexViewModel _Model = new IndexViewModel()
+            {
+                Filter = filter,
+                AvailableEquipmentCount = _Equipment.Equipments.Where(x => x.Status == Status.Available).Count(),
+                OnLoanEquipmentCount = _Equipment.Equipments.Where(x => x.Status == Status.PendingLoan || x.Status == Status.ActiveLoan).Count(),
+                WarrantyExpiredEquipmentCount = _Equipment.Equipments.Where(x => x.Status == Status.WrittenOff).Count()
+            };
 
             if (!string.IsNullOrWhiteSpace(filter.Name))
             {
@@ -138,12 +149,11 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
             {
                 equipment.Blobs = (await __EquipmentBlobManager.GetAsync(equipment.UID)).Select(x => x.Blob).ToList();
             }
-            
-            return View("Index", new IndexViewModel
-            {
-                Filter = filter,
-                Equipment = __Mapper.Map<IList<EquipmentViewModel>>(_Equipment.Equipments)
-            });
+
+            _Model.Equipment = __Mapper.Map<IList<EquipmentViewModel>>(_Equipment.Equipments);
+
+
+            return View("Index", _Model);
         }
 
         [Authorize(Policy = "ViewEquipmentPolicy")]

@@ -77,7 +77,7 @@ namespace ELMS.WEB.Areas.Loan.Controllers
             IndexViewModel _Model = new IndexViewModel
             {
                 Filter = new LoanFilterViewModel(),
-                Loans = __Mapper.Map<IList<LoanViewModel>>(await __LoanManager.GetAsync())
+                Loans = __Mapper.Map<IList<LoanViewModel>>(await __LoanManager.GetAsync()) ?? new List<LoanViewModel>(),
             };
 
             foreach (LoanViewModel loan in _Model.Loans)
@@ -86,6 +86,10 @@ namespace ELMS.WEB.Areas.Loan.Controllers
                 loan.ExpiryTimestamp = await __LoanManager.GetExpiryDate(loan.UID);
             }
 
+            _Model.ActiveLoansCount = _Model.Loans.Where(x => x.Status == Status.ActiveLoan).Count();
+            _Model.PendingLoansCount = _Model.Loans.Where(x => x.Status == Status.Pending).Count();
+            _Model.OverdueLoansCount = _Model.Loans.Where(x => x.Status == Status.Expired && x.CompletedTimestamp == DateTime.MinValue).Count();
+
             return View("Index", _Model);
         }
 
@@ -93,13 +97,17 @@ namespace ELMS.WEB.Areas.Loan.Controllers
         [HttpPost]
         public async Task<IActionResult> FilterIndexAsync(LoanFilterViewModel filter)
         {
-            IList<LoanViewModel> _FilteredLoans = await FilterAsync(await __LoanManager.GetAsync(), filter);
+            IList<LoanResponse> _LoanResponses = await __LoanManager.GetAsync();
 
             IndexViewModel _Model = new IndexViewModel
             {
                 Filter = filter,
-                Loans = _FilteredLoans
+                ActiveLoansCount = _LoanResponses.Where(x => x.Status == Status.ActiveLoan).Count(),
+                PendingLoansCount = _LoanResponses.Where(x => x.Status == Status.Pending).Count(),
+                OverdueLoansCount = _LoanResponses.Where(x => x.Status == Status.Expired && x.CompletedTimestamp == DateTime.MinValue).Count()
             };
+
+            _Model.Loans = await FilterAsync(_LoanResponses, filter);
 
             foreach (LoanViewModel loan in _Model.Loans)
             {
