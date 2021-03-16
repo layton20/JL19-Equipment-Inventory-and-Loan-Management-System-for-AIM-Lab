@@ -1,4 +1,4 @@
-﻿@model ELMS.WEB.Areas.Loan.Models.CreateLoanViewModel
+﻿@model ELMS.WEB.Areas.Loan.Models.CreationProcess.SelectEquipmentUserViewModel
 
 @{
     ViewData["Title"] = "Create a new Loan";
@@ -10,14 +10,14 @@
         <div class="m-auto text-white text-center">
             <div class="m-5">
                 <h1 class="display-2"><strong>@ViewData["Title"]</strong></h1>
-                <h2 class="display-4 text-center">Select the equipment and user you would like to create a loan for.</h2>
+                <h2 class="display-4 text-center">Step 1: Select the equipment and user you would like to create a loan for.</h2>
                 <p>The user will be required to accept the Terms of Conditions before the loan becomes active.</p>
             </div>
         </div>
     </div>
 </div>
 
-<form asp-area="Loan" asp-controller="Loan" asp-action="ConfirmView" enctype="multipart/form-data">
+<form asp-area="Loan" asp-controller="Loan">
     <div asp-validation-summary="All" class="text-danger"></div>
 
     <div class="equipment-container">
@@ -27,7 +27,7 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="display table datatable-export responsive hover compact" cellspacing="0" width="100%">
+                    <table class="display table datatable responsive hover compact" cellspacing="0" width="100%">
                         <thead>
                             <tr>
                                 <th class="text-center"></th>
@@ -45,8 +45,8 @@
                             {
                                 <tr>
                                     <td class="td-name">
-                                        <input type="checkbox" class="checkbox-equipment" data-uid="@Model.EquipmentSelectList[i].UID"/>
-                                        <input class="equipment-selection" type="hidden" asp-for="SelectedEquipment" value="@Model.EquipmentSelectList[i].UID" disabled />
+                                        <input type="checkbox" class="checkbox-equipment" data-uid="@Model.EquipmentSelectList[i].UID" />
+                                        <input class="equipment-selection" type="hidden" asp-for="Equipment" value="@Model.EquipmentSelectList[i].UID" disabled />
                                     </td>
                                     <td class="td-name">@Model.EquipmentSelectList[i].Name</td>
                                     <td class="td-name">@Model.EquipmentSelectList[i].Status.ToString()</td>
@@ -101,9 +101,7 @@
                                             {
                                                 <tr>
                                                     <td class="td-name">
-                                                        <input class="user-radio" type="radio" asp-for="LoaneeUID" value="@user.Id">
-                                                        <input class="user-detail" type="hidden" asp-for="LoaneeEmailAddress" value="@user.Email" />
-                                                        <input class="user-detail" type="hidden" asp-for="LoaneeUID" value="@user.Id" />
+                                                        <input class="user-radio" type="radio" asp-for="LoaneeEmailAddress" value="@user.Email">
                                                     </td>
                                                     <td class="td-name">@user.UserName</td>
                                                     <td class="td-name">@user.NormalizedEmail</td>
@@ -150,169 +148,29 @@
             </div>
         </div>
     </div>
-
-    <div class="loan-period-container" style="display: none">
-        <hr />
-        <div class="card my-3">
-            <div class="card-header card-header-primary card-header-icon">
-                <h4 class="card-title">Loan Period</h4>
-                <p class="card-subtitle">Certain dates may be disabled if a selected equipment have been reserved for another loan.</p>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col">
-                        <div class="form-group">
-                            <label asp-for="FromTimestamp"></label>
-                            <input type="text" class="form-control datetimepicker datetime-from" asp-for="FromTimestamp" />
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="form-group">
-                            <label asp-for="ExpiryTimestamp"></label>
-                            <input type="text" class="form-control datetimepicker datetime-to" asp-for="ExpiryTimestamp" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="submit-container text-center" style="display: none">
-        <div>
-            <input type="submit" class="btn btn-success" value="Preview Loan" />
-            <a class="btn btn-white" asp-area="Loan" asp-controller="Loan" asp-action="Index">Cancel</a>
-        </div>
-    </div>
 </form>
 
 @section Scripts {
-    <environment include="Development">
-        <script src="~/js/areas/loan/createloan.js"></script>
-    </environment>
-    <environment exclude="Development">
-        <script src="~/js/areas/loan/createloan.min.js"></script>
-    </environment>
     <script>
-        $(document).ready(function () {
-            var disabledDates = [];
-            $('#navItemLoans').addClass('active');
-            initDatetimePicker();
+        $('#navItemLoans').addClass('active');
 
-            function initDatetimePicker(datesToDisable = null) {
-                $('.datetimepicker').datetimepicker({
-                    format: 'DD/MM/YYYY',
-                    icons: {
-                        time: "fa fa-clock-o",
-                        date: "fa fa-calendar",
-                        up: "fa fa-chevron-up",
-                        down: "fa fa-chevron-down",
-                        previous: 'fa fa-chevron-left',
-                        next: 'fa fa-chevron-right',
-                        today: 'fa fa-screenshot',
-                        clear: 'fa fa-trash',
-                        close: 'fa fa-remove'
-                    },
-                    disabledDates: datesToDisable ?? [],
-                    minDate: moment()
-                });
+        // Check for checked equipment
+        if ($('.checkbox-equipment:checked').length > 0) {
+            $('.user-container').show()
+        }
+        // Check for manualuseremail or radiocheckeduser
+        if ($('.user-radio:checked').length > 0) {
+            $('.loan-period-container').show()
+            $('.submit-container').show()
+        }
+
+        $('.checkbox-equipment').click(function () {
+            if ($(".checkbox-equipment:checked").length > 0) {
+                $('.user-container').show();
             }
-
-            // Check for checked equipment
-            if ($('.checkbox-equipment:checked').length > 0) {
-                $('.user-container').show()
+            else {
+                $('.user-container').hide();
             }
-            // Check for manualuseremail or radiocheckeduser
-            if ($('.user-radio:checked').length > 0) {
-                $('.loan-period-container').show()
-                $('.submit-container').show()
-            }
-
-            $('.checkbox-equipment').click(function () {
-                var clickedCheckbox = this;
-                $.get(`/Loan/Loan/GetLoanDates?equipmentUID=${$(this).data('uid')}`, function (data) {
-                    if ($(clickedCheckbox).is(':checked')) {
-                        for (var elem of data) {
-                            disabledDates.push(String(elem))
-                        }
-                    }
-                    else {
-                        for (var elem of data) {
-                            var idx = disabledDates.findIndex(e => e == String(elem));
-                            disabledDates.splice(idx, 1);
-                        }
-                    }
-
-                    $('.datetimepicker').datetimepicker('destroy');
-                    initDatetimePicker(disabledDates);
-                });
-
-                if ($(".checkbox-equipment:checked").length > 0) {
-                    $('.user-container').show();
-                }
-                else {
-                    $('.user-container').hide();
-                }
-            })
-
-            $('.datetime-from').datetimepicker().on('dp.change', function (e) {
-                var selectedDate = $(this).data("DateTimePicker").date();
-                //$('.datetime-to').datetimepicker('destroy');
-                if (disabledDates.length > 0) {
-                    disabledDates.sort(function (a, b) {
-                        return new Date(b.date) - new Date(a.date);
-                    })
-
-                    console.log(disabledDates)
-                    console.log($(this).data("DateTimePicker").date())
-                    disabledDates = disabledDates.filter(function (d) {
-                        var date = new Date(d);
-                        return date > selectedDate;
-                    });
-                    console.log(disabledDates)
-
-                    $('.datetime-to').datetimepicker('destroy');
-                    $('.datetimepicker').datetimepicker({
-                        format: 'DD/MM/YYYY',
-                        icons: {
-                            time: "fa fa-clock-o",
-                            date: "fa fa-calendar",
-                            up: "fa fa-chevron-up",
-                            down: "fa fa-chevron-down",
-                            previous: 'fa fa-chevron-left',
-                            next: 'fa fa-chevron-right',
-                            today: 'fa fa-screenshot',
-                            clear: 'fa fa-trash',
-                            close: 'fa fa-remove'
-                        },
-                        disabledDates: disabledDates ?? [],
-                        minDate: selectedDate,
-                        maxDate: disabledDates[0]
-                    });
-                }
-            })
-
-            $('.user-radio').click(() => {
-                if ($(".user-radio:checked").length > 0) {
-                    if ($('.user-container:hidden').css('display') == 'none') {
-                        $('.loan-period-container').show()
-                    }
-                }
-                else {
-                    $('.loan-period-container').hide()
-                }
-
-                if ($('.loan-period-container').css('display') == 'none' || $('.submit-container').css('display') == 'none') {
-                    $('.loan-period-container').show()
-                    $('.submit-container').show()
-                }
-            })
-
-            $('.manualUserEmail').on('input', () => {
-                if ($('.loan-period-container:hidden').css('display') == 'none' || $('.submit-container').css('display') == 'none') {
-                    $('.loan-period-container').show()
-                    $('.submit-container').show()
-                }
-            })
-        });
+        })
     </script>
 }
