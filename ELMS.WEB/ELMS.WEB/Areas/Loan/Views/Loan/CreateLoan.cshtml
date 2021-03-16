@@ -45,7 +45,7 @@
                             {
                                 <tr>
                                     <td class="td-name">
-                                        <input type="checkbox" class="checkbox-equipment" />
+                                        <input type="checkbox" class="checkbox-equipment" data-uid="@Model.EquipmentSelectList[i].UID"/>
                                         <input class="equipment-selection" type="hidden" asp-for="SelectedEquipment" value="@Model.EquipmentSelectList[i].UID" disabled />
                                     </td>
                                     <td class="td-name">@Model.EquipmentSelectList[i].Name</td>
@@ -156,19 +156,20 @@
         <div class="card my-3">
             <div class="card-header card-header-primary card-header-icon">
                 <h4 class="card-title">Loan Period</h4>
+                <p class="card-subtitle">Certain dates may be disabled if a selected equipment have been reserved for another loan.</p>
             </div>
             <div class="card-body">
                 <div class="row">
                     <div class="col">
                         <div class="form-group">
                             <label asp-for="FromTimestamp"></label>
-                            <input type="date" class="form-control datetimepicker" asp-for="FromTimestamp" />
+                            <input type="text" class="form-control datetimepicker" asp-for="FromTimestamp" />
                         </div>
                     </div>
                     <div class="col">
                         <div class="form-group">
                             <label asp-for="ExpiryTimestamp"></label>
-                            <input type="date" class="form-control datetimepicker" asp-for="ExpiryTimestamp" />
+                            <input type="text" class="form-control datetimepicker" asp-for="ExpiryTimestamp" />
                         </div>
                     </div>
                 </div>
@@ -193,7 +194,28 @@
     </environment>
     <script>
         $(document).ready(function () {
+            var disabledDates = [];
             $('#navItemLoans').addClass('active');
+            initDatetimePicker();
+
+            function initDatetimePicker(datesToDisable = null) {
+                $('.datetimepicker').datetimepicker({
+                    format: 'DD/MM/YYYY',
+                    icons: {
+                        time: "fa fa-clock-o",
+                        date: "fa fa-calendar",
+                        up: "fa fa-chevron-up",
+                        down: "fa fa-chevron-down",
+                        previous: 'fa fa-chevron-left',
+                        next: 'fa fa-chevron-right',
+                        today: 'fa fa-screenshot',
+                        clear: 'fa fa-trash',
+                        close: 'fa fa-remove'
+                    },
+                    disabledDates: datesToDisable ?? [],
+                    minDate: moment()
+                });
+            }
 
             // Check for checked equipment
             if ($('.checkbox-equipment:checked').length > 0) {
@@ -205,14 +227,31 @@
                 $('.submit-container').show()
             }
 
-            $('.checkbox-equipment').click(() => {
-                if ($(".checkbox-equipment:checked").length > 0) {
-                    if ($('.user-container:hidden').css('display') == 'none') {
-                        $('.user-container').show()
+            $('.checkbox-equipment').click(function () {
+                var clickedCheckbox = this;
+                $.get(`/Loan/Loan/GetLoanDates?equipmentUID=${$(this).data('uid')}`, function (data) {
+                    if ($(clickedCheckbox).is(':checked')) {
+                        for (var elem of data) {
+                            disabledDates.push(String(elem))
+                        }
                     }
+                    else {
+                        for (var elem of data) {
+                            var idx = disabledDates.findIndex(e => e == String(elem));
+                            disabledDates.splice(idx, 1);
+                        }
+                    }
+
+                    console.log(disabledDates)
+                    $('.datetimepicker').datetimepicker('destroy');
+                    initDatetimePicker(disabledDates);
+                });
+
+                if ($(".checkbox-equipment:checked").length > 0) {
+                    $('.user-container').show();
                 }
                 else {
-                    $('.user-container').hide()
+                    $('.user-container').hide();
                 }
             })
 

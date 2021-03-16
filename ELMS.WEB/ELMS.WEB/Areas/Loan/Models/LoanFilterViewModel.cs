@@ -15,10 +15,10 @@ namespace ELMS.WEB.Areas.Loan.Models
         public string LoaneeEmail { get; set; }
 
         [Display(Name = "Scheduled From")]
-        public DateTime FromTimestamp { get; set; } = DateTime.MinValue;
+        public DateTime FromTimestamp { get; set; }
 
         [Display(Name = "Scheduled To")]
-        public DateTime ExpiryTimestamp { get; set; } = DateTime.Today.AddDays(1);
+        public DateTime ExpiryTimestamp { get; set; }
 
         public IList<Status> Statuses { get; set; }
 
@@ -26,9 +26,9 @@ namespace ELMS.WEB.Areas.Loan.Models
         public BooleanFilter AcceptedTermsAndConditions { get; set; } = BooleanFilter.All;
 
         [Display(Name = "Loan Created From")]
-        public DateTime CreatedFromTimestamp { get; set; } = DateTime.MinValue;
+        public DateTime CreatedFromTimestamp { get; set; }
 
         [Display(Name = "Loan Created To")]
-        public DateTime CreatedToTimestamp { get; set; } = DateTime.Today.AddDays(1);
+        public DateTime CreatedToTimestamp { get; set; }
     }
 }

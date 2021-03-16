@@ -5,6 +5,7 @@ namespace ELMS.WEB.Enums.Equipment
     public enum Status : int
     {
         Unavailable = 0,
+
         Available = 1,
 
         [Display(Name = "Assigned to Pending Loan")]

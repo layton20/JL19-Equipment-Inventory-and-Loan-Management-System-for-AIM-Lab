@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
 using ELMS.WEB.Areas.Loan.Models;
 using ELMS.WEB.Areas.Loan.Models.LoanExtension;
-using ELMS.WEB.Enums.Equipment;
-using ELMS.WEB.Enums.General;
+using NsEquipmentEnum = ELMS.WEB.Enums.Equipment;
+using NsGeneralEnum = ELMS.WEB.Enums.General;
+using ELMS.WEB.Enums.Loan;
 using ELMS.WEB.Helpers;
 using ELMS.WEB.Managers.Admin.Interfaces;
 using ELMS.WEB.Managers.Email.Interface;
@@ -76,7 +77,7 @@ namespace ELMS.WEB.Areas.Loan.Controllers
             IndexViewModel _Model = new IndexViewModel
             {
                 Filter = new LoanFilterViewModel(),
-                Loans = __Mapper.Map<IList<LoanViewModel>>(await __LoanManager.GetAsync())
+                Loans = __Mapper.Map<IList<LoanViewModel>>(await __LoanManager.GetAsync()) ?? new List<LoanViewModel>(),
             };
 
             foreach (LoanViewModel loan in _Model.Loans)
@@ -85,6 +86,10 @@ namespace ELMS.WEB.Areas.Loan.Controllers
                 loan.ExpiryTimestamp = await __LoanManager.GetExpiryDate(loan.UID);
             }
 
+            _Model.ActiveLoansCount = _Model.Loans.Where(x => x.Status == Status.ActiveLoan).Count();
+            _Model.PendingLoansCount = _Model.Loans.Where(x => x.Status == Status.Pending).Count();
+            _Model.OverdueLoansCount = _Model.Loans.Where(x => x.Status == Status.Expired && x.CompletedTimestamp == DateTime.MinValue).Count();
+
             return View("Index", _Model);
         }
 
@@ -92,13 +97,23 @@ namespace ELMS.WEB.Areas.Loan.Controllers
         [HttpPost]
         public async Task<IActionResult> FilterIndexAsync(LoanFilterViewModel filter)
         {
-            IList<LoanViewModel> _FilteredLoans = await FilterAsync(await __LoanManager.GetAsync(), filter);
+            IList<LoanResponse> _LoanResponses = await __LoanManager.GetAsync();
 
             IndexViewModel _Model = new IndexViewModel
             {
                 Filter = filter,
-                Loans = _FilteredLoans
+                ActiveLoansCount = _LoanResponses.Where(x => x.Status == Status.ActiveLoan).Count(),
+                PendingLoansCount = _LoanResponses.Where(x => x.Status == Status.Pending).Count(),
+                OverdueLoansCount = _LoanResponses.Where(x => x.Status == Status.Expired && x.CompletedTimestamp == DateTime.MinValue).Count()
             };
+
+            _Model.Loans = await FilterAsync(_LoanResponses, filter);
+
+            foreach (LoanViewModel loan in _Model.Loans)
+            {
+                loan.Extensions = __Mapper.Map<IList<LoanExtensionViewModel>>(await __LoanExtensionManager.GetAsync(loan.UID));
+                loan.ExpiryTimestamp = await __LoanManager.GetExpiryDate(loan.UID);
+            }
 
             return View("Index", _Model);
         }
@@ -120,39 +135,39 @@ namespace ELMS.WEB.Areas.Loan.Controllers
                 loans = loans.Where(x => x.LoanerEmail.ToUpper().Contains(filter.LoanerEmail.ToUpper())).ToList();
             }
 
-            if (filter.FromTimestamp != null)
+            if (filter.FromTimestamp != DateTime.MinValue)
             {
                 loans = loans.Where(x => x.FromTimestamp >= filter.FromTimestamp).ToList();
             }
 
-            if (filter.ExpiryTimestamp != null)
+            if (filter.ExpiryTimestamp != DateTime.MinValue)
             {
                 loans = loans.Where(x => x.FromTimestamp <= filter.ExpiryTimestamp).ToList();
             }
 
-            if (filter.CreatedFromTimestamp != null)
+            if (filter.CreatedFromTimestamp != DateTime.MinValue)
             {
                 loans = loans.Where(x => x.CreatedTimestamp >= filter.CreatedFromTimestamp).ToList();
             }
 
-            if (filter.CreatedToTimestamp != null)
+            if (filter.CreatedToTimestamp != DateTime.MinValue)
             {
                 loans = loans.Where(x => x.CreatedTimestamp <= filter.CreatedToTimestamp).ToList();
             }
 
-            if (filter.AcceptedTermsAndConditions != BooleanFilter.All)
+            if (filter.AcceptedTermsAndConditions != NsGeneralEnum.BooleanFilter.All)
             {
-                loans = (filter.AcceptedTermsAndConditions == BooleanFilter.True) ?
+                loans = (filter.AcceptedTermsAndConditions == NsGeneralEnum.BooleanFilter.True) ?
                     loans.Where(x => x.AcceptedTermsAndConditions).ToList() :
                     loans.Where(x => !x.AcceptedTermsAndConditions).ToList();
             }
 
-            if (filter.FromTimestamp != null)
+            if (filter.FromTimestamp != DateTime.MinValue)
             {
                 loans = loans.Where(x => x.FromTimestamp >= filter.FromTimestamp).ToList();
             }
 
-            if (filter.ExpiryTimestamp != null)
+            if (filter.ExpiryTimestamp != DateTime.MinValue)
             {
                 loans = loans.Where(x => x.ExpiryTimestamp <= filter.ExpiryTimestamp).ToList();
             }
@@ -166,24 +181,46 @@ namespace ELMS.WEB.Areas.Loan.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "ViewLoanPolicy")]
+        public async Task<IActionResult> ActiveLoansViewAsync()
+        {
+            return await FilterIndexAsync(new LoanFilterViewModel 
+            {
+                Statuses = new List<Status>() { Status.ActiveLoan }
+            });
+        }
+
+        [HttpGet]
+        [Authorize(Policy = "ViewLoanPolicy")]
+        public async Task<IActionResult> PendingLoansViewAsync()
+        {
+            return await FilterIndexAsync(new LoanFilterViewModel
+            {
+                Statuses = new List<Status>() { Status.Pending }
+            });
+        }
+
+        [HttpGet]
+        [Authorize(Policy = "ViewLoanPolicy")]
+        public async Task<IActionResult> ExpiredLoansViewAsync()
+        {
+            return await FilterIndexAsync(new LoanFilterViewModel
+            {
+                Statuses = new List<Status>() { Status.Expired }
+            });
+        }
+
+        [HttpGet]
         [Authorize(Policy = "CreateLoanPolicy")]
         public async Task<IActionResult> CreateViewAsync()
         {
-            IList<LoanResponse> _Loans = (await __LoanManager.GetAsync()).Where(loan => loan.Status != Enums.Loan.Status.Complete && loan.Status != Enums.Loan.Status.EarlyComplete).ToList();
-
-            List<Guid> _ExcludeEquipment = new List<Guid>();
-            foreach (LoanResponse loan in _Loans)
-            {
-                IList<LoanEquipmentResponse> _Response = await __LoanEquipmentManager.GetAsync(loan.UID);
-                _ExcludeEquipment.AddRange(_Response.Select(x => x.EquipmentUID));
-            }
-            _ExcludeEquipment = _ExcludeEquipment.Distinct().ToList();
+            IList<LoanResponse> _Loans = (await __LoanManager.GetAsync()).Where(loan => loan.Status != Status.Complete && loan.Status != Enums.Loan.Status.EarlyComplete).ToList();
 
             CreateLoanViewModel _Model = new CreateLoanViewModel
             {
-                EquipmentSelectList = __Mapper.Map<IList<Equipment.Models.EquipmentViewModel>>((await __EquipmentManager.GetAsync()).Equipments.Where(x => x.Status == Status.Available && !_ExcludeEquipment.Contains(x.UID))),
+                EquipmentSelectList = __Mapper.Map<IList<Equipment.Models.EquipmentViewModel>>((await __EquipmentManager.GetAsync()).Equipments.Where(x => x.Status == NsEquipmentEnum.Status.Available)),
                 UserSelectList = await __UserRepository.GetAsync(),
-                Blacklists = __Mapper.Map<IList<Admin.Models.Blacklist.BlacklistViewModel>>(await __BlacklistManager.GetAsync())
+                Blacklists = __Mapper.Map<IList<Admin.Models.Blacklist.BlacklistViewModel>>(await __BlacklistManager.GetAsync()),
             };
 
             return View("CreateLoan", _Model);
@@ -204,7 +241,7 @@ namespace ELMS.WEB.Areas.Loan.Controllers
                 }
                 _ExcludeEquipment = _ExcludeEquipment.Distinct().ToList();
 
-                model.EquipmentSelectList = __Mapper.Map<IList<Equipment.Models.EquipmentViewModel>>((await __EquipmentManager.GetAsync()).Equipments.Where(x => x.Status == Status.Available && !_ExcludeEquipment.Contains(x.UID)));
+                model.EquipmentSelectList = __Mapper.Map<IList<Equipment.Models.EquipmentViewModel>>((await __EquipmentManager.GetAsync()).Equipments.Where(x => x.Status == NsEquipmentEnum.Status.Available && !_ExcludeEquipment.Contains(x.UID)));
                 model.UserSelectList = await __UserRepository.GetAsync();
                 model.Blacklists = __Mapper.Map<IList<Admin.Models.Blacklist.BlacklistViewModel>>(await __BlacklistManager.GetAsync());
 
@@ -241,7 +278,7 @@ namespace ELMS.WEB.Areas.Loan.Controllers
 
                 CreateLoanViewModel _CreateLoanViewModel = new CreateLoanViewModel
                 {
-                    EquipmentSelectList = __Mapper.Map<IList<Equipment.Models.EquipmentViewModel>>((await __EquipmentManager.GetAsync()).Equipments.Where(x => x.Status == Status.Available && !_ExcludeEquipment.Contains(x.UID))),
+                    EquipmentSelectList = __Mapper.Map<IList<Equipment.Models.EquipmentViewModel>>((await __EquipmentManager.GetAsync()).Equipments.Where(x => x.Status == NsEquipmentEnum.Status.Available && !_ExcludeEquipment.Contains(x.UID))),
                     UserSelectList = await __UserRepository.GetAsync(),
                     Blacklists = __Mapper.Map<IList<Admin.Models.Blacklist.BlacklistViewModel>>(await __BlacklistManager.GetAsync())
                 };
@@ -494,7 +531,7 @@ namespace ELMS.WEB.Areas.Loan.Controllers
 
             foreach (LoanEquipmentResponse loanEquipment in await __LoanEquipmentManager.GetAsync(model.UID))
             {
-                await __EquipmentManager.UpdateStatusAsync(loanEquipment.EquipmentUID, Status.Available);
+                await __EquipmentManager.UpdateStatusAsync(loanEquipment.EquipmentUID, NsEquipmentEnum.Status.Available);
             }
 
             EmailScheduleResponse _Schedule = (await __EmailScheduleManager.GetAsync()).FirstOrDefault(s => s.Sent == false && s.RecipientEmailAddress == _Loan.LoaneeEmail && s.SendTimestamp == _Loan.ExpiryTimestamp);
@@ -505,6 +542,30 @@ namespace ELMS.WEB.Areas.Loan.Controllers
             }
 
             return Json(new { success = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} completed {ENTITY_NAME}." });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetLoanDatesAsync(Guid equipmentUID)
+        {
+            List<DateTime> _Dates = new List<DateTime>();
+
+            IList<LoanResponse> _Loans = (await __LoanManager.GetAsync())
+                .Where(x => x.EquipmentList.Select(e => e.UID).Contains(equipmentUID) &&
+                    (x.Status == Status.InactiveLoan || x.Status == Status.ActiveLoan || x.Status == Status.Pending)).ToList();
+
+            foreach (LoanResponse loan in _Loans)
+            {
+                DateTime _ExpiryDate = await __LoanManager.GetExpiryDate(loan.UID);
+                for (DateTime i = loan.FromTimestamp; i <= _ExpiryDate; i = i.AddDays(1))
+                {
+                    if (!_Dates.Contains(i))
+                    {
+                        _Dates.Add(i);
+                    }
+                }
+            }
+
+            return Json(_Dates);
         }
     }
 }

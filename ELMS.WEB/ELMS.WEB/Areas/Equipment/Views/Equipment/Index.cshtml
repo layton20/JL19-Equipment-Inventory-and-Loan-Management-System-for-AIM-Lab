@@ -15,11 +15,11 @@
                     <i class="fas fa-warehouse"></i>
                 </div>
                 <div class="card-category">Available Equipment</div>
-                <h2 class="card-title">@Model.Equipment.Where(x => x.Status == ELMS.WEB.Enums.Equipment.Status.Available).Count()</h2>
+                <h2 class="card-title">@Model.AvailableEquipmentCount</h2>
             </div>
             <div class="card-footer">
                 <div class="stats">
-                    <a href="#">Add a new equipment</a>
+                    <a asp-area="Equipment" asp-controller="Equipment" asp-action="AvailableEquipmentView">View Available Equipment</a>
                 </div>
             </div>
         </div>
@@ -32,11 +32,11 @@
                     <i class="fas fa-sign-in-alt"></i>
                 </div>
                 <div class="card-category">Equipment On-Loan</div>
-                <h2 class="card-title">@Model.Equipment.Where(x => x.Status == ELMS.WEB.Enums.Equipment.Status.PendingLoan || x.Status == ELMS.WEB.Enums.Equipment.Status.ActiveLoan).Count()</h2>
+                <h2 class="card-title">@Model.OnLoanEquipmentCount</h2>
             </div>
             <div class="card-footer">
                 <div class="stats">
-                    <a href="#">Add a new equipment</a>
+                    <a asp-area="Equipment" asp-controller="Equipment" asp-action="OnLoanEquipmentView">View Equipment On-Loan</a>
                 </div>
             </div>
         </div>
@@ -49,11 +49,11 @@
                     <i class="fas fa-warehouse"></i>
                 </div>
                 <div class="card-category">Warranty Expired Equipment</div>
-                <h2 class="card-title">@Model.Equipment.Where(x => x.Status == ELMS.WEB.Enums.Equipment.Status.WrittenOff).Count()</h2>
+                <h2 class="card-title">@Model.WarrantyExpiredEquipmentCount</h2>
             </div>
             <div class="card-footer">
                 <div class="stats">
-                    <a href="#">Add a new equipment</a>
+                    <a asp-area="Equipment" asp-controller="Equipment" asp-action="ExpiredEquipmentView">View Expired Equipment</a>
                 </div>
             </div>
         </div>

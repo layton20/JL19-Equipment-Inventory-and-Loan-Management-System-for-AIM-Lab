@@ -16,11 +16,11 @@
                     <i class="fas fa-sign-in-alt"></i>
                 </div>
                 <div class="card-category">Active Loans</div>
-                <h2 class="card-title">@Model.Loans.Where(x => x.AcceptedTermsAndConditions && x.ExpiryTimestamp > DateTime.Now && x.FromTimestamp < DateTime.Now).Count()</h2>
+                <h2 class="card-title">@Model.ActiveLoansCount</h2>
             </div>
             <div class="card-footer">
                 <div class="stats">
-                    <a href="#">View active loans</a>
+                    <a asp-area="Loan" asp-controller="Loan" asp-action="ActiveLoansView">View active loans</a>
                 </div>
             </div>
         </div>
@@ -33,11 +33,11 @@
                     <i class="fas fa-pause-circle"></i>
                 </div>
                 <div class="card-category">Pending Loans</div>
-                <h2 class="card-title">@Model.Loans.Where(x => !x.AcceptedTermsAndConditions).Count()</h2>
+                <h2 class="card-title">@Model.PendingLoansCount</h2>
             </div>
             <div class="card-footer">
                 <div class="stats">
-                    <a href="#">View pending loans</a>
+                    <a asp-area="Loan" asp-controller="Loan" asp-action="PendingLoansView">View pending loans</a>
                 </div>
             </div>
         </div>
@@ -50,11 +50,11 @@
                     <i class="fas fa-exclamation-circle"></i>
                 </div>
                 <div class="card-category">Overdue Loans</div>
-                <h2 class="card-title">@Model.Loans.Where(x => x.AcceptedTermsAndConditions && x.ExpiryTimestamp < DateTime.Now && x.Status == Status.ActiveLoan).Count()</h2>
+                <h2 class="card-title">@Model.OverdueLoansCount</h2>
             </div>
             <div class="card-footer">
                 <div class="stats">
-                    <a href="#">View overdue loans</a>
+                    <a asp-area="Loan" asp-controller="Loan" asp-action="ExpiredLoansView">View overdue loans</a>
                 </div>
             </div>
         </div>

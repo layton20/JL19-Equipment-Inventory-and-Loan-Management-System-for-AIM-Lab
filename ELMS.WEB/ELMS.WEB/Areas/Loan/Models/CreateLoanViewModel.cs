@@ -34,5 +34,7 @@ namespace ELMS.WEB.Areas.Loan.Models
         public IList<Guid> SelectedEquipment { get; set; }
 
         public IList<BlacklistViewModel> Blacklists { get; set; }
+
+        public IList<DateTime> DisabledDates { get; set; } = new List<DateTime>();
     }
 }
