@@ -72,8 +72,7 @@
             <div>
                 @if ((await AuthorizationService.AuthorizeAsync(User, "CreateLoanPolicy")).Succeeded)
                 {
-                    <a class="create btn btn-success text-white" asp-area="Loan" asp-controller="Loan" asp-action="CreateViewNew">New Loan</a>
-                    <a class="create btn btn-dark text-white" asp-area="Loan" asp-controller="Loan" asp-action="CreateView">New Loan</a>
+                    <a class="create btn btn-success text-white" asp-area="Loan" asp-controller="Loan" asp-action="CreateView">New Loan</a>
                 }
             </div>
         </div>
