@@ -23,7 +23,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ELMS.WEB.Areas.Loan.Models.CreationProcess;
 
 namespace ELMS.WEB.Areas.Loan.Controllers
 {
@@ -567,26 +566,6 @@ namespace ELMS.WEB.Areas.Loan.Controllers
             }
 
             return Json(_Dates);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> CreateViewNewAsync()
-        {
-            IList<Equipment.Models.EquipmentViewModel> _EquipmentList = __Mapper.Map<IList<Equipment.Models.EquipmentViewModel>>((await __EquipmentManager.GetAsync()).Equipments);
-
-            SelectEquipmentUserViewModel _Model = new SelectEquipmentUserViewModel
-            {
-                EquipmentSelectList = _EquipmentList.Where(x => !(x.Status == NsEquipmentEnum.Status.Unavailable || x.Status == NsEquipmentEnum.Status.WrittenOff)).ToList(),
-                UserSelectList = await __UserRepository.GetAsync(),
-                Blacklists = __Mapper.Map<IList<Admin.Models.Blacklist.BlacklistViewModel>>(await __BlacklistManager.GetAsync())
-            };
-
-            if (_Model?.EquipmentSelectList?.Count <= 0 || _Model?.UserSelectList?.Count <= 0)
-            {
-                return RedirectToAction("Index");
-            }
-
-            return View("CreationProcess/SelectEquipmentUser", _Model);
         }
     }
 }
