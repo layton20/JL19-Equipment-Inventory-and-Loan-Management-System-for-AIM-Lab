@@ -12,5 +12,7 @@ namespace ELMS.WEB.Repositories.Identity.Interface
         public Task<IdentityUser> GetAsync(string email);
 
         public Task<IdentityUser> GetByUIDAsync(Guid uid);
+
+        public Task<bool> DeleteAsync(Guid uid);
     }
 }

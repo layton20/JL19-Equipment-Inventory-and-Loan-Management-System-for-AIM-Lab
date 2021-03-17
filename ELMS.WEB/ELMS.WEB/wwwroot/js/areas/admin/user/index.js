@@ -37,7 +37,17 @@
         })
     }
 
+    $('#modalRoot').on("submit", "#formUser", function (e) {
+        e.preventDefault();
+        var form = $(this);
+        postModalFormAjax(form);
+    });
+
     $('.viewUser').click(function () {
+        loadModalAjax($(this).data('url'), `uid=${$(this).data('uid')}`);
+    });
+
+    $('.deleteUser').click(function () {
         loadModalAjax($(this).data('url'), `uid=${$(this).data('uid')}`);
     });
 });

@@ -17,6 +17,25 @@ namespace ELMS.WEB.Repositories.Identity.Concrete
             __Context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
+        public async Task<bool> DeleteAsync(Guid uid)
+        {
+            if (uid == Guid.Empty)
+            {
+                return false;
+            }
+
+            IdentityUser _User = await __Context.Users.FirstOrDefaultAsync(x => x.Id == uid.ToString());
+
+            if (_User == null)
+            {
+                return false;
+            }
+
+            __Context.Users.Remove(_User);
+
+            return await __Context.SaveChangesAsync() > 0;
+        }
+
         public async Task<IList<IdentityUser>> GetAsync()
         {
             return await __Context.Users.ToListAsync();

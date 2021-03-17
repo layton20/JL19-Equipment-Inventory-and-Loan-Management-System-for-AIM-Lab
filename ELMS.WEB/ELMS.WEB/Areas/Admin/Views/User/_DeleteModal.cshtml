@@ -1,0 +1,28 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@model IdentityUser
+
+<div class="modal-content">
+    <div class="modal-header">
+        <h5 class="modal-title"><strong>Delete User</strong></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div>You are making an irreversible change to delete a user.</div>
+        <ul class="list-group rounded-0 mt-3">
+            <li class="list-group-item border my-1"><strong>ID: </strong><span>@Model.Id</span></li>
+            <li class="list-group-item border my-1"><strong>Email: </strong><span>@Model.Email</span></li>
+            <li class="list-group-item border my-1"><strong>Normalised Email: </strong><span>@Model.NormalizedEmail</span></li>
+            <li class="list-group-item border my-1"><strong>Email Confirm: </strong><span>@Model.EmailConfirmed</span></li>
+        </ul>
+    </div>
+    <div class="modal-footer">
+        <form id="formUser" asp-area="Admin" asp-controller="User" asp-action="Delete">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <button type="submit" class="btn border border-danger btn-danger mr-2">Yes, I want to delete the user</button>
+            <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Cancel</button>
+        </form>
+    </div>
+</div>
