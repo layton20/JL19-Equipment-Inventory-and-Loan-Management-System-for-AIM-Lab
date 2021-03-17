@@ -17,7 +17,6 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using NsModelPermission = ELMS.WEB.Areas.Admin.Models.Permission;
-
 using NsModelUser = ELMS.WEB.Areas.Admin.Models.User;
 
 namespace ELMS.WEB.Areas.Admin.Controllers
@@ -32,7 +31,7 @@ namespace ELMS.WEB.Areas.Admin.Controllers
         private readonly IUserRepository __UserRepository;
         private readonly ILoanEquipmentManager __LoanEquipmentManager;
         private readonly IEquipmentManager __EquipmentManager;
-        private readonly string MODEL_NAME = "User";
+        private readonly string ENTITY_NAME = "User";
 
         public UserController(IMapper mapper, UserManager<IdentityUser> userManager, ILoanManager loanManager, IUserRepository userRepository, ILoanEquipmentManager loanEquipmentManager, IEquipmentManager equipmentManager)
         {
@@ -72,7 +71,7 @@ namespace ELMS.WEB.Areas.Admin.Controllers
 
             if (_User == null)
             {
-                return Json(new { success = $"{GlobalConstants.ERROR_ACTION_PREFIX} find {MODEL_NAME}" });
+                return Json(new { success = $"{GlobalConstants.ERROR_ACTION_PREFIX} find {ENTITY_NAME}" });
             }
 
             DetailsViewModel _Model = new DetailsViewModel
@@ -177,6 +176,41 @@ namespace ELMS.WEB.Areas.Admin.Controllers
             }
 
             return RedirectToAction("DetailsView", "User", new { Area = "Admin", uid = model.UserClaims.UserID, successMessage = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} updated User Permissions." });
+        }
+        
+        [HttpGet]
+        public async Task<IActionResult> DeleteModalAsync(Guid uid)
+        {
+            if (uid == null)
+            {
+                return Json(new { error = $"{GlobalConstants.ERROR_ACTION_PREFIX} find {ENTITY_NAME}." });
+            }
+
+            IdentityUser _User = await __UserRepository.GetByUIDAsync(uid);
+
+            if (_User == null)
+            {
+                return Json(new { error = $"{GlobalConstants.ERROR_ACTION_PREFIX} find {ENTITY_NAME}." });
+            }
+
+            return View("_DeleteModal", _User);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteAsync(IdentityUser model)
+        {
+            if (model != null && !String.IsNullOrWhiteSpace(model.Id))
+            {
+                if (Guid.TryParse(model.Id, out Guid uid))
+                {
+                    if (await __UserRepository.DeleteAsync(uid))
+                    {
+                        return Json(new { success = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} deleted {ENTITY_NAME}." });
+                    }
+                }
+            }
+
+            return Json(new { error = $"{GlobalConstants.ERROR_ACTION_PREFIX} delete {ENTITY_NAME}." });
         }
     }
 }
