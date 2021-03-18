@@ -75,18 +75,26 @@
                             <div class="tab-pane" id="tabNotes">
                                 @if ((await AuthorizationService.AuthorizeAsync(User, "CreateLoanExtensionPolicy")).Succeeded)
                                 {
-                                    <div class="mb-2">
-                                        <a class="createLoanExtension btn btn-primary text-white" data-url="/Loan/LoanExtension/CreateModal" data-uid="@Model.Loan.UID">New Extension</a>
-                                    </div>
+                                    @if (!(Model.Loan.Status == Status.Complete || Model.Loan.Status == Status.EarlyComplete))
+                                    {
+                                        <div class="mb-2">
+                                            <a class="createLoanExtension btn btn-primary text-white" data-url="/Loan/LoanExtension/CreateModal" data-uid="@Model.Loan.UID">New Extension</a>
+                                        </div>
+                                    }
                                 }
 
                                 @if ((await AuthorizationService.AuthorizeAsync(User, "ViewEquipmentPolicy")).Succeeded)
                                 {
                                     @if (Model?.Extensions?.Count <= 0)
                                     {
-                                        <div>
+                                        @if (Model.Loan.Status == Status.Complete || Model.Loan.Status == Status.EarlyComplete)
+                                        {
+                                            <p>Loan is completed and cannot be extended. Please create a new loan.</p>
+                                        }
+                                        else
+                                        {
                                             <p>No extensions have been added to this loan yet.</p>
-                                        </div>
+                                        }
                                     }
                                     else
                                     {
