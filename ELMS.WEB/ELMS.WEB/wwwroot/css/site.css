@@ -92,3 +92,21 @@ body {
 .border-gray {
     border-color: #bdc3c7;
 }
+
+.btn {
+    text-transform: none !important;
+}
+
+.spinner {
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}

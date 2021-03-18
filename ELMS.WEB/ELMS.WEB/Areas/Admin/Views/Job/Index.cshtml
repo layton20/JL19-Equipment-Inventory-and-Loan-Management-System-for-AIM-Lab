@@ -35,11 +35,11 @@
                             <td class="td-name">
                                 @if (Model.JobRunningStatuses.IsEquipmentJobRunning)
                                 {
-                                    <a class="btn btn-primary disabled" href="#">Already Triggered</a>
+                                    <a class="btn btn-primary disabled" href="#"><i class="fas fa-spinner mr-2 spinner"></i>Already Triggered</a>
                                 }
                                 else
                                 {
-                                    <a class="btn btn-primary" asp-area="Admin" asp-controller="Job" asp-action="StartEquipmentJob">Trigger Scheduler</a>
+                                    <a class="btn btn-primary" asp-area="Admin" asp-controller="Job" asp-action="StartEquipmentJob"><i class="fas fa-play-circle mr-2"></i> Trigger Scheduler</a>
                                 }
                             </td>
                         </tr>
@@ -49,11 +49,11 @@
                             <td class="td-name">
                                 @if (Model.JobRunningStatuses.IsLoanJobRunning)
                                 {
-                                    <a class="btn btn-primary disabled" href="#">Already Triggered</a>
+                                    <a class="btn btn-primary disabled" href="#"><i class="fas fa-spinner mr-2 spinner"></i>Already Triggered</a>
                                 }
                                 else
                                 {
-                                    <a class="btn btn-primary" asp-area="Admin" asp-controller="Job" asp-action="StartLoanJob">Trigger Scheduler</a>
+                                    <a class="btn btn-primary" asp-area="Admin" asp-controller="Job" asp-action="StartLoanJob"><i class="fas fa-play-circle mr-2"></i>Trigger Scheduler</a>
                                 }
                             </td>
                         </tr>
@@ -63,11 +63,11 @@
                             <td class="td-name">
                                 @if (Model.JobRunningStatuses.IsEmailJobRunning)
                                 {
-                                    <a class="btn btn-primary disabled" href="#">Already Triggered</a>
+                                    <a class="btn btn-primary disabled" href="#"><i class="fas fa-spinner mr-2 spinner"></i>Already Triggered</a>
                                 }
                                 else
                                 {
-                                    <a class="btn btn-primary" asp-area="Admin" asp-controller="Job" asp-action="StartEmailJob">Trigger Scheduler</a>
+                                    <a class="btn btn-primary" asp-area="Admin" asp-controller="Job" asp-action="StartEmailJob"><i class="fas fa-play-circle mr-2"></i>Trigger Scheduler</a>
                                 }
                             </td>
                         </tr>

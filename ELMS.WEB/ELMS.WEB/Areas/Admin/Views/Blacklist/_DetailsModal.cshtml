@@ -8,7 +8,7 @@
         </button>
     </div>
     <div class="modal-body">
-        <table class="display table-blacklists datatable responsive hover compact">
+        <table class="display table-blacklists datatable responsive hover compact w-100">
             <thead>
                 <tr>
                     <th class="th-description">Created on</th>
@@ -22,7 +22,9 @@
                 {
                     <tr>
                         <td class="td-name">@blacklist.CreatedTimestamp.ToShortDateString()</td>
-                        <td class="td-name">@blacklist.Active</td>
+                        <td class="td-name">
+                            <partial name="Components/_BooleanIcon" model="@blacklist.Active" />
+                        </td>
                         <td class="td-name">@blacklist.Type.ToString()</td>
                         <td class="td-name">@blacklist.Reason</td>
                     </tr>
