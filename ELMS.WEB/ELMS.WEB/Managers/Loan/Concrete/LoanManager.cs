@@ -82,7 +82,14 @@ namespace ELMS.WEB.Managers.Loan.Concrete
 
         public async Task<IList<LoanResponse>> GetAsync(Guid equipmentUID, bool all = false)
         {
-            return __Mapper.Map<IList<LoanResponse>>(await __LoanRepository.GetAsync(equipmentUID, all));
+            IList<LoanEntity> _LoanEntities = await __LoanRepository.GetAsync(equipmentUID, all);
+
+            foreach (LoanEntity loan in _LoanEntities)
+            {
+                loan.ExpiryTimestamp = await GetExpiryDate(loan.UID);
+            }
+
+            return __Mapper.Map<IList<LoanResponse>>(_LoanEntities);
         }
 
         public async Task<LoanResponse> GetByUIDAsync(Guid uid)
@@ -91,6 +98,7 @@ namespace ELMS.WEB.Managers.Loan.Concrete
 
             IList<Guid> _EquipmentUIDs = (await __LoanEquipmentRepository.GetAsync(_Response.UID)).Select(x => x.EquipmentUID).ToList();
             _Response.EquipmentList = __Mapper.Map<IList<EquipmentResponse>>(await __EquipmentRepository.GetAsync(_EquipmentUIDs));
+            _Response.ExpiryTimestamp = await GetExpiryDate(uid);
 
             return _Response;
         }
@@ -116,6 +124,8 @@ namespace ELMS.WEB.Managers.Loan.Concrete
             {
                 IList<Guid> _EquipmentUIDs = (await __LoanEquipmentRepository.GetAsync(response.UID)).Select(x => x.EquipmentUID).ToList();
                 response.EquipmentList = __Mapper.Map<IList<EquipmentResponse>>(await __EquipmentRepository.GetAsync(_EquipmentUIDs));
+                response.ExpiryTimestamp = await GetExpiryDate(response.UID);
+                response.Extensions = __Mapper.Map<IList<LoanExtensionResponse>>(await __LoanExtensionRepository.GetAsync(response.UID));
             }
 
             return _LoanResponses;
@@ -131,14 +141,31 @@ namespace ELMS.WEB.Managers.Loan.Concrete
             return _Response;
         }
 
-        public async Task<IList<LoanResponse>> GetByUserAsync(string loaneeEmail)
+        public async Task<IList<LoanResponse>> GetByLoaneeAsync(string loaneeEmail)
         {
-            IList<LoanResponse> _LoanResponses = __Mapper.Map<IList<LoanResponse>>(await __LoanRepository.GetByUserAsync(loaneeEmail));
+            IList<LoanResponse> _LoanResponses = __Mapper.Map<IList<LoanResponse>>(await __LoanRepository.GetByLoaneeAsync(loaneeEmail));
 
             foreach (LoanResponse loanResponse in _LoanResponses)
             {
                 IList<LoanEquipmentEntity> _LoanEquipments = await __LoanEquipmentRepository.GetAsync(loanResponse.UID);
                 loanResponse.EquipmentList = __Mapper.Map<IList<EquipmentResponse>>(_LoanEquipments.Select(x => x.Equipment));
+                loanResponse.ExpiryTimestamp = await GetExpiryDate(loanResponse.UID);
+                loanResponse.Extensions = __Mapper.Map<IList<LoanExtensionResponse>>(await __LoanExtensionRepository.GetAsync(loanResponse.UID));
+            }
+
+            return _LoanResponses;
+        }
+
+        public async Task<IList<LoanResponse>> GetByLoanerAsync(string loanerEmail)
+        {
+            IList<LoanResponse> _LoanResponses = __Mapper.Map<IList<LoanResponse>>(await __LoanRepository.GetByLoaneeAsync(loanerEmail));
+
+            foreach (LoanResponse loanResponse in _LoanResponses)
+            {
+                IList<LoanEquipmentEntity> _LoanEquipments = await __LoanEquipmentRepository.GetAsync(loanResponse.UID);
+                loanResponse.EquipmentList = __Mapper.Map<IList<EquipmentResponse>>(_LoanEquipments.Select(x => x.Equipment));
+                loanResponse.ExpiryTimestamp = await GetExpiryDate(loanResponse.UID);
+                loanResponse.Extensions = __Mapper.Map<IList<LoanExtensionResponse>>(await __LoanExtensionRepository.GetAsync(loanResponse.UID));
             }
 
             return _LoanResponses;

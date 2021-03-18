@@ -38,7 +38,9 @@
                                 <td class="td-name">@blacklist.Email</td>
                                 <td class="td-name">@blacklist.Reason</td>
                                 <td class="td-name">@blacklist.Type.ToString()</td>
-                                <td class="td-name">@blacklist.Active</td>
+                                <td class="td-name">
+                                    <partial name="Components/_BooleanIcon" model="@blacklist.Active" />
+                                </td>
                                 <td class="td-name">@blacklist.CreatedTimestamp</td>
                                 <td class="td-name">
                                     <div class="dropdown show">

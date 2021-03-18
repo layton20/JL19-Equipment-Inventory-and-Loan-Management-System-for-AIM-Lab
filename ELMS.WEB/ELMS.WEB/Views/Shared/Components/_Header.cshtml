@@ -1,4 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<IdentityUser> userManager
 @inject IAuthorizationService AuthorizationService
 
 <header>
@@ -28,11 +30,11 @@
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
                             @if ((await AuthorizationService.AuthorizeAsync(User, "CreateEquipmentPolicy")).Succeeded)
                             {
-                                <a class="dropdown-item" href="#">New Equipment</a>
+                                <a class="dropdown-item" asp-area="Equipment" asp-controller="Equipment" asp-action="CreateView">New Equipment</a>
                             }
                             @if ((await AuthorizationService.AuthorizeAsync(User, "CreateLoanPolicy")).Succeeded)
                             {
-                                <a class="dropdown-item" href="#">New Loan</a>
+                                <a class="dropdown-item" asp-area="Loan" asp-controller="Loan" asp-action="CreateView">New Loan</a>
                             }
                             @if ((await AuthorizationService.AuthorizeAsync(User, "CreateUserPolicy")).Succeeded)
                             {
@@ -40,7 +42,7 @@
                             }
                             @if ((await AuthorizationService.AuthorizeAsync(User, "CreateEmailSchedulePolicy")).Succeeded)
                             {
-                                <a class="dropdown-item" href="#">New Email Schedule</a>
+                                <a class="dropdown-item" asp-area="Email" asp-controller="EmailSchedule" asp-action="CreateView">New Email Schedule</a>
                             }
                         </div>
                     </li>
@@ -52,8 +54,7 @@
                             </p>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownProfile">
-                            <a class="dropdown-item" href="#">Profile</a>
-                            <a class="dropdown-item" href="#">Settings</a>
+                            <a class="dropdown-item" asp-area="Admin" asp-controller="User" asp-action="Profile" asp-route-uid="@userManager.GetUserId(User)">Profile</a>
                             <div class="dropdown-divider"></div>
                             <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
                                 <button id="logout" type="submit" class="dropdown-item w-100">Logout</button>

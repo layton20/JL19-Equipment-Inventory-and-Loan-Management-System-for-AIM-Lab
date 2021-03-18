@@ -7,11 +7,13 @@ using ELMS.WEB.Helpers;
 using ELMS.WEB.Managers.Email.Interface;
 using ELMS.WEB.Managers.Equipment.Interfaces;
 using ELMS.WEB.Managers.General.Interface;
+using ELMS.WEB.Managers.Loan.Interface;
 using ELMS.WEB.Models.Base.Response;
 using ELMS.WEB.Models.Equipment.Request;
 using ELMS.WEB.Models.Equipment.Response;
 using ELMS.WEB.Models.General.Request;
 using ELMS.WEB.Models.General.Response;
+using ELMS.WEB.Models.Loan.Response;
 using ELMS.WEB.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -35,9 +37,14 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
         private readonly IBlobManager __BlobManager;
         private readonly IEquipmentBlobManager __EquipmentBlobManager;
         private readonly IBlobService __BlobService;
+        private readonly ILoanManager __LoanManager;
+        private readonly ILoanEquipmentManager __LoanEquipmentManager;
         private readonly String ENTITY_NAME = "Equipment";
 
-        public EquipmentController(IMapper mapper, IEquipmentManager equipmentManager, INoteManager noteManager, IEmailScheduleManager emailScheduleManager, IBlobManager blobManager, IEquipmentBlobManager equipmentBlobManager, IBlobService blobService)
+        public EquipmentController(IMapper mapper, IEquipmentManager equipmentManager, 
+            INoteManager noteManager, IEmailScheduleManager emailScheduleManager, 
+            IBlobManager blobManager, IEquipmentBlobManager equipmentBlobManager, 
+            IBlobService blobService, ILoanManager loanManager, ILoanEquipmentManager loanEquipmentManager)
         {
             __Mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             __EquipmentManager = equipmentManager ?? throw new ArgumentNullException(nameof(equipmentManager));
@@ -46,6 +53,8 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
             __BlobManager = blobManager ?? throw new ArgumentNullException(nameof(blobManager));
             __EquipmentBlobManager = equipmentBlobManager ?? throw new ArgumentNullException(nameof(equipmentBlobManager));
             __BlobService = blobService ?? throw new ArgumentNullException(nameof(blobService));
+            __LoanManager = loanManager ?? throw new ArgumentNullException(nameof(loanManager));
+            __LoanEquipmentManager = loanEquipmentManager ?? throw new ArgumentNullException(nameof(loanEquipmentManager));
         }
 
         [Authorize(Policy = "ViewEquipmentPolicy")]
@@ -338,6 +347,8 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
                 ViewData["ErrorMessage"] = errorMessage;
             }
 
+            IList<LoanEquipmentResponse> _LoanEquipments = await __LoanEquipmentManager.GetByEquipmentAsync(uid);
+
             DetailsViewModel _Model = new DetailsViewModel
             {
                 Equipment = __Mapper.Map<EquipmentViewModel>(await __EquipmentManager.GetAsync(uid)),
@@ -346,7 +357,8 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
                 UploadMedia = new CreateEquipmentMediaViewModel
                 {
                     EquipmentUID = uid
-                }
+                },
+                Loans = __Mapper.Map<IList<Loan.Models.LoanViewModel>>((await __LoanManager.GetAsync()).Where(x => _LoanEquipments.Select(y => y.LoanUID).Contains(x.UID)))
             };
 
             return View("Details", _Model);
@@ -354,17 +366,17 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> DetailsModalAsync(Guid equipmentUID)
+        public async Task<IActionResult> DetailsModalAsync(Guid uid)
         {
-            if (equipmentUID == null || equipmentUID == Guid.Empty)
+            if (uid == null || uid == Guid.Empty)
             {
                 ViewData["ErrorMessage"] = "Invalid equipment UID";
             }
 
             DetailsViewModel _Model = new DetailsViewModel
             {
-                Equipment = __Mapper.Map<EquipmentViewModel>(await __EquipmentManager.GetAsync(equipmentUID)),
-                Notes = __Mapper.Map<IList<NoteViewModel>>(await __NoteManager.GetAsync(equipmentUID))
+                Equipment = __Mapper.Map<EquipmentViewModel>(await __EquipmentManager.GetAsync(uid)),
+                Notes = __Mapper.Map<IList<NoteViewModel>>(await __NoteManager.GetAsync(uid))
             };
 
             return PartialView("_DetailsModal", _Model);
@@ -372,9 +384,9 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
 
         [Authorize(Policy = "DeleteEquipmentPolicy")]
         [HttpGet]
-        public async Task<IActionResult> DeleteModalAsync(Guid equipmentUID)
+        public async Task<IActionResult> DeleteModalAsync(Guid uid)
         {
-            EquipmentResponse _Response = await __EquipmentManager.GetAsync(equipmentUID);
+            EquipmentResponse _Response = await __EquipmentManager.GetAsync(uid);
 
             if (!_Response.Success)
             {

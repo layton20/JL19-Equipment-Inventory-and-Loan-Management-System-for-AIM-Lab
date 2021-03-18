@@ -15,9 +15,10 @@ namespace ELMS.WEB.Models.Loan.Response
         public DateTime ExpiryTimestamp { get; set; }
         public Status Status { get; set; } = Status.Pending;
         public bool AcceptedTermsAndConditions { get; set; } = false;
-        public IList<EquipmentResponse> EquipmentList { get; set; }
         public DateTime CompletedTimestamp { get; set; }
         public DateTime CreatedTimestamp { get; set; }
         public DateTime AmendedTimestamp { get; set; }
+        public IList<EquipmentResponse> EquipmentList { get; set; } = new List<EquipmentResponse>();
+        public IList<LoanExtensionResponse> Extensions { get; set; } = new List<LoanExtensionResponse>();
     }
 }

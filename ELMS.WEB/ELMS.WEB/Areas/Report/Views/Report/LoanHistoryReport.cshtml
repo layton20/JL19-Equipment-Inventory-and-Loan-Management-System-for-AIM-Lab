@@ -93,7 +93,7 @@
                             <th class="th-description">From</th>
                             <th class="th-description">To</th>
                             <th class="th-description">Status</th>
-                            <th class="th-description">Accepted Terms and Conditions?</th>
+                            <th class="th-description">Accepted T&C</th>
                             <th class="th-description">Equipment</th>
                             <th class="th-description">Loan Created On</th>
                         </tr>
@@ -116,7 +116,9 @@
                                     }
                                 </td>
                                 <td class="td-name">@loan.Status.ToString()</td>
-                                <td class="td-name">@loan.AcceptedTermsAndConditions</td>
+                                <td class="td-name">
+                                    <partial name="Components/_BooleanIcon" model="@loan.AcceptedTermsAndConditions" />
+                                </td>
                                 <td class="td-name">
                                     @{ 
                                         var equipmentList = Model.Loans.FirstOrDefault(x => x.UID == loan.UID).EquipmentList;
