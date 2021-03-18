@@ -85,6 +85,13 @@ namespace ELMS.WEB.Areas.Loan.Controllers
                 return PartialView("_CreateModal", model);
             }
 
+            LoanResponse _Loan = await __LoanManager.GetByUIDAsync(model.LoanUID);
+
+            if (_Loan.Status == Enums.Loan.Status.EarlyComplete || _Loan.Status == Enums.Loan.Status.Complete)
+            {
+                return Json(new { message = $"{GlobalConstants.ERROR_ACTION_PREFIX} extend Loan because the loan is completed. Please create a new loan instead." });
+            }
+
             LoanExtensionResponse _Response = await __LoanExtensionManager.CreateAsync(__Mapper.Map<CreateLoanExtensionRequest>(model));
 
             if (_Response?.Success == false)
