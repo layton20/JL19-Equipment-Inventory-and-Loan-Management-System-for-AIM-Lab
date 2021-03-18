@@ -45,7 +45,7 @@
                             {
                                 <tr>
                                     <td class="td-name">
-                                        <input type="checkbox" class="checkbox-equipment" data-uid="@Model.EquipmentSelectList[i].UID"/>
+                                        <input type="checkbox" class="checkbox-equipment" data-uid="@Model.EquipmentSelectList[i].UID" />
                                         <input class="equipment-selection" type="hidden" asp-for="SelectedEquipment" value="@Model.EquipmentSelectList[i].UID" disabled />
                                     </td>
                                     <td class="td-name">@Model.EquipmentSelectList[i].Name</td>
@@ -107,15 +107,17 @@
                                                     </td>
                                                     <td class="td-name">@user.UserName</td>
                                                     <td class="td-name">@user.NormalizedEmail</td>
-                                                    <td class="td-name">@user.EmailConfirmed</td>
+                                                    <td class="td-name">
+                                                        <partial name="Components/_BooleanIcon" model="@user.EmailConfirmed" />
+                                                    </td>
                                                     <td class="td-name">
                                                         @if (Model.Blacklists.Any(x => x.Active && x.Email.ToUpper() == user.NormalizedEmail))
                                                         {
-                                                            <span class="badge badge-danger">Blacklisted</span>
+                                                            <a class="viewBlacklistModal text-danger font-weight-bold" href="javascript:;" data-url="/Admin/Blacklist/DetailsModal" data-email="@user.Email">Blacklisted</a>
                                                         }
                                                         else if (Model.Blacklists.Any(x => x.Email.ToUpper() == user.NormalizedEmail))
                                                         {
-                                                            <span class="badge badge-warning">Previously blacklisted</span>
+                                                            <a class="viewBlacklistModal text-warning font-weight-bold" href="javascript:;" data-url="/Admin/Blacklist/DetailsModal" data-email="@user.Email">Historically blacklisted</a>
                                                         }
                                                     </td>
                                                 </tr>
@@ -315,4 +317,5 @@
             })
         });
     </script>
+    <partial name="Components/_NotificationSnippet" />
 }

@@ -42,7 +42,7 @@
                                     <td class="td-name">@template.Name</td>
                                     <td class="td-name">@template.Subject</td>
                                     <td class="td-actions">
-                                        <a class="btn btn-primary text-white" target="_blank" asp-area="Email" asp-controller="Template" asp-action="DetailsView" asp-route-uid="@template.UID"><i class="fas fa-eye"></i></a>
+                                        <a target="_blank" asp-area="Email" asp-controller="EmailTemplate" asp-action="DetailsView" asp-route-uid="@template.UID">View</a>
                                     </td>
                                 }
                             </tr>
