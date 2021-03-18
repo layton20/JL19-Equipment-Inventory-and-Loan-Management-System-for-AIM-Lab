@@ -154,7 +154,7 @@ namespace ELMS.WEB.Repositories.Loan.Concrete
             return await __ApplicationContext.Loans.FirstOrDefaultAsync(x => x.UID == uid);
         }
 
-        public async Task<IList<LoanEntity>> GetByUserAsync(string email)
+        public async Task<IList<LoanEntity>> GetByLoaneeAsync(string email)
         {
             return await __ApplicationContext.Loans.Where(x => x.LoaneeEmail.ToUpper() == email.ToUpper()).ToListAsync();
         }

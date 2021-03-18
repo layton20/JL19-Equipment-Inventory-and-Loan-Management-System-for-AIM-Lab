@@ -26,7 +26,7 @@ namespace ELMS.WEB.Repositories.Loan.Interface
 
         public Task<int> GetCountByStatus(Status status);
 
-        public Task<IList<LoanEntity>> GetByUserAsync(string email);
+        public Task<IList<LoanEntity>> GetByLoaneeAsync(string email);
 
         public Task<bool> DeleteAsync(Guid uid);
     }

@@ -106,7 +106,9 @@
                                     </ul>
                                 </td>
                                 <td class="td-name">@loan.Status.ToString()</td>
-                                <td class="td-name">@(loan.AcceptedTermsAndConditions ? "Accepted" : "Pending")</td>
+                                <td class="td-name">
+                                    <partial name="Components/_BooleanIcon" model="@loan.AcceptedTermsAndConditions"/>
+                                </td>
                                 <td class="td-name">
                                     <div class="dropdown show">
                                         <a class="btn btn-primary dropdown-toggle" href="javascript:;" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

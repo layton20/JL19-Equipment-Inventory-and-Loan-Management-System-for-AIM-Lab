@@ -80,12 +80,6 @@ namespace ELMS.WEB.Areas.Loan.Controllers
                 Loans = __Mapper.Map<IList<LoanViewModel>>(await __LoanManager.GetAsync()) ?? new List<LoanViewModel>(),
             };
 
-            foreach (LoanViewModel loan in _Model.Loans)
-            {
-                loan.Extensions = __Mapper.Map<IList<LoanExtensionViewModel>>(await __LoanExtensionManager.GetAsync(loan.UID));
-                loan.ExpiryTimestamp = await __LoanManager.GetExpiryDate(loan.UID);
-            }
-
             _Model.ActiveLoansCount = _Model.Loans.Where(x => x.Status == Status.ActiveLoan).Count();
             _Model.PendingLoansCount = _Model.Loans.Where(x => x.Status == Status.Pending).Count();
             _Model.OverdueLoansCount = _Model.Loans.Where(x => x.Status == Status.Expired && x.CompletedTimestamp == DateTime.MinValue).Count();
@@ -112,7 +106,6 @@ namespace ELMS.WEB.Areas.Loan.Controllers
             foreach (LoanViewModel loan in _Model.Loans)
             {
                 loan.Extensions = __Mapper.Map<IList<LoanExtensionViewModel>>(await __LoanExtensionManager.GetAsync(loan.UID));
-                loan.ExpiryTimestamp = await __LoanManager.GetExpiryDate(loan.UID);
             }
 
             return View("Index", _Model);
@@ -389,11 +382,6 @@ namespace ELMS.WEB.Areas.Loan.Controllers
                 Extensions = __Mapper.Map<IList<LoanExtensionViewModel>>(await __LoanExtensionManager.GetAsync(uid))
             };
 
-            if (_Model?.Loan?.ExpiryTimestamp != null)
-            {
-                _Model.Loan.ExpiryTimestamp = await __LoanManager.GetExpiryDate(_Model.Loan.UID);
-            }
-
             return View("Details", _Model);
         }
 
@@ -516,15 +504,13 @@ namespace ELMS.WEB.Areas.Loan.Controllers
                 return Json(new { error = $"{GlobalConstants.ERROR_ACTION_PREFIX} find {ENTITY_NAME}." });
             }
 
-            DateTime _ExpiryDate = await __LoanManager.GetExpiryDate(model.UID);
-
-            if (DateTime.Now >= _ExpiryDate)
+            if (DateTime.Now >= _Loan.ExpiryTimestamp)
             {
-                await __LoanManager.ChangeStatusAsync(_Loan.UID, Enums.Loan.Status.Complete);
+                await __LoanManager.ChangeStatusAsync(_Loan.UID, Status.Complete);
             }
             else
             {
-                await __LoanManager.ChangeStatusAsync(_Loan.UID, Enums.Loan.Status.EarlyComplete);
+                await __LoanManager.ChangeStatusAsync(_Loan.UID, Status.EarlyComplete);
             }
 
             await __LoanManager.CompleteLoanAsync(model.UID);

@@ -98,7 +98,9 @@
                                     </td>
                                     <td class="td-name">@schedule.RecipientEmailAddress</td>
                                     <td class="td-name">@schedule.EmailType.ToString()</td>
-                                    <td class="td-name">@schedule.Sent</td>
+                                    <td class="td-name">
+                                        <partial name="Components/_BooleanIcon" model="@schedule.Sent" />
+                                    </td>
                                     <td class="td-name">@schedule.SendTimestamp</td>
                                     <td class="td-name">
                                         <div class="dropdown show">

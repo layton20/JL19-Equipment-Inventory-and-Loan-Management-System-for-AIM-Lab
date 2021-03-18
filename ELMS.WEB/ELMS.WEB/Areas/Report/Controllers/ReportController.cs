@@ -132,11 +132,6 @@ namespace ELMS.WEB.Areas.Report.Controllers
                 Loans = __Mapper.Map<IList<LoanHistoryItemViewModel>>(await __LoanManager.GetAsync())
             };
 
-            foreach (LoanHistoryItemViewModel loan in _Model.Loans)
-            {
-                loan.ExpiryTimestamp = await __LoanManager.GetExpiryDate(loan.UID);
-            }
-
             return View(_Model);
         }
 

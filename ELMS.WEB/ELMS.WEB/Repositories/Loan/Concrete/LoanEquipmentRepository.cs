@@ -46,5 +46,10 @@ namespace ELMS.WEB.Repositories.Loan.Concrete
         {
             return await __ApplicationContext.LoanEquipmentList.ToListAsync();
         }
+
+        public async Task<IList<LoanEquipmentEntity>> GetByEquipmentAsync(Guid equipmentUID)
+        {
+            return await __ApplicationContext.LoanEquipmentList.Where(x => x.EquipmentUID == equipmentUID).Include(x => x.Equipment).ToListAsync();
+        }
     }
 }

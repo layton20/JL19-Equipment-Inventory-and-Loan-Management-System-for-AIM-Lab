@@ -9,6 +9,8 @@ namespace ELMS.WEB.Repositories.Loan.Interface
     {
         public Task<IList<LoanEquipmentEntity>> GetAsync();
 
+        public Task<IList<LoanEquipmentEntity>> GetByEquipmentAsync(Guid equipmentUID);
+
         public Task<IList<LoanEquipmentEntity>> GetAsync(Guid loanUID);
 
         public Task<bool> DeleteAsync(Guid uid);

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ELMS.WEB.Entities.Loan;
 using ELMS.WEB.Helpers;
 using ELMS.WEB.Managers.Loan.Interface;
 using ELMS.WEB.Models.Base.Response;
@@ -51,6 +52,11 @@ namespace ELMS.WEB.Managers.Loan.Concrete
         public async Task<IList<LoanEquipmentResponse>> GetAsync()
         {
             return __Mapper.Map<IList<LoanEquipmentResponse>>(await __LoanEquipmentRepository.GetAsync());
+        }
+
+        public async Task<IList<LoanEquipmentResponse>> GetByEquipmentAsync(Guid equipmentUID)
+        {
+            return __Mapper.Map<IList<LoanEquipmentResponse>>(await __LoanEquipmentRepository.GetByEquipmentAsync(equipmentUID));
         }
     }
 }

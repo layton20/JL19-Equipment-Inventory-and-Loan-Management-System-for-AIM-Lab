@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ELMS.WEB.Areas.Admin.Data;
 using ELMS.WEB.Areas.Admin.Models.User;
+using ELMS.WEB.Areas.Loan.Models;
 using ELMS.WEB.Entities.Admin;
 using ELMS.WEB.Helpers;
 using ELMS.WEB.Managers.Equipment.Interfaces;
@@ -44,6 +45,20 @@ namespace ELMS.WEB.Areas.Admin.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> ProfileAsync(string successMessage = "", string errorMessage = "")
+        {
+            IdentityUser _User = await __UserManager.GetUserAsync(User);
+            ProfileViewModel _Model = new ProfileViewModel
+            {
+                User = _User,
+                UserIsLoaneeLoans = __Mapper.Map<IList<LoanViewModel>>(await __LoanManager.GetByLoaneeAsync(_User.Email)),
+                UserIsLoanerLoans = __Mapper.Map<IList<LoanViewModel>>(await __LoanManager.GetByLoanerAsync(_User.Email))
+            };
+
+            return View("Profile", _Model);
+        }
+
+        [HttpGet]
         public async Task<IActionResult> Index(string successMessage = "", string errorMessage = "")
         {
             if (!String.IsNullOrWhiteSpace(successMessage))
@@ -74,10 +89,10 @@ namespace ELMS.WEB.Areas.Admin.Controllers
                 return Json(new { success = $"{GlobalConstants.ERROR_ACTION_PREFIX} find {ENTITY_NAME}" });
             }
 
-            DetailsViewModel _Model = new DetailsViewModel
+            NsModelUser.DetailsViewModel _Model = new NsModelUser.DetailsViewModel
             {
                 User = _User,
-                Loans = __Mapper.Map<IList<Loan.Models.LoanViewModel>>(await __LoanManager.GetByUserAsync(_User.Email)),
+                Loans = __Mapper.Map<IList<Loan.Models.LoanViewModel>>(await __LoanManager.GetByLoaneeAsync(_User.Email)),
                 Roles = await __UserManager.GetRolesAsync(_User)
             };
 
@@ -104,13 +119,13 @@ namespace ELMS.WEB.Areas.Admin.Controllers
                 return RedirectToAction("Index", "User", new { Area = "Admin", errorMessage = $"User does not exist" });
             }
 
-            DetailsViewModel _Model = new DetailsViewModel
+            NsModelUser.DetailsViewModel _Model = new NsModelUser.DetailsViewModel
             {
                 User = _User,
                 Roles = await __UserManager.GetRolesAsync(_User),
             };
 
-            foreach (LoanResponse loan in await __LoanManager.GetByUserAsync(_User.Email))
+            foreach (LoanResponse loan in await __LoanManager.GetByLoaneeAsync(_User.Email))
             {
                 Loan.Models.LoanViewModel _LoanViewModel = __Mapper.Map<Loan.Models.LoanViewModel>(loan);
 
@@ -150,7 +165,7 @@ namespace ELMS.WEB.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditUserPermissionsAsync(DetailsViewModel model)
+        public async Task<IActionResult> EditUserPermissionsAsync(NsModelUser.DetailsViewModel model)
         {
             IdentityUser _User = await __UserManager.FindByIdAsync(model.UserClaims.UserID);
 
@@ -177,7 +192,7 @@ namespace ELMS.WEB.Areas.Admin.Controllers
 
             return RedirectToAction("DetailsView", "User", new { Area = "Admin", uid = model.UserClaims.UserID, successMessage = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} updated User Permissions." });
         }
-        
+
         [HttpGet]
         public async Task<IActionResult> DeleteModalAsync(Guid uid)
         {

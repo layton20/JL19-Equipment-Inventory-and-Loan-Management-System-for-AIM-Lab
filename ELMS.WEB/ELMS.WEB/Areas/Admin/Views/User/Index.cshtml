@@ -25,7 +25,7 @@
                             <th class="th-description">ID</th>
                             <th class="th-description">Email</th>
                             <th class="th-description">Normalised Email</th>
-                            <th class="th-description">Emailed Confirmed?</th>
+                            <th class="th-description">Email Confirmed?</th>
                             <th class="th-description th-actions">Actions</th>
                         </tr>
                     </thead>
@@ -36,7 +36,9 @@
                                 <td class="td-name">@user.Id</td>
                                 <td class="td-name">@user.Email</td>
                                 <td class="td-name">@user.NormalizedEmail</td>
-                                <td class="td-name">@user.EmailConfirmed</td>
+                                <td class="td-name">
+                                    <partial name="Components/_BooleanIcon" model="@user.EmailConfirmed" />
+                                </td>
                                 <td class="td-name">
                                     <div class="dropdown show">
                                         <a class="btn btn-primary dropdown-toggle" href="javascript:;" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
