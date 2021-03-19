@@ -12,8 +12,9 @@
                 <div class="card-icon">
                     <i class="fas fa-warehouse"></i>
                 </div>
-                <div class="card-category">Equipment Lab Value</div>
-                <h2 class="card-title">&pound;@Model.EquipmentList.Where(x => x.WarrantyExpirationDate <= DateTime.Now).Sum(x => x.PurchasePrice)</h2>
+                <div class="card-category">Total Equipment Value</div>
+                <h2 class="card-title">@*&pound;@Model.EquipmentList.Where(x => x.WarrantyExpirationDate <= DateTime.Now).Sum(x => x.PurchasePrice)*@</h2>
+                <h2 class="card-title">&pound;@Model.EquipmentList.Sum(x => x.PurchasePrice)</h2>
             </div>
             <div class="card-footer">
                 <div class="stats">
@@ -34,7 +35,7 @@
             </div>
             <div class="card-footer">
                 <div class="stats">
-                    <a href="#">View written off equipment</a>
+                    <a asp-area="Equipment" asp-controller="Equipment" asp-action="ExpiredEquipmentView">View written off equipment</a>
                 </div>
             </div>
         </div>
@@ -51,7 +52,7 @@
             </div>
             <div class="card-footer">
                 <div class="stats">
-                    <a href="#">View overdue loans</a>
+                    <a asp-area="Loan" asp-controller="Loan" asp-action="ExpiredLoansView">View overdue loans</a>
                 </div>
             </div>
         </div>

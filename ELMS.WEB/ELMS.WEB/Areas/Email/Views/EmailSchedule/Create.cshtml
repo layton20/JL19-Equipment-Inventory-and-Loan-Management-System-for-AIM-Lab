@@ -1,0 +1,130 @@
+﻿@model ELMS.WEB.Areas.Email.Models.EmailSchedule.CreateViewModel
+
+@{
+    ViewData["Title"] = "Create Email Schedule";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid mb-2">
+    <div class="row">
+        <a class="btn btn-outline-primary w-100" asp-area="Email" asp-controller="EmailSchedule" asp-action="Index"><i class="fas fa-backward mr-2"></i> Back to Email Schedules</a>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="row bg-dark">
+        <div class="m-auto text-white text-center">
+            <div class="m-5">
+                <h1 class="display-2"><strong>@ViewData["Title"]</strong></h1>
+                <h2 class="display-4 text-center instructionText">Select the email template you would like to schedule</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form asp-area="Email" asp-controller="EmailSchedule" asp-action="Create2">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="template-container w-100">
+                <div class="card my-2">
+                    <div class="card-header card-header-primary card-header-icon">
+                        <h4 class="card-title">Select Email Template</h4>
+                    </div>
+                    <div class="card-body">
+                        <table class="display table datatable responsive hover compact" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th class="th-description">Select</th>
+                                    <th class="th-description">Template Name</th>
+                                    <th class="th-description">Subject</th>
+                                    <th class="th-description">Header</th>
+                                    <th class="th-description">Subheader</th>
+                                    <th class="th-description">Body</th>
+                                    <th class="th-description">Footer</th>
+                                    <th class="th-description">Template Type</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var template in Model.EmailTemplates)
+                                {
+                                    <tr>
+                                        <td class="td-name">
+                                            <input class="template-radio" type="radio" asp-for="SelectedEmailTemplate" value="@template.UID">
+                                        </td>
+                                        <td class="td-name">@template.Name</td>
+                                        <td class="td-name">@template.Subject</td>
+                                        <td class="td-name">@template.Header</td>
+                                        <td class="td-name">@template.Subheader</td>
+                                        <td class="td-name">@template.Body</td>
+                                        <td class="td-name">@template.Footer</td>
+                                        <td class="td-name">@template.TemplateType</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="recipient-container w-100" style="display: none">
+                <hr />
+                <div class="card my-2">
+                    <div class="card-header card-header-primary card-header-icon">
+                        <h4 class="card-title">Enter recipients</h4>
+                        <p class="category text-dark">Select all recipients to send the email template to. Add a new recipient in the textbox below and click 'Add Recipient'.</p>
+                    </div>
+                    <div class="card-body">
+                        <div>
+                            <input class="input-recipient" type="email" maxlength="100" />
+                            <a class="btn-recipient btn btn-primary btn-sm text-white">Add Recipient</a>
+                        </div>
+                        <br />
+                        <table class="display table datatable-recipients responsive hover compact" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th class="th-description">Select All <input class="ml-2 recipient-checkbox-selectAll" type="checkbox" /></th>
+                                    <th class="th-description">Email Address</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (int i = 0; i < Model.Users.Count; i++)
+                                {
+                                    <tr>
+                                        <td class="td-name">
+                                            <input type="checkbox" class="recipient-checkbox" data-uid="@Model.Users[i]" />
+                                            <input class="recipient-selection" type="hidden" asp-for="SelectedRecipientEmailAddresses" value="@Model.Users[i].Email" disabled />
+                                        </td>
+                                        <td class="td-name"><span class="recipient-email">@Model.Users[i]</span></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <hr />
+                <div class="card my-2">
+                    <div class="card-header card-header-primary card-header-icon">
+                        <h4 class="card-title">Select a time schedule</h4>
+                        <p class="category text-dark">This will be the time that the email will be sent to the recipient(s).</p>
+                    </div>
+                    <div class="card-body">
+                        <input type="datetime-local" class="input-time-schedule form-control datetimepicker" asp-for="SendTimestamp" value="@DateTime.Today"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="submit-container text-center my-2">
+            <input type="submit" class="btn btn-success" value="Create Schedule" />
+            <a class="btn btn-outline-success" asp-area="Email" asp-controller="EmailSchedule" asp-action="Index">Cancel</a>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <environment include="Development">
+        <script src="~/js/areas/email/emailschedule/create.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/areas/email/emailschedule/create.min.js"></script>
+    </environment>
+} 
