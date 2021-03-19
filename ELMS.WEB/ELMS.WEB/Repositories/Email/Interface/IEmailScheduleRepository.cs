@@ -9,6 +9,8 @@ namespace ELMS.WEB.Repositories.Email.Interface
     {
         public Task<EmailScheduleEntity> CreateAsync(EmailScheduleEntity entity);
 
+        public Task<IList<EmailScheduleEntity>> BulkCreateAsync(IList<EmailScheduleEntity> entities);
+
         public Task<IList<EmailScheduleEntity>> GetAsync();
 
         public Task<IList<EmailScheduleEntity>> GetEmailsToSendAsync();

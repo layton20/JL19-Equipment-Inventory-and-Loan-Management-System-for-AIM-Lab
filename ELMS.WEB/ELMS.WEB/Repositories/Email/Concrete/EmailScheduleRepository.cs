@@ -18,6 +18,20 @@ namespace ELMS.WEB.Repositories.Email.Concrete
             __ApplicationContext = applicationContext ?? throw new ArgumentNullException(nameof(applicationContext));
         }
 
+        public async Task<IList<EmailScheduleEntity>> BulkCreateAsync(IList<EmailScheduleEntity> entities)
+        {
+            if (entities == null || entities.Count <= 0)
+            {
+                return null;
+            }
+
+            entities = entities.Where(x => x.UID != Guid.Empty).ToList();
+            await __ApplicationContext.EmailSchedules.AddRangeAsync(entities);
+            bool _Added = await __ApplicationContext.SaveChangesAsync() > 0;
+
+            return _Added ? entities : null;
+        }
+
         public async Task<EmailScheduleEntity> CreateAsync(EmailScheduleEntity entity)
         {
             if (entity == null || entity.UID == Guid.Empty)

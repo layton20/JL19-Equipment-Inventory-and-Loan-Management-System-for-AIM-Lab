@@ -124,50 +124,6 @@ namespace ELMS.WEB.Areas.Email.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> CreateModalAsync()
-        {
-            IList<Models.EmailTemplate.EmailTemplateViewModel> _Templates = (__Mapper.Map<IList<Models.EmailTemplate.EmailTemplateViewModel>>((await __EmailTemplateManager.GetAsync())?.EmailTemplates)) ?? new List<Models.EmailTemplate.EmailTemplateViewModel>();
-
-            if (_Templates.Count <= 0)
-            {
-                return Json(new { message = $"{GlobalConstants.ERROR_ACTION_PREFIX} create {ENTITY_NAME} because no Email templates exist." });
-            }
-
-            CreateCustomEmailScheduleViewModel _Model = new CreateCustomEmailScheduleViewModel
-            {
-                EmailTemplates = _Templates
-            };
-
-            return PartialView("_CreateModal", _Model);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> CreateAsync(CreateCustomEmailScheduleViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                ViewData["ErrorMessage"] = "Invalid form submission";
-                model.EmailTemplates = __Mapper.Map<IList<Models.EmailTemplate.EmailTemplateViewModel>>((await __EmailTemplateManager.GetAsync())?.EmailTemplates);
-                return PartialView("_CreateModal", model);
-            }
-
-            EmailScheduleResponse _Response = await __EmailScheduleManager.CreateAsync(new CreateEmailScheduleRequest
-            {
-                EmailTemplateUID = model.EmailTemplateUID,
-                EmailType = Enums.Email.EmailType.Custom,
-                RecipientEmailAddress = model.RecipientEmailAddress,
-                SendTimestamp = model.SendTimestamp
-            });
-
-            if (!_Response.Success)
-            {
-                return Json(new { message = _Response.Message });
-            }
-
-            return Json(new { success = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} created {ENTITY_NAME}." });
-        }
-
-        [HttpGet]
         public async Task<IActionResult> DeleteModalAsync(Guid uid)
         {
             if (uid == Guid.Empty)
@@ -278,7 +234,7 @@ namespace ELMS.WEB.Areas.Email.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create2Async(CreateViewModel model)
+        public async Task<IActionResult> CreateAsync(CreateViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -290,16 +246,17 @@ namespace ELMS.WEB.Areas.Email.Controllers
                 return View("Create", model);
             }
 
-            foreach (string recipient in model.SelectedRecipientEmailAddresses)
+            IList<CreateEmailScheduleRequest> _Requests = new List<CreateEmailScheduleRequest>();
+
+            await __EmailScheduleManager.BulkCreateAsync(model.SelectedRecipientEmailAddresses.Select(x =>
+            new CreateEmailScheduleRequest
             {
-                await __EmailScheduleManager.CreateAsync(new CreateEmailScheduleRequest
-                {
-                    EmailTemplateUID = model.SelectedEmailTemplate,
-                    EmailType = Enums.Email.EmailType.Custom,
-                    RecipientEmailAddress = recipient,
-                    SendTimestamp = model.SendTimestamp
-                });
+                EmailTemplateUID = model.SelectedEmailTemplate,
+                EmailType = Enums.Email.EmailType.Custom,
+                RecipientEmailAddress = x,
+                SendTimestamp = model.SendTimestamp
             }
+            ).ToList());
 
             return RedirectToAction("Index", new { successMessage = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} sent {ENTITY_NAME}s." });
         }

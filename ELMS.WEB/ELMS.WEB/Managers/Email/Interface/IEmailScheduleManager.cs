@@ -1,5 +1,4 @@
-﻿using ELMS.WEB.Areas.Email.Models.EmailSchedule;
-using ELMS.WEB.Models.Base.Response;
+﻿using ELMS.WEB.Models.Base.Response;
 using ELMS.WEB.Models.Email.Request;
 using ELMS.WEB.Models.Email.Response;
 using ELMS.WEB.Models.Equipment.Response;
@@ -13,6 +12,8 @@ namespace ELMS.WEB.Managers.Email.Interface
     public interface IEmailScheduleManager
     {
         public Task<EmailScheduleResponse> CreateAsync(CreateEmailScheduleRequest request);
+
+        public Task<IList<EmailScheduleResponse>> BulkCreateAsync(IList<CreateEmailScheduleRequest> requests);
 
         public Task<IList<EmailScheduleResponse>> GetAsync();
 
