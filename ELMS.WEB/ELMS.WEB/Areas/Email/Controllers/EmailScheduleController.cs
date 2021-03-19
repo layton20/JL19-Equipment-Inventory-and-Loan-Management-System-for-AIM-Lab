@@ -5,6 +5,7 @@ using ELMS.WEB.Managers.Email.Interface;
 using ELMS.WEB.Models.Base.Response;
 using ELMS.WEB.Models.Email.Request;
 using ELMS.WEB.Models.Email.Response;
+using ELMS.WEB.Repositories.Identity.Interface;
 using ELMS.WEB.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -28,10 +29,11 @@ namespace ELMS.WEB.Areas.Email.Controllers
         private readonly IEmailTemplateManager __EmailTemplateManager;
         private readonly IApplicationEmailSender __EmailSender;
         private readonly UserManager<IdentityUser> __UserManager;
+        private readonly IUserRepository __UserRepository;
 
         public EmailScheduleController(IMapper mapper, IEmailScheduleManager emailScheduleManager,
             IEmailScheduleParameterManager emailScheduleParameterManager, IEmailTemplateManager emailTemplateManager,
-            IApplicationEmailSender applicationEmailSender, UserManager<IdentityUser> userManager)
+            IApplicationEmailSender applicationEmailSender, UserManager<IdentityUser> userManager, IUserRepository userRepository)
         {
             __Mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             __EmailScheduleManager = emailScheduleManager ?? throw new ArgumentNullException(nameof(emailScheduleManager));
@@ -39,6 +41,7 @@ namespace ELMS.WEB.Areas.Email.Controllers
             __EmailTemplateManager = emailTemplateManager ?? throw new ArgumentNullException(nameof(emailTemplateManager));
             __EmailSender = applicationEmailSender ?? throw new ArgumentNullException(nameof(applicationEmailSender));
             __UserManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+            __UserRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
         }
 
         [HttpGet]
@@ -258,6 +261,47 @@ namespace ELMS.WEB.Areas.Email.Controllers
             }
 
             return RedirectToAction("Index", "EmailSchedule", new { Area = "Email", successMessage = $"Successfully attempted to send {ENTITY_NAME}s." });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> CreateViewAsync()
+        {
+            IList<EmailTemplateResponse> _Templates = (await __EmailTemplateManager.GetAsync())?.EmailTemplates ?? new List<EmailTemplateResponse>();
+
+            CreateViewModel _Model = new CreateViewModel
+            {
+                EmailTemplates = __Mapper.Map<IList<Models.EmailTemplate.EmailTemplateViewModel>>(_Templates),
+                Users = await __UserRepository.GetAsync()
+            };
+
+            return View("Create", _Model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create2Async(CreateViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                IList<EmailTemplateResponse> _Templates = (await __EmailTemplateManager.GetAsync())?.EmailTemplates ?? new List<EmailTemplateResponse>();
+
+                model.EmailTemplates = __Mapper.Map<IList<Models.EmailTemplate.EmailTemplateViewModel>>(_Templates);
+                model.Users = await __UserRepository.GetAsync();
+
+                return View("Create", model);
+            }
+
+            foreach (string recipient in model.SelectedRecipientEmailAddresses)
+            {
+                await __EmailScheduleManager.CreateAsync(new CreateEmailScheduleRequest
+                {
+                    EmailTemplateUID = model.SelectedEmailTemplate,
+                    EmailType = Enums.Email.EmailType.Custom,
+                    RecipientEmailAddress = recipient,
+                    SendTimestamp = model.SendTimestamp
+                });
+            }
+
+            return RedirectToAction("Index", new { successMessage = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} sent {ENTITY_NAME}s." });
         }
     }
 }

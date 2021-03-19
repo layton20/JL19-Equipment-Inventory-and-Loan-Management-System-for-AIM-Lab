@@ -187,7 +187,7 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
 
         [Authorize(Policy = "ViewEquipmentPolicy")]
         [HttpGet]
-        public async Task<IActionResult> ExpiredEquipmentView()
+        public async Task<IActionResult> ExpiredEquipmentViewAsync()
         {
             return await FilterIndexAsync(new FilterEquipmentViewModel
             {

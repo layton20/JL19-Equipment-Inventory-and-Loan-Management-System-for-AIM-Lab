@@ -112,5 +112,11 @@
     "inputFiles": [
       "wwwroot/js/site.js"
     ]
+  },
+  {
+    "outputFileName": "wwwroot/js/areas/email/emailschedule/create.min.js",
+    "inputFiles": [
+      "wwwroot/js/areas/email/emailschedule/create.js"
+    ]
   }
 ]

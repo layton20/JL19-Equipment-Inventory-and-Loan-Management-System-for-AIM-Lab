@@ -10,7 +10,7 @@ namespace ELMS.WEB.Areas.Admin.Models.Blacklist
         public string Email { get; set; }
 
         [Required]
-        public string Reason { get; set; } = "No reason provided.";
+        public string Reason { get; set; }
 
         [Required]
         [Display(Name = "Blacklist Type")]
