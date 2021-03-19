@@ -108,7 +108,7 @@
                         <p class="category text-dark">This will be the time that the email will be sent to the recipient(s).</p>
                     </div>
                     <div class="card-body">
-                        <input type="datetime-local" class="input-time-schedule form-control datetimepicker" asp-for="SendTimestamp" value="@DateTime.Today"/>
+                        <input type="datetime-local" class="input-time-schedule form-control datetimepicker" asp-for="SendTimestamp" value="@DateTime.Today" />
                     </div>
                 </div>
             </div>
@@ -127,4 +127,11 @@
     <environment exclude="Development">
         <script src="~/js/areas/email/emailschedule/create.min.js"></script>
     </environment>
+    <script>
+        $(document).ready(function () {
+            $('#navItemEmails').addClass('active');
+            $('#navCollapseEmails').addClass('show');
+            $('#navItemEmailSchedules').addClass('active');
+        });
+    </script>
 } 
