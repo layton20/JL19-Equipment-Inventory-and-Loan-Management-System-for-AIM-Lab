@@ -38,7 +38,7 @@ namespace ELMS.WEB.Jobs
             {
                 IEquipmentManager _EquipmentManager = scope.ServiceProvider.GetRequiredService<IEquipmentManager>();
 
-                IList<EquipmentResponse> _EquipmentToUpdateStatus = (await _EquipmentManager.GetAsync()).Equipments.Where(x => x.WarrantyExpirationDate <= DateTime.Now && x.Status != Enums.Equipment.Status.WrittenOff).ToList();
+                IList<EquipmentResponse> _EquipmentToUpdateStatus = (await _EquipmentManager.GetAsync()).Where(x => x.WarrantyExpirationDate <= DateTime.Now && x.Status != Enums.Equipment.Status.WrittenOff).ToList();
 
                 if (_EquipmentToUpdateStatus != null && _EquipmentToUpdateStatus?.Count > 0)
                 {
@@ -63,7 +63,7 @@ namespace ELMS.WEB.Jobs
                 IBlobManager _BlobManager = scope.ServiceProvider.GetRequiredService<IBlobManager>();
                 IBlobService _BlobService = scope.ServiceProvider.GetRequiredService<IBlobService>();
 
-                IList<Guid> _EquipmentList = (await _EquipmentManager.GetAsync()).Equipments.Select(x => x.UID).ToList();
+                IList<Guid> _EquipmentList = (await _EquipmentManager.GetAsync()).Select(x => x.UID).ToList();
                 IList<EquipmentBlobResponse> _EquipmentBlobs = (await _EquipmentBlobManager.GetAsync()).Where(x => !_EquipmentList.Contains(x.EquipmentUID)).ToList();
 
                 if (_EquipmentBlobs != null && _EquipmentBlobs.Count > 0)

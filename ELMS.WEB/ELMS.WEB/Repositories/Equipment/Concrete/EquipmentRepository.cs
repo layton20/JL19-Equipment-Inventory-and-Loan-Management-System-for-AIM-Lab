@@ -146,5 +146,10 @@ namespace ELMS.WEB.Repositories.Equipment.Concrete
 
             return await __Context.SaveChangesAsync() > 0;
         }
+
+        public async Task<IList<EquipmentEntity>> GetByStatusAsync(Status status)
+        {
+            return await __Context.Equipment.Where(x => x.Status == status)?.ToListAsync();
+        }
     }
 }

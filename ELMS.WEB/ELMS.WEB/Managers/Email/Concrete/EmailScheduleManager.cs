@@ -154,7 +154,7 @@ namespace ELMS.WEB.Managers.Email.Concrete
             {
                 EmailScheduleUID = _NearlyExpiredScheduleEntity.UID,
                 Name = "Warranty_Expiry_URL",
-                Value = $"{baseURL}/Equipment/Equipment/DetailsView?uid={equipment.UID}"
+                Value = $"{baseURL}/Equipment/Equipment/ExpiredView"
             };
             await __EmailScheduleParameterRepository.CreateAsync(__Mapper.Map<EmailScheduleParameterEntity>(_ParameterNearlyExpiredRequest));
 
@@ -171,7 +171,7 @@ namespace ELMS.WEB.Managers.Email.Concrete
             {
                 EmailScheduleUID = _ExpiredScheduleEntity.UID,
                 Name = "Warranty_Expiry_URL",
-                Value = $"{baseURL}/Equipment/Equipment/DetailsView?uid={equipment.UID}"
+                Value = $"{baseURL}/Equipment/Equipment/ExpiredView"
             };
             await __EmailScheduleParameterRepository.CreateAsync(__Mapper.Map<EmailScheduleParameterEntity>(_ParameterExpiredRequest));
 
@@ -195,7 +195,7 @@ namespace ELMS.WEB.Managers.Email.Concrete
                 {
                     EmailScheduleUID = _NearlyExpiredScheduleEntity.UID,
                     Name = "Warranty_Expiry_URL",
-                    Value = $"{baseURL}/Equipment/Equipment/DetailsView?uid={equipment.UID}"
+                    Value = $"{baseURL}/Equipment/Equipment/ExpiredView"
                 };
                 await __EmailScheduleParameterRepository.CreateAsync(__Mapper.Map<EmailScheduleParameterEntity>(_ParameterNearlyExpiredRequest));
 
@@ -212,7 +212,7 @@ namespace ELMS.WEB.Managers.Email.Concrete
                 {
                     EmailScheduleUID = _ExpiredScheduleEntity.UID,
                     Name = "Warranty_Expiry_URL",
-                    Value = $"{baseURL}/Equipment/Equipment/DetailsView?uid={equipment.UID}"
+                    Value = $"{baseURL}/Equipment/Equipment/ExpiredView"
                 };
                 await __EmailScheduleParameterRepository.CreateAsync(__Mapper.Map<EmailScheduleParameterEntity>(_ParameterExpiredRequest));
             }

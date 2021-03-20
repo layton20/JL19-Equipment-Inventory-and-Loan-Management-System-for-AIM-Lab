@@ -32,7 +32,7 @@ namespace ELMS.WEB.Areas.Admin.Controllers
         {
             IndexViewModel _Model = new IndexViewModel
             {
-                EquipmentList = __Mapper.Map<IList<NsEquipment.Models.EquipmentViewModel>>((await __EquipmentManager.GetAsync()).Equipments),
+                EquipmentList = __Mapper.Map<IList<NsEquipment.Models.EquipmentViewModel>>(await __EquipmentManager.GetAsync()),
                 Loans = __Mapper.Map<IList<NsLoan.Models.LoanViewModel>>(await __LoanManager.GetAsync()),
             };
 

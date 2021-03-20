@@ -211,7 +211,7 @@ namespace ELMS.WEB.Areas.Loan.Controllers
 
             CreateLoanViewModel _Model = new CreateLoanViewModel
             {
-                EquipmentSelectList = __Mapper.Map<IList<Equipment.Models.EquipmentViewModel>>((await __EquipmentManager.GetAsync()).Equipments.Where(x => x.Status == NsEquipmentEnum.Status.Available)),
+                EquipmentSelectList = __Mapper.Map<IList<Equipment.Models.EquipmentViewModel>>((await __EquipmentManager.GetAsync()).Where(x => x.Status == NsEquipmentEnum.Status.Available)),
                 UserSelectList = await __UserRepository.GetAsync(),
                 Blacklists = __Mapper.Map<IList<Admin.Models.Blacklist.BlacklistViewModel>>(await __BlacklistManager.GetAsync()),
             };
@@ -234,7 +234,7 @@ namespace ELMS.WEB.Areas.Loan.Controllers
                 }
                 _ExcludeEquipment = _ExcludeEquipment.Distinct().ToList();
 
-                model.EquipmentSelectList = __Mapper.Map<IList<Equipment.Models.EquipmentViewModel>>((await __EquipmentManager.GetAsync()).Equipments.Where(x => x.Status == NsEquipmentEnum.Status.Available && !_ExcludeEquipment.Contains(x.UID)));
+                model.EquipmentSelectList = __Mapper.Map<IList<Equipment.Models.EquipmentViewModel>>((await __EquipmentManager.GetAsync()).Where(x => x.Status == NsEquipmentEnum.Status.Available && !_ExcludeEquipment.Contains(x.UID)));
                 model.UserSelectList = await __UserRepository.GetAsync();
                 model.Blacklists = __Mapper.Map<IList<Admin.Models.Blacklist.BlacklistViewModel>>(await __BlacklistManager.GetAsync());
 
@@ -271,7 +271,7 @@ namespace ELMS.WEB.Areas.Loan.Controllers
 
                 CreateLoanViewModel _CreateLoanViewModel = new CreateLoanViewModel
                 {
-                    EquipmentSelectList = __Mapper.Map<IList<Equipment.Models.EquipmentViewModel>>((await __EquipmentManager.GetAsync()).Equipments.Where(x => x.Status == NsEquipmentEnum.Status.Available && !_ExcludeEquipment.Contains(x.UID))),
+                    EquipmentSelectList = __Mapper.Map<IList<Equipment.Models.EquipmentViewModel>>((await __EquipmentManager.GetAsync()).Where(x => x.Status == NsEquipmentEnum.Status.Available && !_ExcludeEquipment.Contains(x.UID))),
                     UserSelectList = await __UserRepository.GetAsync(),
                     Blacklists = __Mapper.Map<IList<Admin.Models.Blacklist.BlacklistViewModel>>(await __BlacklistManager.GetAsync())
                 };

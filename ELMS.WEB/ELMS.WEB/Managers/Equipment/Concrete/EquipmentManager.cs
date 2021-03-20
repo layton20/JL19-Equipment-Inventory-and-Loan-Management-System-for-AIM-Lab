@@ -76,14 +76,9 @@ namespace ELMS.WEB.Managers.Equipment.Concrete
             return _Response;
         }
 
-        public async Task<EquipmentListResponse> GetAsync()
+        public async Task<IList<EquipmentResponse>> GetAsync()
         {
-            EquipmentListResponse _Response = new EquipmentListResponse
-            {
-                Equipments = __Mapper.Map<IList<EquipmentResponse>>((await __EquipmentRepository.GetAsync()))
-            };
-
-            return _Response;
+            return __Mapper.Map<IList<EquipmentResponse>>(await __EquipmentRepository.GetAsync());
         }
 
         public async Task<EquipmentListResponse> GetAsync(IList<Guid> uids)
@@ -124,6 +119,11 @@ namespace ELMS.WEB.Managers.Equipment.Concrete
             }
 
             return _Response;
+        }
+
+        public async Task<IList<EquipmentResponse>> GetByStatusAsync(Status status)
+        {
+            return __Mapper.Map<IList<EquipmentResponse>>(await __EquipmentRepository.GetByStatusAsync(status));
         }
     }
 }

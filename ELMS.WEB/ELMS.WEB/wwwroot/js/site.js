@@ -61,6 +61,13 @@ tinymce.init({
     readonly: 1
 });
 
+jQuery.timeago.settings.strings.allowFuture = true;
+$('.timeago').each(function () {
+    var date = new Date($(this).data('date'));
+    var text = $(this).text();
+    $(this).text(`(${text} ${$.timeago(date)})`);
+});
+
 // FileInput
 $('.form-file-simple .inputFileVisible').click(function () {
     $(this).siblings('.inputFileHidden').trigger('click');

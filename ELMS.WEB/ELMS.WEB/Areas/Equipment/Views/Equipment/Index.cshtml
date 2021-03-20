@@ -44,16 +44,16 @@
 
     <div class="col-md-4">
         <div class="card card-stats mb-0">
-            <div class="card-header card-header-icon card-header-primary">
+            <div class="card-header card-header-icon card-header-danger">
                 <div class="card-icon">
-                    <i class="fas fa-warehouse"></i>
+                    <i class="fas fa-calendar-times"></i>
                 </div>
                 <div class="card-category">Warranty Expired Equipment</div>
                 <h2 class="card-title">@Model.WarrantyExpiredEquipmentCount</h2>
             </div>
             <div class="card-footer">
                 <div class="stats">
-                    <a asp-area="Equipment" asp-controller="Equipment" asp-action="ExpiredEquipmentView">View Expired Equipment</a>
+                    <a asp-area="Equipment" asp-controller="Equipment" asp-action="ExpiredView">View Expired Equipment</a>
                 </div>
             </div>
         </div>

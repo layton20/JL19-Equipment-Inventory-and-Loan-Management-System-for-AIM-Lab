@@ -1,0 +1,170 @@
+﻿@model ELMS.WEB.Areas.Equipment.Models.ExpiredViewModel
+
+@{
+    ViewData["Title"] = "Expiring Equipment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row bg-dark">
+        <div class="m-auto text-white text-center">
+            <div class="m-5">
+                <h1 class="display-2"><strong>@ViewData["Title"]</strong></h1>
+                <p>List of equipment with expired or soon-to-expire warranties. Renew or write-off the equipment.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="card mb-0">
+            <div class="card-header card-header-primary card-header-icon">
+                <h4 class="card-title">Expired Equipment</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="display table datatable responsive hover compact" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th class="th-description">Photo</th>
+                                <th class="th-description">Name</th>
+                                <th class="th-description">Serial Number</th>
+                                <th class="th-description">Status</th>
+                                <th class="th-description">Warranty Expiration</th>
+                                <th class="th-description">Purchase Date</th>
+                                <th class="th-description">Purchase Price</th>
+                                <th class="th-description">Replacement Price</th>
+                                <th class="th-description">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var equipment in Model.ExpiredEquipment)
+                            {
+                                <tr>
+                                    <td class="td-name">
+                                        <div class="justify-content-center py-2 text-center">
+                                            @if (equipment.Blobs.Count > 0)
+                                            {
+                                                <img class="" width="100" src="@equipment.Blobs[0].Path" alt="Image" />
+                                            }
+                                            else
+                                            {
+                                                <i class="far fa-image fa-6x text-gray"></i>
+                                            }
+                                        </div>
+                                    </td>
+                                    <td class="td-name">@equipment.Name</td>
+                                    <td class="td-name">@equipment.SerialNumber</td>
+                                    <td class="td-name">@equipment.Status</td>
+                                    <td class="td-name">
+                                        @if (equipment.WarrantyExpirationDate <= DateTime.Now)
+                                        {
+                                            <p class="text-danger m-0">@equipment.WarrantyExpirationDate</p>
+                                        }
+                                        else
+                                        {
+                                            <p class="text-warning m-0">@equipment.WarrantyExpirationDate</p>
+                                        }
+                                        <time class="timeago" data-date="@equipment.WarrantyExpirationDate.ToString("s")">Expired</time>
+                                    </td>
+                                    <td class="td-name">@equipment.PurchaseDate</td>
+                                    <td class="td-name">@equipment.PurchasePrice</td>
+                                    <td class="td-name">@equipment.ReplacementPrice</td>
+                                    <td class="td-name">
+                                        <div class="dropdown show">
+                                            <a class="btn btn-primary dropdown-toggle" href="javascript:;" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                Action
+                                            </a>
+
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                                <a class="dropdown-item" data-url="/Equipment/Equipment/WriteOffModal" data-uid="@equipment.UID" href="javascript:;"><i class="fas fa-calendar-times mr-2"></i>Write Off</a>
+                                                <a class="dropdown-item" asp-area="Equipment" asp-controller="Equipment" asp-action="DetailsView" asp-route-uid="@equipment.UID"><i class="fas fa-pen mr-2"></i>Edit</a>
+                                                <div class="dropdown-divider"></div>
+                                                <a class="dropdown-item deleteEquipment" href="#" data-url="/Equipment/Equipment/DeleteModal" data-uid="@equipment.UID"><i class="fas fa-trash mr-2"></i> Delete</a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-0">
+            <div class="card-header card-header-primary card-header-icon">
+                <h4 class="card-title">Written Off Equipment</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="display table datatable responsive hover compact" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th class="th-description">Photo</th>
+                                <th class="th-description">Name</th>
+                                <th class="th-description">Serial Number</th>
+                                <th class="th-description">Status</th>
+                                <th class="th-description">Warranty Expiration</th>
+                                <th class="th-description">Purchase Date</th>
+                                <th class="th-description">Purchase Price</th>
+                                <th class="th-description">Replacement Price</th>
+                                <th class="th-description">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var equipment in Model.WrittenOffEquipment)
+                            {
+                                <tr>
+                                    <td class="td-name">
+                                        <div class="justify-content-center py-2 text-center">
+                                            @if (equipment.Blobs.Count > 0)
+                                            {
+                                                <img class="" width="100" src="@equipment.Blobs[0].Path" alt="Image" />
+                                            }
+                                            else
+                                            {
+                                                <i class="far fa-image fa-6x text-gray"></i>
+                                            }
+                                        </div>
+                                    </td>
+                                    <td class="td-name">@equipment.Name</td>
+                                    <td class="td-name">@equipment.SerialNumber</td>
+                                    <td class="td-name">@equipment.Status</td>
+                                    <td class="td-name">
+                                        @if (equipment.WarrantyExpirationDate <= DateTime.Now)
+                                        {
+                                            <p class="text-danger m-0">@equipment.WarrantyExpirationDate</p>
+                                        }
+                                        else
+                                        {
+                                            <p class="text-warning m-0">@equipment.WarrantyExpirationDate</p>
+                                        }
+                                        <time class="timeago" data-date="@equipment.WarrantyExpirationDate.ToString("s")">Expired</time>
+                                    </td>
+                                    <td class="td-name">@equipment.PurchaseDate</td>
+                                    <td class="td-name">@equipment.PurchasePrice</td>
+                                    <td class="td-name">@equipment.ReplacementPrice</td>
+                                    <td class="td-name">
+                                        <div class="dropdown show">
+                                            <a class="btn btn-primary dropdown-toggle" href="javascript:;" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                Action
+                                            </a>
+
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                                <a class="dropdown-item" asp-area="Equipment" asp-controller="Equipment" asp-action="DetailsView" asp-route-uid="@equipment.UID"><i class="fas fa-pen mr-2"></i>Edit</a>
+                                                <div class="dropdown-divider"></div>
+                                                <a class="dropdown-item deleteEquipment" href="#" data-url="/Equipment/Equipment/DeleteModal" data-uid="@equipment.UID"><i class="fas fa-trash mr-2"></i> Delete</a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
