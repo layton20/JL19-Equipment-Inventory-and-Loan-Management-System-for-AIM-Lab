@@ -4,10 +4,8 @@ using ELMS.WEB.Managers.Equipment.Interfaces;
 using ELMS.WEB.Managers.Loan.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ELMS.WEB.Areas.Admin.Controllers
@@ -26,7 +24,8 @@ namespace ELMS.WEB.Areas.Admin.Controllers
             __LoanManager = loanManager ?? throw new ArgumentNullException(nameof(loanManager));
             __EquipmentManager = equipmentManager ?? throw new ArgumentNullException(nameof(equipmentManager));
         }
-        
+
+        [Authorize(Policy = "ViewCalendarPolicy")]
         [HttpGet]
         public async Task<IActionResult> Index()
         {

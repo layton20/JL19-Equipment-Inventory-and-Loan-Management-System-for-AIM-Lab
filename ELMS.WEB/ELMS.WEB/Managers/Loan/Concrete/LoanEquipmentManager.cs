@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using ELMS.WEB.Entities.Loan;
 using ELMS.WEB.Helpers;
 using ELMS.WEB.Managers.Loan.Interface;
 using ELMS.WEB.Models.Base.Response;

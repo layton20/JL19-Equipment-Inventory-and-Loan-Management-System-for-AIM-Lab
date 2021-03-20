@@ -44,6 +44,7 @@ namespace ELMS.WEB.Areas.Email.Controllers
             __UserRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
         }
 
+        [Authorize(Policy = "ViewEmailSchedulePolicy")]
         [HttpGet]
         public async Task<IActionResult> Index(string successMessage = "", string errorMessage = "")
         {
@@ -72,6 +73,7 @@ namespace ELMS.WEB.Areas.Email.Controllers
             return View(_Model);
         }
 
+        [Authorize(Policy = "ViewEmailSchedulePolicy")]
         [HttpPost]
         public async Task<IActionResult> FilterAsync(IndexViewModel model)
         {
@@ -123,6 +125,7 @@ namespace ELMS.WEB.Areas.Email.Controllers
             });
         }
 
+        [Authorize(Policy = "DeleteEmailSchedulePolicy")]
         [HttpGet]
         public async Task<IActionResult> DeleteModalAsync(Guid uid)
         {
@@ -150,6 +153,7 @@ namespace ELMS.WEB.Areas.Email.Controllers
             return PartialView("_DeleteModal", _Model);
         }
 
+        [Authorize(Policy = "DeleteEmailSchedulePolicy")]
         [HttpPost]
         public async Task<IActionResult> DeleteAsync(DeleteEmailScheduleViewModel model)
         {
@@ -169,6 +173,7 @@ namespace ELMS.WEB.Areas.Email.Controllers
             return Json(new { success = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} deleted {ENTITY_NAME}." });
         }
 
+        [Authorize(Policy = "SendEmailSchedulePolicy")]
         [HttpGet]
         public async Task<IActionResult> ForceSendModalAsync(Guid uid)
         {
@@ -186,6 +191,7 @@ namespace ELMS.WEB.Areas.Email.Controllers
             });
         }
 
+        [Authorize(Policy = "SendEmailSchedulePolicy")]
         [HttpPost]
         public async Task<IActionResult> ForceSendAsync(ForceSendScheduleViewModel model)
         {
@@ -219,6 +225,7 @@ namespace ELMS.WEB.Areas.Email.Controllers
             return RedirectToAction("Index", "EmailSchedule", new { Area = "Email", successMessage = $"Successfully attempted to send {ENTITY_NAME}s." });
         }
 
+        [Authorize(Policy = "CreateEmailSchedulePolicy")]
         [HttpGet]
         public async Task<IActionResult> CreateViewAsync()
         {
@@ -233,6 +240,7 @@ namespace ELMS.WEB.Areas.Email.Controllers
             return View("Create", _Model);
         }
 
+        [Authorize(Policy = "CreateEmailSchedulePolicy")]
         [HttpPost]
         public async Task<IActionResult> CreateAsync(CreateViewModel model)
         {

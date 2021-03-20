@@ -27,6 +27,8 @@ namespace ELMS.WEB.Areas.Admin.Controllers
             __BlacklistManager = blacklistManager ?? throw new ArgumentException(nameof(blacklistManager));
         }
 
+        [Authorize(Policy = "ViewBlacklistPolicy")]
+        [HttpGet]
         public async Task<IActionResult> IndexAsync(string successMessage = "", string errorMessage = "")
         {
             if (!String.IsNullOrWhiteSpace(successMessage))
@@ -46,12 +48,14 @@ namespace ELMS.WEB.Areas.Admin.Controllers
             return View(_Model);
         }
 
+        [Authorize(Policy = "CreateBlacklistPolicy")]
         [HttpGet]
         public async Task<IActionResult> CreateModalAsync()
         {
             return PartialView("_CreateModal", new CreateViewModel());
         }
 
+        [Authorize(Policy = "CreateBlacklistPolicy")]
         [HttpPost]
         public async Task<IActionResult> CreateAsync(CreateViewModel model)
         {
@@ -70,6 +74,7 @@ namespace ELMS.WEB.Areas.Admin.Controllers
             return Json(new { success = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} created {ENTITY_NAME}." });
         }
 
+        [Authorize(Policy = "EditBlacklistPolicy")]
         [HttpGet]
         public async Task<IActionResult> EditModalAsync(Guid uid)
         {
@@ -97,6 +102,7 @@ namespace ELMS.WEB.Areas.Admin.Controllers
             return PartialView("_EditModal", _Model);
         }
 
+        [Authorize(Policy = "EditBlacklistPolicy")]
         [HttpPost]
         public async Task<IActionResult> EditAsync(UpdateViewModel model)
         {
@@ -122,6 +128,7 @@ namespace ELMS.WEB.Areas.Admin.Controllers
             return Json(new { success = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} update {ENTITY_NAME}." });
         }
 
+        [Authorize(Policy = "DeleteBlacklistPolicy")]
         [HttpGet]
         public async Task<IActionResult> DeleteModalAsync(Guid uid)
         {
@@ -140,6 +147,7 @@ namespace ELMS.WEB.Areas.Admin.Controllers
             return PartialView("_DeleteModal", __Mapper.Map<DeleteViewModel>(_Blacklist));
         }
 
+        [Authorize(Policy = "DeleteBlacklistPolicy")]
         [HttpPost]
         public async Task<IActionResult> DeleteAsync(DeleteViewModel model)
         {
@@ -158,6 +166,7 @@ namespace ELMS.WEB.Areas.Admin.Controllers
             return Json(new { success = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} deleted {ENTITY_NAME}." });
         }
 
+        [Authorize(Policy = "ViewBlacklistPolicy")]
         [HttpGet]
         public async Task<IActionResult> DetailsModalAsync(string email)
         {

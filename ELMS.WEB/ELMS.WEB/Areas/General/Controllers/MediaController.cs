@@ -40,6 +40,7 @@ namespace ELMS.WEB.Areas.General.Controllers
             __EquipmentBlobManager = equipmentBlobManager ?? throw new ArgumentNullException(nameof(equipmentBlobManager));
         }
 
+        [Authorize(Policy = "EditEquipmentPolicy")]
         [HttpPost]
         public async Task<IActionResult> UploadEquipmentMediaAsync(DetailsViewModel model)
         {
@@ -67,6 +68,7 @@ namespace ELMS.WEB.Areas.General.Controllers
             return Redirect(Request.Headers["Referer"].ToString());
         }
 
+        [Authorize(Policy = "EditEquipmentPolicy")]
         [HttpGet]
         public async Task<IActionResult> DeleteEquipmentMediaModalAsync(Guid uid)
         {
@@ -88,6 +90,7 @@ namespace ELMS.WEB.Areas.General.Controllers
             });
         }
 
+        [Authorize(Policy = "EditEquipmentPolicy")]
         [HttpPost]
         public async Task<IActionResult> DeleteEquipmentMediaAsync(DeleteEquipmentMediaViewModel model)
         {

@@ -18,6 +18,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using NsModelPermission = ELMS.WEB.Areas.Admin.Models.Permission;
+
 using NsModelUser = ELMS.WEB.Areas.Admin.Models.User;
 
 namespace ELMS.WEB.Areas.Admin.Controllers
@@ -58,6 +59,7 @@ namespace ELMS.WEB.Areas.Admin.Controllers
             return View("Profile", _Model);
         }
 
+        [Authorize(Policy = "ViewUserPolicy")]
         [HttpGet]
         public async Task<IActionResult> Index(string successMessage = "", string errorMessage = "")
         {
@@ -79,6 +81,7 @@ namespace ELMS.WEB.Areas.Admin.Controllers
             return View(_Model);
         }
 
+        [Authorize(Policy = "ViewUserPolicy")]
         [HttpGet]
         public async Task<IActionResult> DetailsModalAsync(Guid uid)
         {
@@ -99,6 +102,7 @@ namespace ELMS.WEB.Areas.Admin.Controllers
             return PartialView("_DetailsModal", _Model);
         }
 
+        [Authorize(Policy = "ViewUserPolicy")]
         [HttpGet]
         public async Task<IActionResult> DetailsViewAsync(Guid uid, string successMessage, string errorMessage)
         {
@@ -164,6 +168,7 @@ namespace ELMS.WEB.Areas.Admin.Controllers
             return View("Details", _Model);
         }
 
+        [Authorize(Policy = "EditUserPolicy")]
         [HttpPost]
         public async Task<IActionResult> EditUserPermissionsAsync(NsModelUser.DetailsViewModel model)
         {
@@ -193,6 +198,7 @@ namespace ELMS.WEB.Areas.Admin.Controllers
             return RedirectToAction("DetailsView", "User", new { Area = "Admin", uid = model.UserClaims.UserID, successMessage = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} updated User Permissions." });
         }
 
+        [Authorize(Policy = "DeleteUserPolicy")]
         [HttpGet]
         public async Task<IActionResult> DeleteModalAsync(Guid uid)
         {
@@ -211,6 +217,7 @@ namespace ELMS.WEB.Areas.Admin.Controllers
             return View("_DeleteModal", _User);
         }
 
+        [Authorize(Policy = "DeleteUserPolicy")]
         [HttpPost]
         public async Task<IActionResult> DeleteAsync(IdentityUser model)
         {

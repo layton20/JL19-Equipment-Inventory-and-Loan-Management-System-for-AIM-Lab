@@ -8,6 +8,7 @@ namespace ELMS.WEB.Services
     public interface IApplicationEmailSender : IEmailSender
     {
         public Task<Response> SendGeneralEmail(string email, string subject, CustomEmailTemplate templateData);
+
         public Task<Response> SendLoanConfirmEmail(string email, string subject, ConfirmEmailTemplate templateData);
 
         public Task<Response> SendLoanConfirmedEmail(string email, string subject, ConfirmedEmailTemplate templateData);
@@ -19,6 +20,7 @@ namespace ELMS.WEB.Services
         public Task<Response> SendWarrantyExpiredEmail(string email, string subject, WarrantyExpiredTemplate templateData);
 
         public Task<Response> SendWarrantyNearlyExpiredEmail(string email, string subject, WarrantyNearlyExpiredTemplate templateData);
+
         public Task<Response> SendEmailConfirmationEmail(string email, string subject, EmailConfirmationTemplate templateData);
     }
 }

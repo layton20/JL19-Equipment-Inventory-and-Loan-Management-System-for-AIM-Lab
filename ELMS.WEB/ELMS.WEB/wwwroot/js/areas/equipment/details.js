@@ -2,8 +2,7 @@
     $('.btn-edit-submit').hide();
     $('.formDetails :input').prop("disabled", true);
 
-    $('.btn-edit-lock').click(function ()
-    {
+    $('.btn-edit-lock').click(function () {
         if ($('.formDetails :input').prop("disabled")) {
             $('.formDetails :input').prop("disabled", false);
             $(this).html('<i class="fas fa-lock mr-2"></i> Lock Edit Mode');

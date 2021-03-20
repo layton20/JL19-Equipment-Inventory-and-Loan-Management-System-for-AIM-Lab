@@ -37,6 +37,15 @@
         })
     }
 
+    $('.checkbox-permission-selectAll').click(function () {
+        if (this.checked) {
+            $('.checkbox-permission').prop('checked', true);
+        }
+        else {
+            $('.checkbox-permission').prop('checked', false);
+        }
+    });
+
     $('.viewUser').click(function () {
         loadModalAjax($(this).data('url'), `uid=${$(this).data('uid')}`);
     });

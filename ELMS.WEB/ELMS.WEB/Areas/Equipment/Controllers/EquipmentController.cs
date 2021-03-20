@@ -41,9 +41,9 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
         private readonly ILoanEquipmentManager __LoanEquipmentManager;
         private readonly String ENTITY_NAME = "Equipment";
 
-        public EquipmentController(IMapper mapper, IEquipmentManager equipmentManager, 
-            INoteManager noteManager, IEmailScheduleManager emailScheduleManager, 
-            IBlobManager blobManager, IEquipmentBlobManager equipmentBlobManager, 
+        public EquipmentController(IMapper mapper, IEquipmentManager equipmentManager,
+            INoteManager noteManager, IEmailScheduleManager emailScheduleManager,
+            IBlobManager blobManager, IEquipmentBlobManager equipmentBlobManager,
             IBlobService blobService, ILoanManager loanManager, ILoanEquipmentManager loanEquipmentManager)
         {
             __Mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
@@ -161,7 +161,6 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
 
             _Model.Equipment = __Mapper.Map<IList<EquipmentViewModel>>(_Responses);
 
-
             return View("Index", _Model);
         }
 
@@ -169,7 +168,7 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
         [HttpGet]
         public async Task<IActionResult> AvailableEquipmentViewAsync()
         {
-            return await FilterIndexAsync(new FilterEquipmentViewModel 
+            return await FilterIndexAsync(new FilterEquipmentViewModel
             {
                 Statuses = new List<Status>() { Status.Available }
             });

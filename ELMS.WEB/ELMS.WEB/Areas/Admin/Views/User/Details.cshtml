@@ -120,7 +120,10 @@
                                     <table class="display table datatable-permissions responsive hover compact w-100">
                                         <thead>
                                             <tr>
-                                                <th class="th-description">Selection</th>
+                                                <th class="th-description">
+                                                    <span>Selection</span>
+                                                    <input class="checkbox-permission-selectAll ml-2" type="checkbox" />
+                                                </th>
                                                 <th class="th-description">Category</th>
                                                 <th class="th-description">Permission Name</th>
                                             </tr>
@@ -130,7 +133,7 @@
                                             {
                                                 <tr>
                                                     <td class="td-name">
-                                                        <input type="checkbox" asp-for="@Model.UserClaims.Claims[i].IsSelected" />
+                                                        <input class="checkbox-permission" type="checkbox" asp-for="@Model.UserClaims.Claims[i].IsSelected" />
                                                         <input type="hidden" asp-for="@Model.UserClaims.Claims[i].ClaimType" />
                                                         <input type="hidden" asp-for="@Model.UserClaims.Claims[i].ClaimValue" />
                                                     </td>

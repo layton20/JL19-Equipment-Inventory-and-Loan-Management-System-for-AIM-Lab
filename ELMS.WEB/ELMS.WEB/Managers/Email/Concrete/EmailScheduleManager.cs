@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using ELMS.WEB.Areas.Email.Data;
-using ELMS.WEB.Areas.Email.Models.EmailSchedule;
 using ELMS.WEB.Entities.Email;
 using ELMS.WEB.Enums.Email;
 using ELMS.WEB.Helpers;
@@ -413,7 +412,7 @@ namespace ELMS.WEB.Managers.Email.Concrete
                     EmailTemplateResponse _Template = __Mapper.Map<EmailTemplateResponse>(await __EmailTemplateRepository.GetByUIDAsync(schedule.EmailTemplateUID));
                     if (_Template != null)
                     {
-                        await __EmailSender.SendGeneralEmail(schedule.RecipientEmailAddress, _Template.Subject, new CustomEmailTemplate 
+                        await __EmailSender.SendGeneralEmail(schedule.RecipientEmailAddress, _Template.Subject, new CustomEmailTemplate
                         {
                             Header_String = _Template.Header,
                             Body = _Template.Body,

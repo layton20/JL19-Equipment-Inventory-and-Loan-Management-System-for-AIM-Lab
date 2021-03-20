@@ -246,22 +246,22 @@
                                         <tbody>
                                             @foreach (var loan in Model.Loans)
                                             {
-                                            <tr>
-                                                <td class="td-name">@loan.UID</td>
-                                                <td class="td-name">@loan.LoanerEmail</td>
-                                                <td class="td-name">@loan.LoaneeEmail</td>
-                                                <td class="td-name">@loan.FromTimestamp</td>
-                                                <td class="td-name">@loan.ExpiryTimestamp</td>
-                                                <td class="td-name">@loan.Status</td>
-                                                <td class="td-name">
-                                                    <ul class="list-group list-group-flush">
-                                                        @foreach (var extension in loan.Extensions)
-                                                        {
-                                                            <li class="list-group-item pl-0">@extension.PreviousExpiryDate.ToShortDateString() <i class="fas fa-arrow-right"></i> @extension.NewExpiryDate.ToShortDateString()</li>
-                                                        }
-                                                    </ul>
-                                                </td>
-                                            </tr>
+                                                <tr>
+                                                    <td class="td-name">@loan.UID</td>
+                                                    <td class="td-name">@loan.LoanerEmail</td>
+                                                    <td class="td-name">@loan.LoaneeEmail</td>
+                                                    <td class="td-name">@loan.FromTimestamp</td>
+                                                    <td class="td-name">@loan.ExpiryTimestamp</td>
+                                                    <td class="td-name">@loan.Status</td>
+                                                    <td class="td-name">
+                                                        <ul class="list-group list-group-flush">
+                                                            @foreach (var extension in loan.Extensions)
+                                                            {
+                                                                <li class="list-group-item pl-0">@extension.PreviousExpiryDate.ToShortDateString() <i class="fas fa-arrow-right"></i> @extension.NewExpiryDate.ToShortDateString()</li>
+                                                            }
+                                                        </ul>
+                                                    </td>
+                                                </tr>
                                             }
                                         </tbody>
                                     </table>

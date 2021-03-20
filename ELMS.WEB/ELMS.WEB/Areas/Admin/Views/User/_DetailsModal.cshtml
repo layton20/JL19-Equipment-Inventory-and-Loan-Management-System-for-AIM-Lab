@@ -1,4 +1,5 @@
 ﻿@model ELMS.WEB.Areas.Admin.Models.User.DetailsViewModel
+@using ELMS.WEB.Enums.Loan
 
 <div class="modal-content">
     <div class="modal-header">
@@ -44,9 +45,9 @@
                     <div class="card-body">
                         <p><strong>Current Loans</strong></p>
                         @{
-                            var currentLoans = Model.Loans.Where(x => x.Status == ELMS.WEB.Enums.Loan.Status.ActiveLoan || x.Status == ELMS.WEB.Enums.Loan.Status.Pending)?.ToList();
+                            var currentLoans = Model.Loans.Where(x => x.Status == Status.ActiveLoan || x.Status == Status.Pending);
                         }
-                        @if (currentLoans != null && currentLoans.Count > 0)
+                        @if (currentLoans != null && currentLoans.Count() > 0)
                         {
                             <ul class="list-group rounded-0">
                                 @foreach (var currentLoan in currentLoans)
@@ -66,9 +67,9 @@
                         <br />
                         <p><strong>Past Loans</strong></p>
                         @{
-                            var historicLoans = Model.Loans.Where(x => x.Status == ELMS.WEB.Enums.Loan.Status.Complete || x.Status == ELMS.WEB.Enums.Loan.Status.EarlyComplete)?.ToList();
+                            var historicLoans = Model.Loans.Where(x => x.Status == Status.Complete || x.Status == Status.EarlyComplete);
                         }
-                        @if (historicLoans != null || historicLoans?.Count > 0)
+                        @if (historicLoans != null || historicLoans.Count() > 0)
                         {
                             <ul class="list-group rounded-0">
                                 @foreach (var historicLoan in historicLoans)
