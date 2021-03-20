@@ -1,11 +1,9 @@
 ﻿using ELMS.WEB.Areas.Email.Data;
-using ELMS.WEB.Enums.Email;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ELMS.WEB.Services

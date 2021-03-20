@@ -1,4 +1,6 @@
 ﻿@model ELMS.WEB.Areas.Admin.Models.Blacklist.IndexViewModel
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
 
 @{
     ViewData["Title"] = "Blacklist Management";
@@ -9,7 +11,10 @@
     <div class="row">
         <div class="w-100 justify-content-between">
             <div class="pull-right">
-                <a class="createBlacklist btn btn-success text-white" data-url="/Admin/Blacklist/CreateModal">New Blacklist</a>
+                @if ((await AuthorizationService.AuthorizeAsync(User, "CreateBlacklistPolicy")).Succeeded)
+                {
+                    <a class="createBlacklist btn btn-success text-white" data-url="/Admin/Blacklist/CreateModal">New Blacklist</a>
+                }
             </div>
         </div>
 
@@ -49,9 +54,15 @@
                                         </a>
 
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                            <a class="dropdown-item modifyBlacklist" href="javascript:;" data-url="/Admin/Blacklist/EditModal" data-uid="@blacklist.UID"><i class="fas fa-pen mr-2"></i>Edit</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item modifyBlacklist" href="javascript:;" data-url="/Admin/Blacklist/DeleteModal" data-uid="@blacklist.UID"><i class="fas fa-trash mr-2"></i>Delete</a>
+                                            @if ((await AuthorizationService.AuthorizeAsync(User, "EditBlacklistPolicy")).Succeeded)
+                                            {
+                                                <a class="dropdown-item modifyBlacklist" href="javascript:;" data-url="/Admin/Blacklist/EditModal" data-uid="@blacklist.UID"><i class="fas fa-pen mr-2"></i>Edit</a>
+                                            }
+                                            @if ((await AuthorizationService.AuthorizeAsync(User, "DeleteBlacklistPolicy")).Succeeded)
+                                            {
+                                                <div class="dropdown-divider"></div>
+                                                <a class="dropdown-item modifyBlacklist" href="javascript:;" data-url="/Admin/Blacklist/DeleteModal" data-uid="@blacklist.UID"><i class="fas fa-trash mr-2"></i>Delete</a>
+                                            }
                                         </div>
                                     </div>
                                 </td>

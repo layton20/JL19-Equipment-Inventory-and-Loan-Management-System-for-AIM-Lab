@@ -33,12 +33,6 @@ namespace ELMS.WEB.Areas.Report.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index()
-        {
-            return View();
-        }
-
-        [HttpGet]
         [Authorize(Policy = "ViewReportPolicy")]
         public async Task<IActionResult> EquipmentValueReportAsync()
         {

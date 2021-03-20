@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Threading.Tasks;
 
 namespace ELMS.WEB.Areas.Admin.Controllers
 {
@@ -39,22 +38,5 @@ namespace ELMS.WEB.Areas.Admin.Controllers
 
             return View(_Model);
         }
-
-        [HttpGet]
-        public async Task<IActionResult> CreateModalAsync()
-        {
-            CreateViewModel _Model = new CreateViewModel();
-            return PartialView("_CreateModal", _Model);
-        }
-
-        //[HttpPost]
-        //public async Task<IActionResult> CreateAsync(CreateViewModel model)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        ViewData["ErrorMessage"] = "Invalid form submission";
-        //        return PartialView("_CreateModal", model);
-        //    }
-        //}
     }
 }

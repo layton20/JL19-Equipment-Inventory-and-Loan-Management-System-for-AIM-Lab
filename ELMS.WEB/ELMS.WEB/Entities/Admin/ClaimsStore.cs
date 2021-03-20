@@ -59,11 +59,33 @@ namespace ELMS.WEB.Entities.Admin
             new Claim("Delete EmailTemplate", "Delete EmailTemplate"),
             new Claim("View EmailTemplate", "View EmailTemplate"),
 
+            // EmailSchedules
+            new Claim("Create EmailSchedule", "Create EmailSchedule"),
+            new Claim("Edit EmailSchedule", "Edit EmailSchedule"),
+            new Claim("Delete EmailSchedule", "Delete EmailSchedule"),
+            new Claim("View EmailSchedule", "View EmailSchedule"),
+            new Claim("Send EmailSchedule", "View EmailSchedule"),
+
             // EmailLogs
             new Claim("View EmailLog", "View EmailLog"),
 
             // JobScheduler
             new Claim("Run JobScheduler", "Run JobScheduler"),
+
+            // Calendar
+            new Claim("View Calendar", "View Calendar"),
+
+            // Blacklists
+            new Claim("Create Blacklist", "Create Blacklist"),
+            new Claim("Edit Blacklist", "Edit Blacklist"),
+            new Claim("Delete Blacklist", "Delete Blacklist"),
+            new Claim("View Blacklist", "View Blacklist"),
+
+            // Users
+            new Claim("Create User", "Create User"),
+            new Claim("Edit User", "Edit User"),
+            new Claim("Delete User", "Delete User"),
+            new Claim("View User", "View User"),
         };
     }
 }

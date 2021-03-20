@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
 using ELMS.WEB.Areas.Loan.Models;
 using ELMS.WEB.Areas.Loan.Models.LoanExtension;
-using NsEquipmentEnum = ELMS.WEB.Enums.Equipment;
-using NsGeneralEnum = ELMS.WEB.Enums.General;
 using ELMS.WEB.Enums.Loan;
 using ELMS.WEB.Helpers;
 using ELMS.WEB.Managers.Admin.Interfaces;
@@ -23,6 +21,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using NsEquipmentEnum = ELMS.WEB.Enums.Equipment;
+using NsGeneralEnum = ELMS.WEB.Enums.General;
 
 namespace ELMS.WEB.Areas.Loan.Controllers
 {
@@ -177,7 +177,7 @@ namespace ELMS.WEB.Areas.Loan.Controllers
         [Authorize(Policy = "ViewLoanPolicy")]
         public async Task<IActionResult> ActiveLoansViewAsync()
         {
-            return await FilterIndexAsync(new LoanFilterViewModel 
+            return await FilterIndexAsync(new LoanFilterViewModel
             {
                 Statuses = new List<Status>() { Status.ActiveLoan }
             });

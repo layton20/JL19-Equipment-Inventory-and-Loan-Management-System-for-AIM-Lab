@@ -120,7 +120,7 @@
                                     <partial name="Components/_BooleanIcon" model="@loan.AcceptedTermsAndConditions" />
                                 </td>
                                 <td class="td-name">
-                                    @{ 
+                                    @{
                                         var equipmentList = Model.Loans.FirstOrDefault(x => x.UID == loan.UID).EquipmentList;
                                     }
                                     <p>

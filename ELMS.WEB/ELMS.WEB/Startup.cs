@@ -142,9 +142,27 @@ namespace ELMS.WEB
                 options.AddPolicy("DeleteEmailTemplatePolicy", policy => policy.RequireClaim("Delete EmailTemplate", "true"));
                 options.AddPolicy("ViewEmailTemplatePolicy", policy => policy.RequireClaim("View EmailTemplate", "true"));
 
+                options.AddPolicy("CreateEmailSchedulePolicy", policy => policy.RequireClaim("Create EmailSchedule", "true"));
+                options.AddPolicy("EditEmailSchedulePolicy", policy => policy.RequireClaim("Edit EmailSchedule", "true"));
+                options.AddPolicy("DeleteEmailSchedulePolicy", policy => policy.RequireClaim("Delete EmailSchedule", "true"));
+                options.AddPolicy("ViewEmailSchedulePolicy", policy => policy.RequireClaim("View EmailSchedule", "true"));
+                options.AddPolicy("SendEmailSchedulePolicy", policy => policy.RequireClaim("Send EmailSchedule", "true"));
+
                 options.AddPolicy("ViewEmailLogPolicy", policy => policy.RequireClaim("View EmailLog", "true"));
 
                 options.AddPolicy("RunJobSchedulerPolicy", policy => policy.RequireClaim("Run JobScheduler", "true"));
+
+                options.AddPolicy("ViewCalendarPolicy", policy => policy.RequireClaim("View Calendar", "true"));
+
+                options.AddPolicy("CreateBlacklistPolicy", policy => policy.RequireClaim("Create Blacklist", "true"));
+                options.AddPolicy("EditBlacklistPolicy", policy => policy.RequireClaim("Edit Blacklist", "true"));
+                options.AddPolicy("DeleteBlacklistPolicy", policy => policy.RequireClaim("Delete Blacklist", "true"));
+                options.AddPolicy("ViewBlacklistPolicy", policy => policy.RequireClaim("View Blacklist", "true"));
+
+                options.AddPolicy("CreateUserPolicy", policy => policy.RequireClaim("Create User", "true"));
+                options.AddPolicy("EditUserPolicy", policy => policy.RequireClaim("Edit User", "true"));
+                options.AddPolicy("DeleteUserPolicy", policy => policy.RequireClaim("Delete User", "true"));
+                options.AddPolicy("ViewUserPolicy", policy => policy.RequireClaim("View User", "true"));
             });
         }
 

@@ -1,4 +1,6 @@
 ﻿@model ELMS.WEB.Areas.Admin.Models.Job.IndexViewModel
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
 
 @{
     ViewData["Title"] = "Job Scheduler";
@@ -33,13 +35,29 @@
                             <td class="td-name">Equipment Scheduler</td>
                             <td class="td-name">No description provided.</td>
                             <td class="td-name">
-                                @if (Model.JobRunningStatuses.IsEquipmentJobRunning)
+                                @if (!(await AuthorizationService.AuthorizeAsync(User, "RunJobSchedulerPolicy")).Succeeded)
                                 {
-                                    <a class="btn btn-primary disabled" href="#"><i class="fas fa-spinner mr-2 spinner"></i>Already Triggered</a>
+                                    if (Model.JobRunningStatuses.IsEquipmentJobRunning)
+                                    {
+                                        <a class="btn btn-primary text-white disabled"><i class="fas fa-play-circle mr-2"></i> Trigger Scheduler</a>
+                                    }
+                                    else
+                                    {
+                                        <a class="btn btn-primary disabled" href="#"><i class="fas fa-spinner mr-2 spinner"></i>Scheduler Running</a>
+                                    }
+
+                                    <p class="m-0">You do not have permission to interact with this scheduler. Please, speak to an Admin.</p>
                                 }
                                 else
                                 {
-                                    <a class="btn btn-primary" asp-area="Admin" asp-controller="Job" asp-action="StartEquipmentJob"><i class="fas fa-play-circle mr-2"></i> Trigger Scheduler</a>
+                                    @if (Model.JobRunningStatuses.IsEquipmentJobRunning)
+                                    {
+                                        <a class="btn btn-primary disabled" href="#"><i class="fas fa-spinner mr-2 spinner"></i>Scheduler Running</a>
+                                    }
+                                    else
+                                    {
+                                        <a class="btn btn-primary" asp-area="Admin" asp-controller="Job" asp-action="StartEquipmentJob"><i class="fas fa-play-circle mr-2"></i> Trigger Scheduler</a>
+                                    }
                                 }
                             </td>
                         </tr>
@@ -47,13 +65,29 @@
                             <td class="td-name">Loan Scheduler</td>
                             <td class="td-name">No description provided.</td>
                             <td class="td-name">
-                                @if (Model.JobRunningStatuses.IsLoanJobRunning)
+                                @if (!(await AuthorizationService.AuthorizeAsync(User, "RunJobSchedulerPolicy")).Succeeded)
                                 {
-                                    <a class="btn btn-primary disabled" href="#"><i class="fas fa-spinner mr-2 spinner"></i>Already Triggered</a>
+                                    if (Model.JobRunningStatuses.IsLoanJobRunning)
+                                    {
+                                        <a class="btn btn-primary text-white disabled"><i class="fas fa-play-circle mr-2"></i> Trigger Scheduler</a>
+                                    }
+                                    else
+                                    {
+                                        <a class="btn btn-primary disabled" href="#"><i class="fas fa-spinner mr-2 spinner"></i>Scheduler Running</a>
+                                    }
+
+                                    <p class="m-0">You do not have permission to interact with this scheduler. Please, speak to an Admin.</p>
                                 }
                                 else
                                 {
-                                    <a class="btn btn-primary" asp-area="Admin" asp-controller="Job" asp-action="StartLoanJob"><i class="fas fa-play-circle mr-2"></i>Trigger Scheduler</a>
+                                    @if (Model.JobRunningStatuses.IsLoanJobRunning)
+                                    {
+                                        <a class="btn btn-primary disabled" href="#"><i class="fas fa-spinner mr-2 spinner"></i>Scheduler Running</a>
+                                    }
+                                    else
+                                    {
+                                        <a class="btn btn-primary" asp-area="Admin" asp-controller="Job" asp-action="StartLoanJob"><i class="fas fa-play-circle mr-2"></i>Trigger Scheduler</a>
+                                    }
                                 }
                             </td>
                         </tr>
@@ -61,13 +95,29 @@
                             <td class="td-name">Email Scheduler</td>
                             <td class="td-name">No description provided.</td>
                             <td class="td-name">
-                                @if (Model.JobRunningStatuses.IsEmailJobRunning)
+                                @if (!(await AuthorizationService.AuthorizeAsync(User, "RunJobSchedulerPolicy")).Succeeded)
                                 {
-                                    <a class="btn btn-primary disabled" href="#"><i class="fas fa-spinner mr-2 spinner"></i>Already Triggered</a>
+                                    if (Model.JobRunningStatuses.IsEmailJobRunning)
+                                    {
+                                        <a class="btn btn-primary text-white disabled"><i class="fas fa-play-circle mr-2"></i> Trigger Scheduler</a>
+                                    }
+                                    else
+                                    {
+                                        <a class="btn btn-primary disabled" href="#"><i class="fas fa-spinner mr-2 spinner"></i>Scheduler Running</a>
+                                    }
+
+                                    <p class="m-0">You do not have permission to interact with this scheduler. Please, speak to an Admin.</p>
                                 }
                                 else
                                 {
-                                    <a class="btn btn-primary" asp-area="Admin" asp-controller="Job" asp-action="StartEmailJob"><i class="fas fa-play-circle mr-2"></i>Trigger Scheduler</a>
+                                    @if (Model.JobRunningStatuses.IsEmailJobRunning)
+                                    {
+                                        <a class="btn btn-primary disabled" href="#"><i class="fas fa-spinner mr-2 spinner"></i>Scheduler Running</a>
+                                    }
+                                    else
+                                    {
+                                        <a class="btn btn-primary" asp-area="Admin" asp-controller="Job" asp-action="StartEmailJob"><i class="fas fa-play-circle mr-2"></i>Trigger Scheduler</a>
+                                    }
                                 }
                             </td>
                         </tr>

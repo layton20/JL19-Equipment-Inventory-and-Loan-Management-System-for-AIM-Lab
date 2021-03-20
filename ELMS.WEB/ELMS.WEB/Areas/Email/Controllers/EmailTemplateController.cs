@@ -28,6 +28,7 @@ namespace ELMS.WEB.Areas.Email.Controllers
             __EmailTemplateManager = emailTemplateManager ?? throw new ArgumentNullException(nameof(emailTemplateManager));
         }
 
+        [Authorize(Policy = "ViewEmailTemplatePolicy")]
         [HttpGet]
         public async Task<IActionResult> IndexAsync(string successMessage = "", string errorMessage = "")
         {
@@ -48,6 +49,7 @@ namespace ELMS.WEB.Areas.Email.Controllers
             return View("Index", _Model);
         }
 
+        [Authorize(Policy = "CreateEmailTemplatePolicy")]
         [HttpGet]
         public async Task<IActionResult> CreateViewAsync()
         {
@@ -55,6 +57,7 @@ namespace ELMS.WEB.Areas.Email.Controllers
             return View("Create", _Model);
         }
 
+        [Authorize(Policy = "CreateEmailTemplatePolicy")]
         [HttpPost]
         public async Task<IActionResult> CreateAsync(CreateEmailTemplateViewModel model)
         {
@@ -75,6 +78,7 @@ namespace ELMS.WEB.Areas.Email.Controllers
             return RedirectToAction("Index", new { success = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} created {ENTITY_NAME}." });
         }
 
+        [Authorize(Policy = "EditEmailTemplatePolicy")]
         [HttpGet]
         public async Task<IActionResult> EditViewAsync(Guid uid)
         {
@@ -88,6 +92,7 @@ namespace ELMS.WEB.Areas.Email.Controllers
             return View("Edit", __Mapper.Map<EmailTemplateViewModel>(_Response));
         }
 
+        [Authorize(Policy = "EditEmailTemplatePolicy")]
         [HttpPost]
         public async Task<IActionResult> EditAsync(EmailTemplateViewModel model)
         {
@@ -106,6 +111,7 @@ namespace ELMS.WEB.Areas.Email.Controllers
             return RedirectToAction("Index", new { success = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} created {ENTITY_NAME}." });
         }
 
+        [Authorize(Policy = "DeleteEmailTemplatePolicy")]
         [HttpGet]
         public async Task<IActionResult> DeleteModalAsync(Guid uid)
         {
@@ -119,6 +125,7 @@ namespace ELMS.WEB.Areas.Email.Controllers
             return PartialView("_DeleteModal", __Mapper.Map<EmailTemplateViewModel>(_Response));
         }
 
+        [Authorize(Policy = "DeleteEmailTemplatePolicy")]
         [HttpPost]
         public async Task<IActionResult> DeleteAsync(Guid uid)
         {
@@ -138,6 +145,7 @@ namespace ELMS.WEB.Areas.Email.Controllers
             return Json(new { success = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} created {ENTITY_NAME}." });
         }
 
+        [Authorize(Policy = "ViewEmailTemplatePolicy")]
         [HttpGet]
         public async Task<IActionResult> DetailsModalAsync(Guid uid)
         {
