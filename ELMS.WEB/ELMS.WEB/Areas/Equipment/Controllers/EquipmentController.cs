@@ -70,7 +70,7 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
                 ViewData["SuccessMessage"] = successMessage;
             }
 
-            IList<EquipmentViewModel> _EquipmentList = __Mapper.Map<IList<EquipmentViewModel>>((await __EquipmentManager.GetAsync()).Equipments);
+            IList<EquipmentViewModel> _EquipmentList = __Mapper.Map<IList<EquipmentViewModel>>(await __EquipmentManager.GetAsync());
             foreach (EquipmentViewModel equipment in _EquipmentList)
             {
                 equipment.Blobs = (await __EquipmentBlobManager.GetAsync(equipment.UID)).Select(x => x.Blob).ToList();
@@ -94,72 +94,72 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
                 return RedirectToAction("Index");
             }
 
-            EquipmentListResponse _Equipment = await __EquipmentManager.GetAsync();
+            IList<EquipmentResponse> _Responses = await __EquipmentManager.GetAsync();
 
             IndexViewModel _Model = new IndexViewModel()
             {
                 Filter = filter,
-                AvailableEquipmentCount = _Equipment.Equipments.Where(x => x.Status == Status.Available).Count(),
-                OnLoanEquipmentCount = _Equipment.Equipments.Where(x => x.Status == Status.PendingLoan || x.Status == Status.ActiveLoan).Count(),
-                WarrantyExpiredEquipmentCount = _Equipment.Equipments.Where(x => x.Status == Status.WrittenOff).Count()
+                AvailableEquipmentCount = _Responses.Where(x => x.Status == Status.Available).Count(),
+                OnLoanEquipmentCount = _Responses.Where(x => x.Status == Status.PendingLoan || x.Status == Status.ActiveLoan).Count(),
+                WarrantyExpiredEquipmentCount = _Responses.Where(x => x.Status == Status.WrittenOff).Count()
             };
 
             if (!string.IsNullOrWhiteSpace(filter.Name))
             {
-                _Equipment.Equipments = _Equipment.Equipments.Where(x => x.Name.ToUpper().Contains(filter.Name.ToUpper())).ToList();
+                _Responses = _Responses.Where(x => x.Name.ToUpper().Contains(filter.Name.ToUpper())).ToList();
             }
 
             if (!string.IsNullOrWhiteSpace(filter.Description))
             {
-                _Equipment.Equipments = _Equipment.Equipments.Where(x => x.Name.ToUpper().Contains(filter.Description.ToUpper())).ToList();
+                _Responses = _Responses.Where(x => x.Name.ToUpper().Contains(filter.Description.ToUpper())).ToList();
             }
 
             if (!string.IsNullOrWhiteSpace(filter.SerialNumber))
             {
-                _Equipment.Equipments = _Equipment.Equipments.Where(x => x.Name.ToUpper().Contains(filter.SerialNumber.ToUpper())).ToList();
+                _Responses = _Responses.Where(x => x.Name.ToUpper().Contains(filter.SerialNumber.ToUpper())).ToList();
             }
 
             if (filter.PurchasePriceFrom >= 0)
             {
-                _Equipment.Equipments = _Equipment.Equipments.Where(x => x.PurchasePrice >= filter.PurchasePriceFrom).ToList();
+                _Responses = _Responses.Where(x => x.PurchasePrice >= filter.PurchasePriceFrom).ToList();
             }
 
             if (filter.PurchasePriceFrom <= double.MaxValue)
             {
-                _Equipment.Equipments = _Equipment.Equipments.Where(x => x.PurchasePrice <= filter.PurchasePriceTo).ToList();
+                _Responses = _Responses.Where(x => x.PurchasePrice <= filter.PurchasePriceTo).ToList();
             }
 
             if (filter.PurchaseDateFrom != DateTime.MinValue)
             {
-                _Equipment.Equipments = _Equipment.Equipments.Where(x => x.PurchaseDate >= filter.PurchaseDateFrom).ToList();
+                _Responses = _Responses.Where(x => x.PurchaseDate >= filter.PurchaseDateFrom).ToList();
             }
 
             if (filter.PurchaseDateTo != DateTime.MinValue)
             {
-                _Equipment.Equipments = _Equipment.Equipments.Where(x => x.PurchaseDate <= filter.PurchaseDateTo).ToList();
+                _Responses = _Responses.Where(x => x.PurchaseDate <= filter.PurchaseDateTo).ToList();
             }
 
             if (filter.WarrantyExpirationDateFrom != DateTime.MinValue)
             {
-                _Equipment.Equipments = _Equipment.Equipments.Where(x => x.WarrantyExpirationDate >= filter.WarrantyExpirationDateFrom).ToList();
+                _Responses = _Responses.Where(x => x.WarrantyExpirationDate >= filter.WarrantyExpirationDateFrom).ToList();
             }
 
             if (filter.WarrantyExpirationDateTo != DateTime.MinValue)
             {
-                _Equipment.Equipments = _Equipment.Equipments.Where(x => x.WarrantyExpirationDate <= filter.WarrantyExpirationDateTo).ToList();
+                _Responses = _Responses.Where(x => x.WarrantyExpirationDate <= filter.WarrantyExpirationDateTo).ToList();
             }
 
             if (filter.Statuses != null && filter.Statuses?.Count > 0)
             {
-                _Equipment.Equipments = _Equipment.Equipments.Where(x => filter.Statuses.Contains(x.Status)).ToList();
+                _Responses = _Responses.Where(x => filter.Statuses.Contains(x.Status)).ToList();
             }
 
-            foreach (EquipmentResponse equipment in _Equipment.Equipments)
+            foreach (EquipmentResponse equipment in _Responses)
             {
                 equipment.Blobs = (await __EquipmentBlobManager.GetAsync(equipment.UID)).Select(x => x.Blob).ToList();
             }
 
-            _Model.Equipment = __Mapper.Map<IList<EquipmentViewModel>>(_Equipment.Equipments);
+            _Model.Equipment = __Mapper.Map<IList<EquipmentViewModel>>(_Responses);
 
 
             return View("Index", _Model);
@@ -414,6 +414,22 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
             }
 
             return RedirectToAction("Index", "Equipment", new { Area = "Equipment", successMessage = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} deleted {ENTITY_NAME}" });
+        }
+
+        [Authorize(Policy = "ViewEquipmentPolicy")]
+        [HttpGet]
+        public async Task<IActionResult> ExpiredViewAsync()
+        {
+            IList<EquipmentResponse> _ExpiredEquipment = (await __EquipmentManager.GetAsync())?.Where(x => x.WarrantyExpirationDate <= DateTime.Now && x.Status != Status.WrittenOff).ToList();
+            IList<EquipmentResponse> _WrittenOffEquipment = await __EquipmentManager.GetByStatusAsync(Status.WrittenOff);
+
+            ExpiredViewModel _Model = new ExpiredViewModel
+            {
+                ExpiredEquipment = __Mapper.Map<IList<EquipmentViewModel>>(_ExpiredEquipment),
+                WrittenOffEquipment = __Mapper.Map<IList<EquipmentViewModel>>(_WrittenOffEquipment)
+            };
+
+            return View("Expired", _Model);
         }
     }
 }

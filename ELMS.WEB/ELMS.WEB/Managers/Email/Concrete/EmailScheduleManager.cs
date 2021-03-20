@@ -96,6 +96,26 @@ namespace ELMS.WEB.Managers.Email.Concrete
             return _EmailScheduleResponse;
         }
 
+        public async Task<IList<EmailScheduleResponse>> BulkCreateAsync(IList<CreateEmailScheduleRequest> requests)
+        {
+            IList<EmailScheduleResponse> _Responses = new List<EmailScheduleResponse>();
+
+            if (requests != null && requests.Count > 0)
+            {
+                foreach (CreateEmailScheduleRequest request in requests)
+                {
+                    EmailScheduleResponse _Response = await CreateAsync(request);
+
+                    if (_Response != null && _Response.Success)
+                    {
+                        _Responses.Add(_Response);
+                    }
+                }
+            }
+
+            return _Responses;
+        }
+
         public async Task<IList<EmailScheduleResponse>> GetAsync()
         {
             return __Mapper.Map<IList<EmailScheduleResponse>>(await __EmailScheduleRepository.GetAsync());
@@ -134,7 +154,7 @@ namespace ELMS.WEB.Managers.Email.Concrete
             {
                 EmailScheduleUID = _NearlyExpiredScheduleEntity.UID,
                 Name = "Warranty_Expiry_URL",
-                Value = $"{baseURL}/Equipment/Equipment/DetailsView?uid={equipment.UID}"
+                Value = $"{baseURL}/Equipment/Equipment/ExpiredView"
             };
             await __EmailScheduleParameterRepository.CreateAsync(__Mapper.Map<EmailScheduleParameterEntity>(_ParameterNearlyExpiredRequest));
 
@@ -151,7 +171,7 @@ namespace ELMS.WEB.Managers.Email.Concrete
             {
                 EmailScheduleUID = _ExpiredScheduleEntity.UID,
                 Name = "Warranty_Expiry_URL",
-                Value = $"{baseURL}/Equipment/Equipment/DetailsView?uid={equipment.UID}"
+                Value = $"{baseURL}/Equipment/Equipment/ExpiredView"
             };
             await __EmailScheduleParameterRepository.CreateAsync(__Mapper.Map<EmailScheduleParameterEntity>(_ParameterExpiredRequest));
 
@@ -175,7 +195,7 @@ namespace ELMS.WEB.Managers.Email.Concrete
                 {
                     EmailScheduleUID = _NearlyExpiredScheduleEntity.UID,
                     Name = "Warranty_Expiry_URL",
-                    Value = $"{baseURL}/Equipment/Equipment/DetailsView?uid={equipment.UID}"
+                    Value = $"{baseURL}/Equipment/Equipment/ExpiredView"
                 };
                 await __EmailScheduleParameterRepository.CreateAsync(__Mapper.Map<EmailScheduleParameterEntity>(_ParameterNearlyExpiredRequest));
 
@@ -192,7 +212,7 @@ namespace ELMS.WEB.Managers.Email.Concrete
                 {
                     EmailScheduleUID = _ExpiredScheduleEntity.UID,
                     Name = "Warranty_Expiry_URL",
-                    Value = $"{baseURL}/Equipment/Equipment/DetailsView?uid={equipment.UID}"
+                    Value = $"{baseURL}/Equipment/Equipment/ExpiredView"
                 };
                 await __EmailScheduleParameterRepository.CreateAsync(__Mapper.Map<EmailScheduleParameterEntity>(_ParameterExpiredRequest));
             }

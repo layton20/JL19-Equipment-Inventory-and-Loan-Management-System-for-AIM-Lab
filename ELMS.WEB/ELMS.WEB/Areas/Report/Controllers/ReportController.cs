@@ -44,12 +44,10 @@ namespace ELMS.WEB.Areas.Report.Controllers
         {
             EquipmentValueReportViewModel _Model = new EquipmentValueReportViewModel();
 
-            EquipmentListResponse _EquipmentList = await __EquipmentManager.GetAsync();
-
             return View(new EquipmentValueReportViewModel
             {
                 Filter = new EquipmentValueReportFilterViewModel(),
-                ReportItems = __Mapper.Map<IList<EquipmentValueReportItemViewModel>>(_EquipmentList.Equipments)
+                ReportItems = __Mapper.Map<IList<EquipmentValueReportItemViewModel>>(await __EquipmentManager.GetAsync())
             });
         }
 
@@ -57,7 +55,7 @@ namespace ELMS.WEB.Areas.Report.Controllers
         [Authorize(Policy = "FilterReportPolicy")]
         public async Task<IActionResult> EquipmentValueReportFilterAsync(EquipmentValueReportFilterViewModel filter)
         {
-            IList<EquipmentResponse> _EquipmentResponses = (await __EquipmentManager.GetAsync()).Equipments;
+            IList<EquipmentResponse> _EquipmentResponses = await __EquipmentManager.GetAsync();
 
             if (!string.IsNullOrWhiteSpace(filter.Name))
             {
