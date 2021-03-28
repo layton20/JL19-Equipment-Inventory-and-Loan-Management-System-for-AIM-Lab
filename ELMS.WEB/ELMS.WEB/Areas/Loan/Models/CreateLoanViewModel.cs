@@ -22,12 +22,12 @@ namespace ELMS.WEB.Areas.Loan.Models
 
         [Required]
         [FutureOrTodayDate]
-        [Display(Name = "From Date")]
+        [Display(Name = "Loan From")]
         public DateTime FromTimestamp { get; set; } = DateTime.Today;
 
         [Required]
         [FutureDate]
-        [Display(Name = "Expiry Date")]
+        [Display(Name = "Loan To")]
         public DateTime ExpiryTimestamp { get; set; } = DateTime.Today.AddDays(1);
 
         [Required(ErrorMessage = "Select at least one equipment to loan off")]

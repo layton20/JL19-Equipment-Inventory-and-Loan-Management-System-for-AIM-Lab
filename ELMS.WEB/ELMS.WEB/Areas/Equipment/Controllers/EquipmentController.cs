@@ -86,7 +86,7 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
         }
 
         [Authorize(Policy = "ViewEquipmentPolicy")]
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> FilterIndexAsync(FilterEquipmentViewModel filter)
         {
             if (filter == null)
