@@ -82,12 +82,15 @@ body {
     font-size: .06875rem;
 }
 
-.validation-summary-errors {
+.validation-summary-errors-modal {
+    margin: 1rem 0 0 0;
 }
 
-    .validation-summary-errors > ul {
-        margin: 1rem 0 0 0;
-    }
+.validation-summary-errors > ul {
+    list-style-type: none;
+    padding-left: 0;
+    margin: 0 0 1rem 0;
+}
 
 .border-gray {
     border-color: #bdc3c7;

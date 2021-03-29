@@ -10,7 +10,7 @@
         </div>
     </div>
     <form id="formCreateExtension" class="formCreateExtension" asp-area="Loan" asp-controller="LoanExtension" asp-action="Create" data-uid="@Model.LoanUID">
-        <div asp-validation-summary="All" class="text-danger"></div>
+        <div asp-validation-summary="All" class="text-danger asp-validation-summary-modal"></div>
         <input type="hidden" asp-for="LoanUID" />
         <input type="hidden" asp-for="ExtenderEmail" />
         <div class="modal-body">

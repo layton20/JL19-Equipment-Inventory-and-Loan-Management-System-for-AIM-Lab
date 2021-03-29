@@ -1,4 +1,5 @@
-﻿using ELMS.WEB.Enums.Equipment;
+﻿using ELMS.WEB.CustomDataAnnotations;
+using ELMS.WEB.Enums.Equipment;
 using ELMS.WEB.Models.General.Response;
 using System;
 using System.Collections.Generic;
@@ -15,18 +16,23 @@ namespace ELMS.WEB.Areas.Equipment.Models
         public Guid UID { get; set; }
 
         [Required]
+        [MaxLength(50)]
         public string Name { get; set; }
 
+        [MaxLength(1000)]
         public string Description { get; set; } = "No description set.";
 
         [Required]
+        [MaxLength(50)]
         [Display(Name = "Serial Number")]
         public string SerialNumber { get; set; }
 
         [Display(Name = "Purchase Price (£)")]
+        [Range(0, 999999)]
         public double PurchasePrice { get; set; }
 
         [Display(Name = "Replacement Price (£)")]
+        [Range(0, 999999)]
         public double ReplacementPrice { get; set; }
 
         [Display(Name = "Purchase Date")]
@@ -34,6 +40,7 @@ namespace ELMS.WEB.Areas.Equipment.Models
 
         [Required]
         [Display(Name = "Warranty Expiration Date")]
+        [FutureDate]
         public DateTime WarrantyExpirationDate { get; set; }
 
         [Required]

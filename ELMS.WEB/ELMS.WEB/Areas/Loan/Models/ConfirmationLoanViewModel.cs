@@ -15,6 +15,7 @@ namespace ELMS.WEB.Areas.Loan.Models
 
         [Required]
         [FutureOrTodayDate]
+        [DateLessThan("ExpiryTimestamp")]
         public DateTime FromTimestamp { get; set; }
 
         [Required]

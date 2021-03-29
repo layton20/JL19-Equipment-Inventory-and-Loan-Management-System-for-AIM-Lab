@@ -50,6 +50,6 @@
     });
 
     $('.deleteEquipment').click(function () {
-        loadModalAjax($(this).data('url'), `EquipmentUID=${$(this).data('uid')}`);
+        loadModalAjax($(this).data('url'), `uid=${$(this).data('uid')}`);
     });
 });

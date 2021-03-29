@@ -19,7 +19,7 @@
     </div>
     <div class="modal-footer">
         <form id="formUser" asp-area="Admin" asp-controller="User" asp-action="Delete">
-            <div asp-validation-summary="All" class="text-danger"></div>
+            <div asp-validation-summary="All" class="text-danger asp-validation-summary-modal"></div>
             <input type="hidden" asp-for="Id" />
             <button type="submit" class="btn border border-danger btn-danger mr-2">Yes, I want to delete the user</button>
             <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Cancel</button>

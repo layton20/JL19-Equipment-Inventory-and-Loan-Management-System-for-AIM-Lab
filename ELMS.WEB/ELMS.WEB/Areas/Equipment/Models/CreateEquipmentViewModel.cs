@@ -12,20 +12,24 @@ namespace ELMS.WEB.Areas.Equipment.Models
         public string OwnerUID { get; set; }
 
         [Required]
+        [MaxLength(50)]
         public string Name { get; set; }
-
+        [MaxLength(1000)]
         public string Description { get; set; }
 
         [Required]
+        [MaxLength(50)]
         [Display(Name = "Serial Number")]
         public string SerialNumber { get; set; }
 
         [Required]
+        [Range(0, 999999)]
         [Display(Name = "Purchase Price (£)")]
         public double PurchasePrice { get; set; }
 
         [Required]
         [Display(Name = "Replacement Price (£)")]
+        [Range(0, 999999)]
         public double ReplacementPrice { get; set; }
 
         [Required]

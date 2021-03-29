@@ -11,7 +11,7 @@
         </div>
     </div>
     <form id="formForceSend" asp-area="Email" asp-controller="EmailSchedule" asp-action="ForceSend" enctype="multipart/form-data">
-        <div asp-validation-summary="All" class="text-danger"></div>
+        <div asp-validation-summary="All" class="text-danger asp-validation-summary-modal"></div>
         <div class="modal-body">
             <div>
                 <p>You are about to force-send an email schedule to the recipient email <strong>@(Model.RecipientEmailAddress)</strong>.</p>

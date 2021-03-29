@@ -22,7 +22,7 @@
     </div>
     <div class="modal-footer">
         <form id="formDelete" asp-area="Email" asp-controller="EmailSchedule" asp-action="Delete">
-            <div asp-validation-summary="All" class="text-danger"></div>
+            <div asp-validation-summary="All" class="text-danger asp-validation-summary-modal"></div>
             <input type="hidden" asp-for="UID" />
             <button type="submit" class="btn border border-danger btn-danger">Yes, I want to delete the Schedule</button>
             <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Cancel</button>
