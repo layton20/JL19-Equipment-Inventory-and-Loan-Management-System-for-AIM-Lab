@@ -18,7 +18,7 @@
 </div>
 
 <form asp-area="Loan" asp-controller="Loan" asp-action="ConfirmView" enctype="multipart/form-data">
-    <div asp-validation-summary="All" class="text-danger"></div>
+    <div asp-validation-summary="All" class="text-danger mt-3"></div>
 
     <div class="equipment-container">
         <div id="card-equipment" class="card my-3">
@@ -181,7 +181,7 @@
 
     <div class="submit-container text-center" style="display: none">
         <div>
-            <input type="submit" class="btn btn-success" value="Preview Loan" />
+            <input type="submit" class="btn btn-success" value="Continue" />
             <a class="btn btn-outline-success" asp-area="Loan" asp-controller="Loan" asp-action="Index">Cancel</a>
         </div>
     </div>

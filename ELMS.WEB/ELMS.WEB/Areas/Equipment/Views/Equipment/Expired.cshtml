@@ -5,6 +5,12 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<div class="container-fluid mb-2">
+    <div class="row">
+        <a class="btn btn-outline-primary w-100" asp-area="Equipment" asp-controller="Equipment" asp-action="Index"><i class="fas fa-backward mr-2"></i> Back to Equipment List</a>
+    </div>
+</div>
+
 <div class="container-fluid">
     <div class="row bg-dark">
         <div class="m-auto text-white text-center">
@@ -72,7 +78,7 @@
                                     <td class="td-name">@equipment.PurchasePrice</td>
                                     <td class="td-name">@equipment.ReplacementPrice</td>
                                     <td class="td-name">
-                                        <div class="dropdown show">
+                                        <div class="dropdown">
                                             <a class="btn btn-primary dropdown-toggle" href="javascript:;" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 Action
                                             </a>
@@ -147,7 +153,7 @@
                                     <td class="td-name">@equipment.PurchasePrice</td>
                                     <td class="td-name">@equipment.ReplacementPrice</td>
                                     <td class="td-name">
-                                        <div class="dropdown show">
+                                        <div class="dropdown">
                                             <a class="btn btn-primary dropdown-toggle" href="javascript:;" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 Action
                                             </a>
@@ -168,3 +174,11 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#navItemEquipment').addClass('active');
+        });
+    </script>
+} 

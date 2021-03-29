@@ -86,7 +86,7 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
         }
 
         [Authorize(Policy = "ViewEquipmentPolicy")]
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> FilterIndexAsync(FilterEquipmentViewModel filter)
         {
             if (filter == null)
@@ -311,6 +311,7 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
             if (!ModelState.IsValid)
             {
                 ViewData["ErrorMessage"] = "Invalid form submission";
+                return RedirectToAction("EditView", model);
             }
 
             BaseResponse _Response = await __EquipmentManager.UpdateAsync(model.Equipment);
@@ -389,7 +390,7 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
 
             if (!_Response.Success)
             {
-                return RedirectToAction("DetailsView", "Equipment", new { Area = "Equipment", errorMessage = _Response.Message });
+                return Json(new { message = $"{GlobalConstants.ERROR_ACTION_PREFIX} delete {ENTITY_NAME}." });
             }
 
             return PartialView("_DeleteEquipment", __Mapper.Map<EquipmentViewModel>(_Response));

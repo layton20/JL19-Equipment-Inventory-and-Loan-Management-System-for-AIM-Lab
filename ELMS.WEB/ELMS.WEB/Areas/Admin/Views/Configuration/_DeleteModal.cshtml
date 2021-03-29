@@ -10,8 +10,7 @@
     <form id="formConfiguration" class="formConfiguration" asp-area="Admin" asp-controller="Configuration" asp-action="Delete">
         <div class="modal-body">
             <div><span class="text-danger">WARNING:</span> You are making an irreversible change to delete a configuration. This can have a critical effect on parts of the application.</div>
-
-            <div asp-validation-summary="All" class="text-danger"></div>
+            <div asp-validation-summary="All" class="text-danger asp-validation-summary-modal"></div>
             <input type="hidden" asp-for="UID" />
             <input type="hidden" asp-for="Name" />
             <br />

@@ -15,6 +15,7 @@ namespace ELMS.WEB.Areas.Equipment.Models.Note
         public string Name { get; set; }
 
         [Required]
+        [MaxLength(500)]
         public string Description { get; set; }
     }
 }

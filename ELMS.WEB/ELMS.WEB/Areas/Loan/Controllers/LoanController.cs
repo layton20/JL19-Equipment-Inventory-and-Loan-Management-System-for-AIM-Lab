@@ -223,6 +223,12 @@ namespace ELMS.WEB.Areas.Loan.Controllers
         [Authorize(Policy = "CreateLoanPolicy")]
         public async Task<IActionResult> ConfirmViewAsync(CreateLoanViewModel model)
         {
+            if (model.ExpiryTimestamp <= model.FromTimestamp)
+            {
+                ModelState.AddModelError("Error", "Schedule From field must be less than Schedule To");
+                return View("CreateLoan", model);
+            }
+
             if (!ModelState.IsValid)
             {
                 IList<LoanResponse> _Loans = (await __LoanManager.GetAsync()).Where(loan => loan.Status != Enums.Loan.Status.Complete && loan.Status != Enums.Loan.Status.EarlyComplete).ToList();
@@ -260,6 +266,12 @@ namespace ELMS.WEB.Areas.Loan.Controllers
         {
             if (!ModelState.IsValid)
             {
+                if (model.ExpiryTimestamp <= model.FromTimestamp)
+                {
+                    ModelState.AddModelError("Error", "Schedule From field must be less than Schedule To");
+                    return View("CreateLoan", model);
+                }
+
                 IList<LoanResponse> _Loans = (await __LoanManager.GetAsync()).Where(loan => loan.Status != Enums.Loan.Status.Complete && loan.Status != Enums.Loan.Status.EarlyComplete).ToList();
                 List<Guid> _ExcludeEquipment = new List<Guid>();
                 foreach (LoanResponse loan in _Loans)

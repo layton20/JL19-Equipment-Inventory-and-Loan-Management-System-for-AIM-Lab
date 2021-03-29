@@ -10,7 +10,7 @@
         </div>
     </div>
     <form id="formCreate" asp-area="Email" asp-controller="EmailSchedule" asp-action="Create" enctype="multipart/form-data">
-        <div asp-validation-summary="All" class="text-danger"></div>
+        <div asp-validation-summary="All" class="text-danger asp-validation-summary-modal"></div>
         <div class="modal-body">
             <div class="form-group">
                 <label asp-for="RecipientEmailAddress"></label>

@@ -79,6 +79,7 @@
                         <div class="tab-content tab-space pt-2">
                             <div class="tab-pane active" id="tabDetails">
                                 <form class="formDetails" asp-area="Equipment" asp-controller="Equipment" asp-action="Edit" enctype="multipart/form-data">
+                                    <div asp-validation-summary="All" class="text-danger asp-validation-summary mb-4"></div>
                                     <input asp-for="Equipment.UID" type="hidden" />
                                     <input asp-for="Equipment.OwnerUID" type="hidden" />
 

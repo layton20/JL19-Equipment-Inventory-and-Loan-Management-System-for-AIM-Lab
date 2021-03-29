@@ -135,10 +135,10 @@ namespace ELMS.WEB.Areas.Equipment.Controllers
 
             if (!_Response.Success)
             {
-                return RedirectToAction("DetailsView", "Equipment", new { Area = "Equipment", model.EquipmentUID, errorMessage = _Response.Message });
+                return Json(new { error = $"{GlobalConstants.ERROR_ACTION_PREFIX} delete {ENTITY_NAME}." });
             }
 
-            return RedirectToAction("DetailsView", "Equipment", new { Area = "Equipment", model.EquipmentUID, successMessage = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} deleted {ENTITY_NAME}." });
+            return Json(new { success = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} deleted {ENTITY_NAME}." });
         }
     }
 }
