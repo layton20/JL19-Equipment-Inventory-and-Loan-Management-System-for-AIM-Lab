@@ -16,7 +16,7 @@ namespace ELMS.WEB.Repositories.Equipment.Interfaces
 
         public Task<IList<EquipmentEntity>> GetByStatusAsync(Status status);
 
-        public Task<IEnumerable<EquipmentEntity>> GetAsync();
+        public Task<IList<EquipmentEntity>> GetAsync();
 
         public Task<bool> UpdateAsync(EquipmentEntity equipment);
 

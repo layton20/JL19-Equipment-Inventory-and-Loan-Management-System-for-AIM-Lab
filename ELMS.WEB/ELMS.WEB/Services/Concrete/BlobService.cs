@@ -75,7 +75,7 @@ namespace ELMS.WEB.Services.Concrete
                     ContentType = filePath.GetContentType()
                 });
             }
-            catch (RequestFailedException exception)
+            catch (RequestFailedException e)
             {
                 return false;
             }
