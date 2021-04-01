@@ -25,4 +25,8 @@
     <ProjectReference Include="..\ELMS.WEB\ELMS.WEB.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Equipment\" />
+  </ItemGroup>
+
 </Project>
