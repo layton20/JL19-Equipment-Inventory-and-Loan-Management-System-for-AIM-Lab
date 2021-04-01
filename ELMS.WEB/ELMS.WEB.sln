@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30523.141
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ELMS.WEB", "ELMS.WEB\ELMS.WEB.csproj", "{D9388C7B-5A65-46E0-A2BE-732EE581E0B0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ELMS.WEB", "ELMS.WEB\ELMS.WEB.csproj", "{D9388C7B-5A65-46E0-A2BE-732EE581E0B0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ELMS.XUNIT", "ELMS.XUNIT\ELMS.XUNIT.csproj", "{B578A673-5D6F-4633-B222-6DB80E16FC6C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{D9388C7B-5A65-46E0-A2BE-732EE581E0B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D9388C7B-5A65-46E0-A2BE-732EE581E0B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D9388C7B-5A65-46E0-A2BE-732EE581E0B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B578A673-5D6F-4633-B222-6DB80E16FC6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B578A673-5D6F-4633-B222-6DB80E16FC6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B578A673-5D6F-4633-B222-6DB80E16FC6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B578A673-5D6F-4633-B222-6DB80E16FC6C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

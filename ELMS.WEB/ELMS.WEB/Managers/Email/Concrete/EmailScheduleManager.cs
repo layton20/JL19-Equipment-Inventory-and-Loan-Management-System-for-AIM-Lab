@@ -238,11 +238,29 @@ namespace ELMS.WEB.Managers.Email.Concrete
             };
             await __EmailScheduleParameterRepository.CreateAsync(__Mapper.Map<EmailScheduleParameterEntity>(_ParameterLoanConfirmRequest));
 
+            CreateEmailScheduleParameterRequest _ParameterEquipmentRequest = new CreateEmailScheduleParameterRequest
+            {
+                EmailScheduleUID = _LoanConfirmScheduleEntity.UID,
+                Name = "Equipment_String",
+                Value = string.Join(", ", loan.EquipmentList.Select(x => x.Name))
+            };
+            await __EmailScheduleParameterRepository.CreateAsync(__Mapper.Map<EmailScheduleParameterEntity>(_ParameterEquipmentRequest));
+
+            CreateEmailScheduleParameterRequest _ParameterLoanPeriodRequest = new CreateEmailScheduleParameterRequest
+            {
+                EmailScheduleUID = _LoanConfirmScheduleEntity.UID,
+                Name = "Loan_Period_String",
+                Value = $"{loan.FromTimestamp} to {loan.ExpiryTimestamp}"
+            };
+            await __EmailScheduleParameterRepository.CreateAsync(__Mapper.Map<EmailScheduleParameterEntity>(_ParameterLoanPeriodRequest));
+
             if (forceSend)
             {
                 await __EmailSender.SendLoanConfirmEmail(loan.LoaneeEmail, "AIM LAB - Activate Loan", new ConfirmEmailTemplate
                 {
-                    Confirm_Loan_URL = $"<a href='{baseURL}/Loan/Loan/AcceptTermsAndConditionsView?loanUID={loan.UID}'>Accept Terms and Conditions</a> "
+                    Confirm_Loan_URL = $"<a href='{baseURL}/Loan/Loan/AcceptTermsAndConditionsView?loanUID={loan.UID}'>Accept Terms and Conditions</a> ",
+                    Equipment_String = string.Join(", ", loan.EquipmentList.Select(x => x.Name)),
+                    Loan_Period_String = $"{loan.FromTimestamp} to {loan.ExpiryTimestamp}"
                 });
             }
 

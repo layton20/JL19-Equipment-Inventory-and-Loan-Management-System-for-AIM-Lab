@@ -85,7 +85,7 @@ namespace ELMS.WEB.Repositories.Equipment.Concrete
             return await __Context.SaveChangesAsync() > 0;
         }
 
-        public async Task<IEnumerable<EquipmentEntity>> GetAsync()
+        public async Task<IList<EquipmentEntity>> GetAsync()
         {
             return await __Context.Equipment.OrderByDescending(x => x.CreatedTimestamp).ToListAsync();
         }

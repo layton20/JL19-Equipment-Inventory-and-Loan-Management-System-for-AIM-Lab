@@ -301,7 +301,9 @@ namespace ELMS.WEB.Areas.Loan.Controllers
                 return View("CreateLoan", model);
             }
 
-            await __EmailScheduleManager.CreateLoanConfirmScheduleAsync(_Response, $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}", true);
+            LoanResponse _LoanResponse = await __LoanManager.GetByUIDAsync(_Response.UID);
+
+            await __EmailScheduleManager.CreateLoanConfirmScheduleAsync(_LoanResponse, $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}", true);
 
             return RedirectToAction("Index", "Loan", new { Area = "Loan", successMessage = $"{GlobalConstants.SUCCESS_ACTION_PREFIX} created {ENTITY_NAME}." });
         }
