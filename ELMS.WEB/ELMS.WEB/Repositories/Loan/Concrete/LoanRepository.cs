@@ -20,7 +20,7 @@ namespace ELMS.WEB.Repositories.Loan.Concrete
             __ApplicationContext = applicationContext ?? throw new ArgumentNullException(nameof(applicationContext));
         }
 
-        public async Task<bool> AcceptTermsAndConditions(Guid uid)
+        public async Task<bool> AcceptTermsAndConditionsAsync(Guid uid)
         {
             if (uid == Guid.Empty)
             {
@@ -134,7 +134,7 @@ namespace ELMS.WEB.Repositories.Loan.Concrete
             return await __ApplicationContext.SaveChangesAsync() > 0;
         }
 
-        public async Task<IList<LoanEntity>> GetAsync(Guid equipmentUID, bool all = false)
+        public async Task<IList<LoanEntity>> GetAsync(bool all = false)
         {
             if (all)
             {

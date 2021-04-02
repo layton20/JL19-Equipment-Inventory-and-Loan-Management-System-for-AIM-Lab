@@ -38,7 +38,7 @@ namespace ELMS.WEB.Managers.Loan.Concrete
         {
             BaseResponse _Response = new BaseResponse();
 
-            if (uid == Guid.Empty || !await __LoanRepository.AcceptTermsAndConditions(uid))
+            if (uid == Guid.Empty || !await __LoanRepository.AcceptTermsAndConditionsAsync(uid))
             {
                 _Response.Success = false;
                 _Response.Message = $"{GlobalConstants.ERROR_ACTION_PREFIX} accept Terms and Conditions for the {MODEL_NAME}.";
@@ -82,7 +82,7 @@ namespace ELMS.WEB.Managers.Loan.Concrete
 
         public async Task<IList<LoanResponse>> GetAsync(Guid equipmentUID, bool all = false)
         {
-            IList<LoanEntity> _LoanEntities = await __LoanRepository.GetAsync(equipmentUID, all);
+            IList<LoanEntity> _LoanEntities = await __LoanRepository.GetAsync(all);
 
             foreach (LoanEntity loan in _LoanEntities)
             {
