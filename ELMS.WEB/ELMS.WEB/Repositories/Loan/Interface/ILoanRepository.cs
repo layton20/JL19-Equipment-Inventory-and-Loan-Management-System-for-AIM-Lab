@@ -12,11 +12,11 @@ namespace ELMS.WEB.Repositories.Loan.Interface
 
         public Task<LoanEntity> GetByUIDAsync(Guid uid);
 
-        public Task<IList<LoanEntity>> GetAsync(Guid equipmentUID, bool all = false);
+        public Task<IList<LoanEntity>> GetAsync(bool all = false);
 
         public Task<IList<LoanEntity>> GetAsync();
 
-        public Task<bool> AcceptTermsAndConditions(Guid uid);
+        public Task<bool> AcceptTermsAndConditionsAsync(Guid uid);
 
         public Task<bool> CompleteLoanAsync(Guid uid);
 

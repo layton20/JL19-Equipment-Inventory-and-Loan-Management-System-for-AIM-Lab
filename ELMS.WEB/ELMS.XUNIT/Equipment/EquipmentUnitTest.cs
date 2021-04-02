@@ -9,7 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace ELMS.XUNIT
+namespace ELMS.XUNIT.Equipment
 {
     public class EquipmentUnitTest
     {
