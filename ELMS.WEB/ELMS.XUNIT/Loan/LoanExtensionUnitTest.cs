@@ -6,11 +6,10 @@ using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace ELMS.XUNIT.Loans
+namespace ELMS.XUNIT.Loan
 {
     public class LoanExtensionUnitTest
     {
@@ -149,7 +148,7 @@ namespace ELMS.XUNIT.Loans
             __LoanRepositoryMock.Setup(x => x.GetAsync(It.IsAny<Guid>())).ReturnsAsync(() => new List<LoanExtensionEntity>());
 
             // Act
-            IList<LoanExtensionEntity> _LoanExtensions =  await __LoanRepositoryMock.Object.GetAsync(Guid.NewGuid());
+            IList<LoanExtensionEntity> _LoanExtensions = await __LoanRepositoryMock.Object.GetAsync(Guid.NewGuid());
 
             // Assert
             Assert.Empty(_LoanExtensions);

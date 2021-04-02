@@ -20,6 +20,6 @@ namespace ELMS.WEB.Repositories.Admin.Interfaces
 
         Task<BlacklistEntity> GetByUIDAsync(Guid uid);
 
-        Task<BlacklistStateEnum> GetState(string email);
+        Task<BlacklistStateEnum> GetStateAsync(string email);
     }
 }
