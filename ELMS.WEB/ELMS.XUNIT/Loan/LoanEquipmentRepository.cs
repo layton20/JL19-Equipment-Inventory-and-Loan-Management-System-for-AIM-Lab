@@ -11,7 +11,7 @@ using Xunit;
 using NsEquipment = ELMS.WEB.Enums.Equipment;
 using NsLoan = ELMS.WEB.Enums.Loan;
 
-namespace ELMS.XUNIT.Loans
+namespace ELMS.XUNIT.Loan
 {
     public class LoanEquipmentRepository
     {

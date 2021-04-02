@@ -7,11 +7,10 @@ using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace ELMS.XUNIT.Loans
+namespace ELMS.XUNIT.Loan
 {
     public class LoanUnitTest
     {
@@ -349,7 +348,7 @@ namespace ELMS.XUNIT.Loans
         }
 
         [Fact]
-        public async Task GetByLoaneeAsync_ShouldNotReturnLoans_WhenLoansWithLoaneeDoesNotExist() 
+        public async Task GetByLoaneeAsync_ShouldNotReturnLoans_WhenLoansWithLoaneeDoesNotExist()
         {
             // Arrange
             Faker<LoanEntity> _LoanFaker = new Faker<LoanEntity>()

@@ -66,7 +66,7 @@ namespace ELMS.WEB.Repositories.Admin.Concrete
             return await __Context.Blacklists.FirstOrDefaultAsync(x => x.UID == uid);
         }
 
-        public async Task<BlacklistStateEnum> GetState(string email)
+        public async Task<BlacklistStateEnum> GetStateAsync(string email)
         {
             IList<BlacklistEntity> _Blacklists = await __Context.Blacklists.Where(x => x.Email.ToUpper() == email.ToUpper()).ToListAsync();
 

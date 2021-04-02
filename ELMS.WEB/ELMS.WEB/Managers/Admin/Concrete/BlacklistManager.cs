@@ -96,7 +96,7 @@ namespace ELMS.WEB.Managers.Admin.Concrete
 
         public async Task<BlacklistStateEnum> GetState(string email)
         {
-            return await __BlacklistRepository.GetState(email);
+            return await __BlacklistRepository.GetStateAsync(email);
         }
     }
 }
