@@ -90,11 +90,11 @@
                                     <td class="td-name">
                                         @if (schedule.EmailTemplateUID != Guid.Empty)
                                         {
-                                            <p>@schedule.EmailTemplateUID</p>
+                                            <a class="text-primary emailTemplateDetails" href="javascript:;" data-uid="@schedule.EmailTemplateUID" data-url="/Email/EmailTemplate/DetailsModal">@schedule.EmailTemplate.Name</a>
                                         }
                                         else
                                         {
-                                            <p>No template assigned</p>
+                                            <p>No custom template assigned</p>
                                         }
                                     </td>
                                     <td class="td-name">@schedule.RecipientEmailAddress</td>

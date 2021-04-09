@@ -118,10 +118,17 @@ namespace ELMS.WEB.Areas.Email.Controllers
                 _EmailScheduleResponses = _EmailScheduleResponses.Where(x => model.Filter.EmailTypes.Contains(x.EmailType)).ToList();
             }
 
+            EmailScheduleFilterViewModel _FilterModel = model.Filter;
+            _FilterModel.EmailTemplatesSelectList = (await __EmailTemplateManager.GetAsync()).EmailTemplates.Select(x => new SelectListItem
+            {
+                Text = x.Name,
+                Value = x.UID.ToString()
+            }).ToList();
+
             return View("Index", new IndexViewModel
             {
                 EmailSchedules = __Mapper.Map<IList<EmailScheduleViewModel>>(_EmailScheduleResponses),
-                Filter = model.Filter
+                Filter = _FilterModel
             });
         }
 
