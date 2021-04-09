@@ -1,4 +1,5 @@
-﻿using ELMS.WEB.Enums.Email;
+﻿using ELMS.WEB.Areas.Email.Models.EmailTemplate;
+using ELMS.WEB.Enums.Email;
 using System;
 
 namespace ELMS.WEB.Areas.Email.Models.EmailSchedule
@@ -13,5 +14,6 @@ namespace ELMS.WEB.Areas.Email.Models.EmailSchedule
         public bool Sent { get; set; }
         public DateTime CreatedTimestamp { get; set; }
         public DateTime AmendedTimestamp { get; set; }
+        public EmailTemplateViewModel EmailTemplate { get; set; }
     }
 }

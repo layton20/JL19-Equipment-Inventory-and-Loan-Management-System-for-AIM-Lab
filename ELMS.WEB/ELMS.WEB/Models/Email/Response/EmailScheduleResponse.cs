@@ -11,5 +11,6 @@ namespace ELMS.WEB.Models.Email.Response
         public EmailType EmailType { get; set; }
         public DateTime SendTimestamp { get; set; }
         public bool Sent { get; set; }
+        public EmailTemplateResponse EmailTemplate { get; set; }
     }
 }

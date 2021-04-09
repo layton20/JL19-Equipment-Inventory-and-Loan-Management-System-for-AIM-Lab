@@ -117,7 +117,41 @@ namespace ELMS.WEB.Managers.Email.Concrete
 
         public async Task<IList<EmailScheduleResponse>> GetAsync()
         {
-            return __Mapper.Map<IList<EmailScheduleResponse>>(await __EmailScheduleRepository.GetAsync());
+            return await ToResponse(await __EmailScheduleRepository.GetAsync());
+        }
+
+        private async Task<EmailScheduleResponse> ToResponse(EmailScheduleEntity emailSchedule)
+        {
+            if (emailSchedule == null)
+            {
+                return null;
+            }
+
+            EmailScheduleResponse _Response = __Mapper.Map<EmailScheduleResponse>(emailSchedule);
+
+            if (_Response.EmailTemplateUID != Guid.Empty)
+            {
+                _Response.EmailTemplate = __Mapper.Map<EmailTemplateResponse>(await __EmailTemplateRepository.GetByUIDAsync(_Response.EmailTemplateUID));
+            }
+
+            return _Response;
+        }
+
+        private async Task<IList<EmailScheduleResponse>> ToResponse(IList<EmailScheduleEntity> emailSchedules)
+        {
+            if (emailSchedules == null || emailSchedules.Count <= 0)
+            {
+                return new List<EmailScheduleResponse>();
+            }
+
+            IList<EmailScheduleResponse> _Responses = new List<EmailScheduleResponse>();
+
+            foreach (EmailScheduleEntity schedule in emailSchedules)
+            {
+                _Responses.Add(await ToResponse(schedule));
+            }
+
+            return _Responses;
         }
 
         public async Task<EmailScheduleResponse> GetByUIDAsync(Guid uid)
